@@ -4,9 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Features
+
+- Permissions decorator for api endpoints
+## [0.0.6] - 2026-02-15
+
 ### Build
 
-- E2e app to prefix commands with `e2e`
+- E2e app to prefix commands with `e2e` by @ninode97
 ## [0.0.5] - 2026-02-15
 
 ### Build
