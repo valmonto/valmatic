@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: vboilerplatedb
+    environment:
+      POSTGRES_USER: vboilerplate
+      POSTGRES_PASSWORD: vboilerplate
+      POSTGRES_DB: vboilerplate
+    ports:
+      - '5432:5432'
+    volumes:
+      - vboilerplatedb_data:/var/lib/postgresql
+    networks:
+      - dev_local_network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U vboilerplate -d vboilerplate']
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  redis:
+    image: redis:8-alpine
+    container_name: vboilerplateredis
+    command: >
+      redis-server
+      --maxmemory 500mb
+      --maxmemory-policy noeviction
+      --appendonly yes
+      --appendfsync everysec
+      --requirepass vboilerplate
+    ports:
+      - '6379:6379'
+    volumes:
+      - vboilerplateredis_data:/data
+    networks:
+      - dev_local_network
+    healthcheck:
+      test: ['CMD', 'redis-cli', '-a', 'vboilerplate', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  vboilerplatedb_data:
+    driver: local
+  vboilerplateredis_data:
+    driver: local
+
+networks:
+  dev_local_network:
+    driver: bridge

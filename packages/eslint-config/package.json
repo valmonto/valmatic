@@ -1,0 +1,35 @@
+{
+  "name": "@pkg/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./base": {
+      "types": "./index.d.ts",
+      "default": "./base.js"
+    },
+    "./react": {
+      "types": "./index.d.ts",
+      "default": "./react.js"
+    },
+    "./nestjs": {
+      "types": "./index.d.ts",
+      "default": "./nestjs.js"
+    }
+  },
+  "dependencies": {
+    "@eslint/js": "catalog:",
+    "typescript-eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "globals": "catalog:"
+  },
+  "devDependencies": {
+    "eslint": "catalog:"
+  },
+  "peerDependencies": {
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "extends": "@pkg/tsconfig/nestjs.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "preserveWatchOutput": true
+  },
+  "include": ["src"]
+}

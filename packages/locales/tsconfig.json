@@ -1,0 +1,13 @@
+{
+  "extends": "@pkg/tsconfig/library.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "outDir": "./dist",
+    "rootDir": ".",
+    "resolveJsonModule": true,
+    "lib": ["ESNext"]
+  },
+  "include": ["src"],
+  "exclude": ["dist"]
+}

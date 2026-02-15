@@ -1,0 +1,47 @@
+{
+  "name": "@pkg/worker",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nest start --watch",
+    "build": "nest build",
+    "start": "node dist/main",
+    "start:prod": "node dist/main",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@nestjs/bullmq": "catalog:",
+    "@nestjs/common": "catalog:",
+    "@nestjs/config": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/event-emitter": "catalog:",
+    "@nestjs/platform-fastify": "catalog:",
+    "@pkg/contracts": "workspace:*",
+    "@pkg/database": "workspace:*",
+    "@pkg/server": "workspace:*",
+    "@pkg/utils": "workspace:*",
+    "axios": "catalog:",
+    "bullmq": "catalog:",
+    "nestjs-pino": "catalog:",
+    "pino": "catalog:",
+    "pino-http": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "catalog:",
+    "@nestjs/testing": "catalog:",
+    "@pkg/eslint-config": "workspace:*",
+    "@pkg/tsconfig": "workspace:*",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "fastify": "catalog:",
+    "globals": "catalog:",
+    "pino-pretty": "catalog:",
+    "typescript": "catalog:"
+  }
+}

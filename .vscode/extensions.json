@@ -1,0 +1,22 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "mhutchie.git-graph",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.debugpy",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "Prisma.prisma",
+    "ms-ossdata.vscode-pgsql",
+    "ms-azuretools.vscode-docker",
+    "christian-kohler.npm-intellisense",
+    "yoavbls.pretty-ts-errors",
+    "xabikos.JavaScriptSnippets",
+    "dsznajder.es7-react-js-snippets",
+    "christian-kohler.path-intellisense",
+    "file-icons.file-icons"
+  ]
+}

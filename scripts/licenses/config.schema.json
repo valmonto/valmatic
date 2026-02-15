@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "License Check Configuration",
+  "type": "object",
+  "properties": {
+    "allowedLicenses": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Licenses that are approved for use without review"
+    },
+    "reviewRequired": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Licenses that require legal review but are not forbidden (e.g., LGPL)"
+    },
+    "forbidden": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Licenses that are not allowed (e.g., GPL, AGPL)"
+    },
+    "ignoreDev": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, skip dev dependencies from license check"
+    },
+    "ignorePackages": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Package names to ignore from license check"
+    },
+    "overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Manual license overrides for packages with missing/incorrect license info"
+    }
+  },
+  "required": ["allowedLicenses", "reviewRequired", "forbidden"]
+}

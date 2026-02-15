@@ -1,0 +1,103 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: vboilerplatee2e_db
+    environment:
+      POSTGRES_USER: vboilerplate
+      POSTGRES_PASSWORD: vboilerplate
+      POSTGRES_DB: vboilerplate
+    networks:
+      - e2e_network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U vboilerplate -d vboilerplate']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:8-alpine
+    container_name: vboilerplatee2e_redis
+    command: redis-server --requirepass vboilerplate
+    networks:
+      - e2e_network
+    healthcheck:
+      test: ['CMD', 'redis-cli', '-a', 'vboilerplate', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: vboilerplatee2e_api
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://vboilerplate:vboilerplate@postgres:5432/vboilerplate
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: vboilerplate
+      IAM_REDIS_HOST: redis
+      IAM_REDIS_PORT: 6379
+      IAM_REDIS_PASSWORD: vboilerplate
+      IAM_JWT_SECRET: e2e-test-jwt-secret-must-be-32-chars-or-more
+      IAM_COOKIE_SECRET: e2e-test-cookie-secret-must-be-32-chars
+      PORT: 3001
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - e2e_network
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://localhost:3001/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/e2e/web.Dockerfile
+    container_name: vboilerplatee2e_web
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - e2e_network
+    healthcheck:
+      test:
+        ['CMD-SHELL', 'wget --no-check-certificate -qO /dev/null https://127.0.0.1:3000 || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  e2e:
+    build:
+      context: .
+      dockerfile: apps/e2e/Dockerfile
+    container_name: vboilerplatee2e_runner
+    environment:
+      BASE_URL: https://web:3000
+      API_URL: http://api:3001
+      CI: 'true'
+    depends_on:
+      web:
+        condition: service_healthy
+    networks:
+      - e2e_network
+    volumes:
+      - ./apps/e2e/test-results:/app/apps/e2e/test-results
+
+networks:
+  e2e_network:
+    driver: bridge

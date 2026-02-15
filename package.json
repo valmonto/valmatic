@@ -1,0 +1,75 @@
+{
+  "name": "@pkg/root",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter='./packages/*' --filter='./apps/*' run dev",
+    "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint",
+    "lint:fix": "pnpm -r run lint:fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,yaml,yml,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,json,yaml,yml,md}\"",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r run test",
+    "clean": "pnpm -r run clean",
+    "dev:api": "pnpm --filter @pkg/api dev",
+    "dev:worker": "pnpm --filter @pkg/worker dev",
+    "dev:web": "pnpm --filter @pkg/web dev",
+    "test:web": "pnpm --filter @pkg/web test",
+    "dev:contracts": "pnpm --filter @pkg/contracts dev",
+    "dev:utils": "pnpm --filter @pkg/utils dev",
+    "dev:server": "pnpm --filter @pkg/server dev",
+    "dev:locales": "pnpm --filter @pkg/locales dev",
+    "db:generate": "pnpm --filter @pkg/database db:generate",
+    "db:migrate": "pnpm --filter @pkg/database db:migrate",
+    "db:push": "pnpm --filter @pkg/database db:push",
+    "db:studio": "pnpm --filter @pkg/database db:studio",
+    "licenses:check": "node --experimental-strip-types scripts/licenses/check.ts check",
+    "licenses:generate": "node --experimental-strip-types scripts/licenses/check.ts generate",
+    "licenses:why": "node --experimental-strip-types scripts/licenses/why.ts",
+    "versions:check": "node --experimental-strip-types scripts/licenses/versions.ts",
+    "clear:preview": "find . -name 'node_modules' -type d -prune -exec du -sh {} \\;",
+    "clear": "find . -name 'node_modules' -type d -prune -exec rm -rf {} + && echo 'Purged all node_modules'",
+    "init:project": "node --experimental-strip-types scripts/init/init-project.ts",
+    "i18n:extract": "npx i18next-parser",
+    "e2e:setup": "pnpm exec playwright install chromium ",
+    "e2e": "docker run --rm -v ./apps/e2e:/e2e alpine rm -rf /e2e/test-results 2>/dev/null || true; pnpm --filter @pkg/e2e test",
+    "e2e:ui": "docker run --rm -v ./apps/e2e:/e2e alpine rm -rf /e2e/test-results 2>/dev/null || true; pnpm --filter @pkg/e2e test:ui",
+    "e2e:headed": "docker run --rm -v ./apps/e2e:/e2e alpine rm -rf /e2e/test-results 2>/dev/null || true; pnpm --filter @pkg/e2e test:headed",
+    "e2e:debug": "docker run --rm -v ./apps/e2e:/e2e alpine rm -rf /e2e/test-results 2>/dev/null || true; pnpm --filter @pkg/e2e test:debug",
+    "e2e:docker": "docker run --rm -v ./apps/e2e:/e2e alpine rm -rf /e2e/test-results 2>/dev/null || true; mkdir -p apps/e2e/test-results && docker compose -f compose.e2e.yml up --build --abort-on-container-exit --exit-code-from e2e",
+    "e2e:docker:down": "docker compose -f compose.e2e.yml down -v && docker run --rm -v ./apps/e2e:/e2e alpine rm -rf /e2e/test-results 2>/dev/null || true",
+    "release": "release-it",
+    "release:dry": "release-it --dry-run",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "catalog:",
+    "@commitlint/config-conventional": "catalog:",
+    "@playwright/test": "catalog:",
+    "git-cliff": "catalog:",
+    "@types/node": "catalog:",
+    "husky": "catalog:",
+    "i18next-parser": "catalog:",
+    "prettier": "catalog:",
+    "release-it": "catalog:"
+  },
+  "pnpm": {
+    "overrides": {
+      "@isaacs/brace-expansion": "^5.0.1",
+      "esbuild": "^0.25.0"
+    },
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@swc/core",
+      "esbuild",
+      "msgpackr-extract",
+      "msw"
+    ]
+  }
+}

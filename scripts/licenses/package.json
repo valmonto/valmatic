@@ -1,0 +1,5 @@
+{
+  "name": "@pkg/license-scripts",
+  "private": true,
+  "type": "module"
+}

@@ -1,0 +1,59 @@
+{
+  "name": "@pkg/database",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./schema": {
+      "types": "./src/schema/index.ts",
+      "import": "./dist/schema/index.mjs",
+      "require": "./dist/schema/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./src/index.ts",
+  "bin": {
+    "db-migrate": "./dist/cli/migrate.mjs"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node ./dist/cli/migrate.mjs",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@pkg/contracts": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "postgres": "catalog:",
+    "@nestjs/common": "catalog:"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "catalog:"
+  },
+  "peerDependenciesMeta": {
+    "@nestjs/common": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@pkg/tsconfig": "workspace:*",
+    "@pkg/eslint-config": "workspace:*",
+    "drizzle-kit": "catalog:",
+    "typescript": "catalog:",
+    "eslint": "catalog:",
+    "tsdown": "catalog:",
+    "@types/node": "catalog:"
+  }
+}
