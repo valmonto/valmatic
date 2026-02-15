@@ -168,6 +168,28 @@ refactor(database): simplify migration scripts
 
 ---
 
+## Releasing
+
+This project uses [release-it](https://github.com/release-it/release-it) with [git-cliff](https://github.com/orhun/git-cliff) for changelog generation.
+
+```bash
+pnpm release:dry         # Preview what will happen (no changes)
+pnpm release             # Create a release
+```
+
+**What happens during a release:**
+1. Prompts for version bump (patch/minor/major)
+2. Updates `package.json` version
+3. Generates `CHANGELOG.md` from conventional commits
+4. Creates commit: `chore(release): v<version>`
+5. Tags: `v<version>`
+
+**Requirements:**
+- Must be on `main` branch
+- Working directory must be clean
+
+---
+
 ## Documentation
 
 Each app has detailed documentation:
