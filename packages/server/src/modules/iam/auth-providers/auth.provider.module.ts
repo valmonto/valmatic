@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { AUTH_PROVIDER } from './auth-provider';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './guards/auth.guard';
+import { PermissionsGuard } from './guards/permissions.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { ConfigService } from '@nestjs/config';
 import { LocalAuthProvider } from './local/local-auth.provider';
@@ -33,6 +34,11 @@ import { JwtModule } from '@nestjs/jwt';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
+    },
+    // PermissionsGuard runs AFTER RolesGuard for fine-grained access control
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
     },
   ],
   controllers: [],

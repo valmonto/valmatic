@@ -1,6 +1,6 @@
 import { Controller, Delete, Get, Param, Patch, Post, Res } from '@nestjs/common';
 import { OrgService } from './org.service';
-import { ActiveUser, Roles, Role, ZodRequest, COOKIE_OPTIONS, COOKIE_TTL } from '@pkg/server';
+import { ActiveUser, Permissions, ZodRequest, COOKIE_OPTIONS, COOKIE_TTL } from '@pkg/server';
 import {
   CreateOrgRequest,
   CreateOrgRequestSchema,
@@ -23,13 +23,13 @@ export class OrgController {
   constructor(private readonly orgService: OrgService) {}
 
   @Get()
-  @Roles(Role.OWNER, Role.ADMIN, Role.MEMBER)
+  @Permissions('org:list')
   async list(@ActiveUser() activeUser: ActiveUserType): Promise<ListOrgsResponse> {
     return this.orgService.listOrgs(activeUser);
   }
 
   @Get(':id')
-  @Roles(Role.OWNER, Role.ADMIN, Role.MEMBER)
+  @Permissions('org:read')
   async get(
     @Param('id') id: string,
     @ActiveUser() activeUser: ActiveUserType,
@@ -38,7 +38,7 @@ export class OrgController {
   }
 
   @Post()
-  @Roles(Role.OWNER, Role.ADMIN, Role.MEMBER)
+  @Permissions('org:create')
   async create(
     @ZodRequest(CreateOrgRequestSchema) dto: CreateOrgRequest,
     @ActiveUser() activeUser: ActiveUserType,
@@ -47,7 +47,7 @@ export class OrgController {
   }
 
   @Patch(':id')
-  @Roles(Role.OWNER, Role.ADMIN, Role.MEMBER)
+  @Permissions('org:update')
   async update(
     @Param('id') id: string,
     @ZodRequest(UpdateOrgRequestSchema.omit({ id: true })) dto: Omit<UpdateOrgRequest, 'id'>,
@@ -57,7 +57,7 @@ export class OrgController {
   }
 
   @Delete(':id')
-  @Roles(Role.OWNER, Role.ADMIN, Role.MEMBER)
+  @Permissions('org:delete')
   async delete(
     @Param('id') id: string,
     @ActiveUser() activeUser: ActiveUserType,
@@ -67,7 +67,7 @@ export class OrgController {
   }
 
   @Post('switch')
-  @Roles(Role.OWNER, Role.ADMIN, Role.MEMBER)
+  @Permissions('org:switch')
   async switch(
     @ZodRequest(SwitchOrgRequestSchema) dto: SwitchOrgRequest,
     @ActiveUser() activeUser: ActiveUserType,

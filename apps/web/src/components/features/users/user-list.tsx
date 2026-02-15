@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ShieldX } from 'lucide-react';
 import { k } from '@pkg/locales';
 import type { GetUserByIdResponse, ListUsersResponse } from '@pkg/contracts';
 import { api } from '@/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCachedRequest } from '@/hooks/use-cached-request';
+import { useCan } from '@/hooks/use-permissions';
 import { UserDetail } from './user-detail';
 import { UserDetailSkeleton } from './user-detail-skeleton';
 import { UserListSkeleton } from './user-list-skeleton';
@@ -13,16 +15,33 @@ import { UserListSkeleton } from './user-list-skeleton';
 export function UserList() {
   const { t } = useTranslation();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const canList = useCan('user:list');
 
   const { data, error, isLoading, mutate } = useCachedRequest<ListUsersResponse>({
-    key: '/api/users',
+    key: canList ? '/api/users' : null,
     fetcher: () => api.user.list({ skip: 0, limit: 20, search: '' }),
   });
 
   const { data: selected, isLoading: isLoadingUser } = useCachedRequest<GetUserByIdResponse>({
-    key: selectedId ? `/api/users/${selectedId}` : null,
+    key: selectedId && canList ? `/api/users/${selectedId}` : null,
     fetcher: () => api.user.get({ id: selectedId! }),
   });
+
+  if (!canList) {
+    return (
+      <Card className="border-destructive/20 bg-destructive/5">
+        <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+          <ShieldX className="mb-4 h-12 w-12 text-destructive/60" />
+          <h2 className="text-lg font-semibold text-destructive">
+            {t(k.auth.errors.insufficientPermissions)}
+          </h2>
+          <p className="mt-2 max-w-md text-sm text-muted-foreground">
+            {t(k.auth.errors.roleAuthorizationRequired)}
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (error) {
     return (

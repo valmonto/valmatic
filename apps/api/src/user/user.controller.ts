@@ -1,6 +1,6 @@
 import { Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ActiveUser, Roles, Role, ZodRequest } from '@pkg/server';
+import { ActiveUser, Permissions, ZodRequest } from '@pkg/server';
 import {
   CreateUserRequest,
   CreateUserRequestSchema,
@@ -21,7 +21,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @Roles(Role.OWNER, Role.ADMIN)
+  @Permissions('user:list')
   async list(
     @Query() query: ListUsersRequest,
     @ActiveUser() activeUser: ActiveUserType,
@@ -31,7 +31,7 @@ export class UserController {
   }
 
   @Get(':id')
-  @Roles(Role.OWNER, Role.ADMIN)
+  @Permissions('user:read')
   async get(
     @Param('id') id: string,
     @ActiveUser() activeUser: ActiveUserType,
@@ -40,7 +40,7 @@ export class UserController {
   }
 
   @Post()
-  @Roles(Role.OWNER, Role.ADMIN)
+  @Permissions('user:create')
   async create(
     @ZodRequest(CreateUserRequestSchema) dto: CreateUserRequest,
     @ActiveUser() activeUser: ActiveUserType,
@@ -49,7 +49,7 @@ export class UserController {
   }
 
   @Patch(':id')
-  @Roles(Role.OWNER, Role.ADMIN)
+  @Permissions('user:update')
   async update(
     @Param('id') id: string,
     @ZodRequest(UpdateUserByIdRequestSchema.omit({ id: true }))
@@ -60,7 +60,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  @Roles(Role.OWNER, Role.ADMIN)
+  @Permissions('user:delete')
   async remove(
     @Param('id') id: string,
     @ActiveUser() activeUser: ActiveUserType,
