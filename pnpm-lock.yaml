@@ -85,8 +85,8 @@ catalogs:
       specifier: 3.0.3
       version: 3.0.3
     bullmq:
-      specifier: 5.69.1
-      version: 5.69.1
+      specifier: 5.69.2
+      version: 5.69.2
     class-variance-authority:
       specifier: 0.7.1
       version: 0.7.1
@@ -190,8 +190,8 @@ catalogs:
       specifier: 19.2.4
       version: 19.2.4
     react-error-boundary:
-      specifier: 6.1.0
-      version: 6.1.0
+      specifier: 6.1.1
+      version: 6.1.1
     react-hook-form:
       specifier: 7.71.1
       version: 7.71.1
@@ -199,8 +199,8 @@ catalogs:
       specifier: 16.5.4
       version: 16.5.4
     react-resizable-panels:
-      specifier: 4.6.2
-      version: 4.6.2
+      specifier: 4.6.4
+      version: 4.6.4
     react-router:
       specifier: 7.13.0
       version: 7.13.0
@@ -223,8 +223,8 @@ catalogs:
       specifier: 2.4.0
       version: 2.4.0
     tailwind-merge:
-      specifier: 3.4.0
-      version: 3.4.0
+      specifier: 3.4.1
+      version: 3.4.1
     tailwindcss:
       specifier: 4.1.18
       version: 4.1.18
@@ -299,7 +299,7 @@ importers:
         version: 11.0.2
       '@nestjs/bullmq':
         specifier: 'catalog:'
-        version: 11.0.4(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))(bullmq@5.69.1)
+        version: 11.0.4(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))(bullmq@5.69.2)
       '@nestjs/common':
         specifier: 'catalog:'
         version: 11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -338,7 +338,7 @@ importers:
         version: 3.0.3
       bullmq:
         specifier: 'catalog:'
-        version: 5.69.1
+        version: 5.69.2
       ioredis:
         specifier: 'catalog:'
         version: 5.9.3
@@ -465,7 +465,7 @@ importers:
         version: 19.2.4(react@19.2.4)
       react-error-boundary:
         specifier: 'catalog:'
-        version: 6.1.0(react@19.2.4)
+        version: 6.1.1(react@19.2.4)
       react-hook-form:
         specifier: 'catalog:'
         version: 7.71.1(react@19.2.4)
@@ -474,7 +474,7 @@ importers:
         version: 16.5.4(i18next@25.8.7(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
       react-resizable-panels:
         specifier: 'catalog:'
-        version: 4.6.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 4.6.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react-router:
         specifier: 'catalog:'
         version: 7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -489,7 +489,7 @@ importers:
         version: 2.4.0(react@19.2.4)
       tailwind-merge:
         specifier: 'catalog:'
-        version: 3.4.0
+        version: 3.4.1
       tailwindcss:
         specifier: 'catalog:'
         version: 4.1.18
@@ -559,7 +559,7 @@ importers:
     dependencies:
       '@nestjs/bullmq':
         specifier: 'catalog:'
-        version: 11.0.4(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))(bullmq@5.69.1)
+        version: 11.0.4(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))(bullmq@5.69.2)
       '@nestjs/common':
         specifier: 'catalog:'
         version: 11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -592,7 +592,7 @@ importers:
         version: 1.13.5
       bullmq:
         specifier: 'catalog:'
-        version: 5.69.1
+        version: 5.69.2
       nestjs-pino:
         specifier: 'catalog:'
         version: 4.5.0(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@11.0.0)(pino@10.3.1)(rxjs@7.8.2)
@@ -759,7 +759,7 @@ importers:
         version: 11.0.2
       '@nestjs/bullmq':
         specifier: 'catalog:'
-        version: 11.0.4(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))(bullmq@5.69.1)
+        version: 11.0.4(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))(bullmq@5.69.2)
       '@nestjs/common':
         specifier: 'catalog:'
         version: 11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -783,7 +783,7 @@ importers:
         version: link:../locales
       bullmq:
         specifier: 'catalog:'
-        version: 5.69.1
+        version: 5.69.2
       ioredis:
         specifier: 'catalog:'
         version: 5.9.3
@@ -3432,8 +3432,8 @@ packages:
   buffer@6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
 
-  bullmq@5.69.1:
-    resolution: {integrity: sha512-ct9cablOCuIHq4giGK32opyhftzeSDzdoQMLi/90xlBhtJmk0XoOO4FpU64egBD8KnWSCM/u4cjy3NA1J5SYYg==}
+  bullmq@5.69.2:
+    resolution: {integrity: sha512-6CRchWQLN9Jp8idN43BmIn49YRiIH5LUJwXOh3nuVYEWWDHFeJS56z+RzcE7+nsFX1LS5qu8obWFkKy7MmXHyg==}
 
   bundle-name@4.1.0:
     resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
@@ -5586,8 +5586,8 @@ packages:
     peerDependencies:
       react: ^19.2.4
 
-  react-error-boundary@6.1.0:
-    resolution: {integrity: sha512-02k9WQ/mUhdbXir0tC1NiMesGzRPaCsJEWU/4bcFrbY1YMZOtHShtZP6zw0SJrBWA/31H0KT9/FgdL8+sPKgHA==}
+  react-error-boundary@6.1.1:
+    resolution: {integrity: sha512-BrYwPOdXi5mqkk5lw+Uvt0ThHx32rCt3BkukS4X23A2AIWDPSGX6iaWTc0y9TU/mHDA/6qOSGel+B2ERkOvD1w==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
 
@@ -5642,8 +5642,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-resizable-panels@4.6.2:
-    resolution: {integrity: sha512-d6hyD6s7ewNAI+oINrZznR/08GUyAszrowXouUDztePEn/tQ2z/LEI2qRvrizYBe3TpgBi0cCjc10pXTTOc4jw==}
+  react-resizable-panels@4.6.4:
+    resolution: {integrity: sha512-E7Szs1xyaMZ7xOI2gG4TECNz4r/gmpV1AsXyZRnER6OQnfFf9uclFmrHHZR3h/iF8vQS+nQ1LKyZv9bzwGxPSg==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
@@ -6079,8 +6079,8 @@ packages:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
 
-  tailwind-merge@3.4.0:
-    resolution: {integrity: sha512-uSaO4gnW+b3Y2aWoWfFpX62vn2sR3skfhbjsEnaBI81WD1wBLlHZe5sWf0AqjksNdYTbGBEd0UasQMT3SNV15g==}
+  tailwind-merge@3.4.1:
+    resolution: {integrity: sha512-2OA0rFqWOkITEAOFWSBSApYkDeH9t2B3XSJuI4YztKBzK3mX0737A2qtxDZ7xkw9Zfh0bWl+r34sF3HXV+Ig7Q==}
 
   tailwindcss@4.1.18:
     resolution: {integrity: sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw==}
@@ -7464,12 +7464,12 @@ snapshots:
       '@nestjs/core': 11.1.13(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)
       tslib: 2.8.1
 
-  '@nestjs/bullmq@11.0.4(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))(bullmq@5.69.1)':
+  '@nestjs/bullmq@11.0.4(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))(bullmq@5.69.2)':
     dependencies:
       '@nestjs/bull-shared': 11.0.4(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))
       '@nestjs/common': 11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/core': 11.1.13(@nestjs/common@11.1.13(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      bullmq: 5.69.1
+      bullmq: 5.69.2
       tslib: 2.8.1
 
   '@nestjs/cli@11.0.16(@swc/core@1.15.11)(@types/node@24.1.0)':
@@ -9276,7 +9276,7 @@ snapshots:
       base64-js: 1.5.1
       ieee754: 1.2.1
 
-  bullmq@5.69.1:
+  bullmq@5.69.2:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.9.2
@@ -11490,7 +11490,7 @@ snapshots:
       react: 19.2.4
       scheduler: 0.27.0
 
-  react-error-boundary@6.1.0(react@19.2.4):
+  react-error-boundary@6.1.1(react@19.2.4):
     dependencies:
       react: 19.2.4
 
@@ -11534,7 +11534,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.14
 
-  react-resizable-panels@4.6.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  react-resizable-panels@4.6.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
@@ -11993,7 +11993,7 @@ snapshots:
 
   tagged-tag@1.0.0: {}
 
-  tailwind-merge@3.4.0: {}
+  tailwind-merge@3.4.1: {}
 
   tailwindcss@4.1.18: {}
 
