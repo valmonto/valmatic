@@ -46,7 +46,7 @@
     "e2e:docker:down": "docker compose -f compose.e2e.yml down -v && docker run --rm -v ./apps/e2e:/e2e alpine rm -rf /e2e/test-results 2>/dev/null || true",
     "release": "release-it",
     "release:dry": "release-it --dry-run",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:",
