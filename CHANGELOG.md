@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ### Build
 
+- E2e app to prefix commands with `e2e`
+## [0.0.5] - 2026-02-15
+
+### Build
+
 - E2e:docker not starting due to `prepare` command by @ninode97
 ## [0.0.4] - 2026-02-15
 
