@@ -106,25 +106,64 @@ valmonto-boilerplate/
 
 ```bash
 # Development
-pnpm dev              # Start all apps
-pnpm dev:api          # API only (port 3000)
-pnpm dev:web          # Web only (port 5173)
-pnpm dev:worker       # Worker only
+pnpm dev                 # Start all apps (API, Web, Worker)
+pnpm dev:api             # Start single app if needed
 
 # Database
-pnpm db:generate      # Generate migrations
-pnpm db:migrate       # Apply migrations
-pnpm db:studio        # Open Drizzle Studio
+pnpm db:generate         # Generate migrations from schema changes
+pnpm db:migrate          # Apply migrations
+pnpm db:studio           # Open Drizzle Studio
 
 # Testing
-pnpm test             # Unit tests
-pnpm e2e              # E2E tests
-pnpm e2e:ui           # E2E with Playwright UI
+pnpm test                # Unit tests
+pnpm e2e                 # E2E tests (headless)
+pnpm e2e:ui              # E2E with Playwright UI
 
-# Build
-pnpm build            # Build all packages
-pnpm typecheck        # Type check all packages
-pnpm lint             # Lint all packages
+# Quality
+pnpm build               # Build all packages
+pnpm typecheck           # Type check
+pnpm lint                # Lint (use lint:fix to auto-fix)
+pnpm format              # Format with Prettier
+
+# Utilities
+pnpm init:project        # Initialize project name/details
+pnpm i18n:extract        # Extract translation strings
+pnpm clear               # Remove all node_modules
+
+# License Compliance
+pnpm licenses:check      # Check dependencies for disallowed licenses
+pnpm licenses:generate   # Generate license report
+pnpm licenses:why <pkg>  # Show why a package is included
+```
+
+---
+
+## Commit Messages
+
+This project uses [Conventional Commits](https://www.conventionalcommits.org/) enforced by commitlint.
+
+```
+<type>(<scope>): <subject>
+```
+
+**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+
+**Scopes:**
+
+| Apps | Packages | Other |
+| ---- | -------- | ----- |
+| `api`, `web`, `worker`, `e2e` | `contracts`, `database`, `server`, `locales`, `utils`, `eslint-config`, `tsconfig` | `deps`, `ci`, `release`, `config` |
+
+**Rules:**
+- Subject must be lowercase, no period at end
+- Scope is recommended but not required
+
+**Examples:**
+```bash
+feat(api): add user invitation endpoint
+fix(web): resolve login redirect loop
+chore(deps): update dependencies
+refactor(database): simplify migration scripts
 ```
 
 ---
