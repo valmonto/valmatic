@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ### Build
 
+- E2e:docker not starting due to `prepare` command by @ninode97
+## [0.0.4] - 2026-02-15
+
+### Build
+
 - Improving cross-platform support by @ninode97
 ## [0.0.3] - 2026-02-15
 
