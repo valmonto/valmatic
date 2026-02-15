@@ -8,7 +8,7 @@
     "pnpm": ">=10.0.0"
   },
   "scripts": {
-    "dev": "pnpm -r --parallel --filter='./packages/*' --filter='./apps/*' run dev",
+    "dev": "pnpm -r --parallel --filter=./packages/* --filter=./apps/* run dev",
     "build": "pnpm -r run build",
     "lint": "pnpm -r run lint",
     "lint:fix": "pnpm -r run lint:fix",

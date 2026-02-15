@@ -16,7 +16,7 @@ pnpm install && pnpm build
 
 ```bash
 # 3. Start infrastructure
-docker compose -f compose.dev.yml up -d
+docker compose -f compose.dev.yml up
 ```
 
 ```bash
@@ -150,15 +150,17 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/) e
 
 **Scopes:**
 
-| Apps | Packages | Other |
-| ---- | -------- | ----- |
+| Apps                          | Packages                                                                           | Other                             |
+| ----------------------------- | ---------------------------------------------------------------------------------- | --------------------------------- |
 | `api`, `web`, `worker`, `e2e` | `contracts`, `database`, `server`, `locales`, `utils`, `eslint-config`, `tsconfig` | `deps`, `ci`, `release`, `config` |
 
 **Rules:**
+
 - Subject must be lowercase, no period at end
 - Scope is recommended but not required
 
 **Examples:**
+
 ```bash
 feat(api): add user invitation endpoint
 fix(web): resolve login redirect loop
@@ -178,6 +180,7 @@ pnpm release             # Create a release
 ```
 
 **What happens during a release:**
+
 1. Prompts for version bump (patch/minor/major)
 2. Updates `package.json` version
 3. Generates `CHANGELOG.md` from conventional commits
@@ -185,6 +188,7 @@ pnpm release             # Create a release
 5. Tags: `v<version>`
 
 **Requirements:**
+
 - Must be on `main` branch
 - Working directory must be clean
 
