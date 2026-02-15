@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "playwright test --project=chromium",
-    "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --project=chromium-headed",
-    "test:debug": "playwright test --project=chromium-headed --debug",
-    "report": "playwright show-report"
+    "e2e:test": "playwright test --project=chromium",
+    "e2e:test:ui": "playwright test --ui",
+    "e2e:test:headed": "playwright test --project=chromium-headed",
+    "e2e:test:debug": "playwright test --project=chromium-headed --debug",
+    "e2e:report": "playwright show-report"
   },
   "devDependencies": {
     "@playwright/test": "catalog:",

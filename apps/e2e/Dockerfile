@@ -19,4 +19,4 @@ RUN pnpm install --frozen-lockfile
 WORKDIR /app/apps/e2e
 
 # Run tests
-CMD ["pnpm", "test"]
+CMD ["pnpm", "e2e:test"]
