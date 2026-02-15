@@ -6,7 +6,12 @@ All notable changes to this project will be documented in this file.
 
 ### Build
 
-- Db module would give warnings on windows during pnpm install
+- Improving cross-platform support by @ninode97
+## [0.0.3] - 2026-02-15
+
+### Build
+
+- Db module would give warnings on windows during pnpm install by @ninode97
 ## [0.0.2] - 2026-02-15
 
 ### Bug Fixes
