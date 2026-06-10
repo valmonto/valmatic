@@ -14,10 +14,11 @@ import {
 } from '@/components/ui/breadcrumb';
 import { useTheme } from '@/shared/components/theme-provider';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, Moon, RefreshCw, Sun } from 'lucide-react';
+import { AlertTriangle, Moon, RefreshCw, Search, Sun } from 'lucide-react';
 import { OrgSwitcher } from '@/features/org';
 import { NotificationBell } from '@/features/notifications';
 import { LanguageSwitcher } from '@/shared/components/language-switcher';
+import { CommandMenu, openCommandMenu } from '@/shared/components/command-menu';
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   const { t } = useTranslation();
@@ -46,6 +47,7 @@ const pageTitles: Record<string, string> = {
 };
 
 export default function AppLayout() {
+  const { t } = useTranslation();
   const { isAuthenticated, isLoading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
@@ -67,6 +69,7 @@ export default function AppLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
+      <CommandMenu />
       <SidebarInset>
         <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b border-border/50 bg-background/80 backdrop-blur-xl px-4 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2">
@@ -81,6 +84,17 @@ export default function AppLayout() {
             </Breadcrumb>
           </div>
           <div className="ml-auto flex items-center gap-3">
+            <button
+              type="button"
+              onClick={openCommandMenu}
+              className="inline-flex h-8 items-center gap-2 rounded-md border bg-muted/40 px-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <Search className="size-3.5" />
+              <span className="hidden md:inline">{t(k.common.command.search)}</span>
+              <kbd className="ml-1 hidden rounded border bg-background px-1.5 font-mono text-[10px] leading-5 md:inline">
+                ⌘K
+              </kbd>
+            </button>
             <OrgSwitcher />
             <Separator orientation="vertical" className="h-6" />
             <NotificationBell />

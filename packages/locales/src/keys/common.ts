@@ -33,6 +33,15 @@ export const common = {
     errorTest: 'common.nav.errorTest',
   },
 
+  // Command palette
+  command: {
+    search: 'common.command.search',
+    noResults: 'common.command.noResults',
+    navigation: 'common.command.navigation',
+    actions: 'common.command.actions',
+    toggleTheme: 'common.command.toggleTheme',
+  },
+
   // Dashboard
   dashboard: {
     title: 'common.dashboard.title',

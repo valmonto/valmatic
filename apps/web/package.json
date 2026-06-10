@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@base-ui/react": "catalog:",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@pkg/contracts": "workspace:*",
     "@pkg/locales": "workspace:*",
     "@pkg/utils": "workspace:*",
