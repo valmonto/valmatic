@@ -1,0 +1,140 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: vboilerplatedb
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER:-vboilerplate}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-vboilerplate}
+    volumes:
+      - vboilerplatedb_data:/var/lib/postgresql
+    networks:
+      - staging_network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-vboilerplate} -d ${DB_NAME:-vboilerplate}']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:8-alpine
+    container_name: vboilerplateredis
+    env_file:
+      - .env
+    command: sh -c 'exec redis-server --requirepass "$$REDIS_PASSWORD" --appendonly yes'
+    volumes:
+      - vboilerplateredis_data:/data
+    networks:
+      - staging_network
+    healthcheck:
+      test: ['CMD-SHELL', 'redis-cli -a "$$REDIS_PASSWORD" ping']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # One-shot migration runner. Reuses the API image but overrides the
+  # entrypoint to apply migrations and exit. Runs exactly once before api/worker
+  # start, so multiple api replicas never race to migrate.
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: vboilerplatemigrate
+    env_file:
+      - .env
+    # Override host-loopback values from .env: on the compose network the DB is
+    # reachable by service name, not 127.0.0.1. Build the URL from DB_PASSWORD so
+    # it always matches what Postgres was initialized with.
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-vboilerplate}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-vboilerplate}
+    entrypoint: ['node', '/app/packages/database/dist/cli/migrate.mjs']
+    networks:
+      - staging_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: 'no'
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    # No container_name: it must be unique, which blocks `--scale api=N`.
+    # Compose auto-names replicas (valmatic-dev-api-1, -2, …).
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      # See migrate service: reach backing services by name, not 127.0.0.1.
+      DATABASE_URL: postgresql://${DB_USER:-vboilerplate}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-vboilerplate}
+      REDIS_HOST: redis
+      IAM_REDIS_HOST: redis
+    # Host-port range so up to 5 replicas each bind a distinct loopback port
+    # (3011..3015); point your host proxy's upstreams at this range.
+    ports:
+      - '127.0.0.1:3011-3015:3000'
+    networks:
+      - staging_network
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: vboilerplateweb
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+    ports:
+      - '127.0.0.1:3010:3000'
+    networks:
+      - staging_network
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    # No container_name so the worker can also scale (--scale worker=N).
+    # It publishes no host port, so replicas don't conflict.
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      # See migrate service: reach backing services by name, not 127.0.0.1.
+      DATABASE_URL: postgresql://${DB_USER:-vboilerplate}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-vboilerplate}
+      REDIS_HOST: redis
+      IAM_REDIS_HOST: redis
+    networks:
+      - staging_network
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  vboilerplatedb_data:
+  vboilerplateredis_data:
+
+networks:
+  staging_network:
+    driver: bridge

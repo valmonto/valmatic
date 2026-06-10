@@ -1,4 +1,4 @@
-FROM node:24-alpine AS base
+FROM node:26-alpine AS base
 RUN npm install -g pnpm@10
 
 # Build stage
@@ -11,10 +11,10 @@ COPY packages ./packages
 COPY apps/web ./apps/web
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @pkg/web build
+RUN pnpm --filter @pkg/web... build
 
 # Production stage - serve with a simple static server
-FROM node:24-alpine AS runner
+FROM node:26-alpine AS runner
 RUN npm install -g serve@14
 
 WORKDIR /app

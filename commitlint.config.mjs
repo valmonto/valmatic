@@ -24,6 +24,7 @@ export default {
         'ci',
         'release',
         'config',
+        'deploy',
       ],
     ],
     // Warn if no scope provided (not error, to allow root-level commits)

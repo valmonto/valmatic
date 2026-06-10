@@ -28,6 +28,7 @@ docker compose -f compose.dev.yml up
 # 4. Configure environment
 ## Linux
 export DATABASE_URL=postgresql://vboilerplate:vboilerplate@127.0.0.1:5432/vboilerplate
+export DATABASE_PASSWORD=secretpass
 export IAM_REDIS_HOST=127.0.0.1
 export IAM_REDIS_PORT=6379
 export IAM_REDIS_PASSWORD=vboilerplate
