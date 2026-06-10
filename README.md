@@ -5,6 +5,11 @@ Full-stack SaaS starter kit with multi-tenant auth, RBAC, organizations, and bac
 ## Quick Start
 
 ```bash
+#. Clone the repo:
+git clone https://github.com/valmonto/valmatic.git my-valmatic-project
+```
+
+```bash
 # 1. Initialize your project
 pnpm init:project        # Set project name, details
 ```
