@@ -1,6 +1,6 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 
-import { useActionRequest } from '@/hooks/use-action-request';
+import { useActionRequest } from '@/shared/hooks/use-action-request';
 
 describe('useActionRequest', () => {
   it('initializes with default state', () => {

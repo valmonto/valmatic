@@ -2,7 +2,7 @@ import { Navigate, Outlet, useLocation } from 'react-router';
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { k } from '@pkg/locales';
-import { useAuth } from '@/context/auth-context';
+import { useAuth } from '@/shared/auth/auth-context';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layouts/dashboard-layout';
 import { Separator } from '@/components/ui/separator';
@@ -12,12 +12,12 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
-import { useTheme } from '@/components/theme-provider';
+import { useTheme } from '@/shared/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, Moon, RefreshCw, Sun } from 'lucide-react';
-import { OrgSwitcher } from '@/components/features/org/org-switcher';
-import { NotificationBell } from '@/components/features/notifications/notification-bell';
-import { LanguageSwitcher } from '@/components/features/language-switcher';
+import { OrgSwitcher } from '@/features/org';
+import { NotificationBell } from '@/features/notifications';
+import { LanguageSwitcher } from '@/shared/components/language-switcher';
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   const { t } = useTranslation();

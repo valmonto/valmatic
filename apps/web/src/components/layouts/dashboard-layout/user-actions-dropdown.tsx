@@ -15,7 +15,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { useAuth } from '@/context/auth-context';
+import { useAuth } from '@/shared/auth/auth-context';
 import { ChevronsUpDown, LogOut, Settings, User } from 'lucide-react';
 import { useMemo } from 'react';
 

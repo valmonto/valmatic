@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/sidebar';
 import { UserActionsDropdown } from './user-actions-dropdown';
 import { Link, useLocation } from 'react-router';
-import { BarChart3, Bug, LayoutDashboard, Settings, Users, Hexagon, ListTodo } from 'lucide-react';
+import { BarChart3, LayoutDashboard, Settings, Users, Hexagon, ListTodo } from 'lucide-react';
 
 const navGroups = [
   {
@@ -32,10 +32,6 @@ const navGroups = [
       { titleKey: k.jobs.jobs, url: '/jobs', icon: ListTodo },
       { titleKey: k.common.nav.settings, url: '/settings', icon: Settings },
     ],
-  },
-  {
-    labelKey: k.common.nav.developer,
-    items: [{ titleKey: k.common.nav.errorTest, url: '/error-test', icon: Bug }],
   },
 ];
 

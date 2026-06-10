@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
 
-import { useNotificationStore } from '@/context/notification-store';
+import { useNotificationStore } from '@/shared/store/notification-store';
 
 describe('notification-store', () => {
   beforeEach(() => {

@@ -11,7 +11,7 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
-import { useAuth } from '@/context/auth-context';
+import { useAuth } from '@/shared/auth/auth-context';
 import {
   ArrowUpRight,
   TrendingUp,

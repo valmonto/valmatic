@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { k } from '@pkg/locales';
 import { api } from '@/api';
-import { useActionRequest } from '@/hooks/use-action-request';
+import { useActionRequest } from '@/shared/hooks/use-action-request';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

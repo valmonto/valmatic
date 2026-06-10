@@ -2,9 +2,9 @@ import { StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import { AppRouter } from './lib/router';
-import { AuthProvider } from './context/auth-context';
-import { ThemeProvider } from './components/theme-provider';
-import i18n from './lib/i18n';
+import { AuthProvider } from '@/shared/auth/auth-context';
+import { ThemeProvider } from '@/shared/components/theme-provider';
+import i18n from '@/shared/lib/i18n';
 
 import './styles/index';
 

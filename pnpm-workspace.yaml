@@ -34,6 +34,7 @@ catalog:
   eslint-config-prettier: 10.1.8
   eslint-plugin-prettier: 5.5.6
   eslint-plugin-react-hooks: 7.1.1
+  eslint-plugin-boundaries: 6.0.2
   globals: 17.6.0
   '@types/node': 25.9.2
   vitest: 4.1.8
@@ -164,6 +165,7 @@ allowBuilds:
   esbuild: true
   msgpackr-extract: true
   msw: true
+  unrs-resolver: true
 
 # Supply-chain cooldown: wait 2 days (2880 min) before a newly published
 # version is installable, so yanked/malicious releases are caught first.
