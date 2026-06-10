@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '@pkg/server';
 import type {
   ListNotificationsRequest,
   ListNotificationsResponse,
@@ -27,7 +27,7 @@ export interface CreateNotificationData {
 export class NotificationService {
   constructor(
     private readonly notificationRepository: NotificationRepository,
-    @InjectPinoLogger(NotificationService.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
   async create(data: CreateNotificationData): Promise<void> {

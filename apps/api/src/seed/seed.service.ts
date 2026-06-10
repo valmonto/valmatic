@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '@pkg/server';
 import type { Env } from '../config';
 import type { Seeder } from './seeder.interface';
 import { ProductionSeeder } from './seeders/production.seeder';
@@ -20,7 +20,7 @@ export class SeedService {
     private readonly config: ConfigService<Env, true>,
     private readonly productionSeeder: ProductionSeeder,
     private readonly developmentSeeder: DevelopmentSeeder,
-    @InjectPinoLogger(SeedService.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
   private select(): Seeder {

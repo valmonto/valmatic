@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '@pkg/server';
 import { IamService } from '@pkg/server';
 import { k } from '@pkg/locales';
 import type {
@@ -23,7 +23,7 @@ export class OrgService {
   constructor(
     private readonly orgRepository: OrgRepository,
     private readonly iamService: IamService,
-    @InjectPinoLogger(OrgService.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
   async listOrgs(activeUser: ActiveUser): Promise<ListOrgsResponse> {

@@ -32,6 +32,12 @@ export const envSchema = z.object({
   // Server
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
 
+  // Logging — show NestJS framework bootstrap logs (module/route mapping). Off by default.
+  LOG_FRAMEWORK: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((v) => v === 'true'),
+
   // Seeding (initial login). Optional in dev (safe defaults applied by the seeder),
   // required in production — enforced by the superRefine below.
   SEED_INITIAL_EMAIL: z.string().email('SEED_INITIAL_EMAIL must be a valid email').optional(),

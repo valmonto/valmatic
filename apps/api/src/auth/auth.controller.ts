@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Req, Res } from '@nestjs/common';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '@pkg/server';
 import { AuthService } from './auth.service';
 import {
   PublicRoute,
@@ -41,7 +41,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly iamService: IamService,
-    @InjectPinoLogger(AuthController.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
   @PublicRoute()

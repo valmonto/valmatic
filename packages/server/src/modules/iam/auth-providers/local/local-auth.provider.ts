@@ -18,7 +18,7 @@ import { randomBytes } from 'node:crypto';
 import { k } from '@pkg/locales';
 import { IAM_REDIS } from '../../iam.redis';
 import { ORG_ACCESS, type IOrgAccessProvider } from '../org-access-provider';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '../../../logging';
 
 interface SessionData extends ActiveUser {
   sessionStart: number;
@@ -30,7 +30,7 @@ export class LocalAuthProvider implements IAuthProvider {
   private readonly maxSessionTtl: number;
 
   constructor(
-    @InjectPinoLogger() private logger: PinoLogger,
+    @InjectLogger() private logger: PinoLogger,
     @Inject(IAM_REDIS) private readonly redis: Redis,
     private readonly jwtService: JwtService,
     @Inject(ORG_ACCESS)

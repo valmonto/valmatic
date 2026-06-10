@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '@pkg/server';
 import { DATABASE_CLIENT, type DatabaseClient } from '@pkg/database';
 import type { Seeder } from '../seeder.interface';
 import { findOrCreateOrg, upsertMembership, upsertUser } from '../seed.helpers';
@@ -29,7 +29,7 @@ export class ProductionSeeder implements Seeder {
   constructor(
     @Inject(DATABASE_CLIENT) private readonly dbClient: DatabaseClient,
     private readonly config: ConfigService,
-    @InjectPinoLogger(ProductionSeeder.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
   /** Resolve the initial-login config, applying dev fallbacks when unset. */

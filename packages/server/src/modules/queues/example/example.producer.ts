@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Queue, type JobsOptions } from 'bullmq';
 import { EXAMPLE_QUEUE } from './example.constants';
 import { EXAMPLE_JOB_NAMES, type ExampleJobPayload } from './example.types';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '../../logging';
 
 /**
  * Producer service for the example queue.
@@ -30,7 +30,7 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 @Injectable()
 export class ExampleProducer {
   constructor(
-    @InjectPinoLogger(ExampleProducer.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
     @InjectQueue(EXAMPLE_QUEUE.name) private readonly queue: Queue<ExampleJobPayload>,
   ) {}
 

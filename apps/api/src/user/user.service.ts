@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '@pkg/server';
 import * as bcrypt from 'bcryptjs';
 import { k } from '@pkg/locales';
 import { SECURITY_CONFIG } from '@pkg/server';
@@ -26,7 +26,7 @@ const { BCRYPT_ROUNDS } = SECURITY_CONFIG;
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
-    @InjectPinoLogger(UserService.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
   async listUsers(activeUser: ActiveUser, dto: ListUsersRequest): Promise<ListUsersResponse> {

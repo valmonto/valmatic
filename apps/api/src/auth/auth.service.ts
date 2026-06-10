@@ -17,7 +17,7 @@ import {
   type RegisterRequest,
   type RegisterResponse,
 } from '@pkg/contracts';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '@pkg/server';
 import { AuthRepository } from './auth.repository';
 import * as bcrypt from 'bcryptjs';
 import type Redis from 'ioredis';
@@ -30,7 +30,7 @@ export class AuthService {
     private readonly iamService: IamService,
     private readonly authRepository: AuthRepository,
     @Inject(IAM_REDIS) private readonly redis: Redis,
-    @InjectPinoLogger(AuthService.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
   async register(

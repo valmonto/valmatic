@@ -2,10 +2,13 @@ import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from '@pkg/database';
-import { LoggerErrorInterceptor, LoggerModule } from 'nestjs-pino';
-import { randomUUID } from 'node:crypto';
-import type { IncomingMessage, ServerResponse } from 'node:http';
-import { EventsModule, GlobalExceptionFilter, HealthModule } from '@pkg/server';
+import {
+  EventsModule,
+  GlobalExceptionFilter,
+  HealthModule,
+  LoggerErrorInterceptor,
+  LoggingModule,
+} from '@pkg/server';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { OrgModule } from './org/org.module';
@@ -15,53 +18,9 @@ import { I18nModule } from './i18n';
 import { SeedModule } from './seed/seed.module';
 import { validateEnv } from './config';
 
-const isProduction = process.env.NODE_ENV === 'production';
-
 @Module({
   imports: [
-    LoggerModule.forRoot({
-      assignResponse: true,
-      pinoHttp: {
-        level: isProduction ? 'info' : 'debug',
-        transport: isProduction
-          ? undefined
-          : {
-              target: 'pino-pretty',
-              options: {
-                singleLine: false,
-                ignore: 'pid,hostname',
-              },
-            },
-        genReqId: (req) => (req.headers['x-request-id'] as string) ?? randomUUID(),
-        serializers: {
-          req(req: IncomingMessage & { id?: string; raw?: { url?: string; method?: string } }) {
-            return {
-              id: req.id,
-              method: req.method ?? req.raw?.method,
-              url: req.url ?? req.raw?.url,
-              headers: {
-                host: req.headers?.['host'],
-                'content-type': req.headers?.['content-type'],
-                'user-agent': req.headers?.['user-agent'],
-              },
-            };
-          },
-          res(res: ServerResponse & { statusCode?: number }) {
-            return {
-              statusCode: res.statusCode,
-              headers: {
-                'content-type': res.getHeader?.('content-type'),
-                'content-length': res.getHeader?.('content-length'),
-              },
-            };
-          },
-        },
-        redact: {
-          paths: ['req.headers.authorization', 'req.headers.cookie', 'req.headers["set-cookie"]'],
-          censor: '[REDACTED]',
-        },
-      },
-    }),
+    LoggingModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       validate: validateEnv,

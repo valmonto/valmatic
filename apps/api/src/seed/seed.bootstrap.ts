@@ -1,6 +1,6 @@
 import { Injectable, type OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '@pkg/server';
 import type { Env } from '../config';
 import { SeedService } from './seed.service';
 
@@ -17,7 +17,7 @@ export class SeedBootstrapService implements OnApplicationBootstrap {
   constructor(
     private readonly config: ConfigService<Env, true>,
     private readonly seedService: SeedService,
-    @InjectPinoLogger(SeedBootstrapService.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {

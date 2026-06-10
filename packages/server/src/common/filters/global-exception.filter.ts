@@ -6,8 +6,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { ZodError } from 'zod';
+import { InjectLogger, PinoLogger } from '../../modules/logging';
 
 interface ErrorResponse {
   statusCode: number;
@@ -19,7 +19,7 @@ interface ErrorResponse {
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
-  constructor(@InjectPinoLogger(GlobalExceptionFilter.name) private readonly logger: PinoLogger) {}
+  constructor(@InjectLogger() private readonly logger: PinoLogger) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();

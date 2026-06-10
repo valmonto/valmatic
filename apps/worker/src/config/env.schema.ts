@@ -19,6 +19,12 @@ export const envSchema = z.object({
 
   // Worker
   WORKER_PORT: z.coerce.number().int().min(1).max(65535).default(3001),
+
+  // Logging — show NestJS framework bootstrap logs (module/route mapping). Off by default.
+  LOG_FRAMEWORK: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((v) => v === 'true'),
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -214,6 +214,37 @@ changes required. Each entry is validated against the contract schemas:
 
 ---
 
+## Logging
+
+Apps log via [pino](https://getpino.io) (`nestjs-pino`), configured centrally in
+`@pkg/server`. Inject a context-bound logger with `@InjectLogger()`:
+
+```ts
+constructor(@InjectLogger() private readonly logger: PinoLogger) {}
+```
+
+### Quieting NestJS bootstrap logs
+
+By default, NestJS's framework startup logs (module wiring, route mappings, the
+`path-to-regexp` legacy warning — `InstanceLoader`, `RoutesResolver`,
+`RouterExplorer`, …) are **hidden** so boot output stays readable. Your own
+application logs are never affected, and errors always show.
+
+Set `LOG_FRAMEWORK=true` to bring them back when debugging routing or DI:
+
+```bash
+# .env
+LOG_FRAMEWORK=false   # default — quiet startup
+LOG_FRAMEWORK=true    # show full NestJS bootstrap output
+
+# or per-run
+LOG_FRAMEWORK=true pnpm dev:api
+```
+
+Applies to the API, worker, and the seed CLI.
+
+---
+
 ## Commit Messages
 
 This project uses [Conventional Commits](https://www.conventionalcommits.org/) enforced by commitlint.

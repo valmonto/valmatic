@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from '@pkg/database';
-import { LoggerModule } from 'nestjs-pino';
+import { LoggingModule } from '@pkg/server';
 import { validateEnv } from '../config';
 import { SeedModule } from './seed.module';
-
-const isProduction = process.env.NODE_ENV === 'production';
 
 /**
  * Self-contained module for the seed CLI. Stands up only the infrastructure
@@ -14,14 +12,7 @@ const isProduction = process.env.NODE_ENV === 'production';
  */
 @Module({
   imports: [
-    LoggerModule.forRoot({
-      pinoHttp: {
-        level: isProduction ? 'info' : 'debug',
-        transport: isProduction
-          ? undefined
-          : { target: 'pino-pretty', options: { singleLine: false, ignore: 'pid,hostname' } },
-      },
-    }),
+    LoggingModule.forRoot(),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
     DatabaseModule.forRootAsync({
       imports: [ConfigModule],

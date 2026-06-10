@@ -10,7 +10,7 @@ import {
   type ExampleTaskCompletedEvent,
   type ExampleTaskFailedEvent,
 } from '@pkg/server';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '@pkg/server';
 
 /**
  * Processor for the example queue.
@@ -26,7 +26,7 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 @Processor(EXAMPLE_QUEUE.name, EXAMPLE_QUEUE.workerOptions)
 export class ExampleProcessor extends WorkerHost {
   constructor(
-    @InjectPinoLogger(ExampleProcessor.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
     private readonly eventEmitter: EventEmitter2,
   ) {
     super();

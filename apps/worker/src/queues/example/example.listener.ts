@@ -7,7 +7,7 @@ import {
   type ExampleTaskFailedEvent,
 } from '@pkg/server';
 import { NotificationRepository } from './notification.repository';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '@pkg/server';
 
 /**
  * Example event listener.
@@ -16,7 +16,7 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 @Injectable()
 export class ExampleListener {
   constructor(
-    @InjectPinoLogger(ExampleListener.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
     private readonly notificationRepository: NotificationRepository,
   ) {}
 

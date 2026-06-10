@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { Logger } from 'nestjs-pino';
+import { Logger, withFrameworkLogFilter } from '@pkg/server';
 import { SeedCliModule } from './seed-cli.module';
 import { SeedService } from './seed.service';
 
@@ -13,7 +13,7 @@ import { SeedService } from './seed.service';
  */
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.createApplicationContext(SeedCliModule, { bufferLogs: true });
-  app.useLogger(app.get(Logger));
+  app.useLogger(withFrameworkLogFilter(app.get(Logger)));
   app.enableShutdownHooks();
 
   try {

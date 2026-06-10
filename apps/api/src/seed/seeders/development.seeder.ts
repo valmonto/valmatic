@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { InjectLogger, PinoLogger } from '@pkg/server';
 import { z } from 'zod';
 import { DATABASE_CLIENT, eq, user, type DatabaseClient } from '@pkg/database';
 import { SystemRoleSchema, OrganizationUserRoleSchema } from '@pkg/contracts';
@@ -31,7 +31,7 @@ export class DevelopmentSeeder implements Seeder {
   constructor(
     @Inject(DATABASE_CLIENT) private readonly dbClient: DatabaseClient,
     private readonly productionSeeder: ProductionSeeder,
-    @InjectPinoLogger(DevelopmentSeeder.name) private readonly logger: PinoLogger,
+    @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
   async run(): Promise<void> {

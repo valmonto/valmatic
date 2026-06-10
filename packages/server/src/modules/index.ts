@@ -3,3 +3,4 @@ export * from './redis';
 export * from './health';
 export * from './queues';
 export * from './events';
+export * from './logging';
