@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 // ─── Why Zustand for notifications? ─────────────────────────────────────────
 //
@@ -27,14 +27,14 @@ import { create } from "zustand";
 
 interface Notification {
   id: string;
-  type: "success" | "error" | "info";
+  type: 'success' | 'error' | 'info';
   message: string;
   createdAt: Date;
 }
 
 interface NotificationState {
   notifications: Notification[];
-  addNotification: (type: Notification["type"], message: string) => void;
+  addNotification: (type: Notification['type'], message: string) => void;
   dismissNotification: (id: string) => void;
   clearAll: () => void;
 }
@@ -48,10 +48,7 @@ export const useNotificationStore = create<NotificationState>((set) => ({
     const id = crypto.randomUUID();
 
     set((state) => ({
-      notifications: [
-        ...state.notifications,
-        { id, type, message, createdAt: new Date() },
-      ],
+      notifications: [...state.notifications, { id, type, message, createdAt: new Date() }],
     }));
 
     // Auto-dismiss after a timeout. Because `set` is available outside React,

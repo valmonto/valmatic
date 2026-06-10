@@ -8,7 +8,7 @@ import postgres from 'postgres';
  */
 export async function runMigrations(databaseUrl: string, migrationsFolder: string) {
   const sql = postgres(databaseUrl, { max: 1 });
-  const db = drizzle(sql);
+  const db = drizzle({ client: sql });
 
   console.log('Running migrations...');
 

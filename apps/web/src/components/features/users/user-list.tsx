@@ -82,9 +82,7 @@ export function UserList() {
     <Card>
       <CardHeader>
         <CardTitle>{t(k.users.users)}</CardTitle>
-        <CardDescription>
-          {t(k.users.totalUsersCount, { count: data.meta.total })}
-        </CardDescription>
+        <CardDescription>{t(k.users.totalUsersCount, { count: data.meta.total })}</CardDescription>
       </CardHeader>
       <CardContent>
         {data.data.length === 0 ? (

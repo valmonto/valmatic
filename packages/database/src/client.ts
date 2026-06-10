@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres, { type Sql } from 'postgres';
-import * as schema from './schema';
+import { relations } from './schema/relations';
 
 export interface DatabaseConfig {
   url: string;
@@ -9,7 +9,7 @@ export interface DatabaseConfig {
   connectionTimeout?: number;
 }
 
-export type DrizzleOrm = ReturnType<typeof drizzle<typeof schema>>;
+export type DrizzleOrm = ReturnType<typeof drizzle<typeof relations>>;
 
 export interface DatabaseClient {
   /** The Drizzle ORM instance for queries */
@@ -34,7 +34,7 @@ export function createDatabaseClient(config: DatabaseConfig): DatabaseClient {
     prepare: false, // Required for connection poolers like PgBouncer
   });
 
-  const db = drizzle(sql, { schema });
+  const db = drizzle({ client: sql, relations });
 
   const close = async () => {
     await sql.end();

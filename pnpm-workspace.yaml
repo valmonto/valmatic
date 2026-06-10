@@ -2,89 +2,172 @@ packages:
   - apps/*
   - packages/*
 
+# ---------------------------------------------------------------------------
+# Catalog — single source of truth for dependency versions across the
+# monorepo. Grouped by where each dependency is actually consumed:
+#   • Repo tooling        — root-level release / lint / commit / format
+#   • Shared toolchain    — TS, ESLint, test runners used by every package
+#   • Shared runtime      — imported by both frontend and backend app code
+#   • Backend             — apps/api, apps/worker, packages/{server,database}
+#   • Frontend            — apps/web
+#   • E2E                 — apps/e2e
+# ---------------------------------------------------------------------------
 catalog:
-  '@base-ui/react': 1.2.0
+  # ═══════════════════════════════════════════════════════════════════════
+  #  REPO TOOLING  (root devDependencies)
+  #  Release automation, changelog, git hooks, commit linting, formatting.
+  # ═══════════════════════════════════════════════════════════════════════
+  '@commitlint/cli': 21.0.2
+  '@commitlint/config-conventional': 21.0.2
+  git-cliff: 2.13.1
+  husky: 9.1.7
+  prettier: 3.8.4
+  release-it: 20.2.0
+
+  # ═══════════════════════════════════════════════════════════════════════
+  #  SHARED TOOLCHAIN  (TS / lint / test — used by every package)
+  # ═══════════════════════════════════════════════════════════════════════
+  typescript: 6.0.3
+  typescript-eslint: 8.60.1
+  eslint: 10.4.1
   '@eslint/js': 10.0.1
-  '@fastify/cookie': 11.0.2
-  '@nestjs/bullmq': 11.0.4
-  '@nestjs/cli': 11.0.16
-  '@nestjs/common': 11.1.13
-  '@nestjs/config': 4.0.3
-  '@nestjs/core': 11.1.13
-  '@nestjs/event-emitter': 3.0.1
-  '@nestjs/jwt': 11.0.2
-  '@nestjs/platform-fastify': 11.1.13
-  '@nestjs/testing': 11.1.13
-  '@tailwindcss/vite': 4.1.18
-  '@types/node': 24.1.0
-  '@types/react': 19.2.14
-  '@types/react-dom': 19.2.3
-  '@vitejs/plugin-react-swc': 4.2.3
-  axios: 1.13.5
-  bcryptjs: 3.0.3
-  bullmq: 5.69.2
-  class-variance-authority: 0.7.1
-  clsx: 2.1.1
-  cmdk: 1.1.1
-  date-fns: 4.1.0
-  drizzle-kit: 0.31.9
-  drizzle-orm: 0.45.1
-  embla-carousel-react: 8.6.0
-  eslint: 10.0.0
   eslint-config-prettier: 10.1.8
-  eslint-plugin-prettier: 5.5.5
-  eslint-plugin-react-hooks: 7.0.1
-  fastify: 5.7.4
-  framer-motion: 12.34.0
-  globals: 17.3.0
-  input-otp: 1.4.2
-  ioredis: 5.9.3
-  lucide-react: 0.563.0
-  nestjs-pino: 4.5.0
-  next-themes: 0.4.6
+  eslint-plugin-prettier: 5.5.6
+  eslint-plugin-react-hooks: 7.1.1
+  globals: 17.6.0
+  '@types/node': 25.9.2
+  vitest: 4.1.8
+  '@vitest/coverage-v8': 4.1.8
+  tsdown: 0.22.2 # library bundler for packages/*
+
+  # ═══════════════════════════════════════════════════════════════════════
+  #  SHARED RUNTIME  (imported by both frontend and backend app code)
+  # ═══════════════════════════════════════════════════════════════════════
+  axios: 1.17.0
+  zod: 4.4.3
+
+  # ═══════════════════════════════════════════════════════════════════════
+  #  BACKEND  (apps/api, apps/worker, packages/server, packages/database)
+  # ═══════════════════════════════════════════════════════════════════════
+
+  # NestJS + Fastify
+  '@nestjs/common': 11.1.26
+  '@nestjs/core': 11.1.26
+  '@nestjs/cli': 11.0.23
+  '@nestjs/config': 4.0.4
+  '@nestjs/event-emitter': 3.1.0
+  '@nestjs/jwt': 11.0.2
+  '@nestjs/platform-fastify': 11.1.26
+  '@nestjs/testing': 11.1.26
+  '@fastify/cookie': 11.0.2
+  fastify: 5.8.5
+  reflect-metadata: 0.2.2
+  rxjs: 7.8.2
+
+  # Queues / cache
+  '@nestjs/bullmq': 11.0.4
+  bullmq: 5.78.0
+  ioredis: 5.11.1
+
+  # Database (Drizzle + Postgres)
+  drizzle-orm: 1.0.0-rc.3
+  drizzle-kit: 1.0.0-rc.3
+  postgres: 3.4.9
+
+  # Auth
+  bcryptjs: 3.0.3
+
+  # Logging (Pino)
+  nestjs-pino: 4.6.1
   pino: 10.3.1
   pino-http: 11.0.0
   pino-pretty: 13.1.3
-  postgres: 3.4.8
-  prettier: 3.8.1
-  radix-ui: 1.4.3
-  react: 19.2.4
-  react-day-picker: 9.13.2
-  react-dom: 19.2.4
-  react-error-boundary: 6.1.1
-  react-hook-form: 7.71.1
-  react-resizable-panels: 4.6.4
-  react-router: 7.13.0
-  recharts: 2.15.3
-  reflect-metadata: 0.2.2
-  rxjs: 7.8.2
+
+  # i18n (server-side)
+  nestjs-i18n: 10.8.4
+
+  # ═══════════════════════════════════════════════════════════════════════
+  #  FRONTEND  (apps/web)
+  # ═══════════════════════════════════════════════════════════════════════
+
+  # React core + routing
+  react: 19.2.7
+  react-dom: 19.2.7
+  react-router: 7.17.0
+  '@types/react': 19.2.17
+  '@types/react-dom': 19.2.3
+
+  # Data / state / forms
+  swr: 2.4.1
+  zustand: 5.0.14
+  react-hook-form: 7.78.0
+  react-error-boundary: 6.1.2
+  date-fns: 4.4.0
+
+  # UI components / primitives
+  radix-ui: 1.5.0
+  '@base-ui/react': 1.5.0
+  lucide-react: 1.17.0
+  cmdk: 1.1.1
   sonner: 2.0.7
-  swr: 2.4.0
-  tailwind-merge: 3.4.1
-  tailwindcss: 4.1.18
-  tsdown: 0.20.3
-  tw-animate-css: 1.4.0
-  typescript: 5.9.3
-  typescript-eslint: 8.55.0
   vaul: 1.1.2
-  vite: 7.3.1
-  vitest: 4.0.18
-  '@vitest/coverage-v8': 4.0.18
-  '@testing-library/jest-dom': 6.6.3
-  '@testing-library/react': 16.2.0
-  '@testing-library/user-event': 14.6.1
-  jsdom: 26.1.0
-  msw: 2.12.10
-  zod: 4.3.6
-  zustand: 5.0.11
-  i18next: 25.8.7
-  react-i18next: 16.5.4
+  input-otp: 1.4.2
+  next-themes: 0.4.6
+  embla-carousel-react: 8.6.0
+  react-day-picker: 10.0.1
+  react-resizable-panels: 4.11.2
+  recharts: 3.8.1
+  framer-motion: 12.40.0
+
+  # Styling
+  tailwindcss: 4.3.0
+  '@tailwindcss/vite': 4.3.0
+  tailwind-merge: 3.6.0
+  tw-animate-css: 1.4.0
+  class-variance-authority: 0.7.1
+  clsx: 2.1.1
+
+  # i18n (client-side)
+  i18next: 26.3.1
   i18next-browser-languagedetector: 8.2.1
-  nestjs-i18n: 10.6.0
-  i18next-parser: 9.3.0
-  '@playwright/test': 1.52.0
-  '@commitlint/cli': 19.8.1
-  '@commitlint/config-conventional': 19.8.1
-  husky: 9.1.7
-  release-it: 19.0.4
-  git-cliff: 2.12.0
+  react-i18next: 17.0.8
+
+  # Build + test (web)
+  vite: 8.0.16
+  '@vitejs/plugin-react-swc': 4.3.1
+  jsdom: 29.1.1
+  msw: 2.14.6
+  '@testing-library/react': 16.3.2
+  '@testing-library/jest-dom': 6.9.1
+  '@testing-library/user-event': 14.6.1
+
+  # ═══════════════════════════════════════════════════════════════════════
+  #  E2E  (apps/e2e)
+  # ═══════════════════════════════════════════════════════════════════════
+  '@playwright/test': 1.60.0
+
+# ---------------------------------------------------------------------------
+# Install / build policy
+# ---------------------------------------------------------------------------
+
+# Packages allowed to run install/postinstall build scripts.
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@swc/core'
+  - esbuild
+  - msgpackr-extract
+  - msw
+
+allowBuilds:
+  '@nestjs/core': true
+  '@swc/core': true
+  esbuild: true
+  msgpackr-extract: true
+  msw: true
+
+# Supply-chain cooldown: wait 2 days (2880 min) before a newly published
+# version is installable, so yanked/malicious releases are caught first.
+# Listed packages are exempt from the cooldown.
+minimumReleaseAgeExclude:
+  - '@nestjs/cli@11.0.23'
+  - prettier@3.8.4

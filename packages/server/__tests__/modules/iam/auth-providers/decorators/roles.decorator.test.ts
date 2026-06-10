@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { Reflector } from '@nestjs/core';
-import { Roles, Role, ROLES_KEY } from '../../../../../src/modules/iam/auth-providers/decorators/roles.decorator';
+import {
+  Roles,
+  Role,
+  ROLES_KEY,
+} from '../../../../../src/modules/iam/auth-providers/decorators/roles.decorator';
 
 describe('Roles', () => {
   const reflector = new Reflector();

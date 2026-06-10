@@ -29,7 +29,9 @@ export class I18nService {
 
     // Look up translation
     const langTranslations = translations[this.lang as keyof typeof translations];
-    const translated = langTranslations?.[key as keyof typeof langTranslations] as string | undefined;
+    const translated = langTranslations?.[key as keyof typeof langTranslations] as
+      | string
+      | undefined;
 
     return this.interpolate(translated ?? key, args);
   }

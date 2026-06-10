@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { IamService } from '@pkg/server';
 import { k } from '@pkg/locales';
@@ -54,10 +59,7 @@ export class OrgService {
       ownerId: activeUser.userId,
     });
 
-    this.logger.info(
-      { orgId: org.id, userId: activeUser.userId },
-      'Organization created',
-    );
+    this.logger.info({ orgId: org.id, userId: activeUser.userId }, 'Organization created');
 
     return {
       ...org,

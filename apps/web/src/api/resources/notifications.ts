@@ -29,6 +29,5 @@ export const notificationsResource = (http: HttpClient) => ({
   delete: (id: string): Promise<DeleteNotificationResponse> =>
     http.delete(`/api/notifications/${id}`),
 
-  deleteAll: (): Promise<DeleteAllNotificationsResponse> =>
-    http.delete('/api/notifications'),
+  deleteAll: (): Promise<DeleteAllNotificationsResponse> => http.delete('/api/notifications'),
 });

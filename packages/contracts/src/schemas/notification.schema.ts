@@ -58,7 +58,9 @@ export const MarkAllNotificationsReadResponseSchema = z.object({
   count: z.number().int(),
 });
 
-export type MarkAllNotificationsReadResponse = z.infer<typeof MarkAllNotificationsReadResponseSchema>;
+export type MarkAllNotificationsReadResponse = z.infer<
+  typeof MarkAllNotificationsReadResponseSchema
+>;
 
 // --- Get Unread Count ---
 export const GetUnreadCountResponseSchema = z.object({

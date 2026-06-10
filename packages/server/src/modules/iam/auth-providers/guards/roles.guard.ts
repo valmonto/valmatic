@@ -1,4 +1,9 @@
-import { Injectable, ForbiddenException, type CanActivate, type ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  type CanActivate,
+  type ExecutionContext,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { OrganizationUserRole } from '@pkg/contracts';
 import { k } from '@pkg/locales';

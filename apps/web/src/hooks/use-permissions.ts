@@ -61,5 +61,5 @@ export function usePermissions(): readonly Permission[] {
  */
 export function useRole() {
   const { user, isLoading } = useAuth();
-  return isLoading ? null : user?.role ?? null;
+  return isLoading ? null : (user?.role ?? null);
 }

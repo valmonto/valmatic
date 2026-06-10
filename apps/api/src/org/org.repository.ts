@@ -59,10 +59,7 @@ export class OrgRepository {
     return (result[0] as OrgRecord) ?? null;
   }
 
-  async createOrg(data: {
-    name: string;
-    ownerId: string;
-  }): Promise<OrgRecord> {
+  async createOrg(data: { name: string; ownerId: string }): Promise<OrgRecord> {
     return this.dbClient.db.transaction(async (tx) => {
       const [newOrg] = await tx
         .insert(organization)

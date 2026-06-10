@@ -107,7 +107,11 @@ function showReviewRequired(): void {
 
   for (const [license, packages] of Object.entries(data)) {
     const classification = classifyLicense(license, config);
-    if (classification === 'review-required' || classification === 'forbidden' || classification === 'unknown') {
+    if (
+      classification === 'review-required' ||
+      classification === 'forbidden' ||
+      classification === 'unknown'
+    ) {
       for (const pkg of packages) {
         reviewPackages.push({
           name: pkg.name,

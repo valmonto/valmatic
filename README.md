@@ -132,7 +132,6 @@ pnpm format              # Format with Prettier
 
 # Utilities
 pnpm init:project        # Initialize project name/details
-pnpm i18n:extract        # Extract translation strings
 pnpm clear               # Remove all node_modules
 
 # License Compliance

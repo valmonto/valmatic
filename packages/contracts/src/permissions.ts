@@ -80,14 +80,7 @@ export const ROLE_PERMISSIONS: Record<OrganizationUserRole, readonly Permission[
     'settings:read',
     'settings:update',
   ],
-  MEMBER: [
-    'org:list',
-    'org:read',
-    'org:create',
-    'org:switch',
-    'job:list',
-    'settings:read',
-  ],
+  MEMBER: ['org:list', 'org:read', 'org:create', 'org:switch', 'job:list', 'settings:read'],
 } as const;
 
 /**

@@ -7,10 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { hasAnyPermission, hasAllPermissions } from '@pkg/contracts';
 import { k } from '@pkg/locales';
-import {
-  PERMISSIONS_KEY,
-  type PermissionsMetadata,
-} from '../decorators/permissions.decorator';
+import { PERMISSIONS_KEY, type PermissionsMetadata } from '../decorators/permissions.decorator';
 import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator';
 
 /**

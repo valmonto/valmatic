@@ -4,7 +4,12 @@ import { k } from '@pkg/locales';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from '@/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 import { useAuth } from '@/context/auth-context';
 import {
@@ -70,10 +75,38 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const recentActivity = [
-  { actionKey: k.common.activity.newUserRegistered, detail: 'john@example.com', timeKey: k.common.time.minuteAgo, icon: UserPlus, color: 'text-emerald-600 dark:text-emerald-400', dotColor: 'bg-emerald-500' },
-  { actionKey: k.common.activity.settingsUpdated, detailKey: k.common.activity.emailNotificationsEnabled, timeKey: k.common.time.minutesAgo, icon: Settings, color: 'text-blue-600 dark:text-blue-400', dotColor: 'bg-blue-500' },
-  { actionKey: k.common.activity.reportGenerated, detailKey: k.common.activity.monthlyAnalyticsExport, timeKey: k.common.time.hourAgo, icon: FileText, color: 'text-violet-600 dark:text-violet-400', dotColor: 'bg-violet-500' },
-  { actionKey: k.common.activity.securityCheckPassed, detailKey: k.common.dashboard.allSystemsOperational, timeKey: k.common.time.hoursAgo, icon: ShieldCheck, color: 'text-amber-600 dark:text-amber-400', dotColor: 'bg-amber-500' },
+  {
+    actionKey: k.common.activity.newUserRegistered,
+    detail: 'john@example.com',
+    timeKey: k.common.time.minuteAgo,
+    icon: UserPlus,
+    color: 'text-emerald-600 dark:text-emerald-400',
+    dotColor: 'bg-emerald-500',
+  },
+  {
+    actionKey: k.common.activity.settingsUpdated,
+    detailKey: k.common.activity.emailNotificationsEnabled,
+    timeKey: k.common.time.minutesAgo,
+    icon: Settings,
+    color: 'text-blue-600 dark:text-blue-400',
+    dotColor: 'bg-blue-500',
+  },
+  {
+    actionKey: k.common.activity.reportGenerated,
+    detailKey: k.common.activity.monthlyAnalyticsExport,
+    timeKey: k.common.time.hourAgo,
+    icon: FileText,
+    color: 'text-violet-600 dark:text-violet-400',
+    dotColor: 'bg-violet-500',
+  },
+  {
+    actionKey: k.common.activity.securityCheckPassed,
+    detailKey: k.common.dashboard.allSystemsOperational,
+    timeKey: k.common.time.hoursAgo,
+    icon: ShieldCheck,
+    color: 'text-amber-600 dark:text-amber-400',
+    dotColor: 'bg-amber-500',
+  },
 ];
 
 export default function IndexPage() {
@@ -101,7 +134,9 @@ export default function IndexPage() {
         {stats.map((stat) => (
           <Card key={stat.titleKey}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">{t(stat.titleKey)}</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                {t(stat.titleKey)}
+              </CardTitle>
               <div className={`flex size-9 items-center justify-center rounded-xl ${stat.bg}`}>
                 <stat.icon className={`size-4 ${stat.color}`} />
               </div>
@@ -109,7 +144,9 @@ export default function IndexPage() {
             <CardContent>
               <div className="text-2xl font-bold tabular-nums tracking-tight">{stat.value}</div>
               <p className="text-xs text-muted-foreground mt-1.5">
-                <span className="text-emerald-600 dark:text-emerald-400 font-medium">{stat.change}</span>{' '}
+                <span className="text-emerald-600 dark:text-emerald-400 font-medium">
+                  {stat.change}
+                </span>{' '}
                 {t(k.common.dashboard.fromLastMonth)}
               </p>
             </CardContent>
@@ -175,10 +212,14 @@ export default function IndexPage() {
               {recentActivity.map((item, i) => (
                 <div key={i} className="relative flex items-start gap-4 pl-8">
                   {/* Timeline dot */}
-                  <div className={`absolute left-[7px] top-1.5 size-[9px] rounded-full ring-2 ring-background ${item.dotColor}`} />
+                  <div
+                    className={`absolute left-[7px] top-1.5 size-[9px] rounded-full ring-2 ring-background ${item.dotColor}`}
+                  />
                   <div className="flex-1 space-y-0.5">
                     <p className="text-sm font-medium leading-none">{t(item.actionKey)}</p>
-                    <p className="text-xs text-muted-foreground">{item.detailKey ? t(item.detailKey) : item.detail}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {item.detailKey ? t(item.detailKey) : item.detail}
+                    </p>
                     <p className="text-[11px] text-muted-foreground/60">{t(item.timeKey)}</p>
                   </div>
                 </div>
@@ -220,7 +261,9 @@ export default function IndexPage() {
             <CardDescription>{t(k.common.analytics.description)}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Badge variant="outline" className="text-muted-foreground">{t(k.common.comingSoon)}</Badge>
+            <Badge variant="outline" className="text-muted-foreground">
+              {t(k.common.comingSoon)}
+            </Badge>
           </CardContent>
         </Card>
         <Card className="group/action">

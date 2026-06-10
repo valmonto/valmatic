@@ -80,9 +80,7 @@ export function CreateJobForm({ onCreated }: Props) {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <Label>{t(k.users.user)}</Label>
-            <p className="text-sm text-muted-foreground">
-              {user?.email ?? t(k.auth.notLoggedIn)}
-            </p>
+            <p className="text-sm text-muted-foreground">{user?.email ?? t(k.auth.notLoggedIn)}</p>
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="action">{t(k.common.status.action)}</Label>
@@ -100,7 +98,12 @@ export function CreateJobForm({ onCreated }: Props) {
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="data">{t(k.jobs.dataJson)}</Label>
-            <Input id="data" name="data" placeholder='{"email": "test@example.com"}' defaultValue="{}" />
+            <Input
+              id="data"
+              name="data"
+              placeholder='{"email": "test@example.com"}'
+              defaultValue="{}"
+            />
             {errors.data && <p className="text-xs text-destructive">{t(errors.data)}</p>}
             <p className="text-xs text-muted-foreground">{t(k.jobs.dataJsonDesc)}</p>
           </div>

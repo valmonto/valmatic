@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { k } from '@pkg/locales';
-import { CreateUserRequestSchema, type CreateUserResponse, ORGANIZATION_USER_ROLES, type OrganizationUserRole } from '@pkg/contracts';
+import {
+  CreateUserRequestSchema,
+  type CreateUserResponse,
+  ORGANIZATION_USER_ROLES,
+  type OrganizationUserRole,
+} from '@pkg/contracts';
 import { api } from '@/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -65,11 +70,14 @@ export function CreateUserForm({ onCreated }: Props) {
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="password">{t(k.auth.password)}</Label>
-            <Input id="password" name="password" type="password" placeholder={t(k.auth.minCharacters)} />
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              placeholder={t(k.auth.minCharacters)}
+            />
             {errors.password && <p className="text-xs text-destructive">{t(errors.password)}</p>}
-            <p className="text-xs text-muted-foreground">
-              {t(k.auth.passwordRequirements)}
-            </p>
+            <p className="text-xs text-muted-foreground">{t(k.auth.passwordRequirements)}</p>
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="phone">{t(k.users.phone)}</Label>

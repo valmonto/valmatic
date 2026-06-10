@@ -4,14 +4,14 @@ This guide covers security headers configuration for deploying the React SPA acr
 
 ## Security Headers Overview
 
-| Header | Purpose |
-|--------|---------|
-| `X-Frame-Options` | Prevents clickjacking by blocking iframe embedding |
-| `X-Content-Type-Options` | Prevents MIME sniffing attacks |
-| `Strict-Transport-Security` | Forces HTTPS for all future visits (HSTS) |
-| `Content-Security-Policy` | Controls resource loading, prevents XSS |
-| `Referrer-Policy` | Controls referrer information sent to other sites |
-| `Permissions-Policy` | Disables unused browser features |
+| Header                      | Purpose                                            |
+| --------------------------- | -------------------------------------------------- |
+| `X-Frame-Options`           | Prevents clickjacking by blocking iframe embedding |
+| `X-Content-Type-Options`    | Prevents MIME sniffing attacks                     |
+| `Strict-Transport-Security` | Forces HTTPS for all future visits (HSTS)          |
+| `Content-Security-Policy`   | Controls resource loading, prevents XSS            |
+| `Referrer-Policy`           | Controls referrer information sent to other sites  |
+| `Permissions-Policy`        | Disables unused browser features                   |
 
 ---
 
@@ -194,6 +194,7 @@ server {
 ### Configure via Azure Portal or Bicep/Terraform
 
 **Azure Portal:**
+
 1. Go to Front Door profile → Security policies
 2. Add custom rules for headers under "Rules Engine"
 
@@ -257,15 +258,22 @@ resource securityHeadersRule 'Microsoft.Cdn/profiles/ruleSets/rules@2023-05-01' 
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-XSS-Protection", "value": "1; mode=block" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains; preload" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=()" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://api.yourdomain.com; frame-ancestors 'self'; form-action 'self'; base-uri 'self'; upgrade-insecure-requests;" }
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains; preload"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://api.yourdomain.com; frame-ancestors 'self'; form-action 'self'; base-uri 'self'; upgrade-insecure-requests;"
+        }
       ]
     }
   ],
-  "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
-  ]
+  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }]
 }
 ```
 
@@ -311,7 +319,7 @@ Or use `_headers` file in the publish directory:
 
 ## Cloudflare Pages
 
-### _headers file
+### \_headers file
 
 Create `_headers` in your build output directory:
 
@@ -390,13 +398,13 @@ resource "aws_cloudfront_distribution" "spa" {
 
 Adjust CSP based on your needs:
 
-| If you use... | Add to CSP |
-|---------------|------------|
-| Google Fonts | `font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;` |
-| Google Analytics | `script-src 'self' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com;` |
-| Stripe | `script-src 'self' https://js.stripe.com; frame-src https://js.stripe.com;` |
-| YouTube embeds | `frame-src https://www.youtube.com;` |
-| Images from CDN | `img-src 'self' data: https://your-cdn.com;` |
+| If you use...    | Add to CSP                                                                                                  |
+| ---------------- | ----------------------------------------------------------------------------------------------------------- |
+| Google Fonts     | `font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;` |
+| Google Analytics | `script-src 'self' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com;`  |
+| Stripe           | `script-src 'self' https://js.stripe.com; frame-src https://js.stripe.com;`                                 |
+| YouTube embeds   | `frame-src https://www.youtube.com;`                                                                        |
+| Images from CDN  | `img-src 'self' data: https://your-cdn.com;`                                                                |
 
 ---
 

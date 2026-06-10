@@ -1,45 +1,47 @@
-import { relations } from 'drizzle-orm';
+import { defineRelations } from 'drizzle-orm';
 import { user } from './user';
 import { organization } from './organization';
 import { organizationUser } from './organization-user';
 import { notification } from './notification';
 
-// User relations
-export const userRelations = relations(user, ({ many }) => ({
-  availableOrganizations: many(organizationUser),
-  notifications: many(notification),
-}));
-
-// Organization relations
-export const organizationRelations = relations(organization, ({ one, many }) => ({
-  owner: one(user, {
-    fields: [organization.ownerId],
-    references: [user.id],
+/**
+ * Relational config for the relational query builder (drizzle v1 API).
+ * Replaces the per-table `relations()` helpers from drizzle v0.
+ */
+export const relations = defineRelations(
+  { user, organization, organizationUser, notification },
+  (r) => ({
+    user: {
+      availableOrganizations: r.many.organizationUser(),
+      notifications: r.many.notification(),
+    },
+    organization: {
+      owner: r.one.user({
+        from: r.organization.ownerId,
+        to: r.user.id,
+      }),
+      members: r.many.organizationUser(),
+      notifications: r.many.notification(),
+    },
+    organizationUser: {
+      organization: r.one.organization({
+        from: r.organizationUser.orgId,
+        to: r.organization.id,
+      }),
+      user: r.one.user({
+        from: r.organizationUser.userId,
+        to: r.user.id,
+      }),
+    },
+    notification: {
+      user: r.one.user({
+        from: r.notification.userId,
+        to: r.user.id,
+      }),
+      organization: r.one.organization({
+        from: r.notification.orgId,
+        to: r.organization.id,
+      }),
+    },
   }),
-  members: many(organizationUser),
-  notifications: many(notification),
-}));
-
-// OrganizationUser (junction) relations
-export const organizationUserRelations = relations(organizationUser, ({ one }) => ({
-  organization: one(organization, {
-    fields: [organizationUser.orgId],
-    references: [organization.id],
-  }),
-  user: one(user, {
-    fields: [organizationUser.userId],
-    references: [user.id],
-  }),
-}));
-
-// Notification relations
-export const notificationRelations = relations(notification, ({ one }) => ({
-  user: one(user, {
-    fields: [notification.userId],
-    references: [user.id],
-  }),
-  organization: one(organization, {
-    fields: [notification.orgId],
-    references: [organization.id],
-  }),
-}));
+);

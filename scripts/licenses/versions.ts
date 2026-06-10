@@ -144,9 +144,15 @@ function compareVersions(current: string, latest: string): VersionInfo['updateTy
 
 function collectDependencies(
   packageJsonPaths: string[],
-  catalog: Map<string, string>
-): Map<string, { version: string; source: VersionInfo['source']; depType: VersionInfo['depType'] }> {
-  const deps = new Map<string, { version: string; source: VersionInfo['source']; depType: VersionInfo['depType'] }>();
+  catalog: Map<string, string>,
+): Map<
+  string,
+  { version: string; source: VersionInfo['source']; depType: VersionInfo['depType'] }
+> {
+  const deps = new Map<
+    string,
+    { version: string; source: VersionInfo['source']; depType: VersionInfo['depType'] }
+  >();
 
   // First, add all catalog dependencies
   for (const [name, version] of catalog) {
@@ -158,11 +164,18 @@ function collectDependencies(
     const content = readFileSync(pkgPath, 'utf-8');
     const pkg = JSON.parse(content) as PackageJson;
 
-    const addDeps = (depsObj: Record<string, string> | undefined, depType: 'prod' | 'dev' | 'peer') => {
+    const addDeps = (
+      depsObj: Record<string, string> | undefined,
+      depType: 'prod' | 'dev' | 'peer',
+    ) => {
       if (!depsObj) return;
       for (const [name, version] of Object.entries(depsObj)) {
         // Skip workspace protocol and local packages
-        if (version.startsWith('workspace:') || version.startsWith('file:') || version.startsWith('link:')) {
+        if (
+          version.startsWith('workspace:') ||
+          version.startsWith('file:') ||
+          version.startsWith('link:')
+        ) {
           continue;
         }
         // Skip catalog references (already handled above)

@@ -31,15 +31,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import {
-  Building2,
-  Check,
-  ChevronsUpDown,
-  Loader2,
-  Plus,
-  Settings,
-  Trash2,
-} from 'lucide-react';
+import { Building2, Check, ChevronsUpDown, Loader2, Plus, Settings, Trash2 } from 'lucide-react';
 import type { ListOrgsResponse, Organization } from '@pkg/contracts';
 
 export function OrgSwitcher() {
@@ -55,7 +47,11 @@ export function OrgSwitcher() {
   });
 
   const { execute: switchOrg, isLoading: isSwitching } = useActionRequest(api.org.switch);
-  const { execute: createOrg, isLoading: isCreating, error: createError } = useActionRequest(api.org.create);
+  const {
+    execute: createOrg,
+    isLoading: isCreating,
+    error: createError,
+  } = useActionRequest(api.org.create);
   const { execute: deleteOrg, isLoading: isDeleting } = useActionRequest(api.org.remove);
 
   const currentOrg = data?.data.find((org) => org.id === data.currentOrgId);
@@ -206,9 +202,7 @@ export function OrgSwitcher() {
         <DialogContent className="sm:max-w-[400px]">
           <DialogHeader>
             <DialogTitle>Create organization</DialogTitle>
-            <DialogDescription>
-              Create a new organization. You'll be the owner.
-            </DialogDescription>
+            <DialogDescription>Create a new organization. You'll be the owner.</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreate}>
             <div className="space-y-4 py-4">
@@ -222,9 +216,7 @@ export function OrgSwitcher() {
                   autoFocus
                 />
               </div>
-              {createError && (
-                <p className="text-sm text-destructive">{createError.message}</p>
-              )}
+              {createError && <p className="text-sm text-destructive">{createError.message}</p>}
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setIsCreateOpen(false)}>
@@ -257,11 +249,7 @@ export function OrgSwitcher() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={isDeleting}
-            >
+            <AlertDialogAction variant="destructive" onClick={handleDelete} disabled={isDeleting}>
               {isDeleting ? (
                 <>
                   <Loader2 className="size-4 animate-spin" />

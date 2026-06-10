@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { Reflector } from '@nestjs/core';
-import { PublicRoute, IS_PUBLIC_KEY } from '../../../../../src/modules/iam/auth-providers/decorators/public-route.decorator';
+import {
+  PublicRoute,
+  IS_PUBLIC_KEY,
+} from '../../../../../src/modules/iam/auth-providers/decorators/public-route.decorator';
 
 describe('PublicRoute', () => {
   const reflector = new Reflector();

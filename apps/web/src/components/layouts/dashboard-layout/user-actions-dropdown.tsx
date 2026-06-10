@@ -9,7 +9,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from '@/components/ui/sidebar';
 import { useAuth } from '@/context/auth-context';
 import { ChevronsUpDown, LogOut, Settings, User } from 'lucide-react';
 import { useMemo } from 'react';
@@ -46,7 +51,9 @@ export function UserActionsDropdown() {
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{displayName}</span>
-                <span className="truncate text-xs text-muted-foreground">{user.email.toLowerCase()}</span>
+                <span className="truncate text-xs text-muted-foreground">
+                  {user.email.toLowerCase()}
+                </span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -65,7 +72,9 @@ export function UserActionsDropdown() {
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{displayName}</span>
-                  <span className="truncate text-xs text-muted-foreground">{user.email.toLowerCase()}</span>
+                  <span className="truncate text-xs text-muted-foreground">
+                    {user.email.toLowerCase()}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>

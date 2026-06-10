@@ -1,12 +1,27 @@
 import { useCallback, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Bell, CheckCheck, Trash2, AlertCircle, Info, CheckCircle, AlertTriangle, ChevronRight } from 'lucide-react';
+import {
+  Bell,
+  CheckCheck,
+  Trash2,
+  AlertCircle,
+  Info,
+  CheckCircle,
+  AlertTriangle,
+  ChevronRight,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { k } from '@pkg/locales';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty';
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from '@/components/ui/empty';
 import { Skeleton } from '@/components/ui/skeleton';
 import { api } from '@/api';
 import { useCachedRequest } from '@/hooks/use-cached-request';
@@ -46,7 +61,10 @@ const typeStyles = {
   },
 } as const;
 
-function formatTimeAgo(dateString: string, t: (key: string, opts?: Record<string, unknown>) => string): string {
+function formatTimeAgo(
+  dateString: string,
+  t: (key: string, opts?: Record<string, unknown>) => string,
+): string {
   const date = new Date(dateString);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -96,7 +114,7 @@ function NotificationRow({
         !notification.read
           ? cn(styles.bg, styles.border)
           : 'bg-card border-border hover:bg-muted/30',
-        isDeleting && 'opacity-0 scale-95 -translate-x-4 pointer-events-none'
+        isDeleting && 'opacity-0 scale-95 -translate-x-4 pointer-events-none',
       )}
     >
       {!notification.read && (
@@ -105,7 +123,7 @@ function NotificationRow({
       <div
         className={cn(
           'mt-0.5 shrink-0 rounded-full p-2',
-          !notification.read ? styles.icon : 'text-muted-foreground bg-muted'
+          !notification.read ? styles.icon : 'text-muted-foreground bg-muted',
         )}
       >
         <Icon className="size-4" />
@@ -115,7 +133,9 @@ function NotificationRow({
           <p
             className={cn(
               'text-sm leading-tight',
-              !notification.read ? 'font-semibold text-foreground' : 'font-medium text-foreground/80'
+              !notification.read
+                ? 'font-semibold text-foreground'
+                : 'font-medium text-foreground/80',
             )}
           >
             {notification.title}
@@ -127,9 +147,7 @@ function NotificationRow({
           )}
         </div>
         {notification.message && (
-          <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-            {notification.message}
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{notification.message}</p>
         )}
         <div className="mt-2 flex items-center gap-2">
           <p className="text-xs text-muted-foreground/70">
@@ -206,7 +224,7 @@ export default function NotificationsPage() {
 
   const listFetcher = useCallback(
     () => api.notifications.list({ skip: 0, limit: 50, unreadOnly: false }),
-    []
+    [],
   );
 
   const {
@@ -320,13 +338,13 @@ export default function NotificationsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{t(k.notifications.notifications)}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {t(k.notifications.notifications)}
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {unreadCount > 0 ? (
-              t(k.notifications.unreadCount, { count: unreadCount })
-            ) : (
-              t(k.notifications.allCaughtUp)
-            )}
+            {unreadCount > 0
+              ? t(k.notifications.unreadCount, { count: unreadCount })
+              : t(k.notifications.allCaughtUp)}
           </p>
         </div>
         {allNotifications.length > 0 && (
@@ -337,7 +355,12 @@ export default function NotificationsPage() {
                 {t(k.notifications.markAllRead)}
               </Button>
             )}
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-destructive" onClick={handleClearAll}>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-destructive"
+              onClick={handleClearAll}
+            >
               <Trash2 className="mr-2 size-4" />
               {t(k.notifications.clearAll)}
             </Button>
@@ -355,10 +378,7 @@ export default function NotificationsPage() {
               variant={isActive ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setFilter(filterValue)}
-              className={cn(
-                'gap-1.5',
-                !isActive && 'text-muted-foreground hover:text-foreground'
-              )}
+              className={cn('gap-1.5', !isActive && 'text-muted-foreground hover:text-foreground')}
             >
               {t(filterKeys[filterValue])}
               <span
@@ -366,7 +386,7 @@ export default function NotificationsPage() {
                   'min-w-5 rounded-full px-1.5 py-0.5 text-xs font-medium',
                   isActive
                     ? 'bg-primary-foreground/20 text-primary-foreground'
-                    : 'bg-muted text-muted-foreground'
+                    : 'bg-muted text-muted-foreground',
                 )}
               >
                 {count}

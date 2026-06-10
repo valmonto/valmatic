@@ -4,6 +4,12 @@
     "target": "ES2024",
     "module": "CommonJS",
     "moduleResolution": "Node",
+    // TS 6 deprecates the classic "node"/"node10" resolution. Migrating to
+    // node16/nodenext would force explicit .js extensions across every
+    // workspace package's source (they expose raw src/*.ts as types), so we
+    // stay on classic resolution and silence the deprecation until that
+    // monorepo-wide migration is done.
+    "ignoreDeprecations": "6.0",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "declaration": true,

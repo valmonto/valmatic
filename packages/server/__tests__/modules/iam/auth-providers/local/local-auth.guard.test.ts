@@ -107,12 +107,14 @@ describe('LocalAuthGuard', () => {
   let mockJwtService: JwtService;
   let mockAuthProvider: IAuthProvider;
 
-  const createMockContext = (options: {
-    cookies?: Record<string, string>;
-    unsignResult?: { valid: boolean; value: string | null };
-    authHeader?: string;
-    user?: unknown;
-  } = {}): ExecutionContext => {
+  const createMockContext = (
+    options: {
+      cookies?: Record<string, string>;
+      unsignResult?: { valid: boolean; value: string | null };
+      authHeader?: string;
+      user?: unknown;
+    } = {},
+  ): ExecutionContext => {
     const request = {
       cookies: options.cookies,
       unsignCookie: vi.fn().mockReturnValue(options.unsignResult ?? { valid: false, value: null }),

@@ -5,6 +5,7 @@
     "moduleResolution": "Bundler",
     "outDir": "./dist",
     "rootDir": "./src",
+    "types": ["node"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },

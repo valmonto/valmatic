@@ -101,9 +101,7 @@ function ChangePasswordForm() {
           </div>
           {t(k.auth.changePassword)}
         </CardTitle>
-        <CardDescription>
-          {t(k.auth.settings.updatePasswordDescription)}
-        </CardDescription>
+        <CardDescription>{t(k.auth.settings.updatePasswordDescription)}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
@@ -223,11 +221,7 @@ function ChangePasswordForm() {
 
 function LogoutAllDevicesCard() {
   const { t } = useTranslation();
-  const {
-    execute: logoutAll,
-    isLoading,
-    error,
-  } = useActionRequest(() => api.auth.logoutAll({}));
+  const { execute: logoutAll, isLoading, error } = useActionRequest(() => api.auth.logoutAll({}));
 
   const handleLogoutAll = async () => {
     const { d: result } = await logoutAll({});
@@ -246,9 +240,7 @@ function LogoutAllDevicesCard() {
           </div>
           {t(k.auth.logOutAllDevices)}
         </CardTitle>
-        <CardDescription>
-          {t(k.auth.logOutAllDevicesDescription)}
-        </CardDescription>
+        <CardDescription>{t(k.auth.logOutAllDevicesDescription)}</CardDescription>
       </CardHeader>
       <CardContent>
         {error && (
@@ -272,9 +264,7 @@ function LogoutAllDevicesCard() {
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>{t(k.auth.logOutAllDevicesConfirm)}</AlertDialogTitle>
-              <AlertDialogDescription>
-                {t(k.auth.logOutAllDevicesWarning)}
-              </AlertDialogDescription>
+              <AlertDialogDescription>{t(k.auth.logOutAllDevicesWarning)}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>{t(k.common.actions.cancel)}</AlertDialogCancel>

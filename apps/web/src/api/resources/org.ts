@@ -24,9 +24,7 @@ export const orgResource = (http: HttpClient) => ({
   update: (dto: UpdateOrgRequest): Promise<UpdateOrgResponse> =>
     http.patch(`/api/orgs/${dto.id}`, dto),
 
-  remove: (dto: DeleteOrgRequest): Promise<DeleteOrgResponse> =>
-    http.delete(`/api/orgs/${dto.id}`),
+  remove: (dto: DeleteOrgRequest): Promise<DeleteOrgResponse> => http.delete(`/api/orgs/${dto.id}`),
 
-  switch: (dto: SwitchOrgRequest): Promise<SwitchOrgResponse> =>
-    http.post('/api/orgs/switch', dto),
+  switch: (dto: SwitchOrgRequest): Promise<SwitchOrgResponse> => http.post('/api/orgs/switch', dto),
 });

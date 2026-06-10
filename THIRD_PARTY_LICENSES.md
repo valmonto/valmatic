@@ -13,25 +13,25 @@ This project uses the following third-party packages:
 
 ### License Breakdown
 
-| License | Direct | Transitive | Total |
-|---------|--------|------------|-------|
-| (MIT OR Apache-2.0) | 0 | 1 | 1 |
-| (MIT OR CC0-1.0) | 0 | 1 | 1 |
-| 0BSD | 0 | 1 | 1 |
-| Apache-2.0 | 6 | 33 | 39 |
-| Apache-2.0 AND MIT | 0 | 1 | 1 |
-| BSD-2-Clause | 0 | 21 | 21 |
-| BSD-3-Clause | 1 | 17 | 18 |
-| BlueOak-1.0.0 | 0 | 6 | 6 |
-| CC-BY-4.0 | 0 | 1 | 1 |
-| ISC | 1 | 57 | 58 |
-| MIT | 73 | 744 | 817 |
-| MIT AND ISC | 0 | 1 | 1 |
-| MIT OR Apache-2.0 | 1 | 1 | 2 |
-| MIT-0 | 0 | 1 | 1 |
-| MPL-2.0 | 0 | 2 | 2 |
-| Python-2.0 | 0 | 1 | 1 |
-| Unlicense | 1 | 2 | 3 |
+| License             | Direct | Transitive | Total |
+| ------------------- | ------ | ---------- | ----- |
+| (MIT OR Apache-2.0) | 0      | 1          | 1     |
+| (MIT OR CC0-1.0)    | 0      | 1          | 1     |
+| 0BSD                | 0      | 1          | 1     |
+| Apache-2.0          | 6      | 33         | 39    |
+| Apache-2.0 AND MIT  | 0      | 1          | 1     |
+| BSD-2-Clause        | 0      | 21         | 21    |
+| BSD-3-Clause        | 1      | 17         | 18    |
+| BlueOak-1.0.0       | 0      | 6          | 6     |
+| CC-BY-4.0           | 0      | 1          | 1     |
+| ISC                 | 1      | 57         | 58    |
+| MIT                 | 73     | 744        | 817   |
+| MIT AND ISC         | 0      | 1          | 1     |
+| MIT OR Apache-2.0   | 1      | 1          | 2     |
+| MIT-0               | 0      | 1          | 1     |
+| MPL-2.0             | 0      | 2          | 2     |
+| Python-2.0          | 0      | 1          | 1     |
+| Unlicense           | 1      | 2          | 3     |
 
 ## Direct Dependencies
 

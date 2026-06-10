@@ -12,7 +12,9 @@ describe('useActionRequest', () => {
   });
 
   it('sets loading state during execution', async () => {
-    const mockAction = vi.fn(() => new Promise<string>((resolve) => setTimeout(() => resolve('done'), 50)));
+    const mockAction = vi.fn(
+      () => new Promise<string>((resolve) => setTimeout(() => resolve('done'), 50)),
+    );
 
     const { result } = renderHook(() => useActionRequest(mockAction, { minDuration: 0 }));
 
@@ -115,9 +117,7 @@ describe('useActionRequest', () => {
 
   it('clears previous error on new execution', async () => {
     const testError = new Error('Test error');
-    const mockAction = vi.fn()
-      .mockRejectedValueOnce(testError)
-      .mockResolvedValueOnce('success');
+    const mockAction = vi.fn().mockRejectedValueOnce(testError).mockResolvedValueOnce('success');
 
     const { result } = renderHook(() => useActionRequest(mockAction, { minDuration: 0 }));
 

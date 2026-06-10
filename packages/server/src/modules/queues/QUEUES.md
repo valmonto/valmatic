@@ -19,12 +19,12 @@ The queue system uses [BullMQ](https://docs.bullmq.io/) with Redis for reliable 
 
 **Key concepts:**
 
-| Term | Description |
-|------|-------------|
-| **Producer** | Service that adds jobs to a queue (runs in API) |
+| Term          | Description                                              |
+| ------------- | -------------------------------------------------------- |
+| **Producer**  | Service that adds jobs to a queue (runs in API)          |
 | **Processor** | Worker that processes jobs from a queue (runs in Worker) |
-| **Queue** | Redis-backed job queue |
-| **Job** | Unit of work with payload and options |
+| **Queue**     | Redis-backed job queue                                   |
+| **Job**       | Unit of work with payload and options                    |
 
 ---
 
@@ -166,7 +166,7 @@ export class MyFeatureProducer {
     ),
   ],
   providers: [ExampleProducer, MyFeatureProducer], // Add here
-  exports: [ExampleProducer, MyFeatureProducer],   // Add here
+  exports: [ExampleProducer, MyFeatureProducer], // Add here
 })
 export class QueuesModule {}
 ```
@@ -203,11 +203,11 @@ export class WorkerQueuesModule {}
 
 For different resource profiles, categorize queues:
 
-| Profile | Concurrency | Lock Duration | Use Case |
-|---------|-------------|---------------|----------|
-| **Light** | 50 | 30 sec | Notifications, emails |
-| **Medium** | 10 | 5 min | Reports, exports |
-| **Heavy** | 1-3 | 1 hour | Video processing, ML tasks |
+| Profile    | Concurrency | Lock Duration | Use Case                   |
+| ---------- | ----------- | ------------- | -------------------------- |
+| **Light**  | 50          | 30 sec        | Notifications, emails      |
+| **Medium** | 10          | 5 min         | Reports, exports           |
+| **Heavy**  | 1-3         | 1 hour        | Video processing, ML tasks |
 
 ```typescript
 export const QUEUE_PROFILES = {
@@ -275,7 +275,9 @@ function getProcessorsForWorkerType() {
       return [CourseBuilderProcessor, VideoProcessor];
     case 'all':
     default:
-      return [/* all processors */];
+      return [
+        /* all processors */
+      ];
   }
 }
 ```
@@ -322,23 +324,23 @@ await this.flow.add({
 
 ### Worker Options
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `concurrency` | Max parallel jobs per worker | 1 |
-| `lockDuration` | Time before job is considered stalled (ms) | 30000 |
-| `stalledInterval` | How often to check for stalled jobs (ms) | 30000 |
-| `maxStalledCount` | Max times job can stall before failing | 1 |
+| Option            | Description                                | Default |
+| ----------------- | ------------------------------------------ | ------- |
+| `concurrency`     | Max parallel jobs per worker               | 1       |
+| `lockDuration`    | Time before job is considered stalled (ms) | 30000   |
+| `stalledInterval` | How often to check for stalled jobs (ms)   | 30000   |
+| `maxStalledCount` | Max times job can stall before failing     | 1       |
 
 ### Job Options
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `priority` | Lower = higher priority | - |
-| `delay` | Delay before processing (ms) | 0 |
-| `attempts` | Max retry attempts | 3 |
-| `backoff` | Retry delay strategy | exponential |
-| `removeOnComplete` | Remove job data after completion | true |
-| `removeOnFail` | Remove job data after failure | false |
+| Option             | Description                      | Default     |
+| ------------------ | -------------------------------- | ----------- |
+| `priority`         | Lower = higher priority          | -           |
+| `delay`            | Delay before processing (ms)     | 0           |
+| `attempts`         | Max retry attempts               | 3           |
+| `backoff`          | Retry delay strategy             | exponential |
+| `removeOnComplete` | Remove job data after completion | true        |
+| `removeOnFail`     | Remove job data after failure    | false       |
 
 ### Example Heavy Job Configuration
 
@@ -347,8 +349,8 @@ export const HEAVY_QUEUE = {
   name: 'heavy-processing',
   workerOptions: {
     concurrency: 1,
-    lockDuration: 60 * 60 * 1000,      // 1 hour
-    stalledInterval: 5 * 60 * 1000,    // Check every 5 min
+    lockDuration: 60 * 60 * 1000, // 1 hour
+    stalledInterval: 5 * 60 * 1000, // Check every 5 min
     maxStalledCount: 1,
   },
   defaultJobOptions: {

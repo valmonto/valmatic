@@ -1,4 +1,13 @@
-import { pgTable, pgEnum, uuid, varchar, timestamp, boolean, jsonb, index } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  pgEnum,
+  uuid,
+  varchar,
+  timestamp,
+  boolean,
+  jsonb,
+  index,
+} from 'drizzle-orm/pg-core';
 import { pk } from './helpers';
 import { user } from './user';
 import { organization } from './organization';
@@ -10,11 +19,7 @@ export const notificationTypeEnum = pgEnum('notification_type', [
   'error',
 ]);
 
-export const notificationChannelEnum = pgEnum('notification_channel', [
-  'in_app',
-  'email',
-  'push',
-]);
+export const notificationChannelEnum = pgEnum('notification_channel', ['in_app', 'email', 'push']);
 
 export const notification = pgTable(
   'notification',

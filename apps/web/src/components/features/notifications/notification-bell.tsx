@@ -59,7 +59,7 @@ function NotificationItem({
       onClick={handleClick}
       className={cn(
         'group flex gap-3 rounded-lg p-3 transition-colors cursor-pointer hover:bg-muted/80',
-        notification.read ? 'opacity-60' : 'bg-muted/50'
+        notification.read ? 'opacity-60' : 'bg-muted/50',
       )}
     >
       <div className={cn('mt-0.5 shrink-0', typeColors[notification.type])}>
@@ -94,7 +94,10 @@ function NotificationItem({
   );
 }
 
-function formatTimeAgo(dateString: string, t: (key: string, opts?: Record<string, unknown>) => string): string {
+function formatTimeAgo(
+  dateString: string,
+  t: (key: string, opts?: Record<string, unknown>) => string,
+): string {
   const date = new Date(dateString);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -116,7 +119,7 @@ export function NotificationBell() {
 
   const listFetcher = useCallback(
     () => api.notifications.list({ skip: 0, limit: 20, unreadOnly: false }),
-    []
+    [],
   );
 
   const countFetcher = useCallback(() => api.notifications.getUnreadCount(), []);

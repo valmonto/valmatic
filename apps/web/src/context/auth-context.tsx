@@ -34,20 +34,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
   });
 
-  const _logout = useCallback(
-    async () => {
-      try {
-        await api.auth.logout({});
-      } catch {
-        // Show error but still log out locally
-        toast.error(t(k.auth.errors.failedToLogOut));
-      } finally {
-        // Always clear local state to log user out
-        mutate(undefined);
-      }
-    },
-    [mutate, t],
-  );
+  const _logout = useCallback(async () => {
+    try {
+      await api.auth.logout({});
+    } catch {
+      // Show error but still log out locally
+      toast.error(t(k.auth.errors.failedToLogOut));
+    } finally {
+      // Always clear local state to log user out
+      mutate(undefined);
+    }
+  }, [mutate, t]);
 
   const value: AuthContextValue = {
     user,

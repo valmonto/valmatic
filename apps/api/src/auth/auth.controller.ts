@@ -1,7 +1,15 @@
 import { Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { AuthService } from './auth.service';
-import { PublicRoute, ActiveUser, IamService, Roles, Role, COOKIE_OPTIONS, COOKIE_TTL } from '@pkg/server';
+import {
+  PublicRoute,
+  ActiveUser,
+  IamService,
+  Roles,
+  Role,
+  COOKIE_OPTIONS,
+  COOKIE_TTL,
+} from '@pkg/server';
 import { tryCatch } from '@pkg/utils';
 import {
   ChangePasswordRequest,
