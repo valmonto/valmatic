@@ -5,6 +5,7 @@ import { CreateExampleJobRequestSchema, type CreateExampleJobResponse } from '@p
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/shared/auth/auth-context';
 import { useCreateExampleJob } from '../hooks/use-jobs';
@@ -83,16 +84,13 @@ export function CreateJobForm({ onCreated }: Props) {
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="action">{t(k.common.status.action)}</Label>
-            <select
-              id="action"
-              name="action"
-              defaultValue="send-email"
-              className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm transition-colors focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 outline-none"
-            >
-              <option value="send-email">{t(k.jobs.sendEmail)}</option>
-              <option value="generate-report">{t(k.jobs.generateReport)}</option>
-              <option value="sync-data">{t(k.jobs.syncData)}</option>
-            </select>
+            <NativeSelect id="action" name="action" defaultValue="send-email" className="w-full">
+              <NativeSelectOption value="send-email">{t(k.jobs.sendEmail)}</NativeSelectOption>
+              <NativeSelectOption value="generate-report">
+                {t(k.jobs.generateReport)}
+              </NativeSelectOption>
+              <NativeSelectOption value="sync-data">{t(k.jobs.syncData)}</NativeSelectOption>
+            </NativeSelect>
             {errors.action && <p className="text-xs text-destructive">{t(errors.action)}</p>}
           </div>
           <div className="flex flex-col gap-1.5">

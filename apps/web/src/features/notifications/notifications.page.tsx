@@ -25,6 +25,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Notification } from '@pkg/contracts';
 import { cn } from '@/shared/lib/utils';
+import { PageHeader } from '@/shared/components/page-header';
 import {
   useDeleteAllNotifications,
   useDeleteNotification,
@@ -305,37 +306,36 @@ export default function NotificationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {t(k.notifications.notifications)}
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {unreadCount > 0
-              ? t(k.notifications.unreadCount, { count: unreadCount })
-              : t(k.notifications.allCaughtUp)}
-          </p>
-        </div>
-        {allNotifications.length > 0 && (
-          <div className="flex items-center gap-2">
-            {unreadCount > 0 && (
-              <Button variant="outline" size="sm" onClick={handleMarkAllRead}>
-                <CheckCheck className="mr-2 size-4" />
-                {t(k.notifications.markAllRead)}
+      <PageHeader
+        icon={Bell}
+        title={t(k.notifications.notifications)}
+        description={
+          unreadCount > 0
+            ? t(k.notifications.unreadCount, { count: unreadCount })
+            : t(k.notifications.allCaughtUp)
+        }
+        actions={
+          allNotifications.length > 0 ? (
+            <>
+              {unreadCount > 0 && (
+                <Button variant="outline" size="sm" onClick={handleMarkAllRead}>
+                  <CheckCheck className="mr-2 size-4" />
+                  {t(k.notifications.markAllRead)}
+                </Button>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground hover:text-destructive"
+                onClick={handleClearAll}
+              >
+                <Trash2 className="mr-2 size-4" />
+                {t(k.notifications.clearAll)}
               </Button>
-            )}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground hover:text-destructive"
-              onClick={handleClearAll}
-            >
-              <Trash2 className="mr-2 size-4" />
-              {t(k.notifications.clearAll)}
-            </Button>
-          </div>
-        )}
-      </div>
+            </>
+          ) : undefined
+        }
+      />
 
       <div className="flex items-center gap-2">
         {(['all', 'unread', 'read'] as FilterType[]).map((filterValue) => {

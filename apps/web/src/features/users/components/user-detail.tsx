@@ -5,6 +5,7 @@ import type { GetUserByIdResponse, UpdateUserByIdRequest } from '@pkg/contracts'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDeleteUser, useUpdateUser } from '../hooks/use-users';
 
@@ -92,16 +93,11 @@ export function UserDetail({ user, onBack, onUpdated, onDeleted }: Props) {
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="edit-role">{t(k.users.role)}</Label>
-              <select
-                id="edit-role"
-                name="role"
-                defaultValue={user.role}
-                className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm transition-colors focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 outline-none"
-              >
-                <option value="MEMBER">{t(k.users.roles.member)}</option>
-                <option value="ADMIN">{t(k.users.roles.admin)}</option>
-                <option value="OWNER">{t(k.users.roles.owner)}</option>
-              </select>
+              <NativeSelect id="edit-role" name="role" defaultValue={user.role} className="w-full">
+                <NativeSelectOption value="MEMBER">{t(k.users.roles.member)}</NativeSelectOption>
+                <NativeSelectOption value="ADMIN">{t(k.users.roles.admin)}</NativeSelectOption>
+                <NativeSelectOption value="OWNER">{t(k.users.roles.owner)}</NativeSelectOption>
+              </NativeSelect>
             </div>
             <div className="flex gap-2 border-t border-border/50 pt-4">
               <Button type="submit" size="sm" disabled={isUpdating}>

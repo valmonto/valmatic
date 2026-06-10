@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import { useCreateUser } from '../hooks/use-users';
 
 type Props = { onCreated?: () => void };
@@ -85,18 +86,18 @@ export function CreateUserForm({ onCreated }: Props) {
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="role">{t(k.users.role)}</Label>
-            <select
+            <NativeSelect
               id="role"
               name="role"
               defaultValue={'MEMBER' satisfies OrganizationUserRole}
-              className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm transition-colors focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 outline-none"
+              className="w-full"
             >
               {ORGANIZATION_USER_ROLES.map((role) => (
-                <option key={role} value={role}>
+                <NativeSelectOption key={role} value={role}>
                   {t(k.users.roles[role.toLowerCase() as keyof typeof k.users.roles])}
-                </option>
+                </NativeSelectOption>
               ))}
-            </select>
+            </NativeSelect>
             {errors.role && <p className="text-xs text-destructive">{t(errors.role)}</p>}
           </div>
           <Button type="submit" className="mt-2" disabled={isLoading}>

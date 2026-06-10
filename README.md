@@ -37,6 +37,7 @@ export IAM_COOKIE_SECRET=$(openssl rand -hex 32)
 export REDIS_HOST=127.0.0.1
 export REDIS_PORT=6379
 export REDIS_PASSWORD=vboilerplate
+export SEED_ON_STARTUP=true
 ```
 
 ```ps1
@@ -50,6 +51,7 @@ $env:IAM_COOKIE_SECRET = -join ((1..64) | ForEach-Object { '{0:x}' -f (Get-Rando
 $env:REDIS_HOST = "127.0.0.1"
 $env:REDIS_PORT = "6379"
 $env:REDIS_PASSWORD = "vboilerplate"
+$env:SEED_ON_STARTUP = "true"
 ```
 
 ```bash
@@ -155,10 +157,10 @@ also run automatically on startup in development.
 
 ### Strategies
 
-| Strategy        | When it runs                          | What it creates                                                              |
-| --------------- | ------------------------------------- | --------------------------------------------------------------------------- |
-| **production**  | `NODE_ENV=production`                 | One owner user (`OWNER` + system `ADMIN`) and one organization — initial login only |
-| **development** | any other `NODE_ENV` (dev/test)       | The production seed **plus** demo users loaded from `apps/api/src/seed/data/users.json` |
+| Strategy        | When it runs                    | What it creates                                                                         |
+| --------------- | ------------------------------- | --------------------------------------------------------------------------------------- |
+| **production**  | `NODE_ENV=production`           | One owner user (`OWNER` + system `ADMIN`) and one organization — initial login only     |
+| **development** | any other `NODE_ENV` (dev/test) | The production seed **plus** demo users loaded from `apps/api/src/seed/data/users.json` |
 
 Both strategies are **idempotent** — re-running converges to the same state and
 never overwrites a password that already exists.
@@ -187,14 +189,14 @@ All initial-login values come from the environment. They are **optional in
 development** (safe defaults are applied) and **required in production**
 (validated at startup).
 
-| Variable                | Default (dev)      | Description                                  |
-| ----------------------- | ------------------ | -------------------------------------------- |
-| `SEED_INITIAL_EMAIL`    | `owner@valmonto.com` | Email of the initial owner user            |
-| `SEED_INITIAL_PASSWORD` | `ChangeMe123!`     | Plaintext password, hashed on first create   |
-| `SEED_INITIAL_NAME`     | `Initial Owner`    | Display name of the initial owner            |
-| `SEED_INITIAL_ORG_NAME` | `Valmonto`         | Name of the initial organization             |
-| `SEED_ON_STARTUP`       | `false`            | Auto-run the seeder when the API boots       |
-| `SEED_STRATEGY`         | _(unset)_          | Force `production` or `development` strategy  |
+| Variable                | Default (dev)        | Description                                  |
+| ----------------------- | -------------------- | -------------------------------------------- |
+| `SEED_INITIAL_EMAIL`    | `owner@valmonto.com` | Email of the initial owner user              |
+| `SEED_INITIAL_PASSWORD` | `ChangeMe123!`       | Plaintext password, hashed on first create   |
+| `SEED_INITIAL_NAME`     | `Initial Owner`      | Display name of the initial owner            |
+| `SEED_INITIAL_ORG_NAME` | `Valmonto`           | Name of the initial organization             |
+| `SEED_ON_STARTUP`       | `false`              | Auto-run the seeder when the API boots       |
+| `SEED_STRATEGY`         | _(unset)_            | Force `production` or `development` strategy |
 
 ### Development fixtures
 

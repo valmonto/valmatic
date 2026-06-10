@@ -19,8 +19,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Eye, EyeOff, Loader2, LogOut, Shield, KeyRound } from 'lucide-react';
+import { Eye, EyeOff, Loader2, LogOut, Shield, KeyRound, Settings } from 'lucide-react';
 import { PASSWORD_REGEX, type ChangePasswordRequest } from '@pkg/contracts';
+import { PageHeader } from '@/shared/components/page-header';
 
 // --- Password validation helper ---
 const validatePassword = (password: string) => {
@@ -284,16 +285,11 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/15 via-primary/5 to-transparent p-8">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--primary)_0%,transparent_50%)] opacity-[0.08]" />
-        <div className="relative">
-          <h1 className="text-2xl font-semibold tracking-tight">{t(k.auth.settings.title)}</h1>
-          <p className="mt-1.5 text-sm text-muted-foreground max-w-lg">
-            {t(k.auth.settings.description)}
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        icon={Settings}
+        title={t(k.auth.settings.title)}
+        description={t(k.auth.settings.description)}
+      />
 
       {/* Tabs */}
       <Tabs defaultValue="security">

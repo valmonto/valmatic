@@ -11,7 +11,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
 } from '@/components/ui/sidebar';
 import { UserActionsDropdown } from './user-actions-dropdown';
 import { Link, useLocation } from 'react-router';
@@ -42,18 +41,20 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="pb-1">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton size="lg" asChild className="hover:bg-sidebar-accent/60">
               <Link to="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/75 text-primary-foreground shadow-sm shadow-primary/30 ring-1 ring-white/15">
                   <Hexagon className="size-4" />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">vboilerplate</span>
-                  <span className="truncate text-xs text-muted-foreground">
-                    {t(k.common.nav.dashboard)}
+                <div className="grid flex-1 text-left leading-tight">
+                  <span className="truncate text-sm font-semibold tracking-tight">
+                    vboilerplate
+                  </span>
+                  <span className="truncate text-[11px] text-sidebar-foreground/45">
+                    {t(k.common.nav.workspace)}
                   </span>
                 </div>
               </Link>
@@ -64,9 +65,11 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         {navGroups.map((group) => (
           <SidebarGroup key={group.labelKey}>
-            <SidebarGroupLabel>{t(group.labelKey)}</SidebarGroupLabel>
+            <SidebarGroupLabel className="px-2 text-[11px] font-medium tracking-[0.08em] text-sidebar-foreground/45 uppercase">
+              {t(group.labelKey)}
+            </SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className="gap-0.5">
                 {group.items.map((item) => {
                   const isActive =
                     item.url === '/' ? pathname === '/' : pathname.startsWith(item.url);
@@ -89,7 +92,6 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <UserActionsDropdown />
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   );
 }

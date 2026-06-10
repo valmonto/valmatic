@@ -7,7 +7,11 @@ function Card({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="card"
       className={cn(
-        'flex flex-col gap-4 rounded-lg border bg-card py-5 text-card-foreground shadow-xs',
+        // Borderless, elevation-based surface — floats on the canvas instead of
+        // being boxed in. A hairline ring gives just enough definition in dark.
+        'flex flex-col gap-4 rounded-xl bg-card py-5 text-card-foreground',
+        'shadow-[0_1px_2px_rgba(16,18,28,0.04),0_8px_24px_-12px_rgba(16,18,28,0.10)]',
+        'dark:shadow-[0_1px_2px_rgba(0,0,0,0.30),0_12px_32px_-16px_rgba(0,0,0,0.55)] dark:ring-1 dark:ring-white/[0.05]',
         className,
       )}
       {...props}

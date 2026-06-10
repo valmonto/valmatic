@@ -29,6 +29,7 @@ export const common = {
     settings: 'common.nav.settings',
     overview: 'common.nav.overview',
     management: 'common.nav.management',
+    workspace: 'common.nav.workspace',
     developer: 'common.nav.developer',
     errorTest: 'common.nav.errorTest',
   },

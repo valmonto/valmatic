@@ -453,16 +453,33 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<'li'>) {
 }
 
 const sidebarMenuButtonVariants = cva(
-  'peer/menu-button relative flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm text-sidebar-foreground/70 ring-sidebar-ring outline-hidden transition-[width,height,padding,color,background-color] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[active=true]:before:absolute data-[active=true]:before:left-0 data-[active=true]:before:top-1/2 data-[active=true]:before:h-4.5 data-[active=true]:before:w-[2.5px] data-[active=true]:before:-translate-y-1/2 data-[active=true]:before:rounded-r-full data-[active=true]:before:bg-primary data-[active=true]:[&>svg]:text-primary data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
+  [
+    'peer/menu-button group/menu-btn relative flex w-full items-center gap-3 overflow-hidden rounded-md px-3 py-2 text-left text-[0.9375rem] text-sidebar-foreground/65 ring-sidebar-ring outline-hidden',
+    'transition-[width,height,padding,color,background-color,box-shadow] duration-150 ease-out',
+    'group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2!',
+    // Icons sit a notch more muted than the label, then warm up with the row.
+    '[&>svg]:size-[18px] [&>svg]:shrink-0 [&>svg]:text-sidebar-foreground/50 [&>svg]:transition-colors [&>span:last-child]:truncate',
+    // Hover / press — a soft wash, distinctly lighter than the active pill.
+    'hover:bg-sidebar-accent/55 hover:text-sidebar-foreground hover:[&>svg]:text-sidebar-foreground/75',
+    'active:bg-sidebar-accent/70 focus-visible:ring-2',
+    'disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50',
+    // Active — a raised pill: filled surface + hairline ring + soft lift, the
+    // indigo icon, and a glowing accent bar pinned to the left edge.
+    'data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground',
+    'data-[active=true]:shadow-[0_1px_2px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.04)] data-[active=true]:ring-1 data-[active=true]:ring-sidebar-border/70',
+    'data-[active=true]:before:absolute data-[active=true]:before:left-0 data-[active=true]:before:top-1/2 data-[active=true]:before:h-6 data-[active=true]:before:w-[3px] data-[active=true]:before:-translate-y-1/2 data-[active=true]:before:rounded-r-full data-[active=true]:before:bg-primary data-[active=true]:before:shadow-[0_0_8px_var(--color-primary)]',
+    'data-[active=true]:[&>svg]:text-primary',
+    'data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground',
+  ].join(' '),
   {
     variants: {
       variant: {
-        default: 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+        default: 'hover:bg-sidebar-accent/55 hover:text-sidebar-foreground',
         outline:
           'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
       },
       size: {
-        default: 'h-8 text-sm',
+        default: 'h-10',
         sm: 'h-7 text-xs',
         lg: 'h-12 text-sm group-data-[collapsible=icon]:p-0!',
       },
