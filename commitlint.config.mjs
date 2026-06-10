@@ -30,7 +30,8 @@ export default {
     'scope-empty': [1, 'never'],
     // Ensure subject doesn't end with period
     'subject-full-stop': [2, 'never', '.'],
-    // Ensure subject is lowercase
-    'subject-case': [2, 'always', 'lower-case'],
+    // Disabled: strict lower-case forbids acronyms (API, DB, TS, URL) in the
+    // subject. Leave casing to the author.
+    'subject-case': [0],
   },
 };
