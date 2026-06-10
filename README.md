@@ -5,7 +5,7 @@ Full-stack SaaS starter kit with multi-tenant auth, RBAC, organizations, and bac
 ## Quick Start
 
 ```bash
-#. Clone the repo:
+# 0. Clone the repo:
 git clone https://github.com/valmonto/valmatic.git my-valmatic-project
 ```
 
