@@ -53,8 +53,9 @@ $env:REDIS_PASSWORD = "vboilerplate"
 ```
 
 ```bash
-# 5. Run migrations & start
+# 5. Run migrations, seed an initial login & start
 pnpm db:migrate
+pnpm db:seed             # creates the initial owner + demo users (see Database Seeding)
 pnpm dev
 ```
 
@@ -119,6 +120,9 @@ pnpm dev:api             # Start single app if needed
 pnpm db:generate         # Generate migrations from schema changes
 pnpm db:migrate          # Apply migrations
 pnpm db:studio           # Open Drizzle Studio
+pnpm db:seed             # Seed the database (strategy picked from NODE_ENV)
+pnpm db:seed:dev         # Force the development seeder
+pnpm db:seed:prod        # Force the production seeder
 
 # Testing
 pnpm test                # Unit tests
@@ -140,6 +144,73 @@ pnpm licenses:check      # Check dependencies for disallowed licenses
 pnpm licenses:generate   # Generate license report
 pnpm licenses:why <pkg>  # Show why a package is included
 ```
+
+---
+
+## Database Seeding
+
+The API ships with an idempotent seeder (`apps/api/src/seed`) that bootstraps the
+data needed to log in. It picks a strategy automatically from `NODE_ENV` and can
+also run automatically on startup in development.
+
+### Strategies
+
+| Strategy        | When it runs                          | What it creates                                                              |
+| --------------- | ------------------------------------- | --------------------------------------------------------------------------- |
+| **production**  | `NODE_ENV=production`                 | One owner user (`OWNER` + system `ADMIN`) and one organization — initial login only |
+| **development** | any other `NODE_ENV` (dev/test)       | The production seed **plus** demo users loaded from `apps/api/src/seed/data/users.json` |
+
+Both strategies are **idempotent** — re-running converges to the same state and
+never overwrites a password that already exists.
+
+### Running it
+
+```bash
+pnpm db:migrate          # make sure the schema is up to date first
+pnpm db:seed             # strategy from NODE_ENV (development locally)
+pnpm db:seed:dev         # force the development seeder
+pnpm db:seed:prod        # force the production seeder
+```
+
+> The seed scripts require a built API (`pnpm build`) and load the root `.env`
+> automatically when present (no-op in containers, where env is injected).
+
+### Auto-seed on startup (dev convenience)
+
+Set `SEED_ON_STARTUP=true` and the API runs the seeder as it boots — handy for a
+fresh dev or staging container so the database is immediately usable. It is **off
+by default**; production should seed explicitly via `pnpm db:seed:prod`.
+
+### Configuration
+
+All initial-login values come from the environment. They are **optional in
+development** (safe defaults are applied) and **required in production**
+(validated at startup).
+
+| Variable                | Default (dev)      | Description                                  |
+| ----------------------- | ------------------ | -------------------------------------------- |
+| `SEED_INITIAL_EMAIL`    | `owner@valmonto.com` | Email of the initial owner user            |
+| `SEED_INITIAL_PASSWORD` | `ChangeMe123!`     | Plaintext password, hashed on first create   |
+| `SEED_INITIAL_NAME`     | `Initial Owner`    | Display name of the initial owner            |
+| `SEED_INITIAL_ORG_NAME` | `Valmonto`         | Name of the initial organization             |
+| `SEED_ON_STARTUP`       | `false`            | Auto-run the seeder when the API boots       |
+| `SEED_STRATEGY`         | _(unset)_          | Force `production` or `development` strategy  |
+
+### Development fixtures
+
+Edit `apps/api/src/seed/data/users.json` to change the demo dataset — no code
+changes required. Each entry is validated against the contract schemas:
+
+```json
+{
+  "email": "admin@valmonto.com",
+  "name": "Dev Admin",
+  "systemRole": "ADMIN",
+  "orgRole": "ADMIN"
+}
+```
+
+`password` is optional per entry and falls back to `SEED_INITIAL_PASSWORD`.
 
 ---
 

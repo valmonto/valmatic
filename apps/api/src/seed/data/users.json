@@ -1,0 +1,20 @@
+[
+  {
+    "email": "admin@valmonto.com",
+    "name": "Dev Admin",
+    "systemRole": "ADMIN",
+    "orgRole": "ADMIN"
+  },
+  {
+    "email": "moderator@valmonto.com",
+    "name": "Dev Moderator",
+    "systemRole": "MODERATOR",
+    "orgRole": "MEMBER"
+  },
+  {
+    "email": "member@valmonto.com",
+    "name": "Dev Member",
+    "systemRole": "USER",
+    "orgRole": "MEMBER"
+  }
+]

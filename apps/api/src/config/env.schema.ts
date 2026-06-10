@@ -31,6 +31,33 @@ export const envSchema = z.object({
 
   // Server
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+
+  // Seeding (initial login). Optional in dev (safe defaults applied by the seeder),
+  // required in production — enforced by the superRefine below.
+  SEED_INITIAL_EMAIL: z.string().email('SEED_INITIAL_EMAIL must be a valid email').optional(),
+  SEED_INITIAL_PASSWORD: z
+    .string()
+    .min(8, 'SEED_INITIAL_PASSWORD must be at least 8 characters')
+    .optional(),
+  SEED_INITIAL_NAME: z.string().min(1).default('Initial Owner'),
+  SEED_INITIAL_ORG_NAME: z.string().min(1).default('Valmonto'),
+  /** When true, the API runs the seeder automatically on startup (handy for dev). */
+  SEED_ON_STARTUP: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((v) => v === 'true'),
+}).superRefine((env, ctx) => {
+  if (env.NODE_ENV !== 'production') return;
+
+  for (const key of ['SEED_INITIAL_EMAIL', 'SEED_INITIAL_PASSWORD'] as const) {
+    if (!env[key]) {
+      ctx.addIssue({
+        code: 'custom',
+        path: [key],
+        message: `${key} is required in production`,
+      });
+    }
+  }
 });
 
 export type Env = z.infer<typeof envSchema>;

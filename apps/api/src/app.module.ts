@@ -12,6 +12,7 @@ import { OrgModule } from './org/org.module';
 import { JobsModule } from './jobs';
 import { NotificationModule } from './notifications';
 import { I18nModule } from './i18n';
+import { SeedModule } from './seed/seed.module';
 import { validateEnv } from './config';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -81,6 +82,7 @@ const isProduction = process.env.NODE_ENV === 'production';
     OrgModule,
     JobsModule,
     NotificationModule,
+    SeedModule.forApp(),
   ],
   controllers: [],
   providers: [
