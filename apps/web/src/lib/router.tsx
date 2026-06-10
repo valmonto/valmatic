@@ -27,6 +27,10 @@ const router = createBrowserRouter([
         lazy: () => import('@/pages/settings.page').then((m) => ({ Component: m.default })),
       },
       {
+        path: 'components',
+        lazy: () => import('@/pages/components.page').then((m) => ({ Component: m.default })),
+      },
+      {
         path: '*',
         lazy: () => import('@/pages/~404.page').then((m) => ({ Component: m.default })),
       },

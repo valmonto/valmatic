@@ -44,6 +44,7 @@ const pageTitles: Record<string, string> = {
   '/notifications': 'Notifications',
   '/analytics': 'Analytics',
   '/settings': 'Settings',
+  '/components': 'Components',
 };
 
 export default function AppLayout() {

@@ -43,7 +43,7 @@ export function UserActionsDropdown() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="group transition-colors data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src="/diverse-user-avatars.png" alt={displayName} />
@@ -55,7 +55,7 @@ export function UserActionsDropdown() {
                   {user.email.toLowerCase()}
                 </span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <ChevronsUpDown className="ml-auto size-4 text-muted-foreground transition-all duration-200 ease-out group-hover:text-foreground group-data-[state=open]:scale-110 group-data-[state=open]:text-foreground" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent

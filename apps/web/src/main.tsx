@@ -4,6 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import { AppRouter } from './lib/router';
 import { AuthProvider } from '@/shared/auth/auth-context';
 import { ThemeProvider } from '@/shared/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 import i18n from '@/shared/lib/i18n';
 
 import './styles/index';
@@ -21,6 +22,7 @@ createRoot(root).render(
         <ThemeProvider>
           <AuthProvider>
             <AppRouter />
+            <Toaster />
           </AuthProvider>
         </ThemeProvider>
       </Suspense>
