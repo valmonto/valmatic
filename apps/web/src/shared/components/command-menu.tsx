@@ -9,6 +9,7 @@ import {
   LogOut,
   Moon,
   Settings,
+  Smartphone,
   Sun,
   Users,
 } from 'lucide-react';
@@ -71,6 +72,7 @@ export function CommandMenu() {
     { label: t(k.jobs.jobs), icon: ListTodo, to: '/jobs' },
     { label: t(k.notifications.notifications), icon: Bell, to: '/notifications' },
     { label: t(k.common.nav.settings), icon: Settings, to: '/settings' },
+    { label: t(k.common.nav.mobile), icon: Smartphone, to: '/mobile' },
   ];
 
   return (

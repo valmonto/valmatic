@@ -176,6 +176,7 @@
   "common.nav.management": "Management",
   "common.nav.workspace": "Workspace",
   "common.nav.components": "Components",
+  "common.nav.mobile": "Mobile",
   "common.nav.developer": "Developer",
   "common.nav.errorTest": "Error Test",
   "common.dashboard.title": "Dashboard",

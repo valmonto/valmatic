@@ -22,6 +22,7 @@ import {
   Hexagon,
   ListTodo,
   Blocks,
+  Smartphone,
 } from 'lucide-react';
 
 const navGroups = [
@@ -42,7 +43,10 @@ const navGroups = [
   },
   {
     labelKey: k.common.nav.developer,
-    items: [{ titleKey: k.common.nav.components, url: '/components', icon: Blocks }],
+    items: [
+      { titleKey: k.common.nav.components, url: '/components', icon: Blocks },
+      { titleKey: k.common.nav.mobile, url: '/mobile', icon: Smartphone },
+    ],
   },
 ];
 

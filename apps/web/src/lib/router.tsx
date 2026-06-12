@@ -6,10 +6,13 @@ import { userRoutes } from '@/features/users';
 import { jobsRoutes } from '@/features/jobs';
 import { notificationsRoutes } from '@/features/notifications';
 import { authRoutes } from '@/features/auth';
+import { mobileDemoRoutes } from '@/features/mobile-demo';
 
 const router = createBrowserRouter([
   // Auth routes - no app layout (navbar, sidebar, etc.)
   ...authRoutes,
+  // Mobile demo - full-viewport phone layout, no app shell
+  ...mobileDemoRoutes,
   // App routes - with main layout
   {
     path: '/',
