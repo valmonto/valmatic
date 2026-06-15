@@ -1,0 +1,64 @@
+###############################################################################
+# 1. CORE CONFIGURATION
+###############################################################################
+# Handle line endings automatically and force LF in the repo.
+* text=auto eol=lf
+
+###############################################################################
+# 2. JAVASCRIPT / TYPESCRIPT / REACT
+###############################################################################
+*.js      text eol=lf
+*.jsx     text eol=lf
+*.ts      text eol=lf
+*.tsx     text eol=lf
+*.mjs     text eol=lf
+*.cjs     text eol=lf
+
+###############################################################################
+# 3. STYLES & ASSETS
+###############################################################################
+*.css     text eol=lf
+*.scss    text eol=lf
+*.sass    text eol=lf
+*.less    text eol=lf
+*.html    text eol=lf
+*.svg     text eol=lf
+*.json    text eol=lf
+*.json5   text eol=lf
+
+###############################################################################
+# 4. CONFIG & MANIFESTS
+###############################################################################
+.env* text eol=lf
+.editorconfig text eol=lf
+.prettierrc  text eol=lf
+.eslintrc    text eol=lf
+*.md         text eol=lf
+*.yaml       text eol=lf
+*.yml        text eol=lf
+
+# Lockfiles - treat as text but ensure LF
+package-lock.json  text eol=lf
+yarn.lock          text eol=lf
+pnpm-lock.yaml     text eol=lf
+
+###############################################################################
+# 5. SHELL & DOCKER (CRITICAL FOR DEPLOYMENT)
+###############################################################################
+# If these have CRLF, Docker containers will fail to start.
+*.sh      text eol=lf
+Dockerfile text eol=lf
+.dockerignore text eol=lf
+
+###############################################################################
+# 6. BINARIES (PREVENT CORRUPTION)
+###############################################################################
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.ico     binary
+*.pdf     binary
+*.woff    binary
+*.woff2   binary
+*.ttf     binary
