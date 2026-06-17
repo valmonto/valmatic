@@ -1,5 +1,5 @@
 import { Controller, Delete, Get, Param, Patch, Query } from '@nestjs/common';
-import { ActiveUser, Role, Roles } from '@pkg/server';
+import { ActiveUser, Permissions } from '@pkg/server';
 import {
   ListNotificationsRequestSchema,
   type ListNotificationsRequest,
@@ -14,12 +14,12 @@ import {
 } from '@pkg/contracts';
 import { NotificationService } from './notification.service';
 
-@Roles(Role.MEMBER, Role.OWNER, Role.ADMIN)
 @Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
   @Get()
+  @Permissions('notification:list')
   async list(
     @Query() query: ListNotificationsRequest,
     @ActiveUser() activeUser: ActiveUserType,
@@ -29,11 +29,13 @@ export class NotificationController {
   }
 
   @Get('unread-count')
+  @Permissions('notification:list')
   async getUnreadCount(@ActiveUser() activeUser: ActiveUserType): Promise<GetUnreadCountResponse> {
     return this.notificationService.getUnreadCount(activeUser);
   }
 
   @Get(':id')
+  @Permissions('notification:read')
   async getById(
     @Param('id') id: string,
     @ActiveUser() activeUser: ActiveUserType,
@@ -42,6 +44,7 @@ export class NotificationController {
   }
 
   @Patch('read-all')
+  @Permissions('notification:update')
   async markAllAsRead(
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<MarkAllNotificationsReadResponse> {
@@ -49,6 +52,7 @@ export class NotificationController {
   }
 
   @Patch(':id/read')
+  @Permissions('notification:update')
   async markAsRead(
     @Param('id') id: string,
     @ActiveUser() activeUser: ActiveUserType,
@@ -57,6 +61,7 @@ export class NotificationController {
   }
 
   @Delete()
+  @Permissions('notification:delete')
   async deleteAll(
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<DeleteAllNotificationsResponse> {
@@ -64,6 +69,7 @@ export class NotificationController {
   }
 
   @Delete(':id')
+  @Permissions('notification:delete')
   async delete(
     @Param('id') id: string,
     @ActiveUser() activeUser: ActiveUserType,

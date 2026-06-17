@@ -5,6 +5,11 @@ import type { OrganizationUserRole } from './schemas/organization.schema';
  * Format: resource:action
  */
 export const PERMISSIONS = [
+  // Auth / self-service permissions (available to any authenticated user)
+  'auth:read-self',
+  'auth:change-password',
+  'auth:logout',
+
   // Organization permissions
   'org:list',
   'org:read',
@@ -29,6 +34,12 @@ export const PERMISSIONS = [
   'job:update',
   'job:delete',
 
+  // Notification permissions
+  'notification:list',
+  'notification:read',
+  'notification:update',
+  'notification:delete',
+
   // Settings permissions
   'settings:read',
   'settings:update',
@@ -42,6 +53,9 @@ export type Permission = (typeof PERMISSIONS)[number];
  */
 export const ROLE_PERMISSIONS: Record<OrganizationUserRole, readonly Permission[]> = {
   OWNER: [
+    'auth:read-self',
+    'auth:change-password',
+    'auth:logout',
     'org:list',
     'org:read',
     'org:create',
@@ -60,10 +74,17 @@ export const ROLE_PERMISSIONS: Record<OrganizationUserRole, readonly Permission[
     'job:create',
     'job:update',
     'job:delete',
+    'notification:list',
+    'notification:read',
+    'notification:update',
+    'notification:delete',
     'settings:read',
     'settings:update',
   ],
   ADMIN: [
+    'auth:read-self',
+    'auth:change-password',
+    'auth:logout',
     'org:list',
     'org:read',
     'org:create',
@@ -77,10 +98,28 @@ export const ROLE_PERMISSIONS: Record<OrganizationUserRole, readonly Permission[
     'job:create',
     'job:update',
     'job:delete',
+    'notification:list',
+    'notification:read',
+    'notification:update',
+    'notification:delete',
     'settings:read',
     'settings:update',
   ],
-  MEMBER: ['org:list', 'org:read', 'org:create', 'org:switch', 'job:list', 'settings:read'],
+  MEMBER: [
+    'auth:read-self',
+    'auth:change-password',
+    'auth:logout',
+    'org:list',
+    'org:read',
+    'org:create',
+    'org:switch',
+    'job:list',
+    'notification:list',
+    'notification:read',
+    'notification:update',
+    'notification:delete',
+    'settings:read',
+  ],
 } as const;
 
 /**

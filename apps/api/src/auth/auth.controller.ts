@@ -5,8 +5,7 @@ import {
   PublicRoute,
   ActiveUser,
   IamService,
-  Roles,
-  Role,
+  Permissions,
   COOKIE_OPTIONS,
   COOKIE_TTL,
 } from '@pkg/server';
@@ -87,7 +86,7 @@ export class AuthController {
   }
 
   @Post('logout')
-  @Roles(Role.OWNER, Role.ADMIN, Role.MEMBER)
+  @Permissions('auth:logout')
   async logout(
     @ZodRequest(LogoutRequestSchema) dto: LogoutRequest,
     @Req() req: FastifyRequest,
@@ -124,7 +123,7 @@ export class AuthController {
   }
 
   @Get('me')
-  @Roles(Role.OWNER, Role.ADMIN, Role.MEMBER)
+  @Permissions('auth:read-self')
   async me(
     @ZodRequest(CurrentUserRequestSchema) dto: CurrentUserRequest,
     @ActiveUser() activeUser: ActiveUserType,
@@ -133,7 +132,7 @@ export class AuthController {
   }
 
   @Post('logout-all')
-  @Roles(Role.OWNER, Role.ADMIN, Role.MEMBER)
+  @Permissions('auth:logout')
   async logoutAll(
     @ZodRequest(LogoutAllRequestSchema) dto: LogoutAllRequest,
     @ActiveUser() activeUser: ActiveUserType,
@@ -160,7 +159,7 @@ export class AuthController {
   }
 
   @Post('change-password')
-  @Roles(Role.OWNER, Role.ADMIN, Role.MEMBER)
+  @Permissions('auth:change-password')
   async changePassword(
     @ZodRequest(ChangePasswordRequestSchema) dto: ChangePasswordRequest,
     @ActiveUser() activeUser: ActiveUserType,

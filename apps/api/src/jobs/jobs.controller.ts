@@ -1,6 +1,6 @@
 import { Controller, Post } from '@nestjs/common';
 import { ExampleProducer, type ExampleJobPayload } from '@pkg/server';
-import { PublicRoute, ZodRequest } from '@pkg/server';
+import { Permissions, ZodRequest } from '@pkg/server';
 import {
   CreateExampleJobRequest,
   CreateExampleJobRequestSchema,
@@ -30,7 +30,7 @@ export class JobsController {
    * }
    */
   @Post('example')
-  @PublicRoute() // Remove this in production - just for testing
+  @Permissions('job:create')
   async createExampleJob(
     @ZodRequest(CreateExampleJobRequestSchema) dto: CreateExampleJobRequest,
   ): Promise<CreateExampleJobResponse> {
@@ -66,7 +66,7 @@ export class JobsController {
    * }
    */
   @Post('example/bulk')
-  @PublicRoute() // Remove this in production - just for testing
+  @Permissions('job:create')
   async createExampleJobsBulk(
     @ZodRequest(CreateExampleJobsBulkRequestSchema) dto: CreateExampleJobsBulkRequest,
   ): Promise<CreateExampleJobsBulkResponse> {
