@@ -311,6 +311,7 @@ Each app has detailed documentation:
 - [`apps/web/README.md`](apps/web/README.md) — Components, data fetching, adding pages
 - [`apps/worker/README.md`](apps/worker/README.md) — Queue processing, adding jobs
 - [`apps/e2e/README.md`](apps/e2e/README.md) — Writing and running E2E tests
+- 📱 [`apps/mobile/docs/development.md`](apps/mobile/docs/development.md) — Mobile (Expo/React Native) setup & running on a device — Android ([Linux/macOS/Windows](apps/mobile/docs/setup-android.md)) and [iOS](apps/mobile/docs/setup-ios.md)
 
 ---
 

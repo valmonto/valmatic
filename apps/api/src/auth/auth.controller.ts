@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
 import { InjectLogger, PinoLogger } from '@pkg/server';
 import { AuthService } from './auth.service';
 import {
@@ -8,9 +8,13 @@ import {
   Permissions,
   COOKIE_OPTIONS,
   COOKIE_TTL,
+  extractAccessToken,
+  extractRefreshToken,
 } from '@pkg/server';
+import { k } from '@pkg/locales';
 import { tryCatch } from '@pkg/utils';
 import {
+  type AuthTokens,
   ChangePasswordRequest,
   ChangePasswordRequestSchema,
   ChangePasswordResponse,
@@ -26,6 +30,9 @@ import {
   LogoutRequest,
   LogoutRequestSchema,
   LogoutResponse,
+  RefreshRequest,
+  RefreshRequestSchema,
+  RefreshResponse,
   RegisterRequest,
   RegisterRequestSchema,
   RegisterResponse,
@@ -43,46 +50,90 @@ export class AuthController {
     @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
+  /**
+   * Non-browser clients (the mobile app) send `X-Client: mobile` and receive
+   * their tokens in the response body instead of as httpOnly cookies, since
+   * React Native has no browser cookie jar. Web clients are unaffected.
+   */
+  private isMobileClient(req: FastifyRequest): boolean {
+    return req.headers['x-client'] === 'mobile';
+  }
+
+  private setAuthCookies(reply: FastifyReply, tokens: AuthTokens): void {
+    reply.setCookie('accessToken', tokens.accessToken, {
+      ...COOKIE_OPTIONS,
+      maxAge: COOKIE_TTL.ACCESS_TOKEN,
+    });
+    reply.setCookie('refreshToken', tokens.refreshToken, {
+      ...COOKIE_OPTIONS,
+      maxAge: COOKIE_TTL.REFRESH_TOKEN,
+    });
+  }
+
+  private clearAuthCookies(reply: FastifyReply): void {
+    reply.clearCookie('accessToken', { path: '/' });
+    reply.clearCookie('refreshToken', { path: '/' });
+  }
+
+  /**
+   * Delivers freshly issued tokens to the client: mobile gets them in the
+   * body, web gets httpOnly cookies. Mutates `response` for mobile and
+   * returns it so callers can `return this.deliverTokens(...)`.
+   */
+  private deliverTokens<T extends { tokens?: AuthTokens }>(
+    req: FastifyRequest,
+    reply: FastifyReply,
+    tokens: AuthTokens,
+    response: T,
+  ): T {
+    if (this.isMobileClient(req)) {
+      return { ...response, tokens };
+    }
+    this.setAuthCookies(reply, tokens);
+    return response;
+  }
+
   @PublicRoute()
   @Post('login')
   async login(
     @ZodRequest(LoginRequestSchema) dto: LoginRequest,
+    @Req() req: FastifyRequest,
     @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<LoginResponse> {
     const { response, accessToken, refreshToken } = await this.authService.login(dto);
-
-    reply.setCookie('accessToken', accessToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.ACCESS_TOKEN,
-    });
-
-    reply.setCookie('refreshToken', refreshToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.REFRESH_TOKEN,
-    });
-
-    return response;
+    return this.deliverTokens(req, reply, { accessToken, refreshToken }, response);
   }
 
   @PublicRoute()
   @Post('register')
   async register(
     @ZodRequest(RegisterRequestSchema) dto: RegisterRequest,
+    @Req() req: FastifyRequest,
     @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<RegisterResponse> {
     const { response, accessToken, refreshToken } = await this.authService.register(dto);
+    return this.deliverTokens(req, reply, { accessToken, refreshToken }, response);
+  }
 
-    reply.setCookie('accessToken', accessToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.ACCESS_TOKEN,
-    });
+  /**
+   * Explicit refresh for mobile clients, which cannot use the transparent
+   * cookie-based refresh performed by the auth guard. Accepts the refresh
+   * token from the body (mobile) or the refresh cookie (web fallback).
+   */
+  @PublicRoute()
+  @Post('refresh')
+  async refresh(
+    @ZodRequest(RefreshRequestSchema) dto: RefreshRequest,
+    @Req() req: FastifyRequest,
+    @Res({ passthrough: true }) reply: FastifyReply,
+  ): Promise<RefreshResponse> {
+    const currentRefreshToken = dto.refreshToken ?? extractRefreshToken(req);
+    if (!currentRefreshToken) {
+      throw new UnauthorizedException(k.auth.errors.invalidRefreshToken);
+    }
 
-    reply.setCookie('refreshToken', refreshToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.REFRESH_TOKEN,
-    });
-
-    return response;
+    const tokens = await this.authService.refreshTokens(currentRefreshToken);
+    return this.deliverTokens(req, reply, tokens, {} as RefreshResponse);
   }
 
   @Post('logout')
@@ -92,33 +143,25 @@ export class AuthController {
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<LogoutResponse> {
-    // Blacklist the access token so it can't be reused
-    const signedAccessToken = req.cookies?.accessToken;
-    if (signedAccessToken) {
-      const unsigned = req.unsignCookie(signedAccessToken);
-      if (unsigned.valid && unsigned.value) {
-        const { e } = await tryCatch(this.iamService.auth.blacklistAccessToken(unsigned.value));
-        if (e) {
-          this.logger.warn({ err: e }, 'Failed to blacklist access token during logout');
-        }
+    // Blacklist the access token so it can't be reused (cookie or Bearer)
+    const accessToken = extractAccessToken(req);
+    if (accessToken) {
+      const { e } = await tryCatch(this.iamService.auth.blacklistAccessToken(accessToken));
+      if (e) {
+        this.logger.warn({ err: e }, 'Failed to blacklist access token during logout');
       }
     }
 
-    // Revoke the refresh token
-    const signedRefreshToken = req.cookies?.refreshToken;
-    if (signedRefreshToken) {
-      const unsigned = req.unsignCookie(signedRefreshToken);
-      if (unsigned.valid && unsigned.value) {
-        const { e } = await tryCatch(this.iamService.auth.revokeToken({ token: unsigned.value }));
-        if (e) {
-          this.logger.warn({ err: e }, 'Failed to revoke refresh token during logout');
-        }
+    // Revoke the refresh token (cookie for web, request body for mobile)
+    const refreshToken = extractRefreshToken(req) ?? dto.refreshToken;
+    if (refreshToken) {
+      const { e } = await tryCatch(this.iamService.auth.revokeToken({ token: refreshToken }));
+      if (e) {
+        this.logger.warn({ err: e }, 'Failed to revoke refresh token during logout');
       }
     }
 
-    reply.clearCookie('accessToken', { path: '/' });
-    reply.clearCookie('refreshToken', { path: '/' });
-
+    this.clearAuthCookies(reply);
     return {};
   }
 
@@ -142,19 +185,15 @@ export class AuthController {
     await this.authService.logoutAllDevices(activeUser.userId);
 
     // Blacklist current access token and clear cookies
-    const signedAccessToken = req.cookies?.accessToken;
-    if (signedAccessToken) {
-      const unsigned = req.unsignCookie(signedAccessToken);
-      if (unsigned.valid && unsigned.value) {
-        const { e } = await tryCatch(this.iamService.auth.blacklistAccessToken(unsigned.value));
-        if (e) {
-          this.logger.warn({ err: e }, 'Failed to blacklist access token during logout-all');
-        }
+    const accessToken = extractAccessToken(req);
+    if (accessToken) {
+      const { e } = await tryCatch(this.iamService.auth.blacklistAccessToken(accessToken));
+      if (e) {
+        this.logger.warn({ err: e }, 'Failed to blacklist access token during logout-all');
       }
     }
 
-    reply.clearCookie('accessToken', { path: '/' });
-    reply.clearCookie('refreshToken', { path: '/' });
+    this.clearAuthCookies(reply);
     return {};
   }
 
@@ -169,19 +208,15 @@ export class AuthController {
     await this.authService.changePassword(activeUser.userId, dto);
 
     // Clear current session (user logged out from all devices)
-    const signedAccessToken = req.cookies?.accessToken;
-    if (signedAccessToken) {
-      const unsigned = req.unsignCookie(signedAccessToken);
-      if (unsigned.valid && unsigned.value) {
-        const { e } = await tryCatch(this.iamService.auth.blacklistAccessToken(unsigned.value));
-        if (e) {
-          this.logger.warn({ err: e }, 'Failed to blacklist access token during password change');
-        }
+    const accessToken = extractAccessToken(req);
+    if (accessToken) {
+      const { e } = await tryCatch(this.iamService.auth.blacklistAccessToken(accessToken));
+      if (e) {
+        this.logger.warn({ err: e }, 'Failed to blacklist access token during password change');
       }
     }
 
-    reply.clearCookie('accessToken', { path: '/' });
-    reply.clearCookie('refreshToken', { path: '/' });
+    this.clearAuthCookies(reply);
     return {};
   }
 }

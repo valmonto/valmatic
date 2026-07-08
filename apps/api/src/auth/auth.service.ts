@@ -133,6 +133,12 @@ export class AuthService {
     };
   }
 
+  async refreshTokens(
+    refreshToken: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    return this.iamService.auth.refresh({ refreshToken });
+  }
+
   async getMe(activeUser: ActiveUser): Promise<CurrentUserResponse> {
     const userInfo = await this.authRepository.findUserWithOrg(activeUser.userId, activeUser.orgId);
 

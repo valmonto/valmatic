@@ -32,6 +32,20 @@ function isValidProjectName(name: string): boolean {
   return /^[a-z][a-z0-9-]*$/.test(name) && !name.endsWith('-') && !name.includes('--');
 }
 
+/** Lowercase, alphanumeric-only segment (no hyphens) safe for a reverse-DNS id part. */
+function toIdSegment(str: string): string {
+  const seg = str.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return /^[a-z]/.test(seg) ? seg : `app${seg}`;
+}
+
+/** Turn a project slug into a display name: "my-project" → "My Project". */
+function toDisplayName(name: string): string {
+  return name
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
 function getAllFiles(dir: string, files: string[] = []): string[] {
   const entries = readdirSync(dir);
 
@@ -147,6 +161,76 @@ dependencies and their licenses.
 `;
 }
 
+type MobileConfig = {
+  displayName: string;
+  scheme: string;
+  bundleId: string;
+  /** Universal-link domain, or '' to disable app links entirely. */
+  domain: string;
+};
+
+/**
+ * Rewrites `apps/mobile/app.json` with the new app's identity (display name, slug,
+ * URL scheme, iOS/Android ids, universal-link domain) and refreshes the matching
+ * references in the mobile docs. Native ids must be unique per app, so unlike the
+ * web display name they can't ride the `vboilerplate` token swap.
+ */
+function configureMobileApp(cfg: MobileConfig, modifiedFiles: string[]): boolean {
+  const appJsonPath = join(ROOT_DIR, 'apps/mobile/app.json');
+  if (!existsSync(appJsonPath)) return false;
+
+  const app = JSON.parse(readFileSync(appJsonPath, 'utf-8'));
+  const expo = app.expo ?? {};
+  const prevScheme: string | undefined = expo.scheme;
+  const prevBundleId: string | undefined = expo.ios?.bundleIdentifier;
+  const prevDomain: string | undefined = expo.ios?.associatedDomains?.[0]?.replace(/^applinks:/, '');
+
+  expo.name = cfg.displayName;
+  expo.slug = cfg.scheme;
+  expo.scheme = cfg.scheme;
+
+  expo.ios = expo.ios ?? {};
+  expo.ios.bundleIdentifier = cfg.bundleId;
+  expo.android = expo.android ?? {};
+  expo.android.package = cfg.bundleId;
+
+  if (cfg.domain) {
+    expo.ios.associatedDomains = [`applinks:${cfg.domain}`];
+    // Point the existing https intent filter at the new domain (keep other filters).
+    for (const filter of expo.android.intentFilters ?? []) {
+      for (const data of filter.data ?? []) {
+        if (data.scheme === 'https') data.host = cfg.domain;
+      }
+    }
+  } else {
+    // No domain provided → don't claim the boilerplate's universal links.
+    delete expo.ios.associatedDomains;
+    expo.android.intentFilters = (expo.android.intentFilters ?? []).filter(
+      (f: { data?: { scheme?: string }[] }) => !f.data?.some((d) => d.scheme === 'https'),
+    );
+    if (expo.android.intentFilters.length === 0) delete expo.android.intentFilters;
+  }
+
+  app.expo = expo;
+  writeFileSync(appJsonPath, JSON.stringify(app, null, 2) + '\n', 'utf-8');
+  modifiedFiles.push(relative(ROOT_DIR, appJsonPath));
+
+  // Refresh the stale identifiers embedded in the mobile docs/source.
+  const docTargets = getAllFiles(join(ROOT_DIR, 'apps/mobile/docs'));
+  const tokens: [string, string][] = [];
+  if (prevScheme && prevScheme !== cfg.scheme) tokens.push([`${prevScheme}://`, `${cfg.scheme}://`]);
+  if (prevBundleId && prevBundleId !== cfg.bundleId) tokens.push([prevBundleId, cfg.bundleId]);
+  if (cfg.domain && prevDomain && prevDomain !== cfg.domain) tokens.push([prevDomain, cfg.domain]);
+
+  for (const filePath of docTargets) {
+    for (const [from, to] of tokens) {
+      replaceText({ filePath, matchText: from, newText: to, modifiedFiles });
+    }
+  }
+
+  return true;
+}
+
 function prompt(question: string): Promise<string> {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -193,6 +277,20 @@ async function main(): Promise<void> {
 
   const licenseChoice = await prompt('\nSelect (1-2): ');
   const usesMIT = licenseChoice !== '2';
+
+  // Mobile app identity (skippable — Enter accepts the shown default).
+  let mobileConfig: MobileConfig | null = null;
+  const hasMobile = existsSync(join(ROOT_DIR, 'apps/mobile/app.json'));
+  if (hasMobile) {
+    console.log('\n📱 Mobile app (apps/mobile) — press Enter to accept defaults:');
+    const defName = toDisplayName(projectName);
+    const defBundle = `com.${toIdSegment(owner)}.${toIdSegment(projectName)}`;
+    const displayName = (await prompt(`  Display name [${defName}]: `)) || defName;
+    const scheme = (await prompt(`  URL scheme [${projectName}]: `)) || projectName;
+    const bundleId = (await prompt(`  Bundle/package id [${defBundle}]: `)) || defBundle;
+    const domain = await prompt('  Universal-link domain (blank to disable, e.g. app.example.com): ');
+    mobileConfig = { displayName, scheme, bundleId, domain };
+  }
 
   const year = new Date().getFullYear().toString();
 
@@ -261,6 +359,17 @@ See LICENSES/boilerplate-MIT.txt for details.
     }
   } else {
     console.log('  No _boilerplate placeholders found.');
+  }
+
+  // Configure the mobile app's native identity (app.json + docs)
+  if (mobileConfig) {
+    console.log('\n📱 Configuring mobile app...\n');
+    const mobileModified: string[] = [];
+    configureMobileApp(mobileConfig, mobileModified);
+    console.log(`✓ Updated ${mobileModified.length} mobile file(s):`);
+    for (const file of mobileModified) {
+      console.log(`  - ${file}`);
+    }
   }
 
   // Regenerate third-party licenses

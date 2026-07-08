@@ -1,0 +1,76 @@
+/* `important` forces Tailwind utilities to !important so they win the web CSS
+   cascade against react-native-web's unlayered injected styles (v5 web fix). */
+@import 'tailwindcss' important;
+@import 'nativewind/theme';
+
+/* Design tokens ported from apps/web (src/styles/theme.css). */
+:root {
+  --radius: 0.75rem;
+
+  --background: oklch(0.992 0.001 277);
+  --foreground: oklch(0.205 0.006 277);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.205 0.006 277);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.205 0.006 277);
+  --primary: oklch(0.535 0.15 277);
+  --primary-foreground: oklch(0.99 0.003 277);
+  --secondary: oklch(0.971 0.003 277);
+  --secondary-foreground: oklch(0.255 0.008 277);
+  --muted: oklch(0.972 0.003 277);
+  --muted-foreground: oklch(0.505 0.013 277);
+  --accent: oklch(0.962 0.005 277);
+  --accent-foreground: oklch(0.255 0.008 277);
+  --destructive: oklch(0.585 0.21 25.5);
+  --border: oklch(0.916 0.004 277);
+  --input: oklch(0.916 0.004 277);
+  --ring: oklch(0.535 0.15 277);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: oklch(0.146 0.006 277);
+    --foreground: oklch(0.93 0.004 277);
+    --card: oklch(0.178 0.007 277);
+    --card-foreground: oklch(0.93 0.004 277);
+    --popover: oklch(0.178 0.007 277);
+    --popover-foreground: oklch(0.93 0.004 277);
+    --primary: oklch(0.565 0.145 277);
+    --primary-foreground: oklch(0.985 0.003 277);
+    --secondary: oklch(0.214 0.008 277);
+    --secondary-foreground: oklch(0.93 0.004 277);
+    --muted: oklch(0.214 0.008 277);
+    --muted-foreground: oklch(0.638 0.015 277);
+    --accent: oklch(0.245 0.011 277);
+    --accent-foreground: oklch(0.96 0.004 277);
+    --destructive: oklch(0.625 0.21 23);
+    --border: oklch(1 0 0 / 9%);
+    --input: oklch(1 0 0 / 12%);
+    --ring: oklch(0.565 0.145 277);
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}

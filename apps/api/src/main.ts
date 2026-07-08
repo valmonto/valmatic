@@ -35,6 +35,20 @@ async function bootstrap(): Promise<void> {
     parseOptions: {},
   });
 
+  // CORS — browsers (e.g. the Expo web build at localhost:8081, or any SPA on a
+  // different origin) send a preflight that must be allowed. Native apps don't
+  // enforce CORS, so this only matters for web clients. Set CORS_ORIGINS to a
+  // comma-separated allowlist in production; in dev we reflect localhost/LAN.
+  const corsOrigins = config.get<string>('CORS_ORIGINS');
+  app.enableCors({
+    origin: corsOrigins
+      ? corsOrigins.split(',').map((o) => o.trim())
+      : [/^http:\/\/localhost:\d+$/, /^http:\/\/127\.0\.0\.1:\d+$/, /^http:\/\/192\.168\.\d+\.\d+:\d+$/],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Client'],
+  });
+
   app.setGlobalPrefix('api', { exclude: ['health'] });
 
   const port = config.get<number>('PORT', 3000);

@@ -1,11 +1,12 @@
 import en from './translations/en.json';
 import es from './translations/es.json';
+import lt from './translations/lt.json';
 
 // Export all keys
 export * from './keys';
 export { k } from './keys';
 
-export const supportedLanguages = ['en', 'es'] as const;
+export const supportedLanguages = ['en', 'es', 'lt'] as const;
 export type SupportedLanguage = (typeof supportedLanguages)[number];
 
 export const defaultLanguage: SupportedLanguage = 'en';
@@ -14,6 +15,7 @@ export const defaultLanguage: SupportedLanguage = 'en';
 export const translations = {
   en,
   es,
+  lt,
 } as const;
 
 // Shared i18next configuration
