@@ -22,22 +22,27 @@ export const describeIntegration: typeof describe | typeof describe.skip = proce
 export const hasDatabase = Boolean(process.env.DATABASE_URL);
 
 /**
+ * Anything exposing Drizzle's `.delete(table)`.
+ *
+ * The parameter is `never` so any concrete table type satisfies it — method
+ * parameters are compared bivariantly, and spelling out Drizzle's builder
+ * generics here would buy no safety, since the tables arrive untyped anyway.
+ */
+interface Deletable {
+  delete: (table: never) => PromiseLike<unknown>;
+}
+
+/**
  * Empty the given tables, children first.
  *
  * Prefer this in `beforeEach` over assuming an empty database: tests that leak
  * rows into each other fail in confusing, order-dependent ways.
  *
- * @param db     anything exposing Drizzle's `.delete(table)`
+ * @param db     a Drizzle database
  * @param tables tables in deletion order (dependents before dependencies)
  */
-export async function truncate(
-  db: { delete: (table: unknown) => { execute?: () => Promise<unknown> } | Promise<unknown> },
-  tables: unknown[],
-): Promise<void> {
+export async function truncate(db: Deletable, tables: unknown[]): Promise<void> {
   for (const table of tables) {
-    const query = db.delete(table);
-    await (typeof (query as { execute?: unknown }).execute === 'function'
-      ? (query as { execute: () => Promise<unknown> }).execute()
-      : (query as Promise<unknown>));
+    await db.delete(table as never);
   }
 }
