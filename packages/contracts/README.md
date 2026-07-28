@@ -34,7 +34,7 @@ junk drawer.
 **Web and mobile alias `@pkg/contracts` to `/client`** (`vite.config.ts`,
 `metro.config.js`). So in frontend code the bare specifier is already the safe
 one — reaching a schema by accident fails to build rather than quietly adding
-~11 kB of Zod to the bundle. The client entry is 453 bytes.
+Zod and the whole schema graph to the bundle.
 
 Frontend code that genuinely re-validates imports `@pkg/contracts/schemas`
 explicitly, which shows up in review instead of happening by accident.
