@@ -1,54 +1,92 @@
-export type LogLevel = 'log' | 'error' | 'warn' | 'debug' | 'verbose';
+export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
 
 export interface LogEntry {
   level: LogLevel;
-  message: unknown;
-  context?: unknown;
+  args: unknown[];
 }
 
 /**
- * A logger that records instead of printing.
+ * A pino logger that records instead of printing.
+ *
+ * Shaped to `PinoLogger` from `nestjs-pino`, which is what `@InjectLogger()`
+ * provides — so it drops into a service under test without the
+ * `as unknown as PinoLogger` cast a hand-rolled object needs.
  *
  * Two jobs: keep test output readable, and let a test assert that something was
- * logged — useful for the paths where logging *is* the observable behaviour,
- * like a swallowed error in a background job.
- *
- * Shaped to satisfy Nest's `LoggerService`.
+ * logged — useful where logging *is* the observable behaviour, like an error
+ * swallowed on purpose so a cleanup step cannot fail the request.
  */
 export class FakeLogger {
   readonly entries: LogEntry[] = [];
+  context?: string;
 
-  log(message: unknown, context?: unknown): void {
-    this.entries.push({ level: 'log', message, context });
+  trace(...args: unknown[]): void {
+    this.entries.push({ level: 'trace', args });
   }
 
-  error(message: unknown, context?: unknown): void {
-    this.entries.push({ level: 'error', message, context });
+  debug(...args: unknown[]): void {
+    this.entries.push({ level: 'debug', args });
   }
 
-  warn(message: unknown, context?: unknown): void {
-    this.entries.push({ level: 'warn', message, context });
+  info(...args: unknown[]): void {
+    this.entries.push({ level: 'info', args });
   }
 
-  debug(message: unknown, context?: unknown): void {
-    this.entries.push({ level: 'debug', message, context });
+  warn(...args: unknown[]): void {
+    this.entries.push({ level: 'warn', args });
   }
 
-  verbose(message: unknown, context?: unknown): void {
-    this.entries.push({ level: 'verbose', message, context });
+  error(...args: unknown[]): void {
+    this.entries.push({ level: 'error', args });
   }
 
-  /** Entries at one level, or all of them. */
+  fatal(...args: unknown[]): void {
+    this.entries.push({ level: 'fatal', args });
+  }
+
+  setContext(context: string): void {
+    this.context = context;
+  }
+
+  /**
+   * Hand it to something typed against a concrete logger class.
+   *
+   * `PinoLogger` carries private members (`logger`, `contextName`, `errorKey`)
+   * that no structural stand-in can satisfy, so a cast is unavoidable. Keeping
+   * it here means one documented cast rather than
+   * `as unknown as PinoLogger` scattered through every test — and the variable
+   * you assert on stays a `FakeLogger`.
+   *
+   * @example provider = new AuthProvider(redis, logger.as<PinoLogger>());
+   */
+  as<T>(): T {
+    return this as unknown as T;
+  }
+
+  /** Entries at one level. */
   at(level: LogLevel): LogEntry[] {
     return this.entries.filter((e) => e.level === level);
   }
 
-  /** True when any entry's message contains `text`. */
+  /**
+   * True when any entry contains `text`, in the message or in a logged object.
+   * Pino is called as `logger.warn({ err }, 'message')`, so both matter.
+   */
   logged(text: string, level?: LogLevel): boolean {
-    return (level ? this.at(level) : this.entries).some((e) => String(e.message).includes(text));
+    const entries = level ? this.at(level) : this.entries;
+    return entries.some((e) => e.args.some((arg) => serialize(arg).includes(text)));
   }
 
   reset(): void {
     this.entries.length = 0;
+  }
+}
+
+function serialize(value: unknown): string {
+  if (typeof value === 'string') return value;
+  try {
+    return JSON.stringify(value, (_, v) => (v instanceof Error ? v.message : v)) ?? '';
+  } catch {
+    return String(value);
   }
 }

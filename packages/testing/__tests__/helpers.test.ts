@@ -1,39 +1,26 @@
 import { describe, expect, it } from 'vitest';
-import { FakeClock, FakeLogger, hasDatabase } from '../src/index';
-
-describe('FakeClock', () => {
-  it('starts at a fixed instant so tests are reproducible', () => {
-    expect(new FakeClock().now().toISOString()).toBe('2026-01-01T00:00:00.000Z');
-  });
-
-  it('advances by milliseconds and by duration strings', () => {
-    const clock = new FakeClock('2026-01-01T00:00:00.000Z');
-
-    clock.advance(1_500);
-    expect(clock.now().toISOString()).toBe('2026-01-01T00:00:01.500Z');
-
-    clock.advance('5m');
-    expect(clock.now().toISOString()).toBe('2026-01-01T00:05:01.500Z');
-
-    clock.advance('2h').advance('1d');
-    expect(clock.now().toISOString()).toBe('2026-01-02T02:05:01.500Z');
-  });
-
-  it('rejects an unparseable duration rather than silently doing nothing', () => {
-    expect(() => new FakeClock().advance('soon')).toThrow(/Unrecognised duration/);
-  });
-});
+import { FakeLogger, hasDatabase } from '../src/index';
 
 describe('FakeLogger', () => {
-  it('records entries by level and matches on message text', () => {
+  it('records entries by level', () => {
     const logger = new FakeLogger();
 
-    logger.error('sync failed', 'WhaleSync');
-    logger.log('done');
+    logger.info('started');
+    logger.error('sync failed');
 
+    expect(logger.at('info')).toHaveLength(1);
     expect(logger.at('error')).toHaveLength(1);
     expect(logger.logged('sync failed', 'error')).toBe(true);
     expect(logger.logged('never happened')).toBe(false);
+  });
+
+  it('matches text inside a logged object, as pino is called', () => {
+    const logger = new FakeLogger();
+
+    logger.warn({ err: new Error('token expired') }, 'refresh failed');
+
+    expect(logger.logged('refresh failed')).toBe(true);
+    expect(logger.logged('token expired')).toBe(true);
   });
 });
 

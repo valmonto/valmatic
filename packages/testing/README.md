@@ -10,24 +10,42 @@ Import it as a dev dependency wherever you write tests.
 
 | Export | Use it for |
 |---|---|
-| `FakeClock` | control time — `clock.advance('5m')` |
-| `FakeLogger` | records instead of printing; assert something was logged |
+| `FakeLogger` | pino logger that records instead of printing |
 | `describeIntegration` | a suite that needs a real database |
 | `truncate` | empty tables between integration tests |
 | `loadFixture` / `expectGolden` | pin recorded input and exact output |
 
-## Fakes
+## FakeLogger
+
+Shaped to `PinoLogger`, which is what `@InjectLogger()` provides:
 
 ```ts
-const clock = new FakeClock('2026-01-01T00:00:00Z');
-clock.advance('2h');                       // ms, or '30s' / '5m' / '2h' / '1d'
-
 const logger = new FakeLogger();
-expect(logger.logged('sync failed', 'error')).toBe(true);
+const provider = new LocalAuthProvider(redis, logger.as<PinoLogger>());
+
+expect(logger.logged('token expired', 'warn')).toBe(true);
 ```
 
-Inject `systemClock` in production wherever a test would want `FakeClock` —
-code that calls `Date.now()` directly cannot be made deterministic.
+`PinoLogger` has private members no structural fake can satisfy, so `.as<T>()`
+holds the one cast rather than leaving `as unknown as PinoLogger` in every test.
+
+`logged()` searches logged objects too, since pino is called as
+`logger.warn({ err }, 'message')`.
+
+## Time — use vitest, not a fake
+
+There is no fake clock. Nothing takes an injected one — production code calls
+`Date.now()` directly in a dozen places — so a clock you must inject would
+require rewriting each call site. Vitest patches the global instead:
+
+```ts
+vi.useFakeTimers();
+vi.setSystemTime(new Date('2026-01-01T00:00:00Z'));
+await vi.advanceTimersByTimeAsync(5 * 60_000);
+vi.useRealTimers();
+```
+
+`health.service.test.ts` uses this to prove a hanging probe times out.
 
 ## HTTP — use MSW, not a fake
 
@@ -82,10 +100,12 @@ Fixtures are recorded input — `loadFixture('signals/june.json')` reads from
 
 ## Adding a fake
 
-It belongs here when it replaces something **non-deterministic** that code can
-take as a dependency — time, a logger, a queue client. Anything crossing the
-network is MSW's job, not a fake's. Fakes for your own domain objects belong in
-the workspace that owns them.
+It belongs here only when code **actually takes it as a dependency**. A fake for
+something nothing injects is unusable — the HTTP client and clock that used to
+live here were exactly that, and MSW and `vi.useFakeTimers()` do those jobs by
+patching instead. Check the call sites first.
+
+Fakes for your own domain objects belong in the workspace that owns them.
 
 Keep it dependency-free beyond `vitest`, and give it a test: a broken fake makes
 every suite that uses it lie.

@@ -4,24 +4,20 @@ import type { ConfigService } from '@nestjs/config';
 import type { JwtService } from '@nestjs/jwt';
 import type Redis from 'ioredis';
 import type { PinoLogger } from 'nestjs-pino';
+import { FakeLogger } from '@pkg/testing';
 import { LocalAuthProvider } from '../../../../../src/modules/iam/auth-providers/local/local-auth.provider';
 import type { IOrgAccessProvider } from '../../../../../src/modules/iam/auth-providers/org-access-provider';
 
 describe('LocalAuthProvider', () => {
   let provider: LocalAuthProvider;
-  let mockLogger: PinoLogger;
+  let mockLogger: FakeLogger;
   let mockRedis: Redis;
   let mockJwtService: JwtService;
   let mockOrgAccess: IOrgAccessProvider;
   let mockConfigService: ConfigService;
 
   beforeEach(() => {
-    mockLogger = {
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-      debug: vi.fn(),
-    } as unknown as PinoLogger;
+    mockLogger = new FakeLogger();
 
     mockRedis = {
       get: vi.fn(),
@@ -53,7 +49,7 @@ describe('LocalAuthProvider', () => {
     } as unknown as ConfigService;
 
     provider = new LocalAuthProvider(
-      mockLogger,
+      mockLogger.as<PinoLogger>(),
       mockRedis,
       mockJwtService,
       mockOrgAccess,

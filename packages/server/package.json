@@ -66,6 +66,7 @@
     "@fastify/cookie": "catalog:",
     "@nestjs/testing": "catalog:",
     "@pkg/eslint-config": "workspace:*",
+    "@pkg/testing": "workspace:*",
     "@pkg/tsconfig": "workspace:*",
     "@pkg/vitest-config": "workspace:*",
     "@types/node": "catalog:",
