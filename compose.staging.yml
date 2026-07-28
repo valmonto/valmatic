@@ -80,6 +80,22 @@ services:
       - '127.0.0.1:3011-3015:3000'
     networks:
       - staging_network
+    # Without this, `docker compose up --wait` only waits for the container to
+    # be *running*, so an api that boots and then fails its first request still
+    # reports a green deploy. Uses node's global fetch — no curl/wget in the
+    # alpine runtime image.
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     depends_on:
       migrate:
         condition: service_completed_successfully
