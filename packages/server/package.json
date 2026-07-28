@@ -67,6 +67,7 @@
     "@nestjs/testing": "catalog:",
     "@pkg/eslint-config": "workspace:*",
     "@pkg/tsconfig": "workspace:*",
+    "@pkg/vitest-config": "workspace:*",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "fastify": "catalog:",

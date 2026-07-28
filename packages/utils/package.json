@@ -24,11 +24,12 @@
     "test:watch": "vitest"
   },
   "devDependencies": {
-    "@pkg/tsconfig": "workspace:*",
     "@pkg/eslint-config": "workspace:*",
-    "typescript": "catalog:",
+    "@pkg/tsconfig": "workspace:*",
+    "@pkg/vitest-config": "workspace:*",
     "eslint": "catalog:",
     "tsdown": "catalog:",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   }
 }

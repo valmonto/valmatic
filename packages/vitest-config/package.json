@@ -1,0 +1,26 @@
+{
+  "name": "@pkg/vitest-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./base": {
+      "types": "./index.d.ts",
+      "default": "./base.js"
+    },
+    "./react": {
+      "types": "./index.d.ts",
+      "default": "./react.js"
+    }
+  },
+  "files": [
+    "*.js",
+    "*.d.ts"
+  ],
+  "peerDependencies": {
+    "vitest": "catalog:"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react-swc": "catalog:"
+  }
+}

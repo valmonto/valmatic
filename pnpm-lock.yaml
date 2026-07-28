@@ -954,6 +954,9 @@ importers:
       '@pkg/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
+      '@pkg/vitest-config':
+        specifier: workspace:*
+        version: link:../../packages/vitest-config
       '@testing-library/jest-dom':
         specifier: 'catalog:'
         version: 6.9.1
@@ -1251,6 +1254,9 @@ importers:
       '@pkg/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
+      '@pkg/vitest-config':
+        specifier: workspace:*
+        version: link:../vitest-config
       '@types/node':
         specifier: 'catalog:'
         version: 25.9.2
@@ -1283,6 +1289,9 @@ importers:
       '@pkg/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
+      '@pkg/vitest-config':
+        specifier: workspace:*
+        version: link:../vitest-config
       eslint:
         specifier: 'catalog:'
         version: 10.4.1(jiti@2.7.0)
@@ -1295,6 +1304,15 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.8(@types/node@26.1.0)(@vitest/coverage-v8@4.1.8)(jsdom@29.1.1)(msw@2.14.6(@types/node@26.1.0)(typescript@6.0.3))(vite@8.0.16(@types/node@26.1.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+
+  packages/vitest-config:
+    dependencies:
+      '@vitejs/plugin-react-swc':
+        specifier: 'catalog:'
+        version: 4.3.1(vite@8.0.16(@types/node@25.9.2)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.48.0))
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.8(@types/node@25.9.2)(@vitest/coverage-v8@4.1.8)(jsdom@29.1.1)(msw@2.14.6(@types/node@25.9.2)(typescript@6.0.3))(vite@8.0.16(@types/node@25.9.2)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.48.0))
 
 packages:
 

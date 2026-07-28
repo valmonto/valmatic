@@ -2,6 +2,7 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import globals from 'globals';
 
 /** @type {import('eslint').Linter.Config[]} */
 export const base = [
@@ -28,8 +29,14 @@ export const base = [
     },
   },
   {
-    files: ['**/*.js', '**/*.mjs'],
+    // Plain JS/MJS here is tooling: config files and `bin/` scripts, which run
+    // in Node and need its globals (console, process, __dirname, …).
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
     ...tseslint.configs.disableTypeChecked,
+    languageOptions: {
+      ...tseslint.configs.disableTypeChecked.languageOptions,
+      globals: { ...globals.node },
+    },
   },
 ];
 

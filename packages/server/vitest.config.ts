@@ -1,17 +1,12 @@
-import { defineConfig } from 'vitest/config';
+import { base } from '@pkg/vitest-config/base';
 
-export default defineConfig({
+export default base({
   test: {
-    globals: true,
-    environment: 'node',
-    include: ['__tests__/**/*.test.ts'],
     setupFiles: ['./__tests__/setup.ts'],
     alias: {
       '@/': new URL('./src/', import.meta.url).pathname,
     },
     coverage: {
-      provider: 'v8',
-      include: ['src/**/*.ts'],
       exclude: ['src/**/index.ts', 'src/**/*.module.ts'],
     },
   },
