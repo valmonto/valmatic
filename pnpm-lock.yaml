@@ -123,6 +123,9 @@ catalogs:
     eslint-plugin-react-hooks:
       specifier: 7.1.1
       version: 7.1.1
+    fast-check:
+      specifier: 4.9.0
+      version: 4.9.0
     fastify:
       specifier: 5.8.5
       version: 5.8.5
@@ -1091,7 +1094,7 @@ importers:
         specifier: 'catalog:'
         version: 10.4.1(jiti@2.7.0)
       fast-check:
-        specifier: ^4.1.1
+        specifier: 'catalog:'
         version: 4.9.0
       fastify:
         specifier: 'catalog:'
@@ -1208,6 +1211,9 @@ importers:
       '@pkg/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
+      '@pkg/vitest-config':
+        specifier: workspace:*
+        version: link:../vitest-config
       eslint:
         specifier: 'catalog:'
         version: 10.4.1(jiti@2.7.0)
@@ -1217,6 +1223,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.8(@types/node@26.1.0)(@vitest/coverage-v8@4.1.8)(jsdom@29.1.1)(msw@2.14.6(@types/node@26.1.0)(typescript@6.0.3))(vite@8.0.16(@types/node@26.1.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
 
   packages/server:
     dependencies:
@@ -1266,6 +1275,9 @@ importers:
       '@pkg/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
+      '@pkg/testing':
+        specifier: workspace:*
+        version: link:../testing
       '@pkg/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig

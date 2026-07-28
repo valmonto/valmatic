@@ -1,10 +1,70 @@
 # `@pkg/testing`
 
-Fakes and helpers so tests stay hermetic: no clock, no network, no database on
-the default path. That is what keeps `pnpm verify` fast and lets several suites —
-or several agents in worktrees — run at once without tripping over each other.
+Fakes and helpers for the workspace's tests, plus the conventions for the
+tools around them. The default path touches no clock, network or database,
+which is what keeps `pnpm verify` fast and lets several suites — or several
+agents in worktrees — run at once without tripping over each other.
 
 Import it as a dev dependency wherever you write tests.
+
+## The stack
+
+| Tool | For | Where |
+|---|---|---|
+| **vitest** | the runner, `expect`, mocks, fake timers | every workspace |
+| **@pkg/vitest-config** | shared config; aliases `@pkg/*` to source | every workspace |
+| **@pkg/testing** | the fakes and helpers below | wherever you need them |
+| **fast-check** | property tests — generated inputs | pure functions |
+| **msw** | HTTP interception | web |
+| **@nestjs/testing** | `Test.createTestingModule` for DI | api, worker, server |
+| **@testing-library/react** | rendering and queries | web |
+| **@playwright/test** | end-to-end, real browser | `apps/e2e` only |
+
+All versions are catalog-managed in `pnpm-workspace.yaml`.
+
+## Which kind of test
+
+| Question | Test |
+|---|---|
+| Does this function do the right thing? | unit — vitest, in the workspace |
+| Does it hold for any input? | property — fast-check |
+| Does this service behave with its collaborators? | `Test.createTestingModule` + fakes |
+| Does the SQL work? | `describeIntegration` |
+| Does the screen render and respond? | testing-library + msw, in `apps/web` |
+| Does the whole stack work end to end? | Playwright, in `apps/e2e` |
+
+Reach for the cheapest one that can answer the question. A rule about a pure
+function is a unit test, not a browser starting up.
+
+Playwright covers what nothing else can: real browser, real API, real database,
+real cookies — login, redirects, and permission-gated screens as a user meets
+them. It is not the place to check validation rules or business logic; that is
+a unit test that runs in milliseconds instead of a minute.
+
+It stays out of `pnpm verify` deliberately — slow, needs ports and a database,
+and parallel runs collide. It runs as its own step (`pnpm e2e`, or
+`pnpm e2e:docker` for the containerised stack), while `verify` stays fast enough
+to run after every change. See `apps/e2e` for writing and debugging specs.
+
+## Property tests
+
+`fast-check` generates ~100 inputs per property, biased toward boundaries,
+instead of the handful you would think to write:
+
+```ts
+fc.assert(
+  fc.property(fc.integer({ min: 1, max: 65535 }), (port) => {
+    expect(validateEnv({ REDIS_PORT: String(port) }).REDIS_PORT).toBe(port);
+  }),
+);
+```
+
+Worth it for **pure functions with an always/never rule** — parsers, validators,
+encoders, maths. `apps/worker/__tests__/config/env.property.test.ts` is the
+worked example; it found a schema that accepted `"A:"` as a database URL.
+
+Not worth it for anything doing I/O: 100 runs against a database is 100 round
+trips. Cap it with `{ numRuns: 20 }` where a property is expensive.
 
 ## What's in it
 
