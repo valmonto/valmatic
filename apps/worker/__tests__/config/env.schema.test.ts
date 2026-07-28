@@ -29,8 +29,13 @@ describe('validateEnv', () => {
     expect(() => validateEnv({})).toThrow(/DATABASE_URL/);
   });
 
-  it('rejects a DATABASE_URL that is not a URL', () => {
-    expect(() => validateEnv({ DATABASE_URL: 'not-a-url' })).toThrow(/valid URL/);
+  it('rejects a DATABASE_URL that is not a postgres connection string', () => {
+    expect(() => validateEnv({ DATABASE_URL: 'not-a-url' })).toThrow(/DATABASE_URL/);
+    // `.url()` alone accepted this: a scheme with no host is still a valid URL.
+    expect(() => validateEnv({ DATABASE_URL: 'A:' })).toThrow(/DATABASE_URL/);
+    expect(() => validateEnv({ DATABASE_URL: 'mysql://user:pass@host:3306/db' })).toThrow(
+      /DATABASE_URL/,
+    );
   });
 
   it('rejects an out-of-range port instead of silently clamping it', () => {

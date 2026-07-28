@@ -42,6 +42,7 @@
     "@pkg/vitest-config": "workspace:*",
     "@types/node": "catalog:",
     "eslint": "catalog:",
+    "fast-check": "^4.1.1",
     "fastify": "catalog:",
     "globals": "catalog:",
     "pino-pretty": "catalog:",
