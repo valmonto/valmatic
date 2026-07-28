@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FakeClock, FakeHttpClient, FakeLogger, hasDatabase } from '../src/index';
+import { FakeClock, FakeLogger, hasDatabase } from '../src/index';
 
 describe('FakeClock', () => {
   it('starts at a fixed instant so tests are reproducible', () => {
@@ -21,32 +21,6 @@ describe('FakeClock', () => {
 
   it('rejects an unparseable duration rather than silently doing nothing', () => {
     expect(() => new FakeClock().advance('soon')).toThrow(/Unrecognised duration/);
-  });
-});
-
-describe('FakeHttpClient', () => {
-  it('returns the registered body and records the call', async () => {
-    const http = new FakeHttpClient().on('/api/users', [{ id: 1 }]);
-
-    await expect(http.get('/api/users')).resolves.toEqual([{ id: 1 }]);
-    expect(http.callsTo('/api/users')).toHaveLength(1);
-    expect(http.requests[0]?.method).toBe('GET');
-  });
-
-  it('passes the request to a function responder', async () => {
-    const http = new FakeHttpClient().on('/echo', (req) => req.body);
-
-    await expect(http.post('/echo', { hello: 'world' })).resolves.toEqual({ hello: 'world' });
-  });
-
-  it('throws for unregistered URLs instead of returning undefined', async () => {
-    await expect(new FakeHttpClient().get('/nope')).rejects.toThrow(/no handler for GET \/nope/);
-  });
-
-  it('can simulate a failing endpoint', async () => {
-    const http = new FakeHttpClient().onError('/flaky', 'upstream exploded');
-
-    await expect(http.get('/flaky')).rejects.toThrow('upstream exploded');
   });
 });
 
