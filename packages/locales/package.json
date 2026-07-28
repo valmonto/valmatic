@@ -19,16 +19,20 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "i18next": "catalog:"
   },
   "devDependencies": {
-    "@pkg/tsconfig": "workspace:*",
     "@pkg/eslint-config": "workspace:*",
-    "typescript": "catalog:",
+    "@pkg/tsconfig": "workspace:*",
+    "@pkg/vitest-config": "workspace:*",
     "eslint": "catalog:",
-    "tsdown": "catalog:"
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

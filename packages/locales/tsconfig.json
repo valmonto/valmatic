@@ -6,8 +6,15 @@
     "outDir": "./dist",
     "rootDir": ".",
     "resolveJsonModule": true,
-    "lib": ["ESNext"]
+    "lib": [
+      "ESNext"
+    ]
   },
-  "include": ["src"],
-  "exclude": ["dist"]
+  "include": [
+    "src",
+    "__tests__"
+  ],
+  "exclude": [
+    "dist"
+  ]
 }
