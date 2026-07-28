@@ -12,6 +12,7 @@ import { supportedLanguages, type SupportedLanguage } from '@pkg/locales';
 const languageNames: Record<SupportedLanguage, string> = {
   en: 'English',
   es: 'Español',
+  lt: 'Lietuvių',
 };
 
 export function LanguageSwitcher() {
