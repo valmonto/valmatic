@@ -5,7 +5,9 @@ import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { SafeAreaView } from '@/shared/components/safe-area-view';
 import { AxiosError } from 'axios';
 import { Lock, Mail, type LucideIcon } from 'lucide-react-native';
-import { LoginRequestSchema, type LoginRequest } from '@pkg/contracts';
+import type { LoginRequest } from '@pkg/contracts';
+// Client-side validation for instant field errors; the server validates too.
+import { LoginRequestSchema } from '@pkg/contracts/schemas';
 
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';

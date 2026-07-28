@@ -25,6 +25,23 @@ function workspaceSourceAliases(): Record<string, string> {
       .find(existsSync);
     if (name && entry) aliases[name] = entry;
   }
+
+  // `@pkg/contracts` resolves to its client entry in the browser: every type,
+  // plus the Zod-free constants and permission helpers. The root entry
+  // re-exports the whole schema graph, so importing it here would ship Zod for
+  // the sake of a regex. Code that must validate client-side imports
+  // `@pkg/contracts/schemas` explicitly — visible in review, not accidental.
+  // Aliases match by prefix in insertion order, so the bare specifier must come
+  // after its subpaths or it would swallow them.
+  delete aliases['@pkg/contracts'];
+  const contractsSrc = resolve(packagesDir, 'contracts/src');
+  aliases['@pkg/contracts/schemas'] = resolve(contractsSrc, 'schemas/index.ts');
+  aliases['@pkg/contracts/permissions'] = resolve(contractsSrc, 'permissions/index.ts');
+  aliases['@pkg/contracts/constants'] = resolve(contractsSrc, 'constants/index.ts');
+  aliases['@pkg/contracts/types'] = resolve(contractsSrc, 'types/index.ts');
+  aliases['@pkg/contracts/client'] = resolve(contractsSrc, 'client/index.ts');
+  aliases['@pkg/contracts'] = resolve(contractsSrc, 'client/index.ts');
+
   return aliases;
 }
 

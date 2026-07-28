@@ -1,17 +1,10 @@
 import { z } from 'zod';
+import { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants';
 import { OrganizationUserRoleSchema } from './organization.schema';
 
-/**
- * Password validation regex.
- * Requires: lowercase, uppercase, number, special character, min 8 chars.
- */
-export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
-
-/**
- * Password validation error message (translation key).
- */
-export const PASSWORD_ERROR_MESSAGE =
-  'Password must be at least 8 characters and include uppercase, lowercase, number, and special character';
+// Defined in constants.ts (Zod-free) so the frontend can import them without
+// pulling in the schema graph; re-exported here for existing callers.
+export { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants';
 
 /**
  * Bearer tokens returned to non-cookie clients (e.g. the mobile app),

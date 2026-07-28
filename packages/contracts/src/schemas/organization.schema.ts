@@ -1,7 +1,8 @@
 import { z } from 'zod';
+import { ORGANIZATION_USER_ROLES } from '../constants';
 
 // Single source of truth for organization user roles
-export const ORGANIZATION_USER_ROLES = ['OWNER', 'ADMIN', 'MEMBER'] as const;
+export { ORGANIZATION_USER_ROLES } from '../constants';
 export const OrganizationUserRoleSchema = z.enum(ORGANIZATION_USER_ROLES);
 export type OrganizationUserRole = z.infer<typeof OrganizationUserRoleSchema>;
 

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { k } from '@pkg/locales';
-import { CreateExampleJobRequestSchema, type CreateExampleJobResponse } from '@pkg/contracts';
+import type { CreateExampleJobResponse } from '@pkg/contracts';
+// Client-side validation for instant field errors; the server validates too.
+import { CreateExampleJobRequestSchema } from '@pkg/contracts/schemas';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

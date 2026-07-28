@@ -1,10 +1,11 @@
 import { z } from 'zod';
+import { SYSTEM_ROLES } from '../constants';
 import { PaginatedRequestSchema, PaginatedResponseSchema } from './pagination.schema';
 import { OrganizationUserRoleSchema } from './organization.schema';
 import { PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE } from './auth.schema';
 
 // Single source of truth for system roles (platform-wide)
-export const SYSTEM_ROLES = ['USER', 'MODERATOR', 'ADMIN'] as const;
+export { SYSTEM_ROLES } from '../constants';
 export const SystemRoleSchema = z.enum(SYSTEM_ROLES);
 export type SystemRole = z.infer<typeof SystemRoleSchema>;
 

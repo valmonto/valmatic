@@ -8,6 +8,31 @@
       "types": "./src/index.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./client": {
+      "types": "./src/client/index.ts",
+      "import": "./dist/client/index.mjs",
+      "require": "./dist/client/index.cjs"
+    },
+    "./types": {
+      "types": "./src/types/index.ts",
+      "import": "./dist/types/index.mjs",
+      "require": "./dist/types/index.cjs"
+    },
+    "./schemas": {
+      "types": "./src/schemas/index.ts",
+      "import": "./dist/schemas/index.mjs",
+      "require": "./dist/schemas/index.cjs"
+    },
+    "./constants": {
+      "types": "./src/constants/index.ts",
+      "import": "./dist/constants/index.mjs",
+      "require": "./dist/constants/index.cjs"
+    },
+    "./permissions": {
+      "types": "./src/permissions/index.ts",
+      "import": "./dist/permissions/index.mjs",
+      "require": "./dist/permissions/index.cjs"
     }
   },
   "main": "./dist/index.cjs",
