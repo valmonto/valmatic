@@ -2,8 +2,12 @@
   "extends": "@pkg/tsconfig/nestjs.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
-    "preserveWatchOutput": true
+    "preserveWatchOutput": true,
+    "types": ["vitest/globals"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", "__tests__"],
+  "exclude": ["dist"]
 }

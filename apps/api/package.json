@@ -13,7 +13,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@fastify/cookie": "catalog:",
@@ -44,11 +46,13 @@
     "@nestjs/testing": "catalog:",
     "@pkg/eslint-config": "workspace:*",
     "@pkg/tsconfig": "workspace:*",
+    "@pkg/vitest-config": "workspace:*",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "fastify": "catalog:",
     "globals": "catalog:",
     "pino-pretty": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }
