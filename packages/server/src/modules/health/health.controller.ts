@@ -1,23 +1,30 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Res } from '@nestjs/common';
+import type { FastifyReply } from 'fastify';
 import { PublicRoute } from '../iam';
-
-interface HealthResponse {
-  status: 'ok' | 'degraded';
-  timestamp: string;
-  uptime: number;
-}
+import { HealthService, type HealthReport } from './health.service';
 
 @Controller('health')
 export class HealthController {
-  private readonly startTime = Date.now();
+  constructor(private readonly health: HealthService) {}
 
+  /**
+   * Answers "can this instance serve traffic?" — 200 when its dependencies
+   * respond, 503 when they do not, so `docker compose --wait`, load balancers
+   * and uptime checks all read the same signal.
+   *
+   * The body stays deliberately thin: which dependency failed is in the logs,
+   * not in an unauthenticated response.
+   */
   @PublicRoute()
   @Get()
-  check(): HealthResponse {
-    return {
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-      uptime: Math.floor((Date.now() - this.startTime) / 1000),
-    };
+  @HttpCode(HttpStatus.OK)
+  async check(@Res({ passthrough: true }) reply: FastifyReply): Promise<HealthReport> {
+    const report = await this.health.check();
+
+    if (report.status !== 'ok') {
+      reply.status(HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    return report;
   }
 }
