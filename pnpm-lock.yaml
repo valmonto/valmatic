@@ -1081,6 +1081,9 @@ importers:
       '@pkg/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@pkg/testing':
+        specifier: workspace:*
+        version: link:../../packages/testing
       '@pkg/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
