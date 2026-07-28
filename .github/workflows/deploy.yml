@@ -5,8 +5,32 @@ on:
     branches:
       - main
 
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
 jobs:
+  # Gate: main must typecheck, lint and pass tests before anything ships.
+  # A compile error would already fail the image build, but a logic error
+  # builds and deploys perfectly happily — that is what this catches.
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm verify
+
   deploy:
+    needs: verify
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to VPS via SSH
@@ -18,4 +42,19 @@ jobs:
           script: |
             cd /opt/vboilerplate
             git pull origin main
-            docker compose -f compose.staging.yml up -d --build
+            # --wait blocks until services are healthy and exits non-zero if any
+            # container is unhealthy or crash-looping (so a bad deploy is RED, not a
+            # silently-green deploy hiding a rebooting api). On failure, dump status +
+            # logs so the crash reason shows up directly in this CI output.
+            if ! docker compose -f compose.staging.yml up -d --build --wait --wait-timeout 180; then
+              echo "===== DEPLOY UNHEALTHY — diagnostics ====="
+              docker compose -f compose.staging.yml ps
+              echo "----- api logs -----"
+              docker compose -f compose.staging.yml logs --tail 200 api
+              echo "----- worker logs -----"
+              docker compose -f compose.staging.yml logs --tail 80 worker
+              echo "----- web logs -----"
+              docker compose -f compose.staging.yml logs --tail 80 web
+              exit 1
+            fi
+            echo "Deploy healthy."
