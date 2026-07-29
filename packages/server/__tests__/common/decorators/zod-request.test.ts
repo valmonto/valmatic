@@ -1,7 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { z } from 'zod';
-import { validateZodRequest } from '../../../src/common/decorators/zod-request';
+import {
+  mergeRequestInput,
+  validateZodRequest,
+} from '../../../src/common/decorators/zod-request';
 
 describe('validateZodRequest', () => {
   const testSchema = z.object({
@@ -133,5 +136,46 @@ describe('validateZodRequest', () => {
       expect(validateZodRequest(unionSchema, { id: 'abc' })).toEqual({ id: 'abc' });
       expect(validateZodRequest(unionSchema, { id: 123 })).toEqual({ id: 123 });
     });
+  });
+});
+
+describe('mergeRequestInput', () => {
+  it('merges body, query and params into one object', () => {
+    const merged = mergeRequestInput({
+      body: { name: 'John' },
+      query: { page: '2' },
+      params: { id: 'abc' },
+    });
+
+    expect(merged).toEqual({ name: 'John', page: '2', id: 'abc' });
+  });
+
+  // The path identifies the resource. If the body could override it, a request
+  // to PATCH /users/AAA carrying { id: 'BBB' } would update someone else.
+  it('lets the path win over a body claiming the same field', () => {
+    const merged = mergeRequestInput({
+      body: { id: 'BBB', name: 'hacked' },
+      params: { id: 'AAA' },
+    });
+
+    expect(merged.id).toBe('AAA');
+    expect(merged.name).toBe('hacked');
+  });
+
+  it('lets the path win over the query string too', () => {
+    const merged = mergeRequestInput({ query: { id: 'BBB' }, params: { id: 'AAA' } });
+
+    expect(merged.id).toBe('AAA');
+  });
+
+  it('prefers the query string over the body', () => {
+    const merged = mergeRequestInput({ body: { page: '1' }, query: { page: '9' } });
+
+    expect(merged.page).toBe('9');
+  });
+
+  it('copes with any part being absent', () => {
+    expect(mergeRequestInput({})).toEqual({});
+    expect(mergeRequestInput({ params: { id: 'AAA' } })).toEqual({ id: 'AAA' });
   });
 });
