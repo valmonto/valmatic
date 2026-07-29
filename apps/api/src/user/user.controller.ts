@@ -1,11 +1,15 @@
-import { Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ActiveUser, Permissions, ZodRequest } from '@pkg/server';
 import {
   CreateUserRequest,
   CreateUserRequestSchema,
   CreateUserResponse,
+  DeleteUserByIdRequest,
+  DeleteUserByIdRequestSchema,
   DeleteUserByIdResponse,
+  GetUserByIdRequest,
+  GetUserByIdRequestSchema,
   GetUserByIdResponse,
   ListUsersRequest,
   ListUsersRequestSchema,
@@ -16,6 +20,11 @@ import {
   type ActiveUser as ActiveUserType,
 } from '@pkg/contracts';
 
+/**
+ * Every route takes its input through `@ZodRequest`, which validates body, query
+ * string and path params together against one schema. Path segments win over the
+ * payload, so `id` is whatever the URL says regardless of what was sent.
+ */
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -23,20 +32,19 @@ export class UserController {
   @Get()
   @Permissions('user:list')
   async list(
-    @Query() query: ListUsersRequest,
+    @ZodRequest(ListUsersRequestSchema) dto: ListUsersRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<ListUsersResponse> {
-    const dto = ListUsersRequestSchema.parse(query);
     return this.userService.listUsers(activeUser, dto);
   }
 
   @Get(':id')
   @Permissions('user:read')
   async get(
-    @Param('id') id: string,
+    @ZodRequest(GetUserByIdRequestSchema) dto: GetUserByIdRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<GetUserByIdResponse> {
-    return this.userService.getUserById(activeUser, id);
+    return this.userService.getUserById(activeUser, dto.id);
   }
 
   @Post()
@@ -51,21 +59,19 @@ export class UserController {
   @Patch(':id')
   @Permissions('user:update')
   async update(
-    @Param('id') id: string,
-    @ZodRequest(UpdateUserByIdRequestSchema.omit({ id: true }))
-    dto: Omit<UpdateUserByIdRequest, 'id'>,
+    @ZodRequest(UpdateUserByIdRequestSchema) dto: UpdateUserByIdRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<UpdateUserByIdResponse> {
-    return this.userService.updateUser(activeUser, { ...dto, id });
+    return this.userService.updateUser(activeUser, dto);
   }
 
   @Delete(':id')
   @Permissions('user:delete')
   async remove(
-    @Param('id') id: string,
+    @ZodRequest(DeleteUserByIdRequestSchema) dto: DeleteUserByIdRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<DeleteUserByIdResponse> {
-    await this.userService.removeUser(activeUser, id);
+    await this.userService.removeUser(activeUser, dto.id);
     return {};
   }
 }

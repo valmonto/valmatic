@@ -175,6 +175,19 @@ export class UserRepository {
     },
   ): Promise<OrgUserRecord | null> {
     return this.dbClient.db.transaction(async (tx) => {
+      // The `user` row is shared across organizations, so the update below cannot
+      // carry an org predicate of its own. Establish membership first: without
+      // this, a caller passing an org the user does not belong to still renames
+      // the account, and the org-scoped select at the end returns null while that
+      // write has already committed.
+      const membership = await tx
+        .select({ userId: organizationUser.userId })
+        .from(organizationUser)
+        .where(and(eq(organizationUser.userId, userId), eq(organizationUser.orgId, orgId)))
+        .limit(1);
+
+      if (membership.length === 0) return null;
+
       // Update user fields if provided
       if (data.name !== undefined || data.displayName !== undefined || data.phone !== undefined) {
         const userUpdates: Record<string, unknown> = {};
