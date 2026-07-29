@@ -6,9 +6,9 @@ type CanProps = {
   /** Single permission. */
   permission?: Permission;
   /** Passes if the user has ANY of these. */
-  anyOf?: Permission[];
+  any?: Permission[];
   /** Passes if the user has ALL of these. */
-  allOf?: Permission[];
+  all?: Permission[];
   /** Rendered when the check fails (default: nothing). */
   fallback?: React.ReactNode;
   children: React.ReactNode;
@@ -22,17 +22,17 @@ type CanProps = {
  * the permission table.
  *
  * `<Can permission="user:create"><Button …/></Can>`
- * `<Can anyOf={['org:update','org:delete']}>…</Can>`
+ * `<Can any={['org:update','org:delete']}>…</Can>`
  */
-export function Can({ permission, anyOf, allOf, fallback = null, children }: CanProps) {
+export function Can({ permission, any, all, fallback = null, children }: CanProps) {
   const granted = usePermissions();
 
   const allowed = React.useMemo(() => {
-    if (allOf) return allOf.length > 0 && allOf.every((p) => granted.includes(p));
-    if (anyOf) return anyOf.length > 0 && anyOf.some((p) => granted.includes(p));
+    if (all) return all.length > 0 && all.every((p) => granted.includes(p));
+    if (any) return any.length > 0 && any.some((p) => granted.includes(p));
     if (permission) return granted.includes(permission);
     return false;
-  }, [granted, permission, anyOf, allOf]);
+  }, [granted, permission, any, all]);
 
   return <>{allowed ? children : fallback}</>;
 }
