@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { EmptyRequestSchema } from './common.schema';
+import { PermissionSchema } from './permission.schema';
 import { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants';
 import { OrganizationUserRoleSchema } from './organization.schema';
 
@@ -75,6 +76,17 @@ export const CurrentUserResponseSchema = z
     displayName: z.string().nullish(),
     role: OrganizationUserRoleSchema,
     orgId: z.string().uuid(),
+    /**
+     * What this user may do in this organization, resolved server-side.
+     *
+     * Sent rather than derived so a client never holds its own copy of the
+     * permission table: changing what a role can do reaches every client on
+     * its next request, including a mobile build that cannot be redeployed.
+     *
+     * Authorization is unaffected — the API enforces regardless. This only
+     * decides what the client renders.
+     */
+    permissions: z.array(PermissionSchema),
   })
   .strict();
 

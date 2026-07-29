@@ -1,6 +1,7 @@
 import { BadRequestException, ConflictException, UnauthorizedException } from '@nestjs/common';
 import type { IamService } from '@pkg/server';
 import { SECURITY_CONFIG } from '@pkg/server';
+import { getPermissionsForRole } from '@pkg/contracts';
 import { FakeLogger } from '@pkg/testing';
 import * as bcrypt from 'bcryptjs';
 import type Redis from 'ioredis';
@@ -262,6 +263,26 @@ describe('AuthService', () => {
 
       expect(me.orgId).toBe(ORG_UUID);
       expect(repository.findUserWithOrg).toHaveBeenCalledWith(USER_UUID, ORG_UUID);
+    });
+
+    // Sent rather than derived, so a client never needs its own copy of the
+    // permission table — the reason an old mobile build stays correct.
+    it('resolves the permissions for the role and sends them', async () => {
+      repository.findUserWithOrg!.mockResolvedValue(row);
+
+      const me = await service.getMe(activeUser);
+
+      expect(me.permissions).toEqual(getPermissionsForRole('OWNER'));
+      expect(me.permissions).toContain('user:create');
+    });
+
+    it('sends the narrower list for a lesser role', async () => {
+      repository.findUserWithOrg!.mockResolvedValue({ ...row, role: 'MEMBER' });
+
+      const me = await service.getMe(activeUser);
+
+      expect(me.permissions).toEqual(getPermissionsForRole('MEMBER'));
+      expect(me.permissions).not.toContain('user:create');
     });
 
     it('rejects a session whose membership no longer exists', async () => {

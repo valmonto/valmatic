@@ -1,3 +1,4 @@
+export * from './permission.schema';
 export * from './common.schema';
 export * from './user.schema';
 export * from './organization.schema';

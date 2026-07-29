@@ -12,6 +12,7 @@ import {
   type ChangePasswordRequest,
   type CurrentUserResponse,
   CurrentUserResponseSchema,
+  getPermissionsForRole,
   type LoginRequest,
   type LoginResponse,
   type RegisterRequest,
@@ -146,7 +147,12 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    return CurrentUserResponseSchema.parse(userInfo);
+    // Resolved here rather than by the client, so what a role can do is decided
+    // in one place and reaches every client on its next request.
+    return CurrentUserResponseSchema.parse({
+      ...userInfo,
+      permissions: getPermissionsForRole(userInfo.role),
+    });
   }
 
   async logoutAllDevices(userId: string): Promise<void> {

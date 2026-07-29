@@ -1,5 +1,5 @@
-import { hasAllPermissions, hasAnyPermission, hasPermission, type Permission } from '@pkg/contracts';
-import { useAuthStore } from '@/shared/auth/auth-store';
+import { type Permission } from '@pkg/contracts';
+import { usePermissions } from '@/shared/hooks/use-permissions';
 import * as React from 'react';
 
 type CanProps = {
@@ -15,23 +15,24 @@ type CanProps = {
 };
 
 /**
- * Declarative permission gate — renders `children` only if the current user's
- * role grants the requested permission(s), else `fallback`.
+ * Declarative permission gate — renders `children` only if the current user
+ * holds the requested permission(s), else `fallback`.
+ *
+ * Reads the permissions the API resolved and sent, so it never needs a copy of
+ * the permission table.
  *
  * `<Can permission="user:create"><Button …/></Can>`
  * `<Can anyOf={['org:update','org:delete']}>…</Can>`
  */
 export function Can({ permission, anyOf, allOf, fallback = null, children }: CanProps) {
-  const role = useAuthStore((s) => s.user?.role);
-  const loading = useAuthStore((s) => s.status === 'loading');
+  const granted = usePermissions();
 
   const allowed = React.useMemo(() => {
-    if (loading || !role) return false;
-    if (allOf) return hasAllPermissions(role, allOf);
-    if (anyOf) return hasAnyPermission(role, anyOf);
-    if (permission) return hasPermission(role, permission);
+    if (allOf) return allOf.length > 0 && allOf.every((p) => granted.includes(p));
+    if (anyOf) return anyOf.length > 0 && anyOf.some((p) => granted.includes(p));
+    if (permission) return granted.includes(permission);
     return false;
-  }, [role, loading, permission, anyOf, allOf]);
+  }, [granted, permission, anyOf, allOf]);
 
   return <>{allowed ? children : fallback}</>;
 }
