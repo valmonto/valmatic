@@ -13,5 +13,7 @@ export const orgs = {
     onlyOwnerCanDelete: 'orgs.errors.onlyOwnerCanDelete',
     cannotDeleteOnly: 'orgs.errors.cannotDeleteOnly',
     noAccess: 'orgs.errors.noAccess',
+    noActiveOrg: 'orgs.errors.noActiveOrg',
+    orgMismatch: 'orgs.errors.orgMismatch',
   },
 } as const;

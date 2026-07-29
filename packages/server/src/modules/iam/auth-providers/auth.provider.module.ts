@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { AUTH_PROVIDER } from './auth-provider';
 import { APP_GUARD } from '@nestjs/core';
+import { ActiveOrgGuard } from './guards/active-org.guard';
 import { AuthGuard } from './guards/auth.guard';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { RolesGuard } from './guards/roles.guard';
@@ -29,6 +30,13 @@ import { JwtModule } from '@nestjs/jwt';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    // ActiveOrgGuard runs AFTER AuthGuard — it compares the organization named
+    // in the path against the one on the token, so it needs req.user — and
+    // BEFORE the role guards, so they judge the organization actually addressed.
+    {
+      provide: APP_GUARD,
+      useClass: ActiveOrgGuard,
     },
     // RolesGuard runs AFTER AuthGuard (order matters)
     {
