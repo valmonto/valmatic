@@ -1,3 +1,4 @@
+export * from './common.schema';
 export * from './user.schema';
 export * from './organization.schema';
 export * from './pagination.schema';

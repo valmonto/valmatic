@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { EmptyRequestSchema } from './common.schema';
 import { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants';
 import { OrganizationUserRoleSchema } from './organization.schema';
 
@@ -64,7 +65,8 @@ export const LogoutRequestSchema = z.object({
 });
 export const LogoutResponseSchema = z.object({});
 
-export const CurrentUserRequestSchema = z.object({});
+/** `GET /auth/me` takes no input — the session identifies the user. */
+export const CurrentUserRequestSchema = EmptyRequestSchema;
 export const CurrentUserResponseSchema = z
   .object({
     id: z.string().uuid(),
@@ -94,7 +96,8 @@ export type CurrentUserRequest = z.infer<typeof CurrentUserRequestSchema>;
 export type CurrentUserResponse = z.infer<typeof CurrentUserResponseSchema>;
 
 // Logout All Devices
-export const LogoutAllRequestSchema = z.object({});
+/** Revokes every session for the caller; no input beyond the token. */
+export const LogoutAllRequestSchema = EmptyRequestSchema;
 export const LogoutAllResponseSchema = z.object({});
 
 export type LogoutAllRequest = z.infer<typeof LogoutAllRequestSchema>;
