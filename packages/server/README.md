@@ -34,17 +34,30 @@ create(@ZodRequest(CreateUserRequestSchema) dto: CreateUserRequest, @ActiveUser(
 | `@PublicRoute()` | skip authentication |
 | `@Permissions('user:create')` | require a permission from `@pkg/contracts` |
 | `@Roles('OWNER')` | require an org role |
+| `@SystemRoles('ADMIN')` | require a platform role, independent of any org |
 | `@ActiveUser()` | inject the authenticated user |
 | `@ZodRequest(Schema)` | validate the body; 400 with field errors |
 
-## Three things to know
+## Four things to know
 
 **Routes are protected by default.** The guards are `APP_GUARD`s, so an endpoint
-without `@PublicRoute()` requires a valid token.
+without `@PublicRoute()` requires a valid token. A route carrying none of
+`@Roles`, `@Permissions` or `@SystemRoles` is refused rather than exposed.
+
+**There are two role axes, and both enums contain `ADMIN`.** `orgRole`
+(`OWNER|ADMIN|MEMBER`) is a membership and decides what you may do inside the
+active organization. `systemRole` (`USER|MODERATOR|ADMIN`) belongs to the
+account and decides nothing inside one. `@Roles` and `@Permissions` read the
+first, `@SystemRoles` the second — never each other's.
+
+A system role opens *dedicated* routes; it never widens an organization-scoped
+one. Every tenant route stays scoped to the caller's active organization
+whatever their platform standing, so there is one code path to reason about
+rather than two.
 
 **Guard order is load-bearing.** `AuthGuard` resolves the user before
-`RolesGuard` and `PermissionsGuard` judge them. Reordering them in
-`auth.provider.module.ts` breaks authorization silently.
+`RolesGuard`, `PermissionsGuard` and `SystemRolesGuard` judge them. Reordering
+them in `auth.provider.module.ts` breaks authorization silently.
 
 **Auth is swappable.** `LocalAuthProvider` (JWT + Redis) is bound to the
 `AUTH_PROVIDER` token; moving to a hosted provider is one class and one binding.

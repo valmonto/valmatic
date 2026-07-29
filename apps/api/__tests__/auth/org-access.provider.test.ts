@@ -19,19 +19,40 @@ describe('OrgAccessProvider', () => {
     provider = new OrgAccessProvider({ findUserWithOrg } as unknown as AuthRepository);
   });
 
-  it('returns the role the user holds in that organization', async () => {
+  it('returns both roles the user currently holds', async () => {
     findUserWithOrg.mockResolvedValue({
       id: 'u1',
       email: 'a@example.com',
       name: 'A',
       displayName: null,
       role: 'ADMIN',
+      systemRole: 'MODERATOR',
       orgId: 'org-1',
     });
 
     await expect(provider.verifyAccess({ userId: 'u1', orgId: 'org-1' })).resolves.toEqual({
-      role: 'ADMIN',
+      orgRole: 'ADMIN',
+      systemRole: 'MODERATOR',
     });
+  });
+
+  // The membership role is named `role` on the row and `orgRole` on the way out.
+  // Both enums contain ADMIN, so a mapping that crossed the two would typecheck
+  // and silently hand a platform role to the organization guards.
+  it('maps the membership role to orgRole, never to systemRole', async () => {
+    findUserWithOrg.mockResolvedValue({
+      id: 'u1',
+      email: 'a@example.com',
+      name: 'A',
+      displayName: null,
+      role: 'ADMIN',
+      systemRole: 'USER',
+      orgId: 'org-1',
+    });
+
+    const access = await provider.verifyAccess({ userId: 'u1', orgId: 'org-1' });
+
+    expect(access).toEqual({ orgRole: 'ADMIN', systemRole: 'USER' });
   });
 
   it('returns null when the user is not a member', async () => {
@@ -49,18 +70,19 @@ describe('OrgAccessProvider', () => {
     expect(findUserWithOrg).toHaveBeenCalledWith('u1', 'org-9');
   });
 
-  it('exposes only the role, not the rest of the user record', async () => {
+  it('exposes only the two roles, not the rest of the user record', async () => {
     findUserWithOrg.mockResolvedValue({
       id: 'u1',
       email: 'a@example.com',
       name: 'A',
       displayName: null,
       role: 'MEMBER',
+      systemRole: 'USER',
       orgId: 'org-1',
     });
 
     const access = await provider.verifyAccess({ userId: 'u1', orgId: 'org-1' });
 
-    expect(Object.keys(access!)).toEqual(['role']);
+    expect(Object.keys(access!)).toEqual(['orgRole', 'systemRole']);
   });
 });

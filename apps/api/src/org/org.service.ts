@@ -132,10 +132,13 @@ export class OrgService {
     }
 
     // Issue new tokens for the new org
+    // systemRole is carried over unchanged: it belongs to the account, not the
+    // organization, so switching organizations must not alter it.
     const tokens = await this.iamService.auth.issueTokens({
       userId: activeUser.userId,
       orgId,
-      role,
+      orgRole: role,
+      systemRole: activeUser.systemRole,
     });
 
     this.logger.info(

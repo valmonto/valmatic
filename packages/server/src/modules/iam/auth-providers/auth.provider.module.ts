@@ -5,6 +5,7 @@ import { ActiveOrgGuard } from './guards/active-org.guard';
 import { AuthGuard } from './guards/auth.guard';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { RolesGuard } from './guards/roles.guard';
+import { SystemRolesGuard } from './guards/system-roles.guard';
 import { ConfigService } from '@nestjs/config';
 import { LocalAuthProvider } from './local/local-auth.provider';
 import { LocalAuthGuard } from './local/local-auth.guard';
@@ -47,6 +48,12 @@ import { JwtModule } from '@nestjs/jwt';
     {
       provide: APP_GUARD,
       useClass: PermissionsGuard,
+    },
+    // SystemRolesGuard is last: it judges the platform axis, which is
+    // independent of the organization the guards above have been checking.
+    {
+      provide: APP_GUARD,
+      useClass: SystemRolesGuard,
     },
   ],
   controllers: [],

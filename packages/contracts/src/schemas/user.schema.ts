@@ -1,8 +1,10 @@
 import { z } from 'zod';
-import { SYSTEM_ROLES } from '../constants';
+// Sourced from ../constants rather than ./auth.schema: auth.schema needs
+// SystemRoleSchema from here, and importing the constants back out of it would
+// close a cycle that leaves one of the two schemas undefined at evaluation.
+import { SYSTEM_ROLES, PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE } from '../constants';
 import { PaginatedRequestSchema, PaginatedResponseSchema } from './pagination.schema';
 import { OrganizationUserRoleSchema } from './organization.schema';
-import { PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE } from './auth.schema';
 
 // Single source of truth for system roles (platform-wide)
 export { SYSTEM_ROLES } from '../constants';

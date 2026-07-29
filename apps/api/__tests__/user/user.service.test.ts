@@ -11,8 +11,8 @@ const ORG = 'org-1';
 const OTHER_ORG = 'org-2';
 const now = new Date('2026-01-01T00:00:00.000Z');
 
-const owner: ActiveUser = { userId: 'owner-1', orgId: ORG, role: 'OWNER' };
-const admin: ActiveUser = { userId: 'admin-1', orgId: ORG, role: 'ADMIN' };
+const owner: ActiveUser = { userId: 'owner-1', orgId: ORG, orgRole: 'OWNER', systemRole: 'USER' };
+const admin: ActiveUser = { userId: 'admin-1', orgId: ORG, orgRole: 'ADMIN', systemRole: 'USER' };
 
 const member = {
   id: 'member-1',

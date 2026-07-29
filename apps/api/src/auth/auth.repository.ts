@@ -11,6 +11,7 @@ import {
   Organization,
   OrganizationUser,
   OrganizationUserRole,
+  SystemRole,
 } from '@pkg/database';
 import { k } from '@pkg/locales';
 
@@ -97,6 +98,7 @@ export class AuthRepository {
     name: string;
     displayName: string | null;
     role: OrganizationUserRole;
+    systemRole: SystemRole;
     orgId: string;
   } | null> {
     const result = await this.dbClient.db
@@ -106,6 +108,7 @@ export class AuthRepository {
         name: user.name,
         displayName: user.displayName,
         role: organizationUser.role,
+        systemRole: user.systemRole,
         orgId: organizationUser.orgId,
       })
       .from(user)

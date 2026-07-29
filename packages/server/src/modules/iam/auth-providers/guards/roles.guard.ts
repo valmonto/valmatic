@@ -5,18 +5,21 @@ import {
   type ExecutionContext,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import type { OrganizationUserRole } from '@pkg/contracts';
+import type { ActiveUser, OrganizationUserRole, SystemRole } from '@pkg/contracts';
 import { k } from '@pkg/locales';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { PERMISSIONS_KEY, type PermissionsMetadata } from '../decorators/permissions.decorator';
+import { SYSTEM_ROLES_KEY } from '../decorators/system-roles.decorator';
 import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator';
 
 /**
- * STRICT RBAC Guard
+ * STRICT RBAC Guard — organization roles only. Platform roles are
+ * `SystemRolesGuard`, and `@SystemRoles` satisfies the strict check below.
  *
  * - @PublicRoute() → Skip role check (unauthenticated access allowed)
  * - @Roles(Role.X, Role.Y) → Only listed roles allowed
- * - @Permissions(...) → Skip role check (handled by PermissionsGuard)
+ * - @Permissions(...) alone → Skip role check (handled by PermissionsGuard)
+ * - @Roles + @Permissions together → BOTH are enforced
  * - No decorator → DENIED (strict mode)
  *
  * This guard runs AFTER AuthGuard, so req.user is already populated.
@@ -51,8 +54,21 @@ export class RolesGuard implements CanActivate {
     const hasPermissionsDecorator =
       permissionsMetadata && permissionsMetadata.permissions.length > 0;
 
-    // STRICT MODE: No @Roles() or @Permissions() decorator = denied
-    if ((!requiredRoles || requiredRoles.length === 0) && !hasPermissionsDecorator) {
+    // A platform route authorizes through SystemRolesGuard instead. Without this
+    // the strict check below rejects it here, before that guard ever runs.
+    const systemRoles = this.reflector.getAllAndOverride<SystemRole[]>(SYSTEM_ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    const hasSystemRolesDecorator = systemRoles && systemRoles.length > 0;
+
+    // STRICT MODE: none of @Roles(), @Permissions() or @SystemRoles() = denied
+    if (
+      (!requiredRoles || requiredRoles.length === 0) &&
+      !hasPermissionsDecorator &&
+      !hasSystemRolesDecorator
+    ) {
       throw new ForbiddenException(k.auth.errors.roleAuthorizationRequired);
     }
 
@@ -62,14 +78,14 @@ export class RolesGuard implements CanActivate {
     }
 
     // Get user from request (set by AuthGuard)
-    const { user } = context.switchToHttp().getRequest();
+    const { user } = context.switchToHttp().getRequest<{ user?: ActiveUser }>();
 
-    if (!user?.role) {
+    if (!user?.orgRole) {
       throw new ForbiddenException(k.auth.errors.noRoleAssigned);
     }
 
     // Check if user's role is in the allowed list (explicit, no hierarchy)
-    const hasRole = requiredRoles.includes(user.role);
+    const hasRole = requiredRoles.includes(user.orgRole);
 
     if (!hasRole) {
       throw new ForbiddenException(k.auth.errors.insufficientPermissions);

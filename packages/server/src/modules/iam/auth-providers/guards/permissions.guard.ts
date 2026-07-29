@@ -5,7 +5,7 @@ import {
   type ExecutionContext,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { hasAnyPermission, hasAllPermissions } from '@pkg/contracts';
+import { hasAnyPermission, hasAllPermissions, type ActiveUser } from '@pkg/contracts';
 import { k } from '@pkg/locales';
 import { PERMISSIONS_KEY, type PermissionsMetadata } from '../decorators/permissions.decorator';
 import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator';
@@ -48,17 +48,18 @@ export class PermissionsGuard implements CanActivate {
     }
 
     // Get user from request (set by AuthGuard)
-    const { user } = context.switchToHttp().getRequest();
+    const { user } = context.switchToHttp().getRequest<{ user?: ActiveUser }>();
 
-    if (!user?.role) {
+    if (!user?.orgRole) {
       throw new ForbiddenException(k.auth.errors.noRoleAssigned);
     }
 
-    // Check permissions based on mode
+    // Permissions are an organization concept: ROLE_PERMISSIONS is keyed on the
+    // membership role, never the system one.
     const hasPermission =
       metadata.mode === 'all'
-        ? hasAllPermissions(user.role, metadata.permissions)
-        : hasAnyPermission(user.role, metadata.permissions);
+        ? hasAllPermissions(user.orgRole, metadata.permissions)
+        : hasAnyPermission(user.orgRole, metadata.permissions);
 
     if (!hasPermission) {
       throw new ForbiddenException(k.auth.errors.insufficientPermissions);
