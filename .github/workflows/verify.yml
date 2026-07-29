@@ -10,6 +10,28 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
+
+    # Integration suites are written with `describeIntegration`, which skips when
+    # DATABASE_URL is unset. Without a database here they would never run
+    # anywhere — the repository layer would be covered on paper only.
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: valmatic
+          POSTGRES_PASSWORD: valmatic
+          POSTGRES_DB: valmatic_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U valmatic"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://valmatic:valmatic@localhost:5432/valmatic_test
+
     steps:
       - uses: actions/checkout@v4
 
@@ -21,6 +43,12 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+
+      # db:migrate runs the compiled CLI, so the package has to be built first.
+      - name: Apply migrations
+        run: |
+          pnpm --filter @pkg/database build
+          pnpm db:migrate
 
       # typecheck + lint + test. Runs on a clean checkout with no dist/, which
       # @pkg/vitest-config supports by aliasing workspace packages to source.
