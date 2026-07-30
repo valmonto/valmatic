@@ -45,6 +45,9 @@ spans the whole repo belongs here.
   `@Permissions`/`@Roles`. `systemRole` (USER|MODERATOR|ADMIN) is platform
   standing and drives `@SystemRoles` only. A system role opens dedicated
   routes (`/admin/*`); it never widens an org-scoped route.
+- **Dependency versions live in the `pnpm-workspace.yaml` catalog.** Never
+  `pnpm add` a version into a package.json directly — add an exact pin to the
+  catalog section it belongs to and reference it as `catalog:`.
 - **Every tenant query is org-scoped, and the boundary gets a test.** New
   repository methods take `orgId` and join on it; add a two-tenant
   integration test that proves reads and writes stay inside. Two real
