@@ -86,6 +86,10 @@ catalog:
   # Auth
   bcryptjs: 3.0.3
 
+  # Telemetry (server) — error reporting + product analytics, env-gated no-ops
+  '@sentry/node': 10.69.0
+  posthog-node: 5.46.1
+
   # Logging (Pino)
   nestjs-pino: 4.6.1
   pino: 10.3.1
@@ -140,6 +144,9 @@ catalog:
   i18next: 26.3.1
   i18next-browser-languagedetector: 8.2.1
   react-i18next: 17.0.8
+
+  # Telemetry (web) — analytics, session replay, frontend errors; env-gated
+  posthog-js: 1.407.6
 
   # Build + test (web)
   vite: 8.0.16

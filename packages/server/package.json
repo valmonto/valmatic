@@ -33,11 +33,11 @@
     "@nestjs/jwt": "catalog:",
     "@pkg/contracts": "workspace:*",
     "@pkg/locales": "workspace:*",
-    "@sentry/node": "^10.69.0",
+    "@sentry/node": "catalog:",
     "bullmq": "catalog:",
     "ioredis": "catalog:",
     "nestjs-pino": "catalog:",
-    "posthog-node": "^5.46.1",
+    "posthog-node": "catalog:",
     "zod": "catalog:"
   },
   "peerDependencies": {

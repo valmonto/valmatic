@@ -35,7 +35,7 @@
     "input-otp": "catalog:",
     "lucide-react": "catalog:",
     "next-themes": "catalog:",
-    "posthog-js": "^1.407.6",
+    "posthog-js": "catalog:",
     "radix-ui": "catalog:",
     "react": "catalog:",
     "react-day-picker": "catalog:",
