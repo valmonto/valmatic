@@ -86,3 +86,12 @@ Export through the module's `index.ts`, add it to `modules/index.ts`, and import
 from `@pkg/server` — never a deep path.
 
 Nest-specific code only; anything framework-free belongs in `@pkg/utils`.
+
+## Testing
+
+The guard chain is the most heavily tested surface in the repo (113 tests) —
+each guard has a suite, and the token provider's refresh path asserts both
+roles are re-read from the database, so a demotion cannot outlive the access
+token. Guards are plain classes: construct them with a stubbed `Reflector`,
+no Nest testing module needed. See
+[`@pkg/testing`](../testing/README.md) for the shared tools.

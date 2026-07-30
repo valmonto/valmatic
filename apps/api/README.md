@@ -127,11 +127,28 @@ throw new ForbiddenException(k.users.errors.cannotRemoveSelf);
 one organization, development adds demo users from
 `src/seed/data/users.json`. Force it with `SEED_STRATEGY=production|development`.
 
+## Testing
+
+Two layers, one per kind of failure ([`@pkg/testing`](../../packages/testing/README.md)
+is the guide):
+
+- **Service tests** (`__tests__/*/**.service.test.ts`) — business rules over a
+  faked repository. Fast, always run.
+- **Repository integration tests** (`*.repository.test.ts`, via
+  `describeIntegration`) — the queries against a real Postgres. They run only
+  when `DATABASE_URL` is set and **skip silently otherwise**, so a green run
+  without a database proves less than it looks. CI always sets one.
+
+The split earns its keep: the service tests asserted the repository was
+*called* with an org while the query ignored it — only the integration layer
+caught the cross-tenant write.
+
 ## Commands
 
 ```bash
 pnpm dev --filter @pkg/api
 pnpm --filter @pkg/api test
+DATABASE_URL=postgresql://… pnpm --filter @pkg/api test   # + integration
 pnpm db:seed
 ```
 
