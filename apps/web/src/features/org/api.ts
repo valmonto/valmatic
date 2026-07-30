@@ -1,8 +1,6 @@
 import type {
   CreateOrgRequest,
   CreateOrgResponse,
-  DeleteOrgRequest,
-  DeleteOrgResponse,
   GetOrgByIdRequest,
   GetOrgByIdResponse,
   ListOrgsRequest,
@@ -25,11 +23,11 @@ export const orgResource = (client: HttpClient) => ({
 
   create: (dto: CreateOrgRequest): Promise<CreateOrgResponse> => client.post('/api/orgs', dto),
 
+  // update addresses the ACTIVE organization only — the API enforces that the
+  // id in the path equals the session's org, so switch first to rename another
+  // one. There is no delete: that is a platform-admin operation (/admin/orgs).
   update: (dto: UpdateOrgRequest): Promise<UpdateOrgResponse> =>
-    client.patch(`/api/orgs/${dto.id}`, dto),
-
-  remove: (dto: DeleteOrgRequest): Promise<DeleteOrgResponse> =>
-    client.delete(`/api/orgs/${dto.id}`),
+    client.patch(`/api/orgs/${dto.orgId}`, dto),
 
   switch: (dto: SwitchOrgRequest): Promise<SwitchOrgResponse> =>
     client.post('/api/orgs/switch', dto),

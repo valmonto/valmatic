@@ -6,4 +6,4 @@
  */
 export { orgResource } from './api';
 export { OrgSwitcher } from './components/org-switcher';
-export { useOrgs, useSwitchOrg, useCreateOrg, useDeleteOrg } from './hooks/use-orgs';
+export { useOrgs, useSwitchOrg, useCreateOrg } from './hooks/use-orgs';

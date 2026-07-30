@@ -1,12 +1,15 @@
-import { Controller, Delete, Get, Param, Patch, Post, Res } from '@nestjs/common';
+import { Controller, Get, Patch, Post, Res } from '@nestjs/common';
 import { OrgService } from './org.service';
 import { ActiveUser, Permissions, ZodRequest, COOKIE_OPTIONS, COOKIE_TTL } from '@pkg/server';
 import {
   CreateOrgRequest,
   CreateOrgRequestSchema,
   CreateOrgResponse,
-  DeleteOrgResponse,
+  GetOrgByIdRequest,
+  GetOrgByIdRequestSchema,
   GetOrgByIdResponse,
+  ListOrgsRequest,
+  ListOrgsRequestSchema,
   ListOrgsResponse,
   UpdateOrgRequest,
   UpdateOrgRequestSchema,
@@ -18,23 +21,33 @@ import {
 } from '@pkg/contracts';
 import type { FastifyReply } from 'fastify';
 
+/**
+ * The param name is load-bearing. `:orgId` puts a route under ActiveOrgGuard,
+ * which forces it to equal the session's organization — so update and delete
+ * only ever address the org the caller is switched into, and `@Permissions`
+ * judges the right one by construction. `:id` (read) deliberately does not:
+ * reading any organization you belong to is allowed from anywhere.
+ */
 @Controller('orgs')
 export class OrgController {
   constructor(private readonly orgService: OrgService) {}
 
   @Get()
   @Permissions('org:list')
-  async list(@ActiveUser() activeUser: ActiveUserType): Promise<ListOrgsResponse> {
+  async list(
+    @ZodRequest(ListOrgsRequestSchema) dto: ListOrgsRequest,
+    @ActiveUser() activeUser: ActiveUserType,
+  ): Promise<ListOrgsResponse> {
     return this.orgService.listOrgs(activeUser);
   }
 
   @Get(':id')
   @Permissions('org:read')
   async get(
-    @Param('id') id: string,
+    @ZodRequest(GetOrgByIdRequestSchema) dto: GetOrgByIdRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<GetOrgByIdResponse> {
-    return this.orgService.getOrgById(activeUser, id);
+    return this.orgService.getOrgById(activeUser, dto.id);
   }
 
   @Post()
@@ -46,25 +59,18 @@ export class OrgController {
     return this.orgService.createOrg(activeUser, dto);
   }
 
-  @Patch(':id')
+  @Patch(':orgId')
   @Permissions('org:update')
   async update(
-    @Param('id') id: string,
-    @ZodRequest(UpdateOrgRequestSchema.omit({ id: true })) dto: Omit<UpdateOrgRequest, 'id'>,
+    @ZodRequest(UpdateOrgRequestSchema) dto: UpdateOrgRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<UpdateOrgResponse> {
-    return this.orgService.updateOrg(activeUser, { ...dto, id });
+    return this.orgService.updateOrg(activeUser, dto);
   }
 
-  @Delete(':id')
-  @Permissions('org:delete')
-  async delete(
-    @Param('id') id: string,
-    @ActiveUser() activeUser: ActiveUserType,
-  ): Promise<DeleteOrgResponse> {
-    await this.orgService.deleteOrg(activeUser, id);
-    return {};
-  }
+  // There is deliberately no DELETE here. Organization users, including
+  // OWNERs, cannot delete organizations — that is a platform operation, on
+  // /admin/orgs behind @SystemRoles(ADMIN). See AdminOrgController.
 
   @Post('switch')
   @Permissions('org:switch')

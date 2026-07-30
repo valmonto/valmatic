@@ -22,7 +22,7 @@ type CanProps = {
  * the permission table.
  *
  * `<Can permission="user:create"><Button …/></Can>`
- * `<Can any={['org:update','org:delete']}>…</Can>`
+ * `<Can any={['org:update','org:switch']}>…</Can>`
  */
 export function Can({ permission, any, all, fallback = null, children }: CanProps) {
   const granted = usePermissions();

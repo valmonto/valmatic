@@ -13,7 +13,6 @@ export const PERMISSIONS = [
   'org:read',
   'org:create',
   'org:update',
-  'org:delete',
   'org:switch',
 
   // User management permissions

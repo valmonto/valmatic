@@ -6,6 +6,7 @@ import {
   organizationUser,
   eq,
   and,
+  count,
 } from '@pkg/database';
 import { k } from '@pkg/locales';
 import type { OrganizationUserRole } from '@pkg/contracts';
@@ -89,13 +90,41 @@ export class OrgRepository {
     });
   }
 
-  async updateOrg(orgId: string, data: { name?: string }): Promise<void> {
-    if (data.name !== undefined) {
-      await this.dbClient.db
-        .update(organization)
-        .set({ name: data.name })
-        .where(eq(organization.id, orgId));
+  /**
+   * Returns the updated row rather than void, so the caller does not need a
+   * second query — which previously had its own failure branch throwing a 500
+   * for a write that had already succeeded.
+   */
+  async updateOrg(
+    orgId: string,
+    data: { name?: string },
+  ): Promise<Omit<OrgRecord, 'role'> | null> {
+    if (data.name === undefined) {
+      const [row] = await this.dbClient.db
+        .select({
+          id: organization.id,
+          name: organization.name,
+          createdAt: organization.createdAt,
+          updatedAt: organization.updatedAt,
+        })
+        .from(organization)
+        .where(eq(organization.id, orgId))
+        .limit(1);
+      return row ?? null;
     }
+
+    const [row] = await this.dbClient.db
+      .update(organization)
+      .set({ name: data.name })
+      .where(eq(organization.id, orgId))
+      .returning({
+        id: organization.id,
+        name: organization.name,
+        createdAt: organization.createdAt,
+        updatedAt: organization.updatedAt,
+      });
+
+    return row ?? null;
   }
 
   async deleteOrg(orgId: string): Promise<void> {
@@ -103,13 +132,57 @@ export class OrgRepository {
     await this.dbClient.db.delete(organization).where(eq(organization.id, orgId));
   }
 
+  /** Platform-admin view: every organization, no membership filter on purpose. */
+  async findAllOrgs(opts: { skip: number; limit: number }): Promise<{
+    data: Array<{
+      id: string;
+      name: string;
+      memberCount: number;
+      createdAt: Date;
+      updatedAt: Date;
+    }>;
+    total: number;
+  }> {
+    const [data, totalResult] = await Promise.all([
+      this.dbClient.db
+        .select({
+          id: organization.id,
+          name: organization.name,
+          memberCount: count(organizationUser.userId),
+          createdAt: organization.createdAt,
+          updatedAt: organization.updatedAt,
+        })
+        .from(organization)
+        .leftJoin(organizationUser, eq(organizationUser.orgId, organization.id))
+        .groupBy(organization.id)
+        .orderBy(organization.name)
+        .offset(opts.skip)
+        .limit(opts.limit),
+      this.dbClient.db.select({ count: count() }).from(organization),
+    ]);
+
+    return { data, total: totalResult[0]?.count ?? 0 };
+  }
+
+  async findOrgById(
+    orgId: string,
+  ): Promise<{ id: string; name: string } | null> {
+    const [row] = await this.dbClient.db
+      .select({ id: organization.id, name: organization.name })
+      .from(organization)
+      .where(eq(organization.id, orgId))
+      .limit(1);
+
+    return row ?? null;
+  }
+
   async countUserOrgs(userId: string): Promise<number> {
-    const result = await this.dbClient.db
-      .select({ id: organizationUser.orgId })
+    const [result] = await this.dbClient.db
+      .select({ count: count() })
       .from(organizationUser)
       .where(eq(organizationUser.userId, userId));
 
-    return result.length;
+    return result?.count ?? 0;
   }
 
   async getUserRoleInOrg(userId: string, orgId: string): Promise<OrganizationUserRole | null> {

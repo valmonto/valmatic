@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { ORGANIZATION_USER_ROLES } from '../constants';
+import { EmptyRequestSchema } from './common.schema';
+import { PaginatedRequestSchema, PaginatedResponseSchema } from './pagination.schema';
 
 // Single source of truth for organization user roles
 export { ORGANIZATION_USER_ROLES } from '../constants';
@@ -23,7 +25,7 @@ export const OrganizationSchema = z.object({
 export type Organization = z.infer<typeof OrganizationSchema>;
 
 // --- List User's Organizations ---
-export const ListOrgsRequestSchema = z.object({});
+export const ListOrgsRequestSchema = EmptyRequestSchema;
 export const ListOrgsResponseSchema = z.object({
   data: z.array(OrganizationSchema),
   currentOrgId: z.string().uuid(),
@@ -52,22 +54,53 @@ export type CreateOrgRequest = z.infer<typeof CreateOrgRequestSchema>;
 export type CreateOrgResponse = z.infer<typeof CreateOrgResponseSchema>;
 
 // --- Update Organization ---
-export const UpdateOrgRequestSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string().min(1).max(255).optional(),
-});
+// The field is `orgId`, not `id`: the route is /orgs/:orgId, which puts it
+// under ActiveOrgGuard — update addresses the ACTIVE organization only, so
+// @Permissions judges the same organization the write lands in. Reading stays
+// cross-org (`id` above); administering does not.
+export const UpdateOrgRequestSchema = z
+  .object({
+    orgId: z.string().uuid(),
+    name: z.string().min(1).max(255).optional(),
+  })
+  .strict();
 
 export const UpdateOrgResponseSchema = OrganizationSchema;
 
 export type UpdateOrgRequest = z.infer<typeof UpdateOrgRequestSchema>;
 export type UpdateOrgResponse = z.infer<typeof UpdateOrgResponseSchema>;
 
-// --- Delete Organization ---
-export const DeleteOrgRequestSchema = z.object({ id: z.string().uuid() }).strict();
-export const DeleteOrgResponseSchema = z.object({});
+// --- Admin: List All Organizations ---
+// Platform surface (`/admin/orgs`, @SystemRoles(ADMIN)) — deliberately NOT part
+// of the tenant routes above. Organization users, including OWNERs, cannot
+// delete organizations; a platform admin can delete any of them. Deletion was
+// removed from the tenant surface entirely, so there is no `org:delete`
+// permission — holding every org permission still does not grant it.
+export const AdminOrgSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1).max(255),
+  memberCount: z.number().int(),
+  createdAt: isoTimestamp,
+  updatedAt: isoTimestamp,
+});
 
-export type DeleteOrgRequest = z.infer<typeof DeleteOrgRequestSchema>;
-export type DeleteOrgResponse = z.infer<typeof DeleteOrgResponseSchema>;
+export type AdminOrg = z.infer<typeof AdminOrgSchema>;
+
+export const AdminListOrgsRequestSchema = PaginatedRequestSchema.strict();
+export const AdminListOrgsResponseSchema = PaginatedResponseSchema(AdminOrgSchema);
+
+export type AdminListOrgsRequest = z.infer<typeof AdminListOrgsRequestSchema>;
+export type AdminListOrgsResponse = z.infer<typeof AdminListOrgsResponseSchema>;
+
+// --- Admin: Delete Organization ---
+// `id`, not `orgId`: this route addresses ANY organization, so it must stay
+// outside ActiveOrgGuard's tenant rule. Deleting the org the admin is switched
+// into is refused instead of re-homed — switch first.
+export const AdminDeleteOrgRequestSchema = z.object({ id: z.string().uuid() }).strict();
+export const AdminDeleteOrgResponseSchema = z.object({});
+
+export type AdminDeleteOrgRequest = z.infer<typeof AdminDeleteOrgRequestSchema>;
+export type AdminDeleteOrgResponse = z.infer<typeof AdminDeleteOrgResponseSchema>;
 
 // --- Switch Organization ---
 export const SwitchOrgRequestSchema = z.object({ orgId: z.string().uuid() }).strict();
