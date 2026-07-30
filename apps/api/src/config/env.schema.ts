@@ -51,6 +51,14 @@ export const envSchema = z.object({
 
   // Rate limiting (Redis-backed, so limits hold across replicas and restarts).
   // Disabled under NODE_ENV=test.
+  // Optional dedicated Redis for the limiter. Unset → the IAM Redis is
+  // reused, which is fine until the limiter's per-request INCRs deserve
+  // isolation from session traffic. Counters are 60-second ephemera, so
+  // pointing this at a fresh instance later migrates nothing.
+  RATE_LIMIT_REDIS_HOST: z.string().optional(),
+  RATE_LIMIT_REDIS_PORT: z.coerce.number().int().min(1).max(65535).default(6379),
+  RATE_LIMIT_REDIS_PASSWORD: z.string().optional(),
+
   RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(300), // per window, general traffic
   RATE_LIMIT_AUTH_MAX: z.coerce.number().int().min(1).default(10), // per window, login/register per IP
   RATE_LIMIT_WINDOW_MS: z.coerce.number().int().min(1000).default(60_000),

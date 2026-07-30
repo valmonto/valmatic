@@ -10,7 +10,7 @@ import fastifyCookie from '@fastify/cookie';
 import fastifyHelmet from '@fastify/helmet';
 import fastifyRateLimit from '@fastify/rate-limit';
 import { IAM_REDIS } from '@pkg/server';
-import type Redis from 'ioredis';
+import Redis from 'ioredis';
 import { rateLimitErrorResponse, rateLimitKey, rateLimitMax } from './config/rate-limit';
 
 async function bootstrap(): Promise<void> {
@@ -62,9 +62,20 @@ async function bootstrap(): Promise<void> {
       windowMs: config.get<number>('RATE_LIMIT_WINDOW_MS', 60_000),
     };
 
+    // A dedicated limiter Redis when configured; the IAM one otherwise. The
+    // keys are namespaced either way, so switching later migrates nothing.
+    const rateLimitRedisHost = config.get<string>('RATE_LIMIT_REDIS_HOST');
+    const rateLimitRedis = rateLimitRedisHost
+      ? new Redis({
+          host: rateLimitRedisHost,
+          port: config.get<number>('RATE_LIMIT_REDIS_PORT', 6379),
+          password: config.get<string>('RATE_LIMIT_REDIS_PASSWORD'),
+        })
+      : app.get<Redis>(IAM_REDIS);
+
     await app.register(fastifyRateLimit, {
       global: true,
-      redis: app.get<Redis>(IAM_REDIS),
+      redis: rateLimitRedis,
       nameSpace: 'rate-limit:',
       timeWindow: rateLimitEnv.windowMs,
       max: (req) => rateLimitMax(rateLimitEnv, { ip: req.ip, url: req.url }),
