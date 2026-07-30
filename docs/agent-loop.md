@@ -23,8 +23,11 @@ YOU          PR + evidence pack (screenshots, checked acceptance list,
 
 ## The two custom agents — and why only two
 
-Written at ticket 1 against the real ticket format (`.claude/agents/
-ui-verifier.md`, `.claude/agents/valmatic-reviewer.md`), not before.
+They exist: `.claude/agents/ui-verifier.md` and
+`.claude/agents/valmatic-reviewer.md`. The ticket's content arrives in the
+invocation prompt, so the definitions (role, checklist, output contract) did
+not need to wait for the ticket format — ticket 1 exercises them rather than
+creates them.
 
 There are deliberately NO role agents (frontender/backender/worker/packager):
 the nested CLAUDE.md files make any agent the right specialist for whatever
