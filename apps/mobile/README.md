@@ -133,19 +133,13 @@ blur is verified on an emulator, not a browser. The loop ships ready to run:
 pnpm --filter @pkg/mobile emu:setup   # one-time: SDK images + AVD (needs KVM on Linux)
 pnpm --filter @pkg/mobile emu:start   # boot the emulator
 pnpm --filter @pkg/mobile start       # press 'a' to open the app on it
-
-pnpm --filter @pkg/mobile emu:snap    # screenshot → prints the PNG path
-pnpm --filter @pkg/mobile emu:dump    # accessibility/view hierarchy as XML
-bash apps/mobile/scripts/emu.sh tap 200 640    # interact
 ```
 
-Every command degrades with a clear message when the host has no Android SDK,
-so CI and SDK-less machines fail honestly instead of mysteriously.
-
-`.mcp.json` also ships mobile-mcp: on a host with a booted emulator, agent
-sessions get first-class tools (see screen, tap by accessibility label)
-automatically; on hosts without one, the server just reports unavailable and
-nothing else is affected.
+That is ALL the scripts do — provisioning, the one part no existing tool
+covers. Interaction is mobile-mcp's job (`.mcp.json`): with a booted emulator,
+agent sessions natively get see-screen / tap-by-label / type / inspect tools;
+on hosts without one the server reports unavailable and nothing else is
+affected. Both scripts degrade with a clear message when the SDK is absent.
 
 What no emulator verifies: how haptics FEEL, and true end-to-end push
 delivery — those stay a two-minute human check on a real phone.
