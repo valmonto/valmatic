@@ -47,8 +47,16 @@ The controller does no work: it declares the permission, validates the body,
 and hands the active user plus a typed DTO to the service. Rules — who may do
 what to whom — live in the service. SQL lives in the repository.
 
-Use `@ZodRequest(Schema)` for bodies. Query strings arrive as strings, so those
-parse explicitly: `ListUsersRequestSchema.parse(query)`.
+Use `@ZodRequest(Schema)` for everything — it validates body, query string and
+path params together against one schema, with path segments winning over the
+payload. No route reads `@Param`, `@Query` or `@Body` raw; routes that take no
+input still validate against the strict `EmptyRequestSchema`, so unexpected
+input is rejected rather than silently discarded.
+
+One param name is load-bearing: **`:orgId` puts a route under `ActiveOrgGuard`**,
+which forces it to equal the session's organization (update an org). **`:id` is
+a plain resource id**, authorised on its own terms (read an org you belong to).
+Pick deliberately.
 
 ## Every query is scoped to the organization
 
@@ -64,10 +72,20 @@ removeUserFromOrg(userId, orgId)
 They filter by joining `organizationUser` on `orgId`, so a row belonging to
 another tenant cannot come back.
 
-**This is convention, not enforcement.** Nothing stops a new `findAllUsers()`
-without an org filter, and the result is a cross-tenant leak that no test
-currently catches. When adding a repository method, take `orgId` and join on
-it — or be able to say precisely why the query is safe without one.
+**The convention is now backed by tests that run against a real database.**
+Each repository has an integration suite (`describeIntegration`, runs when
+`DATABASE_URL` is set — locally and in CI) that creates two organizations and
+proves reads and writes stay inside the one asked for. This is not theoretical
+cover: the user module's suite caught a real cross-tenant write on its first
+run, and the notification module shipped for months filtering by user alone.
+When adding a repository method, take `orgId`, join on it, and add the
+two-tenant test — or be able to say precisely why the query is safe without
+one.
+
+The one deliberate exception: `/admin/orgs` (`AdminOrgController`) is
+cross-tenant **by design** — it lists and deletes any organization, gated by
+`@SystemRoles(SystemRole.ADMIN)`, the platform role. Organization users,
+including OWNERs, cannot delete organizations at all.
 
 `deleteUser(userId)` is the exception and shows the shape of a safe one: the
 service first proves membership with `findUserInOrg`, removes the user from the
@@ -93,9 +111,15 @@ throw new ForbiddenException(k.users.errors.cannotRemoveSelf);
 
 1. `src/thing/` with controller, service, repository and module.
 2. Schemas and permissions go in `@pkg/contracts` first — the client needs them.
-3. Guard every route with `@Permissions(...)`.
-4. Take `activeUser.orgId` through to the repository.
-5. Register the module in `app.module.ts`.
+   A permission no route reads gets deleted, not kept: a table entry that gates
+   nothing reads as protection and provides none.
+3. Guard every route with `@Permissions(...)` — or `@SystemRoles(...)` for a
+   platform surface. A route with neither is refused by default.
+4. Identity comes from `@ActiveUser`, never the payload: `userId` and `orgId`
+   ride the session token into services, repositories and job payloads.
+5. Take `activeUser.orgId` through to the repository, and prove the boundary
+   with a two-tenant integration test.
+6. Register the module in `app.module.ts`.
 
 ## Seeding
 
