@@ -14,6 +14,7 @@ export { users } from './users';
 export { orgs } from './orgs';
 export { jobs } from './jobs';
 export { notifications } from './notifications';
+export { mcp } from './mcp';
 export { common } from './common';
 export { validation } from './validation';
 
@@ -24,6 +25,7 @@ import { users } from './users';
 import { orgs } from './orgs';
 import { jobs } from './jobs';
 import { notifications } from './notifications';
+import { mcp } from './mcp';
 import { common } from './common';
 import { validation } from './validation';
 
@@ -34,6 +36,7 @@ export const k = {
   orgs,
   jobs,
   notifications,
+  mcp,
   common,
   validation,
 } as const;

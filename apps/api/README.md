@@ -127,6 +127,25 @@ throw new ForbiddenException(k.users.errors.cannotRemoveSelf);
    with a two-tenant integration test.
 6. Register the module in `app.module.ts`.
 
+## MCP — agent access to a running instance
+
+`POST /api/mcp` is a Model Context Protocol endpoint (Streamable HTTP), OFF by
+default (`MCP_ENABLED`). Auth is machine API keys, not user sessions: a
+platform admin mints keys at `/admin/api-keys`, choosing **scopes** — and a
+key sees exactly the tools its scopes cover, filtered at registration, so
+granting a scope IS the exposure decision. The plaintext key is shown once;
+only its hash is stored.
+
+Tools live in `src/mcp/mcp-tools.ts`, one catalog, each tagged with a scope.
+The convention for adding one: wrap a SERVICE method, never raw SQL — tools
+inherit the same rules and logging the HTTP surface has. Connect with:
+
+```json
+{ "mcpServers": { "myapp": {
+  "type": "http", "url": "https://api.example.com/api/mcp",
+  "headers": { "Authorization": "Bearer sk_…" } } } }
+```
+
 ## Seeding
 
 `pnpm db:seed` picks a strategy from `NODE_ENV`: production seeds one owner and

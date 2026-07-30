@@ -9,3 +9,4 @@ export {
   type AnalyticsEvent,
   type FeatureFlag,
 } from './constants/analytics';
+export { MCP_SCOPES, type McpScope } from './constants/mcp';

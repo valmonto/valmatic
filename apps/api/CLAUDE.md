@@ -11,3 +11,5 @@ Read ./README.md before changing this workspace.
   matches top-down.
 - Errors throw k.* translation keys, never sentences.
 - New endpoint = schema + permission in @pkg/contracts FIRST, then the route.
+- MCP tools (src/mcp/mcp-tools.ts) wrap service methods, never raw SQL, and
+  every tool declares a scope — an unscoped tool is exposed to every key.
