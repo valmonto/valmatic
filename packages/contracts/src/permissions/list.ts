@@ -26,10 +26,7 @@ export const PERMISSIONS = [
   'user:remove-owner', // Special: remove users with OWNER role
 
   // Job permissions
-  'job:list',
   'job:create',
-  'job:update',
-  'job:delete',
 
   // Notification permissions
   'notification:list',

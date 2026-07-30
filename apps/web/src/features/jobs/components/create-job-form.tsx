@@ -45,7 +45,7 @@ export function CreateJobForm({ onCreated }: Props) {
     }
 
     const data = {
-      userId: user.id, // Use current user's ID
+      // No userId: the API attributes the job to the session user.
       action: rawData.action,
       priority: rawData.priority ? Number(rawData.priority) : undefined,
       delay: rawData.delay ? Number(rawData.delay) : undefined,

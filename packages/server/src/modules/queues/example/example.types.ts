@@ -3,8 +3,10 @@
  * This is what gets passed to the processor.
  */
 export interface ExampleJobPayload {
-  /** Unique identifier for the user */
+  /** The session user the job is attributed to — never taken from a request payload */
   userId: string;
+  /** The organization the job was enqueued from, so processors can scope their work */
+  orgId: string;
   /** Action to perform */
   action: 'send-email' | 'generate-report' | 'sync-data';
   /** Additional data for the job */

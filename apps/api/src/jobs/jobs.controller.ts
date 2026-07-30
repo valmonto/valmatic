@@ -1,7 +1,8 @@
 import { Controller, Post } from '@nestjs/common';
 import { ExampleProducer, type ExampleJobPayload } from '@pkg/server';
-import { Permissions, ZodRequest } from '@pkg/server';
+import { ActiveUser, Permissions, ZodRequest } from '@pkg/server';
 import {
+  type ActiveUser as ActiveUserType,
   CreateExampleJobRequest,
   CreateExampleJobRequestSchema,
   CreateExampleJobResponse,
@@ -13,6 +14,10 @@ import {
 /**
  * Controller for managing background jobs.
  * Demonstrates how to enqueue jobs from the API.
+ *
+ * The job is attributed to the SESSION user and organization — the payload
+ * carries no identity fields, because a caller-supplied identity would let
+ * anyone enqueue work as someone else.
  */
 @Controller('jobs')
 export class JobsController {
@@ -33,9 +38,11 @@ export class JobsController {
   @Permissions('job:create')
   async createExampleJob(
     @ZodRequest(CreateExampleJobRequestSchema) dto: CreateExampleJobRequest,
+    @ActiveUser() activeUser: ActiveUserType,
   ): Promise<CreateExampleJobResponse> {
     const payload: ExampleJobPayload = {
-      userId: dto.userId,
+      userId: activeUser.userId,
+      orgId: activeUser.orgId,
       action: dto.action,
       data: dto.data,
     };
@@ -69,9 +76,11 @@ export class JobsController {
   @Permissions('job:create')
   async createExampleJobsBulk(
     @ZodRequest(CreateExampleJobsBulkRequestSchema) dto: CreateExampleJobsBulkRequest,
+    @ActiveUser() activeUser: ActiveUserType,
   ): Promise<CreateExampleJobsBulkResponse> {
     const payloads: ExampleJobPayload[] = dto.jobs.map((job) => ({
-      userId: job.userId,
+      userId: activeUser.userId,
+      orgId: activeUser.orgId,
       action: job.action,
       data: job.data,
     }));

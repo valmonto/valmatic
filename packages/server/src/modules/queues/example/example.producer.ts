@@ -16,9 +16,13 @@ import { InjectLogger, PinoLogger } from '../../logging';
  *   constructor(private exampleProducer: ExampleProducer) {}
  *
  *   @Post()
- *   async createTask(@Body() dto: CreateTaskDto) {
+ *   async createTask(
+ *     @ZodRequest(CreateTaskSchema) dto: CreateTaskRequest,
+ *     @ActiveUser() activeUser: ActiveUserType,
+ *   ) {
  *     await this.exampleProducer.enqueue({
- *       userId: dto.userId,
+ *       userId: activeUser.userId, // identity from the session, never the payload
+ *       orgId: activeUser.orgId,
  *       action: 'send-email',
  *       data: { email: dto.email },
  *     });
