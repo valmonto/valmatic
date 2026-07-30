@@ -8,6 +8,8 @@ import { InjectLogger, PinoLogger } from '@pkg/server';
 import { IamService } from '@pkg/server';
 import { k } from '@pkg/locales';
 import type {
+  AdminListOrgsRequest,
+  AdminListOrgsResponse,
   CreateOrgRequest,
   CreateOrgResponse,
   ListOrgsResponse,
@@ -100,53 +102,48 @@ export class OrgService {
     };
   }
 
+  /** Platform-admin view of every organization; no membership filter. */
+  async adminListOrgs(dto: AdminListOrgsRequest): Promise<AdminListOrgsResponse> {
+    const { data, total } = await this.orgRepository.findAllOrgs(dto);
+
+    return {
+      data: data.map((org) => ({
+        ...org,
+        createdAt: org.createdAt.toISOString(),
+        updatedAt: org.updatedAt.toISOString(),
+      })),
+      meta: { total, skip: dto.skip, limit: dto.limit },
+    };
+  }
+
   /**
-   * Deletes the ACTIVE organization — the only one the route can address — so
-   * the session's orgId always points at a deleted row afterwards. Left alone,
-   * every org-scoped query then quietly returns empty until the next token
-   * refresh logs the user out. Instead the session is re-issued against a
-   * remaining organization, which the deleting-your-only-org check guarantees
-   * exists.
+   * Deletes ANY organization — membership is deliberately not required, which
+   * is exactly why the route sits behind @SystemRoles(ADMIN) rather than the
+   * tenant permission table.
+   *
+   * The admin's own ACTIVE organization is refused rather than re-homed:
+   * "switch first" keeps this path free of session surgery. Members of a
+   * deleted organization are logged out on their next token refresh, and a
+   * member whose only organization this was cannot log in afterwards — deleting
+   * a customer's last workspace deprovisions that customer.
    */
-  async deleteOrg(
-    activeUser: ActiveUser,
-    orgId: string,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
-    const org = await this.orgRepository.findOrgForUser(orgId, activeUser.userId);
+  async adminDeleteOrg(activeUser: ActiveUser, orgId: string): Promise<void> {
+    if (orgId === activeUser.orgId) {
+      throw new ForbiddenException(k.orgs.errors.cannotDeleteActiveOrg);
+    }
+
+    const org = await this.orgRepository.findOrgById(orgId);
 
     if (!org) {
       throw new NotFoundException(k.orgs.errors.notFound);
     }
 
-    if (org.role !== 'OWNER') {
-      throw new ForbiddenException(k.orgs.errors.onlyOwnerCanDelete);
-    }
-
-    // Prevent deleting if it's the user's only org
-    const orgCount = await this.orgRepository.countUserOrgs(activeUser.userId);
-    if (orgCount <= 1) {
-      throw new ForbiddenException(k.orgs.errors.cannotDeleteOnly);
-    }
-
     await this.orgRepository.deleteOrg(orgId);
 
-    const remaining = await this.orgRepository.findOrgsForUser(activeUser.userId);
-    const next = remaining[0];
-    if (!next) {
-      // Unreachable while the only-org check above holds; fail loudly if it stops holding.
-      throw new InternalServerErrorException(k.common.errors.failedToRetrieveOrg);
-    }
-
-    const tokens = await this.iamService.auth.issueTokens({
-      userId: activeUser.userId,
-      orgId: next.id,
-      orgRole: next.role,
-      systemRole: activeUser.systemRole,
-    });
-
-    this.logger.info({ orgId, nextOrgId: next.id }, 'Organization deleted, session re-homed');
-
-    return tokens;
+    this.logger.info(
+      { orgId, orgName: org.name, deletedBy: activeUser.userId },
+      'Organization deleted by platform admin',
+    );
   }
 
   async switchOrg(

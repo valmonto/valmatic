@@ -15,7 +15,6 @@ export const ROLE_PERMISSIONS: Record<OrganizationUserRole, readonly Permission[
     'org:read',
     'org:create',
     'org:update',
-    'org:delete',
     'org:switch',
     'user:list',
     'user:read',

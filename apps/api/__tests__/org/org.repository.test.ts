@@ -137,4 +137,25 @@ describeIntegration('OrgRepository', () => {
     await expect(repository.getUserRoleInOrg(ownerA, orgA)).resolves.toBe('OWNER');
     await expect(repository.getUserRoleInOrg(ownerA, orgB)).resolves.toBeNull();
   });
+
+  // The admin view is the one query allowed to cross tenants: every
+  // organization, whoever asks, with a real member count per row.
+  it('lists every organization for the platform view, with member counts', async () => {
+    await client.db
+      .insert(organizationUser)
+      .values({ orgId: orgA, userId: ownerB, role: 'MEMBER' });
+
+    const { data, total } = await repository.findAllOrgs({ skip: 0, limit: 20 });
+
+    expect(total).toBe(2);
+    expect(data.find((o) => o.id === orgA)?.memberCount).toBe(2);
+    expect(data.find((o) => o.id === orgB)?.memberCount).toBe(1);
+  });
+
+  it('finds an organization by id alone, without a membership', async () => {
+    await expect(repository.findOrgById(orgB)).resolves.toMatchObject({ id: orgB });
+    await expect(
+      repository.findOrgById('00000000-0000-4000-8000-000000000000'),
+    ).resolves.toBeNull();
+  });
 });

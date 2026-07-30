@@ -33,7 +33,7 @@ type CanProps = {
  *
  * @example
  * // All permissions required
- * <Can all={['org:update', 'org:delete']}>
+ * <Can all={['org:update', 'org:switch']}>
  *   <OrgAdminPanel />
  * </Can>
  */

@@ -18,30 +18,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { Building2, Check, ChevronsUpDown, Loader2, Plus, Trash2 } from 'lucide-react';
+import { Building2, Check, ChevronsUpDown, Loader2, Plus } from 'lucide-react';
 import type { Organization } from '@pkg/contracts';
-import { useCreateOrg, useDeleteOrg, useOrgs, useSwitchOrg } from '../hooks/use-orgs';
+import { useCreateOrg, useOrgs, useSwitchOrg } from '../hooks/use-orgs';
 
 export function OrgSwitcher() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [orgToDelete, setOrgToDelete] = useState<Organization | null>(null);
   const [newOrgName, setNewOrgName] = useState('');
 
   const { data, isLoading } = useOrgs();
   const { execute: switchOrg, isLoading: isSwitching } = useSwitchOrg();
   const { execute: createOrg, isLoading: isCreating, error: createError } = useCreateOrg();
-  const { execute: deleteOrg, isLoading: isDeleting } = useDeleteOrg();
 
   const currentOrg = data?.data.find((org) => org.id === data.currentOrgId);
   const otherOrgs = data?.data.filter((org) => org.id !== data.currentOrgId) ?? [];
@@ -63,21 +50,6 @@ export function OrgSwitcher() {
       // Switch to the new org
       await handleSwitch(newOrg.id);
     }
-  };
-
-  const handleDelete = async () => {
-    if (!orgToDelete) return;
-
-    const { e } = await deleteOrg({ orgId: orgToDelete.id });
-    if (!e) {
-      setOrgToDelete(null);
-      setIsDeleteOpen(false);
-    }
-  };
-
-  const openDeleteDialog = (org: Organization) => {
-    setOrgToDelete(org);
-    setIsDeleteOpen(true);
   };
 
   if (isLoading || !data) {
@@ -144,17 +116,6 @@ export function OrgSwitcher() {
                     <span className="truncate flex-1 text-left">{org.name}</span>
                     <span className="text-xs text-muted-foreground">{org.role}</span>
                   </button>
-                  {org.role === 'OWNER' && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openDeleteDialog(org);
-                      }}
-                      className="opacity-0 group-hover:opacity-100 p-1 hover:bg-destructive/10 rounded transition-opacity"
-                    >
-                      <Trash2 className="size-3.5 text-destructive" />
-                    </button>
-                  )}
                 </DropdownMenuItem>
               ))}
             </>
@@ -168,17 +129,8 @@ export function OrgSwitcher() {
             <span>Create organization</span>
           </DropdownMenuItem>
 
-          {/* Current org settings (if owner) */}
-          {currentOrg?.role === 'OWNER' && (
-            <DropdownMenuItem
-              className="gap-2 text-destructive focus:text-destructive"
-              onSelect={() => openDeleteDialog(currentOrg)}
-              disabled={data.data.length <= 1}
-            >
-              <Trash2 className="size-4" />
-              <span>Delete current org</span>
-            </DropdownMenuItem>
-          )}
+          {/* No delete here: removing an organization is a platform-admin
+              operation (/admin/orgs), not something an OWNER can self-serve. */}
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -222,31 +174,6 @@ export function OrgSwitcher() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete org confirmation */}
-      <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete organization?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will permanently delete <strong>{orgToDelete?.name}</strong> and remove all
-              members. This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction variant="destructive" onClick={handleDelete} disabled={isDeleting}>
-              {isDeleting ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                'Delete'
-              )}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </>
   );
 }

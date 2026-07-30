@@ -1,11 +1,6 @@
 import { useCallback } from 'react';
 import { useSWRConfig } from 'swr';
-import type {
-  CreateOrgRequest,
-  DeleteOrgRequest,
-  ListOrgsResponse,
-  SwitchOrgRequest,
-} from '@pkg/contracts';
+import type { CreateOrgRequest, ListOrgsResponse, SwitchOrgRequest } from '@pkg/contracts';
 import { useCachedRequest } from '@/shared/hooks/use-cached-request';
 import { useActionRequest } from '@/shared/hooks/use-action-request';
 import { orgApi } from '../api';
@@ -17,7 +12,7 @@ import { orgApi } from '../api';
 const ORGS_KEY = 'orgs';
 
 /**
- * Reset every SWR cache entry. Switching (or deleting) the active org changes
+ * Reset every SWR cache entry. Switching the active org changes
  * the tenant, so `/api/auth/me` (which carries `orgId`) and all org-scoped keys
  * are now stale. Revalidating everything lets components re-key to the new org
  * reactively — replacing the old full-page `window.location.reload()`, which
@@ -57,19 +52,6 @@ export function useCreateOrg() {
   const execute = async (dto: CreateOrgRequest) => {
     const res = await req.execute(dto);
     if (!res.e) await invalidateOrgs();
-    return res;
-  };
-  return { ...req, execute };
-}
-
-export function useDeleteOrg() {
-  // Deleting an org can remove the *active* one (the server then reassigns it),
-  // so reset everything rather than just the list to keep auth/orgId consistent.
-  const resetAllCaches = useResetAllCaches();
-  const req = useActionRequest(orgApi.remove);
-  const execute = async (dto: DeleteOrgRequest) => {
-    const res = await req.execute(dto);
-    if (!res.e) await resetAllCaches();
     return res;
   };
   return { ...req, execute };

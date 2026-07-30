@@ -132,6 +132,50 @@ export class OrgRepository {
     await this.dbClient.db.delete(organization).where(eq(organization.id, orgId));
   }
 
+  /** Platform-admin view: every organization, no membership filter on purpose. */
+  async findAllOrgs(opts: { skip: number; limit: number }): Promise<{
+    data: Array<{
+      id: string;
+      name: string;
+      memberCount: number;
+      createdAt: Date;
+      updatedAt: Date;
+    }>;
+    total: number;
+  }> {
+    const [data, totalResult] = await Promise.all([
+      this.dbClient.db
+        .select({
+          id: organization.id,
+          name: organization.name,
+          memberCount: count(organizationUser.userId),
+          createdAt: organization.createdAt,
+          updatedAt: organization.updatedAt,
+        })
+        .from(organization)
+        .leftJoin(organizationUser, eq(organizationUser.orgId, organization.id))
+        .groupBy(organization.id)
+        .orderBy(organization.name)
+        .offset(opts.skip)
+        .limit(opts.limit),
+      this.dbClient.db.select({ count: count() }).from(organization),
+    ]);
+
+    return { data, total: totalResult[0]?.count ?? 0 };
+  }
+
+  async findOrgById(
+    orgId: string,
+  ): Promise<{ id: string; name: string } | null> {
+    const [row] = await this.dbClient.db
+      .select({ id: organization.id, name: organization.name })
+      .from(organization)
+      .where(eq(organization.id, orgId))
+      .limit(1);
+
+    return row ?? null;
+  }
+
   async countUserOrgs(userId: string): Promise<number> {
     const [result] = await this.dbClient.db
       .select({ count: count() })

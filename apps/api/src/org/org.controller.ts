@@ -1,13 +1,10 @@
-import { Controller, Delete, Get, Patch, Post, Res } from '@nestjs/common';
+import { Controller, Get, Patch, Post, Res } from '@nestjs/common';
 import { OrgService } from './org.service';
 import { ActiveUser, Permissions, ZodRequest, COOKIE_OPTIONS, COOKIE_TTL } from '@pkg/server';
 import {
   CreateOrgRequest,
   CreateOrgRequestSchema,
   CreateOrgResponse,
-  DeleteOrgRequest,
-  DeleteOrgRequestSchema,
-  DeleteOrgResponse,
   GetOrgByIdRequest,
   GetOrgByIdRequestSchema,
   GetOrgByIdResponse,
@@ -71,29 +68,9 @@ export class OrgController {
     return this.orgService.updateOrg(activeUser, dto);
   }
 
-  @Delete(':orgId')
-  @Permissions('org:delete')
-  async delete(
-    @ZodRequest(DeleteOrgRequestSchema) dto: DeleteOrgRequest,
-    @ActiveUser() activeUser: ActiveUserType,
-    @Res({ passthrough: true }) reply: FastifyReply,
-  ): Promise<DeleteOrgResponse> {
-    // Deleting the active org re-homes the session; the new cookies ARE the
-    // response, same as switch below.
-    const { accessToken, refreshToken } = await this.orgService.deleteOrg(activeUser, dto.orgId);
-
-    reply.setCookie('accessToken', accessToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.ACCESS_TOKEN,
-    });
-
-    reply.setCookie('refreshToken', refreshToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.REFRESH_TOKEN,
-    });
-
-    return {};
-  }
+  // There is deliberately no DELETE here. Organization users, including
+  // OWNERs, cannot delete organizations — that is a platform operation, on
+  // /admin/orgs behind @SystemRoles(ADMIN). See AdminOrgController.
 
   @Post('switch')
   @Permissions('org:switch')

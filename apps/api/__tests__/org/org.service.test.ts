@@ -32,6 +32,8 @@ describe('OrgService', () => {
       deleteOrg: vi.fn().mockResolvedValue(undefined),
       countUserOrgs: vi.fn().mockResolvedValue(2),
       getUserRoleInOrg: vi.fn().mockResolvedValue('MEMBER'),
+      findAllOrgs: vi.fn().mockResolvedValue({ data: [], total: 0 }),
+      findOrgById: vi.fn().mockResolvedValue({ id: ORG_A, name: 'Org A' }),
     };
     issueTokens = vi.fn().mockResolvedValue(TOKENS);
     service = new OrgService(
@@ -70,58 +72,52 @@ describe('OrgService', () => {
     });
   });
 
-  describe('deleteOrg', () => {
-    const remaining = { id: ORG_B, name: 'Org B', role: 'MEMBER' as const, createdAt: now, updatedAt: now };
-
-    beforeEach(() => {
-      repository.findOrgsForUser!.mockResolvedValue([remaining]);
-    });
-
-    it('refuses a non-OWNER', async () => {
-      repository.findOrgForUser!.mockResolvedValue({ ...orgRecord, role: 'MEMBER' });
-
-      await expect(service.deleteOrg(owner, ORG_A)).rejects.toThrow(ForbiddenException);
-      expect(repository.deleteOrg).not.toHaveBeenCalled();
-    });
-
-    // An account must always belong somewhere, or the next login has no tenant
-    // to land in.
-    it('refuses to delete the only organization', async () => {
-      repository.countUserOrgs!.mockResolvedValue(1);
-
-      await expect(service.deleteOrg(owner, ORG_A)).rejects.toThrow(ForbiddenException);
-      expect(repository.deleteOrg).not.toHaveBeenCalled();
-    });
+  describe('adminDeleteOrg', () => {
+    const platformAdmin: ActiveUser = { ...owner, systemRole: 'ADMIN' };
 
     /**
-     * The route only ever addresses the active organization, so after the
-     * delete the session's orgId points at a deleted row. Left alone, every
-     * org-scoped query quietly returns empty until token refresh logs the user
-     * out — so the session must be re-issued against a remaining organization.
+     * Membership is deliberately NOT consulted — the route is gated by
+     * @SystemRoles, and the admin typically is not a member of the org being
+     * removed. What the service must still refuse is the admin's own ACTIVE
+     * org, which would leave their session pointing at a deleted row.
      */
-    it('re-homes the session to a remaining organization', async () => {
-      const tokens = await service.deleteOrg(owner, ORG_A);
-
-      expect(tokens).toEqual(TOKENS);
-      expect(issueTokens).toHaveBeenCalledWith({
-        userId: USER,
-        orgId: ORG_B,
-        orgRole: 'MEMBER',
-        systemRole: 'USER',
-      });
+    it('refuses the organization the admin is switched into', async () => {
+      await expect(service.adminDeleteOrg(platformAdmin, ORG_A)).rejects.toThrow(
+        ForbiddenException,
+      );
+      expect(repository.deleteOrg).not.toHaveBeenCalled();
     });
 
-    it('deletes before re-homing, not after', async () => {
-      const order: string[] = [];
-      repository.deleteOrg!.mockImplementation(async () => order.push('delete'));
-      issueTokens.mockImplementation(async () => {
-        order.push('issue');
-        return TOKENS;
+    it('reports an unknown organization as not found', async () => {
+      repository.findOrgById!.mockResolvedValue(null);
+
+      await expect(service.adminDeleteOrg(platformAdmin, ORG_B)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('deletes an organization the admin is not a member of', async () => {
+      repository.findOrgById!.mockResolvedValue({ id: ORG_B, name: 'Org B' });
+
+      await service.adminDeleteOrg(platformAdmin, ORG_B);
+
+      expect(repository.deleteOrg).toHaveBeenCalledWith(ORG_B);
+      // No membership lookup: authorization is the system role, not a membership.
+      expect(repository.findOrgForUser).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('adminListOrgs', () => {
+    it('reports every organization with the paging asked for', async () => {
+      repository.findAllOrgs!.mockResolvedValue({
+        data: [{ id: ORG_A, name: 'Org A', memberCount: 3, createdAt: now, updatedAt: now }],
+        total: 42,
       });
 
-      await service.deleteOrg(owner, ORG_A);
+      const result = await service.adminListOrgs({ skip: 20, limit: 10 });
 
-      expect(order).toEqual(['delete', 'issue']);
+      expect(result.meta).toEqual({ total: 42, skip: 20, limit: 10 });
+      expect(result.data[0]).toMatchObject({ memberCount: 3, createdAt: now.toISOString() });
     });
   });
 

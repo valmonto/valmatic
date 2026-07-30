@@ -10,8 +10,7 @@ export const orgs = {
   errors: {
     notFound: 'orgs.errors.notFound',
     onlyOwnerCanUpdate: 'orgs.errors.onlyOwnerCanUpdate',
-    onlyOwnerCanDelete: 'orgs.errors.onlyOwnerCanDelete',
-    cannotDeleteOnly: 'orgs.errors.cannotDeleteOnly',
+    cannotDeleteActiveOrg: 'orgs.errors.cannotDeleteActiveOrg',
     noAccess: 'orgs.errors.noAccess',
     noActiveOrg: 'orgs.errors.noActiveOrg',
     orgMismatch: 'orgs.errors.orgMismatch',
