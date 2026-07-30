@@ -18,6 +18,7 @@ interface KeyableRequest {
   ip: string;
   url: string;
   cookies?: Record<string, string | undefined>;
+  authorizationHeader?: string;
 }
 
 /** The unauthenticated endpoints worth spraying — limited strictly, per IP. */
@@ -32,21 +33,23 @@ export function isStrictAuthRoute(url: string): boolean {
  * Auth endpoints: the IP alone, always — there is no user yet, and letting
  * anything else into the key would let an attacker mint fresh buckets.
  *
- * Everything else: IP + a hash of the session cookie when present. The cookie
- * half exists for carrier NAT — thousands of mobile users share one IP, and
- * pure-IP buckets would let them exhaust each other's quota. The trade-off is
- * honest: a client rotating garbage cookies from one IP can spread general
- * traffic across buckets. That only dilutes the coarse global limit; the
- * strict auth limits above ignore cookies entirely, so the spray protection
- * cannot be bypassed this way.
+ * Everything else: IP + a hash of the session credential when present. That
+ * credential is the cookie for web and the Authorization header for mobile —
+ * missing either would put that client's users back into shared IP buckets.
+ * The session half exists for carrier NAT: thousands of mobile users share
+ * one IP, and pure-IP buckets would let them exhaust each other's quota. The
+ * trade-off is honest: a client rotating garbage credentials from one IP can
+ * spread general traffic across buckets. That only dilutes the coarse global
+ * limit; the strict auth limits above ignore credentials entirely, so the
+ * spray protection cannot be bypassed this way.
  */
 export function rateLimitKey(req: KeyableRequest): string {
   if (isStrictAuthRoute(req.url)) return `ip:${req.ip}`;
 
-  const cookie = req.cookies?.accessToken;
-  if (!cookie) return `ip:${req.ip}`;
+  const credential = req.cookies?.accessToken ?? req.authorizationHeader;
+  if (!credential) return `ip:${req.ip}`;
 
-  const tokenHash = createHash('sha256').update(cookie).digest('base64url').slice(0, 16);
+  const tokenHash = createHash('sha256').update(credential).digest('base64url').slice(0, 16);
   return `ip:${req.ip}:tok:${tokenHash}`;
 }
 

@@ -44,6 +44,27 @@ describe('rate limit policy', () => {
     expect(rateLimitKey({ ip: '1.2.3.4', url: '/api/users' })).toBe('ip:1.2.3.4');
   });
 
+  // Mobile has no cookie — it sends Authorization: Bearer. Without this,
+  // every mobile user behind one carrier IP shares a single bucket, which is
+  // the exact failure the session keying exists to prevent.
+  it('separates mobile users (Authorization header, no cookie) sharing one IP', () => {
+    const a = rateLimitKey({ ip: '1.2.3.4', url: '/api/users', authorizationHeader: 'Bearer aaa' });
+    const b = rateLimitKey({ ip: '1.2.3.4', url: '/api/users', authorizationHeader: 'Bearer bbb' });
+
+    expect(a).not.toBe(b);
+    expect(a.startsWith('ip:1.2.3.4:tok:')).toBe(true);
+  });
+
+  it('keys auth routes by IP alone for header clients too', () => {
+    const key = rateLimitKey({
+      ip: '1.2.3.4',
+      url: '/api/auth/login',
+      authorizationHeader: 'Bearer anything',
+    });
+
+    expect(key).toBe('ip:1.2.3.4');
+  });
+
   it('does not put the raw token into the key', () => {
     const key = rateLimitKey({
       ip: '1.2.3.4',

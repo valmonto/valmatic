@@ -73,6 +73,7 @@ async function bootstrap(): Promise<void> {
           ip: req.ip,
           url: req.url,
           cookies: req.cookies as Record<string, string | undefined>,
+          authorizationHeader: req.headers.authorization,
         }),
       allowList: (req) => req.url.split('?')[0] === '/health',
       errorResponseBuilder: () => rateLimitErrorResponse(),
