@@ -88,6 +88,9 @@ catalog:
   # Auth
   bcryptjs: 3.0.3
 
+  # MCP — agent access to a deployed instance, env-gated off
+  '@modelcontextprotocol/sdk': 1.20.0
+
   # Telemetry (server) — error reporting + product analytics, env-gated no-ops
   '@sentry/node': 10.69.0
   posthog-node: 5.46.1

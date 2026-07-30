@@ -64,6 +64,14 @@ export const envSchema = z.object({
   RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(300),
   RATE_LIMIT_WINDOW_MS: z.coerce.number().int().min(1000).default(60_000),
 
+  // MCP endpoint (/mcp) for agent access via API keys. OFF by default like
+  // every capability here; keys are minted at /admin/api-keys, and each key's
+  // scopes decide which tools it can see.
+  MCP_ENABLED: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((v) => v === 'true'),
+
   // Telemetry — all optional; absent means the corresponding service is a
   // no-op. SENTRY_DSN wakes backend error reporting, POSTHOG_KEY wakes
   // product analytics and feature flags.

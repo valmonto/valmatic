@@ -6,6 +6,7 @@ export * from './user';
 export * from './organization';
 export * from './organization-user';
 export * from './notification';
+export * from './api-key';
 
 // Relations
 export * from './relations';
