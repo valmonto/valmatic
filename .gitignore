@@ -27,4 +27,7 @@ ignored
 
 
 
-.claude
+# Claude Code: shared project config (agents, commands) IS repo content;
+# only user-local state stays ignored.
+.claude/settings.local.json
+.claude/*.local.*
