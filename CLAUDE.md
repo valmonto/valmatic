@@ -5,11 +5,27 @@ pnpm monorepo SaaS boilerplate. `apps/{api,web,worker,mobile,e2e}`,
 Every workspace has a README that explains it; `packages/README.md` is the index.
 `GAPS.md` is the honest list of what is missing.
 
+## How the docs are layered
+
+- **This file** — repo-wide rules, loaded into every session automatically.
+- **Workspace `CLAUDE.md`** (`apps/api/CLAUDE.md`, …) — the few rules specific
+  to that workspace, loaded automatically when files there are touched. Keep
+  them short; anything repo-wide belongs here, not there.
+- **Workspace `README.md`** — the human-depth explanation, read on demand.
+  Each workspace `CLAUDE.md` opens by pointing at it.
+
 ## Definition of done
 
 ```bash
 pnpm verify        # typecheck + lint + test — must exit 0
 ```
+
+Done also means the documentation still tells the truth: **if a change
+falsifies a claim in a README (or this file, or `GAPS.md`), fix that claim in
+the same PR.** Stale docs are worse than none — they carry authority while
+teaching the old behaviour. This has already happened once: an entire
+hardening pass shipped while `apps/api/README.md` kept saying tenancy had no
+test coverage.
 
 Integration tests (`describeIntegration`) run only when `DATABASE_URL` is set;
 without a database they skip silently, so a green run proves less. CI sets one.
