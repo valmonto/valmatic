@@ -143,3 +143,10 @@ affected. Both scripts degrade with a clear message when the SDK is absent.
 
 What no emulator verifies: how haptics FEEL, and true end-to-end push
 delivery — those stay a two-minute human check on a real phone.
+
+Remote emulator (deferred; trigger: wanting emulator verification from
+sessions not on the dev machine): adb is network-transparent, so an emulator
+in Docker on any KVM-capable box (`budtmo/docker-android`, or Google's
+android-emulator-container-scripts) plus `adb connect` over an SSH tunnel
+makes every tool here work unchanged. About an evening of setup when the day
+comes.
