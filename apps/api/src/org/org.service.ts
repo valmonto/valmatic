@@ -68,9 +68,13 @@ export class OrgService {
     };
   }
 
+  /**
+   * ActiveOrgGuard has already forced dto.orgId to equal the session's org, so
+   * the membership and OWNER checks here judge the same organization the write
+   * lands in. They stay as defence in depth, not as the primary gate.
+   */
   async updateOrg(activeUser: ActiveUser, dto: UpdateOrgRequest): Promise<UpdateOrgResponse> {
-    // Check user has access and is OWNER
-    const org = await this.orgRepository.findOrgForUser(dto.id, activeUser.userId);
+    const org = await this.orgRepository.findOrgForUser(dto.orgId, activeUser.userId);
 
     if (!org) {
       throw new NotFoundException(k.orgs.errors.notFound);
@@ -80,25 +84,34 @@ export class OrgService {
       throw new ForbiddenException(k.orgs.errors.onlyOwnerCanUpdate);
     }
 
-    await this.orgRepository.updateOrg(dto.id, { name: dto.name });
-
-    const updated = await this.orgRepository.findOrgForUser(dto.id, activeUser.userId);
+    const updated = await this.orgRepository.updateOrg(dto.orgId, { name: dto.name });
 
     if (!updated) {
       throw new InternalServerErrorException(k.common.errors.failedToRetrieveOrg);
     }
 
-    this.logger.info({ orgId: dto.id }, 'Organization updated');
+    this.logger.info({ orgId: dto.orgId }, 'Organization updated');
 
     return {
       ...updated,
+      role: org.role,
       createdAt: updated.createdAt.toISOString(),
       updatedAt: updated.updatedAt.toISOString(),
     };
   }
 
-  async deleteOrg(activeUser: ActiveUser, orgId: string): Promise<void> {
-    // Check user has access and is OWNER
+  /**
+   * Deletes the ACTIVE organization — the only one the route can address — so
+   * the session's orgId always points at a deleted row afterwards. Left alone,
+   * every org-scoped query then quietly returns empty until the next token
+   * refresh logs the user out. Instead the session is re-issued against a
+   * remaining organization, which the deleting-your-only-org check guarantees
+   * exists.
+   */
+  async deleteOrg(
+    activeUser: ActiveUser,
+    orgId: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const org = await this.orgRepository.findOrgForUser(orgId, activeUser.userId);
 
     if (!org) {
@@ -117,7 +130,23 @@ export class OrgService {
 
     await this.orgRepository.deleteOrg(orgId);
 
-    this.logger.info({ orgId }, 'Organization deleted');
+    const remaining = await this.orgRepository.findOrgsForUser(activeUser.userId);
+    const next = remaining[0];
+    if (!next) {
+      // Unreachable while the only-org check above holds; fail loudly if it stops holding.
+      throw new InternalServerErrorException(k.common.errors.failedToRetrieveOrg);
+    }
+
+    const tokens = await this.iamService.auth.issueTokens({
+      userId: activeUser.userId,
+      orgId: next.id,
+      orgRole: next.role,
+      systemRole: activeUser.systemRole,
+    });
+
+    this.logger.info({ orgId, nextOrgId: next.id }, 'Organization deleted, session re-homed');
+
+    return tokens;
   }
 
   async switchOrg(

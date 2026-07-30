@@ -68,7 +68,7 @@ export function OrgSwitcher() {
   const handleDelete = async () => {
     if (!orgToDelete) return;
 
-    const { e } = await deleteOrg({ id: orgToDelete.id });
+    const { e } = await deleteOrg({ orgId: orgToDelete.id });
     if (!e) {
       setOrgToDelete(null);
       setIsDeleteOpen(false);

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ORGANIZATION_USER_ROLES } from '../constants';
+import { EmptyRequestSchema } from './common.schema';
 
 // Single source of truth for organization user roles
 export { ORGANIZATION_USER_ROLES } from '../constants';
@@ -23,7 +24,7 @@ export const OrganizationSchema = z.object({
 export type Organization = z.infer<typeof OrganizationSchema>;
 
 // --- List User's Organizations ---
-export const ListOrgsRequestSchema = z.object({});
+export const ListOrgsRequestSchema = EmptyRequestSchema;
 export const ListOrgsResponseSchema = z.object({
   data: z.array(OrganizationSchema),
   currentOrgId: z.string().uuid(),
@@ -52,10 +53,16 @@ export type CreateOrgRequest = z.infer<typeof CreateOrgRequestSchema>;
 export type CreateOrgResponse = z.infer<typeof CreateOrgResponseSchema>;
 
 // --- Update Organization ---
-export const UpdateOrgRequestSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string().min(1).max(255).optional(),
-});
+// The field is `orgId`, not `id`: the route is /orgs/:orgId, which puts it
+// under ActiveOrgGuard — update addresses the ACTIVE organization only, so
+// @Permissions judges the same organization the write lands in. Reading stays
+// cross-org (`id` above); administering does not.
+export const UpdateOrgRequestSchema = z
+  .object({
+    orgId: z.string().uuid(),
+    name: z.string().min(1).max(255).optional(),
+  })
+  .strict();
 
 export const UpdateOrgResponseSchema = OrganizationSchema;
 
@@ -63,7 +70,10 @@ export type UpdateOrgRequest = z.infer<typeof UpdateOrgRequestSchema>;
 export type UpdateOrgResponse = z.infer<typeof UpdateOrgResponseSchema>;
 
 // --- Delete Organization ---
-export const DeleteOrgRequestSchema = z.object({ id: z.string().uuid() }).strict();
+// `orgId` for the same reason as update: you delete the organization you are
+// switched into. The server then re-issues the session against a remaining
+// organization, so the response carries no body — the cookies are the result.
+export const DeleteOrgRequestSchema = z.object({ orgId: z.string().uuid() }).strict();
 export const DeleteOrgResponseSchema = z.object({});
 
 export type DeleteOrgRequest = z.infer<typeof DeleteOrgRequestSchema>;
