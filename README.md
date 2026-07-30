@@ -39,6 +39,12 @@ Each workspace has its own README; start at [`packages/README.md`](packages/READ
 [`docs/operations.md`](docs/operations.md) is the growth playbook — capacity,
 costs, durability, scaling out and geography, each decision pre-made with its
 trigger.
+[`docs/agent-loop.md`](docs/agent-loop.md) is how tickets become features —
+the builder/verifier/reviewer flow (agents in `.claude/agents/`), auto vs
+semi-auto modes, and the always-human override list.
+[`docs/agent-loop.md`](docs/agent-loop.md) is how tickets become features —
+the builder/verifier/reviewer flow, auto vs semi-auto modes, and the
+always-human override list.
 
 ## Run it
 
