@@ -58,6 +58,8 @@ export const auth = {
     invalidEmailOrPassword: 'auth.errors.invalidEmailOrPassword',
     loginFailed: 'auth.errors.loginFailed',
     tooManyAttempts: 'auth.errors.tooManyAttempts',
+    tooManyRequests: 'auth.errors.tooManyRequests',
+    registrationDisabled: 'auth.errors.registrationDisabled',
     unableToCreateAccount: 'auth.errors.unableToCreateAccount',
     userNotFound: 'auth.errors.userNotFound',
     noOrgAccess: 'auth.errors.noOrgAccess',

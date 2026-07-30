@@ -1,4 +1,5 @@
 import type { RouteObject } from 'react-router';
+import { REGISTRATION_ENABLED } from '@/shared/lib/registration';
 
 /**
  * The full `/auth` route subtree (its own layout, no app navbar/sidebar) owned
@@ -13,10 +14,16 @@ export const authRoutes: RouteObject[] = [
         path: 'login',
         lazy: () => import('./login.page').then((m) => ({ Component: m.default })),
       },
-      {
-        path: 'register',
-        lazy: () => import('./register.page').then((m) => ({ Component: m.default })),
-      },
+      // Rendered only when this deployment offers open signup; the API
+      // enforces its own flag either way.
+      ...(REGISTRATION_ENABLED
+        ? [
+            {
+              path: 'register',
+              lazy: () => import('./register.page').then((m) => ({ Component: m.default })),
+            },
+          ]
+        : []),
     ],
   },
 ];

@@ -11,6 +11,8 @@ COPY packages ./packages
 COPY apps/web ./apps/web
 
 RUN pnpm install --frozen-lockfile
+# Vite inlines env at BUILD time; the e2e suite exercises open signup.
+ENV VITE_PUBLIC_REGISTRATION_ENABLED=true
 RUN pnpm --filter @pkg/web build
 
 # Production stage - serve with nginx (includes API proxy for E2E)

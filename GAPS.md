@@ -23,31 +23,18 @@ Kept here so the list stays honest about what changed and why.
 | Test step flaked ~2 runs in 3                             | Serialized (`--workspace-concurrency=1`); do not re-parallelize without per-suite databases                                                                                                                                             |
 | No `CLAUDE.md`, no root README                            | Both exist                                                                                                                                                                                                                              |
 | No error tracking                                         | Wired and sleeping: `ErrorReporter` reports api/worker 5xx (with user, org, route) when `SENTRY_DSN` is set; PostHog captures web exceptions when its key is set. Enabling per product is one env var                                    |
+| No security headers                                       | `@fastify/helmet` on the api (CSP off — JSON API; CORP cross-origin so the SPA can consume responses)                                                                                                                                  |
+| No IP rate limiting                                       | Redis-backed `@fastify/rate-limit`: strict per-IP buckets on login/register (closes the cross-email spray), generous IP+session buckets elsewhere (carrier-NAT safe), /health excluded, off under test. Policy unit-tested             |
+| Open self-registration                                    | Closed by default (`AUTH_REGISTRATION_ENABLED=false`): accounts come from the seed, org admins, or a product's own onboarding. Server enforces; clients hide the page                                                                   |
 | Feature flags                                             | Shipped: resolved server-side (PostHog when configured, all-off otherwise), delivered in `/auth/me` as `features` beside `permissions`, read via `useFeature()` on web and mobile                                                       |
 
 ---
 
 ## 1. Blocking — fix before this ships anything real
 
-### No security headers
-
-The API sets CORS and nothing else — no CSP, HSTS, X-Frame-Options or
-`nosniff`. `docs/legacy/docs/spa-deployment-config.md` covers headers for the
-SPA at the reverse proxy, but the API itself is bare.
-
-**Cost:** ~1h (`@fastify/helmet`).
-**Value:** removes a class of clickjacking and content-sniffing findings that
-any security review or customer questionnaire will raise.
-
-### No IP rate limiting
-
-Login lockout exists but is **per email** (10 attempts, 15-minute lockout).
-Credential stuffing across many emails from one address is unthrottled, and
-every other endpoint has no limit at all.
-
-**Cost:** ~2h (`@fastify/rate-limit`, Redis-backed).
-**Value:** closes the spray attack the per-email lockout does not see, and
-protects expensive endpoints from a single noisy client.
+Nothing currently. Error tracking, security headers, rate limiting and the
+registration posture all closed above; the next most consequential items are
+the tests in section 2.
 
 ---
 
@@ -181,8 +168,7 @@ verification both.
 
 ## Suggested order
 
-1. **Helmet + rate limiting** — ~3h together, the remaining silent-failure gaps
-2. **Permission-table test** — ~1h
-3. **Admin UI + Bull Board** — the `@SystemRoles` gate is built; give it a screen
-4. **E2E in CI** — ~2h
-5. Then features, starting with email → password reset → verification
+1. **Permission-table test** — ~1h
+2. **Admin UI + Bull Board** — the `@SystemRoles` gate is built; give it a screen
+3. **E2E in CI** — ~2h
+4. Then features, starting with email → password reset → verification

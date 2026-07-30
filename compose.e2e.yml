@@ -42,6 +42,8 @@ services:
       IAM_REDIS_PASSWORD: vboilerplate
       IAM_JWT_SECRET: e2e-test-jwt-secret-must-be-32-chars-or-more
       IAM_COOKIE_SECRET: e2e-test-cookie-secret-must-be-32-chars
+      # The e2e specs exercise open signup; production posture stays closed.
+      AUTH_REGISTRATION_ENABLED: 'true'
       PORT: 3001
     depends_on:
       postgres:
