@@ -6,6 +6,7 @@ import { userRoutes } from '@/features/users';
 import { jobsRoutes } from '@/features/jobs';
 import { notificationsRoutes } from '@/features/notifications';
 import { authRoutes } from '@/features/auth';
+import { adminRoutes } from '@/features/admin';
 import { mobileDemoRoutes } from '@/features/mobile-demo';
 
 const router = createBrowserRouter([
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
       },
       ...userRoutes,
       ...jobsRoutes,
+      ...adminRoutes,
       ...notificationsRoutes,
       {
         path: 'settings',

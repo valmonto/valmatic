@@ -27,6 +27,7 @@ Kept here so the list stays honest about what changed and why.
 | No IP rate limiting                                       | Redis-backed `@nestjs/throttler`: per-route `@Throttle` decorators (login/register strict per IP, closing the cross-email spray), a global budget keyed by VERIFIED userId (carrier-NAT safe), `@SkipThrottle` on health, off under test |
 | `ROLE_PERMISSIONS` untested                               | Invariant tests in `packages/contracts`: no orphan permissions, MEMBER ⊆ ADMIN ⊆ OWNER, every role holds the self-service core; helpers degrade an unknown (stale-JWT) role to 403 instead of crashing the guard                        |
 | E2E never ran anywhere                                    | Deploy gate (`deploy.yml`: verify → e2e → deploy), OPT-IN via the `E2E_GATE=on` Actions variable — a product enables it when its deploys deserve the ~8 min, same philosophy as every other switch. Also runnable on demand via workflow_dispatch. Deliberately not per-PR |
+| No admin UI                                               | `/admin` in the web app: organizations table (list, delete with the active-org rule mirrored in the UI) and a read-only permission matrix rendered straight from contracts. Sidebar group + pages visible to `systemRole === 'ADMIN'` only; API enforces regardless |
 | Open self-registration                                    | Closed by default (`AUTH_REGISTRATION_ENABLED=false`): accounts come from the seed, org admins, or a product's own onboarding. Server enforces; clients hide the page                                                                   |
 | Feature flags                                             | Shipped: resolved server-side (PostHog when configured, all-off otherwise), delivered in `/auth/me` as `features` beside `permissions`, read via `useFeature()` on web and mobile                                                       |
 
@@ -66,14 +67,6 @@ invisible until someone notices work is not happening.
 
 **Cost:** ~3h (Bull Board behind `@SystemRoles(ADMIN)` — the gate exists now).
 **Value:** turns "jobs feel slow" into a number.
-
-### No admin UI
-
-`/admin/orgs` (list all organizations, delete any) is API-only. A platform
-admin manages tenants with curl. `useSystemRole()` exists on web and mobile
-precisely to gate such a surface.
-
-**Cost:** ~4h for a minimal web page.
 
 ### Only `api` has a container healthcheck
 
@@ -152,5 +145,6 @@ verification both.
 
 ## Suggested order
 
-1. **Admin UI + Bull Board** — the `@SystemRoles` gate is built; give it a screen
+1. **Bull Board** (~3h) — when a product has queues doing real work; needs a
+   hand-rolled auth preHandler since it mounts outside the Nest guard chain
 2. Then features, starting with email → password reset → verification
