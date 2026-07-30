@@ -122,3 +122,30 @@ There are no tests yet — the only workspace without any (tracked in
 [`GAPS.md`](../../GAPS.md)). When adding them: vitest is already configured
 via `@pkg/vitest-config`, and [`@pkg/testing`](../../packages/testing/README.md)
 explains which kind of test fits what.
+
+## Verifying native behaviour
+
+Web preview runs fallback code for native modules (tokens.ts literally
+branches on platform), so anything touching secure storage, push, haptics or
+blur is verified on an emulator, not a browser:
+
+```bash
+# one-time host setup (needs KVM on Linux)
+sdkmanager "platform-tools" "emulator" "system-images;android-35;google_apis;x86_64"
+avdmanager create avd -n dev -k "system-images;android-35;google_apis;x86_64"
+
+emulator -avd dev &          # boot it
+pnpm --filter @pkg/mobile start   # press 'a' to open the app on it
+```
+
+An agent can then drive it with zero extra tooling: `adb exec-out screencap -p`
+for screenshots, `adb shell input tap/text` to interact, `adb shell
+uiautomator dump` for the view hierarchy. If that loop becomes routine, add
+mobile-mcp to `.mcp.json` for first-class tools:
+
+```json
+"mobile": { "command": "npx", "args": ["-y", "@mobilenext/mobile-mcp@latest"] }
+```
+
+What no emulator verifies: how haptics FEEL, and true end-to-end push
+delivery — those stay a two-minute human check on a real phone.

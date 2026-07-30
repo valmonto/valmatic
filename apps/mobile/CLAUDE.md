@@ -7,9 +7,14 @@ Read ./README.md before changing this workspace.
 - Outside pnpm lint and without tests today (see GAPS.md) — that is debt, not
   licence to add more uncovered code.
 - Verify UI via `expo start --web` + Playwright MCP at a phone viewport
-  (390×844). That covers layout, flows and navigation — it does NOT cover
-  native modules: push notifications, haptics, secure-store, blur/glass
-  effects, and some reanimated/gesture behaviour render differently or not at
-  all on web. Never sign those off from a browser preview; they need the
-  emulator/device path (raw adb first, mobile-mcp if it sticks), which is
-  deliberately unwired until such a feature ships.
+  (390×844). That covers layout, flows and navigation — it does NOT cover the
+  native modules this app ALREADY uses out of the box: secure-store (the
+  entire token storage — on web it falls back to localStorage, so web preview
+  exercises a DIFFERENT code path than devices run), push notifications,
+  haptics (wired into most UI components), and blur effects. Never sign those
+  off from a browser preview.
+- Changes touching tokens.ts, notifications/, or haptic behaviour need the
+  emulator/device path: Android emulator on the host + raw adb
+  (screencap/input/uiautomator), or mobile-mcp in .mcp.json — see the README
+  for setup. Haptics feel and end-to-end push delivery remain human-verified
+  on a device.
