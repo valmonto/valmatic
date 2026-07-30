@@ -10,7 +10,11 @@
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
-    "clean": "rm -rf .expo dist node_modules/.cache"
+    "clean": "rm -rf .expo dist node_modules/.cache",
+    "emu:setup": "bash scripts/emu.sh setup",
+    "emu:start": "bash scripts/emu.sh start",
+    "emu:snap": "bash scripts/emu.sh snap",
+    "emu:dump": "bash scripts/emu.sh dump"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "catalog:mobile",

@@ -127,25 +127,25 @@ explains which kind of test fits what.
 
 Web preview runs fallback code for native modules (tokens.ts literally
 branches on platform), so anything touching secure storage, push, haptics or
-blur is verified on an emulator, not a browser:
+blur is verified on an emulator, not a browser. The loop ships ready to run:
 
 ```bash
-# one-time host setup (needs KVM on Linux)
-sdkmanager "platform-tools" "emulator" "system-images;android-35;google_apis;x86_64"
-avdmanager create avd -n dev -k "system-images;android-35;google_apis;x86_64"
+pnpm --filter @pkg/mobile emu:setup   # one-time: SDK images + AVD (needs KVM on Linux)
+pnpm --filter @pkg/mobile emu:start   # boot the emulator
+pnpm --filter @pkg/mobile start       # press 'a' to open the app on it
 
-emulator -avd dev &          # boot it
-pnpm --filter @pkg/mobile start   # press 'a' to open the app on it
+pnpm --filter @pkg/mobile emu:snap    # screenshot → prints the PNG path
+pnpm --filter @pkg/mobile emu:dump    # accessibility/view hierarchy as XML
+bash apps/mobile/scripts/emu.sh tap 200 640    # interact
 ```
 
-An agent can then drive it with zero extra tooling: `adb exec-out screencap -p`
-for screenshots, `adb shell input tap/text` to interact, `adb shell
-uiautomator dump` for the view hierarchy. If that loop becomes routine, add
-mobile-mcp to `.mcp.json` for first-class tools:
+Every command degrades with a clear message when the host has no Android SDK,
+so CI and SDK-less machines fail honestly instead of mysteriously.
 
-```json
-"mobile": { "command": "npx", "args": ["-y", "@mobilenext/mobile-mcp@latest"] }
-```
+`.mcp.json` also ships mobile-mcp: on a host with a booted emulator, agent
+sessions get first-class tools (see screen, tap by accessibility label)
+automatically; on hosts without one, the server just reports unavailable and
+nothing else is affected.
 
 What no emulator verifies: how haptics FEEL, and true end-to-end push
 delivery — those stay a two-minute human check on a real phone.
