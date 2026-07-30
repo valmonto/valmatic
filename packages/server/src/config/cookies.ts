@@ -18,13 +18,21 @@ export const COOKIE_OPTIONS = {
 } as const;
 
 /**
- * Cookie TTL values in seconds.
- * Should match the corresponding token TTL values.
+ * Cookie TTL values in seconds — read from the SAME env vars the token layer
+ * uses, so they cannot drift. These used to be hardcoded "must match" comments,
+ * and raising IAM_MAX_SESSION_TTL without touching this file silently kept
+ * logging web users out at the old 24h: the browser deleted the refresh cookie
+ * while the Redis session lived on.
  */
-export const COOKIE_TTL = {
-  /** Access token TTL: 15 minutes (must match JWT ACCESS_TOKEN_TTL) */
-  ACCESS_TOKEN: 15 * 60,
+const envSeconds = (name: string, fallback: number): number => {
+  const raw = Number(process.env[name]);
+  return Number.isFinite(raw) && raw > 0 ? raw : fallback;
+};
 
-  /** Refresh token TTL: 24 hours (must match Redis MAX_SESSION_TTL) */
-  REFRESH_TOKEN: 24 * 60 * 60,
+export const COOKIE_TTL = {
+  /** Follows IAM_ACCESS_TOKEN_TTL (default 15 minutes). */
+  ACCESS_TOKEN: envSeconds('IAM_ACCESS_TOKEN_TTL', 15 * 60),
+
+  /** Follows IAM_MAX_SESSION_TTL (default 30 days). */
+  REFRESH_TOKEN: envSeconds('IAM_MAX_SESSION_TTL', 30 * 24 * 60 * 60),
 } as const;

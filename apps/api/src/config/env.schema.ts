@@ -21,7 +21,12 @@ export const envSchema = z.object({
   IAM_JWT_SECRET: z.string().min(32, 'IAM_JWT_SECRET must be at least 32 characters'),
   IAM_COOKIE_SECRET: z.string().min(32, 'IAM_COOKIE_SECRET must be at least 32 characters'),
   IAM_ACCESS_TOKEN_TTL: z.coerce.number().int().min(60).default(900), // 15 minutes in seconds
-  IAM_MAX_SESSION_TTL: z.coerce.number().int().min(3600).default(86400), // 24 hours in seconds
+  // Absolute session lifetime — how long between typed passwords. Security is
+  // carried by the short access token + revocation, not by forcing re-logins.
+  IAM_MAX_SESSION_TTL: z.coerce.number().int().min(3600).default(2_592_000), // 30 days in seconds
+  // How long a just-rotated refresh token still answers with its successor
+  // pair (idempotent refresh) — covers concurrent refreshes and lost responses.
+  IAM_REFRESH_GRACE_TTL: z.coerce.number().int().min(5).max(600).default(60),
 
   // IAM Redis
   IAM_REDIS_HOST: z.string().default('localhost'),

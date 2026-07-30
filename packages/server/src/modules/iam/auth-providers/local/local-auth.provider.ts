@@ -24,10 +24,23 @@ interface SessionData extends ActiveUser {
   sessionStart: number;
 }
 
+/**
+ * What a rotated refresh token's key holds during the grace window: the exact
+ * pair its successor was issued. A client presenting the old token within the
+ * window gets the SAME tokens back (idempotent refresh) instead of a 401.
+ */
+interface RotatedMarker {
+  rotatedTo: { accessToken: string; refreshToken: string };
+}
+
+const isRotatedMarker = (v: unknown): v is RotatedMarker =>
+  typeof v === 'object' && v !== null && 'rotatedTo' in v;
+
 @Injectable()
 export class LocalAuthProvider implements IAuthProvider {
   private readonly accessTokenTtl: number;
   private readonly maxSessionTtl: number;
+  private readonly refreshGraceTtl: number;
 
   constructor(
     @InjectLogger() private logger: PinoLogger,
@@ -38,7 +51,11 @@ export class LocalAuthProvider implements IAuthProvider {
     private readonly configService: ConfigService,
   ) {
     this.accessTokenTtl = this.configService.get<number>('IAM_ACCESS_TOKEN_TTL', 900);
-    this.maxSessionTtl = this.configService.get<number>('IAM_MAX_SESSION_TTL', 86400);
+    // 30 days: the ABSOLUTE session lifetime — how long a user goes without
+    // typing a password. Security is carried by the 15-minute access token,
+    // revocation lists and logout-everywhere, not by forcing daily logins.
+    this.maxSessionTtl = this.configService.get<number>('IAM_MAX_SESSION_TTL', 2_592_000);
+    this.refreshGraceTtl = this.configService.get<number>('IAM_REFRESH_GRACE_TTL', 60);
   }
 
   async issueTokens(dto: IamIssueTokensRequest): Promise<IamIssueTokensResponse> {
@@ -78,7 +95,16 @@ export class LocalAuthProvider implements IAuthProvider {
       throw new UnauthorizedException(k.auth.errors.invalidRefreshToken);
     }
 
-    const session: SessionData = JSON.parse(data);
+    const parsed: SessionData | RotatedMarker = JSON.parse(data);
+
+    // Revoking a token that sits in its rotation grace window must kill the
+    // SUCCESSOR session — that is where the live session actually is.
+    if (isRotatedMarker(parsed)) {
+      await this.redis.del(key);
+      return this.revokeToken({ token: parsed.rotatedTo.refreshToken });
+    }
+
+    const session: SessionData = parsed;
 
     // Delete token and remove from user's session index
     await this.redis.multi().del(key).srem(this.userSessionsKey(session.userId), key).exec();
@@ -94,7 +120,19 @@ export class LocalAuthProvider implements IAuthProvider {
       throw new UnauthorizedException(k.auth.errors.invalidRefreshToken);
     }
 
-    const session: SessionData = JSON.parse(data);
+    const parsed: SessionData | RotatedMarker = JSON.parse(data);
+
+    // Grace window: this token was already rotated moments ago. Hand back the
+    // same successor pair instead of failing. This is what stops (a) N
+    // concurrent requests from the same client racing one rotation — the
+    // losers used to get 401s that logged the user out — and (b) a mobile
+    // client that lost the rotation response mid-network from being stranded
+    // with a dead token.
+    if (isRotatedMarker(parsed)) {
+      return parsed.rotatedTo;
+    }
+
+    const session: SessionData = parsed;
     const elapsed = Date.now() - session.sessionStart;
 
     if (elapsed >= this.maxSessionTtl * 1000) {
@@ -136,11 +174,15 @@ export class LocalAuthProvider implements IAuthProvider {
       { expiresIn: this.accessTokenTtl },
     );
 
-    // Rotate: delete old token, add new token, update session index
+    // Rotate: the OLD key becomes a short-lived marker pointing at the pair
+    // just issued (not deleted — see the grace check above), the new key
+    // becomes the live session. After the grace window the marker expires and
+    // the old token is dead for good.
     const userSessionsKey = this.userSessionsKey(session.userId);
+    const marker: RotatedMarker = { rotatedTo: { accessToken, refreshToken: newRefreshToken } };
     await this.redis
       .multi()
-      .del(key)
+      .set(key, JSON.stringify(marker), 'EX', this.refreshGraceTtl)
       .set(newKey, JSON.stringify(session), 'EX', remainingTtl)
       .srem(userSessionsKey, key)
       .sadd(userSessionsKey, newKey)
