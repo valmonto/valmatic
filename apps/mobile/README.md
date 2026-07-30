@@ -115,3 +115,10 @@ Device setup, deep linking, push notifications and EAS deployment are covered in
 [`docs/legacy/apps/mobile/docs/`](../../docs/legacy/apps/mobile/docs):
 `setup-ios.md`, `setup-android.md`, `development.md`, `deep-linking.md`,
 `push-notifications.md`, `deploy-eas.md`, `force-update-and-review.md`.
+
+## Testing
+
+There are no tests yet — the only workspace without any (tracked in
+[`GAPS.md`](../../GAPS.md)). When adding them: vitest is already configured
+via `@pkg/vitest-config`, and [`@pkg/testing`](../../packages/testing/README.md)
+explains which kind of test fits what.

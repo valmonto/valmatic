@@ -8,6 +8,7 @@ import {
   LoggerErrorInterceptor,
   LoggingModule,
   RedisModule,
+  TelemetryModule,
 } from '@pkg/server';
 import { WorkerQueuesModule } from './queues';
 import { validateEnv } from './config';
@@ -15,6 +16,7 @@ import { validateEnv } from './config';
 @Module({
   imports: [
     LoggingModule.forRoot({ singleLine: true }),
+    TelemetryModule,
     ConfigModule.forRoot({
       isGlobal: true,
       validate: validateEnv,

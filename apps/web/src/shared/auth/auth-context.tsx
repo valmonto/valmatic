@@ -1,10 +1,11 @@
-import { createContext, useCallback, useContext } from 'react';
+import { createContext, useCallback, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { k } from '@pkg/locales';
 import { api } from '@/api';
 import type { CurrentUserResponse } from '@pkg/contracts';
 import { useCachedRequest } from '@/shared/hooks/use-cached-request';
+import { identify, resetIdentity } from '@/shared/telemetry/posthog';
 
 interface AuthContextValue {
   user: CurrentUserResponse | null;
@@ -37,6 +38,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
   });
 
+  // Telemetry follows the session: identified while logged in (events grouped
+  // by the active organization), reset on logout so the next visitor on this
+  // browser is not attributed to this user. No-ops when PostHog is off.
+  useEffect(() => {
+    if (user) identify(user.id, user.orgId);
+  }, [user]);
+
   const _logout = useCallback(async () => {
     try {
       await api.auth.logout({});
@@ -45,6 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       toast.error(t(k.auth.errors.failedToLogOut));
     } finally {
       // Always clear local state to log user out
+      resetIdentity();
       mutate(undefined);
     }
   }, [mutate, t]);

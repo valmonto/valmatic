@@ -29,6 +29,11 @@ export const envSchema = z.object({
     .enum(['true', 'false'])
     .default('false')
     .transform((v) => v === 'true'),
+
+  // Telemetry — optional; absent = no-op
+  SENTRY_DSN: z.string().url().optional(),
+  POSTHOG_KEY: z.string().optional(),
+  POSTHOG_HOST: z.string().url().default('https://eu.i.posthog.com'),
 });
 
 export type Env = z.infer<typeof envSchema>;

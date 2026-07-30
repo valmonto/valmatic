@@ -33,6 +33,13 @@ export const envSchema = z.object({
   REDIS_PORT: z.coerce.number().int().min(1).max(65535).default(6379),
   REDIS_PASSWORD: z.string().optional(),
 
+  // Telemetry — all optional; absent means the corresponding service is a
+  // no-op. SENTRY_DSN wakes backend error reporting, POSTHOG_KEY wakes
+  // product analytics and feature flags.
+  SENTRY_DSN: z.string().url().optional(),
+  POSTHOG_KEY: z.string().optional(),
+  POSTHOG_HOST: z.string().url().default('https://eu.i.posthog.com'),
+
   // Server
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
 

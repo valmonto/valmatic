@@ -5,7 +5,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { IAM_REDIS, IamService, SECURITY_CONFIG } from '@pkg/server';
+import { FeatureFlags, IAM_REDIS, IamService, SECURITY_CONFIG } from '@pkg/server';
 import { k } from '@pkg/locales';
 import {
   type ActiveUser,
@@ -30,6 +30,7 @@ export class AuthService {
   constructor(
     private readonly iamService: IamService,
     private readonly authRepository: AuthRepository,
+    private readonly featureFlags: FeatureFlags,
     @Inject(IAM_REDIS) private readonly redis: Redis,
     @InjectLogger() private readonly logger: PinoLogger,
   ) {}
@@ -161,6 +162,10 @@ export class AuthService {
       ...rest,
       orgRole: role,
       permissions: getPermissionsForRole(role),
+      // Resolved server-side like permissions, and for the same reason: every
+      // client gets the same answer on its next request, and none needs a flag
+      // SDK. Unconfigured analytics means every flag is off.
+      features: await this.featureFlags.resolveFeatures(activeUser),
     });
   }
 

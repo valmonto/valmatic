@@ -6,3 +6,4 @@
  * and Zod — into the bundle. One file per domain, mirroring `schemas/`.
  */
 export * from './iam';
+export * from './analytics';

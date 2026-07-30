@@ -93,7 +93,16 @@ is enough.
 
 ```bash
 pnpm dev --filter @pkg/worker    # watch mode
-pnpm --filter @pkg/worker test
+pnpm --filter @pkg/worker test                            # processors with faked deps
+DATABASE_URL=postgresql://… pnpm --filter @pkg/worker test # + repository integration
 ```
 
 Redis and Postgres must be running — `docker compose up -d` at the root.
+
+## Testing
+
+Processor tests fake the queue job and assert on results and emitted events;
+the repository suite runs against a real database via `describeIntegration`
+(needs `DATABASE_URL`, skips silently without). See
+[`@pkg/testing`](../../packages/testing/README.md) for which kind of test to
+write.

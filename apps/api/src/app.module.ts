@@ -8,6 +8,7 @@ import {
   HealthModule,
   LoggerErrorInterceptor,
   LoggingModule,
+  TelemetryModule,
 } from '@pkg/server';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
@@ -33,6 +34,7 @@ import { validateEnv } from './config';
         maxConnections: config.get<number>('DATABASE_MAX_CONNECTIONS', 10),
       }),
     }),
+    TelemetryModule,
     EventsModule,
     I18nModule,
     HealthModule,

@@ -31,11 +31,13 @@
     "@nestjs/core": "catalog:",
     "@nestjs/event-emitter": "catalog:",
     "@nestjs/jwt": "catalog:",
-    "nestjs-pino": "catalog:",
     "@pkg/contracts": "workspace:*",
     "@pkg/locales": "workspace:*",
+    "@sentry/node": "catalog:",
     "bullmq": "catalog:",
     "ioredis": "catalog:",
+    "nestjs-pino": "catalog:",
+    "posthog-node": "catalog:",
     "zod": "catalog:"
   },
   "peerDependencies": {
