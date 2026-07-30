@@ -65,12 +65,13 @@ jobs:
   # this. Trigger manually via workflow_dispatch when touching auth/session
   # code.
   #
-  # Opt out per repository with an Actions variable: E2E_GATE=off (Settings →
-  # Secrets and variables → Actions → Variables). Descendants of this template
-  # disable the gate with one variable instead of editing workflows; deploy
-  # then rides on verify alone.
+  # OPT-IN, like every other capability in this template: set the Actions
+  # variable E2E_GATE=on (Settings → Secrets and variables → Actions →
+  # Variables) when a product has real users and its deploys deserve the
+  # ~8 minutes. Until then deploys ride on verify alone and a fresh
+  # descendant's first deploy is not gated on example-app specs.
   e2e:
-    if: vars.E2E_GATE != 'off'
+    if: vars.E2E_GATE == 'on'
     needs: verify
     runs-on: ubuntu-latest
     steps:
@@ -94,9 +95,9 @@ jobs:
 
   deploy:
     # Manual workflow_dispatch runs the gates without shipping. always() +
-    # explicit result checks: with E2E_GATE=off the e2e job is SKIPPED, and a
-    # skipped need would otherwise skip deploy too — but a FAILED e2e must
-    # still block it.
+    # explicit result checks: without E2E_GATE=on the e2e job is SKIPPED, and
+    # a skipped need would otherwise skip deploy too — but when the gate IS on
+    # and FAILS, it must still block.
     if: >-
       always() && github.event_name == 'push' &&
       needs.verify.result == 'success' &&
