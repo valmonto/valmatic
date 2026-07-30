@@ -1,19 +1,37 @@
-import { Controller, Delete, Get, Param, Patch, Query } from '@nestjs/common';
-import { ActiveUser, Permissions } from '@pkg/server';
+import { Controller, Delete, Get, Patch } from '@nestjs/common';
+import { ActiveUser, Permissions, ZodRequest } from '@pkg/server';
 import {
+  DeleteAllNotificationsRequest,
+  DeleteAllNotificationsRequestSchema,
+  DeleteAllNotificationsResponse,
+  DeleteNotificationRequest,
+  DeleteNotificationRequestSchema,
+  DeleteNotificationResponse,
+  GetNotificationByIdRequest,
+  GetNotificationByIdRequestSchema,
+  GetNotificationByIdResponse,
+  GetUnreadCountRequest,
+  GetUnreadCountRequestSchema,
+  GetUnreadCountResponse,
+  ListNotificationsRequest,
   ListNotificationsRequestSchema,
-  type ListNotificationsRequest,
-  type ListNotificationsResponse,
-  type GetNotificationByIdResponse,
-  type MarkNotificationReadResponse,
-  type MarkAllNotificationsReadResponse,
-  type GetUnreadCountResponse,
-  type DeleteNotificationResponse,
-  type DeleteAllNotificationsResponse,
+  ListNotificationsResponse,
+  MarkAllNotificationsReadRequest,
+  MarkAllNotificationsReadRequestSchema,
+  MarkAllNotificationsReadResponse,
+  MarkNotificationReadRequest,
+  MarkNotificationReadRequestSchema,
+  MarkNotificationReadResponse,
   type ActiveUser as ActiveUserType,
 } from '@pkg/contracts';
 import { NotificationService } from './notification.service';
 
+/**
+ * Every route takes its input through `@ZodRequest`. The static routes
+ * (`unread-count`, `read-all`) are declared before `:id`, and that order is
+ * load-bearing — Nest matches top to bottom, so reversed they would arrive
+ * here as `id: 'unread-count'` and 400 on the uuid check.
+ */
 @Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
@@ -21,31 +39,34 @@ export class NotificationController {
   @Get()
   @Permissions('notification:list')
   async list(
-    @Query() query: ListNotificationsRequest,
+    @ZodRequest(ListNotificationsRequestSchema) dto: ListNotificationsRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<ListNotificationsResponse> {
-    const dto = ListNotificationsRequestSchema.parse(query);
     return this.notificationService.list(activeUser, dto);
   }
 
   @Get('unread-count')
   @Permissions('notification:list')
-  async getUnreadCount(@ActiveUser() activeUser: ActiveUserType): Promise<GetUnreadCountResponse> {
+  async getUnreadCount(
+    @ZodRequest(GetUnreadCountRequestSchema) dto: GetUnreadCountRequest,
+    @ActiveUser() activeUser: ActiveUserType,
+  ): Promise<GetUnreadCountResponse> {
     return this.notificationService.getUnreadCount(activeUser);
   }
 
   @Get(':id')
   @Permissions('notification:read')
   async getById(
-    @Param('id') id: string,
+    @ZodRequest(GetNotificationByIdRequestSchema) dto: GetNotificationByIdRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<GetNotificationByIdResponse> {
-    return this.notificationService.getById(activeUser, id);
+    return this.notificationService.getById(activeUser, dto.id);
   }
 
   @Patch('read-all')
   @Permissions('notification:update')
   async markAllAsRead(
+    @ZodRequest(MarkAllNotificationsReadRequestSchema) dto: MarkAllNotificationsReadRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<MarkAllNotificationsReadResponse> {
     return this.notificationService.markAllAsRead(activeUser);
@@ -54,15 +75,16 @@ export class NotificationController {
   @Patch(':id/read')
   @Permissions('notification:update')
   async markAsRead(
-    @Param('id') id: string,
+    @ZodRequest(MarkNotificationReadRequestSchema) dto: MarkNotificationReadRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<MarkNotificationReadResponse> {
-    return this.notificationService.markAsRead(activeUser, id);
+    return this.notificationService.markAsRead(activeUser, dto.id);
   }
 
   @Delete()
   @Permissions('notification:delete')
   async deleteAll(
+    @ZodRequest(DeleteAllNotificationsRequestSchema) dto: DeleteAllNotificationsRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<DeleteAllNotificationsResponse> {
     return this.notificationService.deleteAll(activeUser);
@@ -71,10 +93,10 @@ export class NotificationController {
   @Delete(':id')
   @Permissions('notification:delete')
   async delete(
-    @Param('id') id: string,
+    @ZodRequest(DeleteNotificationRequestSchema) dto: DeleteNotificationRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<DeleteNotificationResponse> {
-    await this.notificationService.delete(activeUser, id);
+    await this.notificationService.delete(activeUser, dto.id);
     return {};
   }
 }

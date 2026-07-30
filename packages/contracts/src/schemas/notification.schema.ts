@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { EmptyRequestSchema } from './common.schema';
 import { PaginatedRequestSchema, PaginatedResponseSchema } from './pagination.schema';
 
 // --- Notification Enums ---
@@ -54,6 +55,8 @@ export type MarkNotificationReadRequest = z.infer<typeof MarkNotificationReadReq
 export type MarkNotificationReadResponse = z.infer<typeof MarkNotificationReadResponseSchema>;
 
 // --- Mark All Notifications as Read ---
+export const MarkAllNotificationsReadRequestSchema = EmptyRequestSchema;
+export type MarkAllNotificationsReadRequest = z.infer<typeof MarkAllNotificationsReadRequestSchema>;
 export const MarkAllNotificationsReadResponseSchema = z.object({
   count: z.number().int(),
 });
@@ -63,6 +66,8 @@ export type MarkAllNotificationsReadResponse = z.infer<
 >;
 
 // --- Get Unread Count ---
+export const GetUnreadCountRequestSchema = EmptyRequestSchema;
+export type GetUnreadCountRequest = z.infer<typeof GetUnreadCountRequestSchema>;
 export const GetUnreadCountResponseSchema = z.object({
   count: z.number().int(),
 });
@@ -77,6 +82,8 @@ export type DeleteNotificationRequest = z.infer<typeof DeleteNotificationRequest
 export type DeleteNotificationResponse = z.infer<typeof DeleteNotificationResponseSchema>;
 
 // --- Delete All Notifications ---
+export const DeleteAllNotificationsRequestSchema = EmptyRequestSchema;
+export type DeleteAllNotificationsRequest = z.infer<typeof DeleteAllNotificationsRequestSchema>;
 export const DeleteAllNotificationsResponseSchema = z.object({
   count: z.number().int(),
 });
