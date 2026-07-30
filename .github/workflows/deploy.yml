@@ -64,7 +64,13 @@ jobs:
   # production only: PRs stay fast, an MVP that never deploys never pays for
   # this. Trigger manually via workflow_dispatch when touching auth/session
   # code.
+  #
+  # Opt out per repository with an Actions variable: E2E_GATE=off (Settings →
+  # Secrets and variables → Actions → Variables). Descendants of this template
+  # disable the gate with one variable instead of editing workflows; deploy
+  # then rides on verify alone.
   e2e:
+    if: vars.E2E_GATE != 'off'
     needs: verify
     runs-on: ubuntu-latest
     steps:
@@ -87,8 +93,14 @@ jobs:
           path: apps/e2e/test-results
 
   deploy:
-    # Manual workflow_dispatch runs the gates without shipping.
-    if: github.event_name == 'push'
+    # Manual workflow_dispatch runs the gates without shipping. always() +
+    # explicit result checks: with E2E_GATE=off the e2e job is SKIPPED, and a
+    # skipped need would otherwise skip deploy too — but a FAILED e2e must
+    # still block it.
+    if: >-
+      always() && github.event_name == 'push' &&
+      needs.verify.result == 'success' &&
+      (needs.e2e.result == 'success' || needs.e2e.result == 'skipped')
     needs: [verify, e2e]
     runs-on: ubuntu-latest
     steps:
