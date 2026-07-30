@@ -1,9 +1,11 @@
-import { pgTable, pgEnum, uuid, timestamp, primaryKey, index } from 'drizzle-orm/pg-core';
-import { ORGANIZATION_USER_ROLES } from '@pkg/contracts';
+import { pgTable, uuid, varchar, timestamp, primaryKey, index, check } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+import {
+  ORGANIZATION_USER_ROLES,
+  type OrganizationUserRole as OrganizationUserRoleType,
+} from '@pkg/contracts';
 import { organization } from './organization';
 import { user } from './user';
-
-export const organizationUserRoleEnum = pgEnum('organization_user_role', ORGANIZATION_USER_ROLES);
 
 export const organizationUser = pgTable(
   'organization_user',
@@ -14,7 +16,8 @@ export const organizationUser = pgTable(
     userId: uuid('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
-    role: organizationUserRoleEnum('role').notNull(),
+    // varchar + CHECK, not pgEnum — see user.ts for the reasoning.
+    role: varchar('role', { length: 32 }).$type<OrganizationUserRoleType>().notNull(),
     joinedAt: timestamp('joined_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
@@ -22,9 +25,13 @@ export const organizationUser = pgTable(
     // Index on userId for "find all orgs for user" queries
     // (orgId is already efficiently indexed as the first column of the composite PK)
     index('organization_user_user_id_idx').on(table.userId),
+    check(
+      'organization_user_role_check',
+      sql.raw(`role IN (${ORGANIZATION_USER_ROLES.map((v) => `'${v}'`).join(', ')})`),
+    ),
   ],
 );
 
 export type OrganizationUser = typeof organizationUser.$inferSelect;
 export type NewOrganizationUser = typeof organizationUser.$inferInsert;
-export type OrganizationUserRole = (typeof organizationUserRoleEnum.enumValues)[number];
+export type OrganizationUserRole = OrganizationUserRoleType;

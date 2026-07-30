@@ -1,10 +1,14 @@
 import { z } from 'zod';
+import { NOTIFICATION_CHANNELS, NOTIFICATION_TYPES } from '../constants';
 import { EmptyRequestSchema } from './common.schema';
 import { PaginatedRequestSchema, PaginatedResponseSchema } from './pagination.schema';
 
 // --- Notification Enums ---
-export const NotificationTypeSchema = z.enum(['info', 'success', 'warning', 'error']);
-export const NotificationChannelSchema = z.enum(['in_app', 'email', 'push']);
+// Derived from ../constants — the same value sets the database CHECK
+// constraints enforce, defined exactly once.
+export { NOTIFICATION_TYPES, NOTIFICATION_CHANNELS } from '../constants';
+export const NotificationTypeSchema = z.enum(NOTIFICATION_TYPES);
+export const NotificationChannelSchema = z.enum(NOTIFICATION_CHANNELS);
 
 export type NotificationType = z.infer<typeof NotificationTypeSchema>;
 export type NotificationChannel = z.infer<typeof NotificationChannelSchema>;
