@@ -1,9 +1,11 @@
-# apps/web — agent notes
+Read ./README.md before changing this workspace.
 
-Read `./README.md` before changing this workspace.
-
-- `@pkg/contracts` is aliased to its Zod-free client entry here. Never import
-  a schema for its `.parse` — if the bundle gains Zod, the alias was bypassed.
-- Permission hooks (`useCan`, `usePermissions`, `useOrgRole`, `useSystemRole`)
-  decide what to RENDER only; the API enforces. Keep the hook API identical to
-  apps/mobile — they diverged once and silently rendered nothing.
+- @pkg/contracts resolves to its Zod-free client entry here. Never import a
+  schema for .parse — if the bundle gains Zod, an alias was bypassed.
+- Permission hooks (useCan, usePermissions, useOrgRole, useSystemRole) decide
+  what to RENDER; the API enforces. Never derive permissions from a role
+  client-side — they arrive resolved from /auth/me.
+- Keep the permission-hook API identical to apps/mobile. They diverged once
+  (anyOf/allOf vs any/all) and components silently rendered nothing.
+- Org-scoped SWR keys are stale after an org switch — actions that change the
+  active org reset all caches, not just their own.
