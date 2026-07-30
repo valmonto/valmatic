@@ -25,6 +25,7 @@ Kept here so the list stays honest about what changed and why.
 | No error tracking                                         | Wired and sleeping: `ErrorReporter` reports api/worker 5xx (with user, org, route) when `SENTRY_DSN` is set; PostHog captures web exceptions when its key is set. Enabling per product is one env var                                    |
 | No security headers                                       | `@fastify/helmet` on the api (CSP off — JSON API; CORP cross-origin so the SPA can consume responses)                                                                                                                                  |
 | No IP rate limiting                                       | Redis-backed `@nestjs/throttler`: per-route `@Throttle` decorators (login/register strict per IP, closing the cross-email spray), a global budget keyed by VERIFIED userId (carrier-NAT safe), `@SkipThrottle` on health, off under test |
+| `ROLE_PERMISSIONS` untested                               | Invariant tests in `packages/contracts`: no orphan permissions, MEMBER ⊆ ADMIN ⊆ OWNER, every role holds the self-service core; helpers degrade an unknown (stale-JWT) role to 403 instead of crashing the guard                        |
 | Open self-registration                                    | Closed by default (`AUTH_REGISTRATION_ENABLED=false`): accounts come from the seed, org admins, or a product's own onboarding. Server enforces; clients hide the page                                                                   |
 | Feature flags                                             | Shipped: resolved server-side (PostHog when configured, all-off otherwise), delivered in `/auth/me` as `features` beside `permissions`, read via `useFeature()` on web and mobile                                                       |
 
@@ -39,15 +40,6 @@ the tests in section 2.
 ---
 
 ## 2. High — the tests that would catch real regressions
-
-### `packages/contracts` permission tests
-
-`ROLE_PERMISSIONS` is a hand-maintained table with no inheritance. A permission
-added to `PERMISSIONS` but forgotten in a role is silently denied.
-
-**Cost:** ~1h.
-**Value:** an OWNER quietly losing an ability is the kind of bug found in
-production by a confused customer.
 
 ### Web and mobile feature tests
 
@@ -168,7 +160,6 @@ verification both.
 
 ## Suggested order
 
-1. **Permission-table test** — ~1h
-2. **Admin UI + Bull Board** — the `@SystemRoles` gate is built; give it a screen
-3. **E2E in CI** — ~2h
-4. Then features, starting with email → password reset → verification
+1. **Admin UI + Bull Board** — the `@SystemRoles` gate is built; give it a screen
+2. **E2E in CI** — ~2h
+3. Then features, starting with email → password reset → verification
