@@ -273,6 +273,7 @@ onlyBuiltDependencies:
 allowBuilds:
   '@nestjs/core': true
   '@swc/core': true
+  core-js: false # postinstall only prints a funding banner — nothing to build
   esbuild: true
   msgpackr-extract: true
   msw: true

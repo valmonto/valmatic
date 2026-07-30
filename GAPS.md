@@ -22,20 +22,12 @@ Kept here so the list stays honest about what changed and why.
 | Dead permissions (`org:delete`, `job:list/update/delete`) | Deleted. Standing rule: a permission no route reads gets removed, not kept                                                                                                                                                              |
 | Test step flaked ~2 runs in 3                             | Serialized (`--workspace-concurrency=1`); do not re-parallelize without per-suite databases                                                                                                                                             |
 | No `CLAUDE.md`, no root README                            | Both exist                                                                                                                                                                                                                              |
+| No error tracking                                         | Wired and sleeping: `ErrorReporter` reports api/worker 5xx (with user, org, route) when `SENTRY_DSN` is set; PostHog captures web exceptions when its key is set. Enabling per product is one env var                                    |
+| Feature flags                                             | Shipped: resolved server-side (PostHog when configured, all-off otherwise), delivered in `/auth/me` as `features` beside `permissions`, read via `useFeature()` on web and mobile                                                       |
 
 ---
 
 ## 1. Blocking — fix before this ships anything real
-
-### No error tracking
-
-Production errors reach the logs and stop there. Nobody is told, nothing is
-aggregated, and a 500 that happens to one customer at 3am is invisible until
-they complain.
-
-**Cost:** ~2h for Sentry in api, worker and web.
-**Value:** you learn about breakage from the tool rather than the customer, and
-a stack trace with request context beats grepping logs.
 
 ### No security headers
 
@@ -180,7 +172,6 @@ boilerplate is honest about what it is not.
 | **Billing**            | no Stripe, plans or subscriptions                                                             | ~1w        |
 | **File uploads**       | no S3 or multipart handling                                                                   | ~1d        |
 | **Audit log**          | who changed what is unanswerable                                                              | ~1d        |
-| **Feature flags**      | no way to ship dark — planned as a `features` field beside `permissions`, never mixed into it | ~1d        |
 | **2FA / SSO**          | expected by any business customer                                                             | ~1w        |
 
 Password reset is the one users notice first; email sending unblocks it and
@@ -191,8 +182,7 @@ verification both.
 ## Suggested order
 
 1. **Helmet + rate limiting** — ~3h together, the remaining silent-failure gaps
-2. **Sentry** — ~2h
-3. **Permission-table test** — ~1h
-4. **Admin UI + Bull Board** — the `@SystemRoles` gate is built; give it a screen
-5. **E2E in CI** — ~2h
-6. Then features, starting with email → password reset → verification
+2. **Permission-table test** — ~1h
+3. **Admin UI + Bull Board** — the `@SystemRoles` gate is built; give it a screen
+4. **E2E in CI** — ~2h
+5. Then features, starting with email → password reset → verification

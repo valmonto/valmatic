@@ -4,6 +4,7 @@ import { PermissionSchema } from './permission.schema';
 import { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants';
 import { OrganizationUserRoleSchema } from './organization.schema';
 import { SystemRoleSchema } from './user.schema';
+import { FEATURE_FLAGS } from '../constants';
 
 // Defined in constants.ts (Zod-free) so the frontend can import them without
 // pulling in the schema graph; re-exported here for existing callers.
@@ -68,6 +69,8 @@ export const LogoutRequestSchema = z.object({
 export const LogoutResponseSchema = z.object({});
 
 /** `GET /auth/me` takes no input — the session identifies the user. */
+const FeatureFlagSchema = z.enum(FEATURE_FLAGS);
+
 export const CurrentUserRequestSchema = EmptyRequestSchema;
 export const CurrentUserResponseSchema = z
   .object({
@@ -96,6 +99,12 @@ export const CurrentUserResponseSchema = z
      * decides what the client renders.
      */
     permissions: z.array(PermissionSchema),
+    /**
+     * Feature flags active for this user, resolved server-side (PostHog when
+     * configured, empty otherwise). Beside `permissions`, never mixed into it:
+     * permissions say what a role MAY do, features say what is TURNED ON.
+     */
+    features: z.array(FeatureFlagSchema),
   })
   .strict();
 

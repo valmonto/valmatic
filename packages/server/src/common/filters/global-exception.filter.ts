@@ -8,6 +8,8 @@ import {
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { ZodError } from 'zod';
 import { InjectLogger, PinoLogger } from '../../modules/logging';
+import { ErrorReporter } from '../../modules/telemetry';
+import type { ActiveUser } from '@pkg/contracts';
 
 interface ErrorResponse {
   statusCode: number;
@@ -19,7 +21,10 @@ interface ErrorResponse {
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
-  constructor(@InjectLogger() private readonly logger: PinoLogger) {}
+  constructor(
+    @InjectLogger() private readonly logger: PinoLogger,
+    private readonly errorReporter: ErrorReporter,
+  ) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
@@ -36,12 +41,21 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       path: request.url,
     };
 
-    // Log internal server errors
+    // Log internal server errors, and report them if a reporter is configured.
+    // 4xx are the caller's mistakes; only 5xx are ours.
     if (statusCode >= 500) {
       this.logger.error(
         `${request.method} ${request.url} - ${statusCode}`,
         exception instanceof Error ? exception.stack : String(exception),
       );
+
+      const user = (request as FastifyRequest & { user?: ActiveUser }).user;
+      this.errorReporter.report(exception, {
+        userId: user?.userId,
+        orgId: user?.orgId,
+        method: request.method,
+        path: request.url,
+      });
     }
 
     void reply.status(statusCode).send(errorResponse);

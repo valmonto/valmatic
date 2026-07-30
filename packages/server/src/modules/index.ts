@@ -4,3 +4,4 @@ export * from './health';
 export * from './queues';
 export * from './events';
 export * from './logging';
+export * from './telemetry';

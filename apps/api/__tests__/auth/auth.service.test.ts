@@ -1,5 +1,5 @@
 import { BadRequestException, ConflictException, UnauthorizedException } from '@nestjs/common';
-import type { IamService } from '@pkg/server';
+import type { FeatureFlags, IamService } from '@pkg/server';
 import { SECURITY_CONFIG } from '@pkg/server';
 import { getPermissionsForRole, type ActiveUser } from '@pkg/contracts';
 import { FakeLogger } from '@pkg/testing';
@@ -34,6 +34,7 @@ describe('AuthService', () => {
   let redis: Record<string, ReturnType<typeof vi.fn>>;
   let issueTokens: ReturnType<typeof vi.fn>;
   let revokeAllForUser: ReturnType<typeof vi.fn>;
+  let resolveFeatures: ReturnType<typeof vi.fn>;
   let logger: FakeLogger;
 
   beforeEach(() => {
@@ -53,11 +54,13 @@ describe('AuthService', () => {
     };
     issueTokens = vi.fn().mockResolvedValue(TOKENS);
     revokeAllForUser = vi.fn().mockResolvedValue(undefined);
+    resolveFeatures = vi.fn().mockResolvedValue([]);
     logger = new FakeLogger();
 
     service = new AuthService(
       { auth: { issueTokens, revokeAllForUser, refresh: vi.fn() } } as unknown as IamService,
       repository as unknown as AuthRepository,
+      { resolveFeatures } as unknown as FeatureFlags,
       redis as unknown as Redis,
       logger.as<PinoLogger>(),
     );
@@ -291,6 +294,18 @@ describe('AuthService', () => {
 
       expect(me.permissions).toEqual(getPermissionsForRole('MEMBER'));
       expect(me.permissions).not.toContain('user:create');
+    });
+
+    // Features ride /auth/me beside permissions and come from the resolver —
+    // the client never evaluates flags itself.
+    it('sends the features the resolver reports, keyed to the session user', async () => {
+      repository.findUserWithOrg!.mockResolvedValue(row);
+      resolveFeatures.mockResolvedValue(['example-feature']);
+
+      const me = await service.getMe(activeUser);
+
+      expect(me.features).toEqual(['example-feature']);
+      expect(resolveFeatures).toHaveBeenCalledWith(activeUser);
     });
 
     it('rejects a session whose membership no longer exists', async () => {

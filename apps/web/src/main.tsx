@@ -6,8 +6,12 @@ import { AuthProvider } from '@/shared/auth/auth-context';
 import { ThemeProvider } from '@/shared/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import i18n from '@/shared/lib/i18n';
+import { initTelemetry } from '@/shared/telemetry/posthog';
 
 import './styles/index';
+
+// Sleeping unless VITE_PUBLIC_POSTHOG_KEY is set — see shared/telemetry.
+initTelemetry();
 
 const root = document.getElementById('root');
 
