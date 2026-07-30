@@ -14,6 +14,21 @@ Every workspace has a README that explains it; `packages/README.md` is the index
 - **Workspace `README.md`** — the human-depth explanation, read on demand.
   Each workspace `CLAUDE.md` opens by pointing at it.
 
+## Agent tooling — you have eyes
+
+`.mcp.json` gives every session in this repo browser control (Playwright MCP:
+navigate, click, type, screenshot, accessibility snapshot). **UI work is not
+done until you have looked at it**: boot the stack, log in, drive the flow you
+built, and compare what renders against the spec.
+
+- Dev logins come from the seed: `admin@valmonto.com` (platform admin),
+  `member@valmonto.com`, … — password `ChangeMe123!` unless
+  `SEED_INITIAL_PASSWORD` overrides it.
+- Mobile UI: run `expo start --web` and verify at a phone viewport — Expo
+  renders in the browser, which covers layout, flows and navigation. A native
+  Android/iOS emulator layer (mobile-mcp / Maestro) is deliberately NOT wired;
+  add it when a ticket needs native-only behaviour (push, haptics, camera).
+
 ## Definition of done
 
 ```bash
