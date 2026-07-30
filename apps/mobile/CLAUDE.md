@@ -14,7 +14,7 @@ Read ./README.md before changing this workspace.
   haptics (wired into most UI components), and blur effects. Never sign those
   off from a browser preview.
 - Changes touching tokens.ts, notifications/, or haptic behaviour need the
-  emulator/device path: Android emulator on the host + raw adb
-  (screencap/input/uiautomator), or mobile-mcp in .mcp.json — see the README
-  for setup. Haptics feel and end-to-end push delivery remain human-verified
-  on a device.
+  emulator path: `pnpm emu:setup` + `emu:start` provision and boot it, then
+  use the mobile-mcp TOOLS (screenshot, tap by label, inspect) — do not shell
+  out to adb for what the tools already do. Haptics feel and end-to-end push
+  delivery remain human-verified on a device.
