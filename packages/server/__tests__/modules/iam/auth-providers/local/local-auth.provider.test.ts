@@ -219,7 +219,7 @@ describe('LocalAuthProvider', () => {
     });
 
     it('should throw UnauthorizedException when session expired', async () => {
-      const sessionStart = Date.now() - 25 * 60 * 60 * 1000; // 25 hours ago
+      const sessionStart = Date.now() - 31 * 24 * 60 * 60 * 1000; // 31 days ago — past the 30-day default
       vi.mocked(mockRedis.get).mockResolvedValue(
         JSON.stringify({ userId: 'user-123', orgId: 'org-456', orgRole: 'ADMIN', systemRole: 'USER', sessionStart }),
       );
@@ -335,5 +335,120 @@ describe('LocalAuthProvider', () => {
         expect.any(Number),
       );
     });
+  });
+});
+
+/**
+ * The rotation grace window — the fix for two field bugs with one mechanism:
+ * N concurrent requests racing one rotation (the losers used to 401 and log
+ * the user out), and a mobile client losing the rotation response mid-network
+ * (stranded with a token the server had already deleted).
+ */
+describe('refresh rotation grace window', () => {
+  let provider: LocalAuthProvider;
+  let redis: Redis;
+  let jwt: JwtService;
+  let orgAccess: IOrgAccessProvider;
+  let lastMulti: {
+    set: ReturnType<typeof vi.fn>;
+    del: ReturnType<typeof vi.fn>;
+    sadd: ReturnType<typeof vi.fn>;
+    srem: ReturnType<typeof vi.fn>;
+    expire: ReturnType<typeof vi.fn>;
+    exec: ReturnType<typeof vi.fn>;
+  };
+
+  beforeEach(() => {
+    lastMulti = {
+      set: vi.fn().mockReturnThis(),
+      del: vi.fn().mockReturnThis(),
+      sadd: vi.fn().mockReturnThis(),
+      srem: vi.fn().mockReturnThis(),
+      expire: vi.fn().mockReturnThis(),
+      exec: vi.fn().mockResolvedValue([]),
+    };
+    redis = {
+      get: vi.fn(),
+      set: vi.fn(),
+      del: vi.fn(),
+      smembers: vi.fn(),
+      multi: vi.fn().mockReturnValue(lastMulti),
+    } as unknown as Redis;
+    jwt = { signAsync: vi.fn(), verifyAsync: vi.fn(), decode: vi.fn() } as unknown as JwtService;
+    orgAccess = { verifyAccess: vi.fn() } as unknown as IOrgAccessProvider;
+
+    provider = new LocalAuthProvider(
+      new FakeLogger().as<PinoLogger>(),
+      redis,
+      jwt,
+      orgAccess,
+      {
+        get: vi.fn().mockImplementation((_k: string, d: number) => d),
+      } as unknown as ConfigService,
+    );
+  });
+
+  it('answers a just-rotated token with the SAME successor pair, not a 401', async () => {
+    vi.mocked(redis.get).mockResolvedValue(
+      JSON.stringify({ rotatedTo: { accessToken: 'same-access', refreshToken: 'same-refresh' } }),
+    );
+
+    const result = await provider.refresh({ refreshToken: 'the-old-token' });
+
+    expect(result).toEqual({ accessToken: 'same-access', refreshToken: 'same-refresh' });
+    // Idempotent: redemption must not rotate again or touch the session.
+    expect(jwt.signAsync).not.toHaveBeenCalled();
+    expect(orgAccess.verifyAccess).not.toHaveBeenCalled();
+  });
+
+  it('keeps the old key as a marker instead of deleting it on rotation', async () => {
+    const sessionStart = Date.now() - 1000;
+    vi.mocked(redis.get).mockResolvedValue(
+      JSON.stringify({
+        userId: 'user-123',
+        orgId: 'org-456',
+        orgRole: 'ADMIN',
+        systemRole: 'USER',
+        sessionStart,
+      }),
+    );
+    vi.mocked(orgAccess.verifyAccess).mockResolvedValue({ orgRole: 'ADMIN', systemRole: 'USER' });
+    vi.mocked(jwt.signAsync).mockResolvedValue('new-access');
+
+    const result = await provider.refresh({ refreshToken: 'old-token' });
+
+    // The old key is SET to a marker carrying the successor pair…
+    const markerCall = lastMulti.set.mock.calls.find(
+      (c: unknown[]) => typeof c[1] === 'string' && (c[1] as string).includes('rotatedTo'),
+    );
+    expect(markerCall).toBeDefined();
+    expect(JSON.parse(markerCall![1] as string)).toEqual({
+      rotatedTo: { accessToken: 'new-access', refreshToken: result.refreshToken },
+    });
+    // …and never deleted.
+    expect(lastMulti.del).not.toHaveBeenCalled();
+  });
+
+  // Revoking a token that sits in its grace window must kill the LIVE session
+  // (the successor), or logout would leave the real session running.
+  it('revoking an in-grace token revokes its successor session', async () => {
+    vi.mocked(redis.get)
+      .mockResolvedValueOnce(
+        JSON.stringify({ rotatedTo: { accessToken: 'a', refreshToken: 'successor-token' } }),
+      )
+      .mockResolvedValueOnce(
+        JSON.stringify({
+          userId: 'user-123',
+          orgId: 'org-456',
+          orgRole: 'ADMIN',
+          systemRole: 'USER',
+          sessionStart: 1,
+        }),
+      );
+
+    const result = await provider.revokeToken({ token: 'old-token' });
+
+    expect(result).toEqual({ userId: 'user-123' });
+    expect(redis.get).toHaveBeenCalledWith('iam:refresh:successor-token');
   });
 });

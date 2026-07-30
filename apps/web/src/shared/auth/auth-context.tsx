@@ -34,7 +34,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     minDuration: 200,
     config: {
       shouldRetryOnError: false,
-      revalidateOnFocus: false,
+      // Returning to a long-idle tab re-checks the session instead of trusting
+      // a possibly-stale "logged out" answer — the api refreshes cookies
+      // server-side, so this call is what silently renews the session.
+      revalidateOnFocus: true,
     },
   });
 

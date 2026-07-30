@@ -59,19 +59,28 @@ http.interceptors.request.use(async (config) => {
 const refreshClient = axios.create({ baseURL: API_BASE_URL, headers: CLIENT_HEADER });
 
 // Single-flight: concurrent 401s share one refresh round-trip.
-let refreshPromise: Promise<AuthTokens | null> | null = null;
+let refreshPromise: Promise<AuthTokens | 'unrecoverable' | null> | null = null;
 
-async function refreshTokens(): Promise<AuthTokens | null> {
+/**
+ * 'unrecoverable' = the server DEFINITIVELY rejected the refresh token
+ * (401/403) — only then may stored credentials be destroyed. A network blip,
+ * timeout or 5xx during refresh returns null and KEEPS the tokens: they are
+ * very likely still valid, and destroying them on a transient failure is what
+ * used to force mobile users to re-enter credentials after any flaky moment.
+ */
+async function refreshTokens(): Promise<AuthTokens | 'unrecoverable' | null> {
   const refreshToken = await getRefreshToken();
-  if (!refreshToken) return null;
+  if (!refreshToken) return 'unrecoverable';
 
   try {
     const { data } = await refreshClient.post<RefreshResponse>('/auth/refresh', { refreshToken });
-    if (!data.tokens) return null;
+    if (!data.tokens) return 'unrecoverable';
     await setTokens(data.tokens);
     return data.tokens;
-  } catch {
-    return null;
+  } catch (err) {
+    const status = axios.isAxiosError(err) ? err.response?.status : undefined;
+    if (status === 401 || status === 403) return 'unrecoverable';
+    return null; // transient — keep tokens, the next request retries
   }
 }
 
@@ -91,9 +100,13 @@ http.interceptors.response.use(
     });
     const tokens = await refreshPromise;
 
-    if (!tokens) {
+    if (tokens === 'unrecoverable') {
       await clearTokens();
       onAuthError?.();
+      return Promise.reject(error);
+    }
+    if (!tokens) {
+      // Transient refresh failure: fail THIS request, keep the session.
       return Promise.reject(error);
     }
 
