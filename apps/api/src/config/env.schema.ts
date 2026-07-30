@@ -33,6 +33,37 @@ export const envSchema = z.object({
   REDIS_PORT: z.coerce.number().int().min(1).max(65535).default(6379),
   REDIS_PASSWORD: z.string().optional(),
 
+  // Registration posture. CLOSED by default: most products gate account
+  // creation behind onboarding/billing, and accounts otherwise come from the
+  // seed or from org admins (user:create). Flip to 'true' for open signup.
+  AUTH_REGISTRATION_ENABLED: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((v) => v === 'true'),
+
+  // Behind a reverse proxy the client IP arrives in X-Forwarded-For; without
+  // this every request appears to come from the proxy and rate limiting
+  // throttles all users as one. Set 'true' in any proxied deployment.
+  TRUST_PROXY: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((v) => v === 'true'),
+
+  // Rate limiting (Redis-backed, so limits hold across replicas and restarts).
+  // Disabled under NODE_ENV=test.
+  // Optional dedicated Redis for the limiter. Unset → the IAM Redis is
+  // reused, which is fine until the limiter's per-request INCRs deserve
+  // isolation from session traffic. Counters are 60-second ephemera, so
+  // pointing this at a fresh instance later migrates nothing.
+  RATE_LIMIT_REDIS_HOST: z.string().optional(),
+  RATE_LIMIT_REDIS_PORT: z.coerce.number().int().min(1).max(65535).default(6379),
+  RATE_LIMIT_REDIS_PASSWORD: z.string().optional(),
+
+  // The global default budget. Stricter per-route limits are declared at the
+  // routes themselves with @Throttle (login/register: 10/min).
+  RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(300),
+  RATE_LIMIT_WINDOW_MS: z.coerce.number().int().min(1000).default(60_000),
+
   // Telemetry — all optional; absent means the corresponding service is a
   // no-op. SENTRY_DSN wakes backend error reporting, POSTHOG_KEY wakes
   // product analytics and feature flags.

@@ -5,3 +5,4 @@ export * from './queues';
 export * from './events';
 export * from './logging';
 export * from './telemetry';
+export * from './throttling';

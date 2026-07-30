@@ -1,5 +1,6 @@
-import { BadRequestException, ConflictException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import type { FeatureFlags, IamService } from '@pkg/server';
+import type { ConfigService } from '@nestjs/config';
 import { SECURITY_CONFIG } from '@pkg/server';
 import { getPermissionsForRole, type ActiveUser } from '@pkg/contracts';
 import { FakeLogger } from '@pkg/testing';
@@ -35,6 +36,7 @@ describe('AuthService', () => {
   let issueTokens: ReturnType<typeof vi.fn>;
   let revokeAllForUser: ReturnType<typeof vi.fn>;
   let resolveFeatures: ReturnType<typeof vi.fn>;
+  let registrationEnabled: boolean;
   let logger: FakeLogger;
 
   beforeEach(() => {
@@ -57,10 +59,14 @@ describe('AuthService', () => {
     resolveFeatures = vi.fn().mockResolvedValue([]);
     logger = new FakeLogger();
 
+    registrationEnabled = true;
     service = new AuthService(
       { auth: { issueTokens, revokeAllForUser, refresh: vi.fn() } } as unknown as IamService,
       repository as unknown as AuthRepository,
       { resolveFeatures } as unknown as FeatureFlags,
+      {
+        get: (key: string) => (key === 'AUTH_REGISTRATION_ENABLED' ? registrationEnabled : undefined),
+      } as unknown as ConfigService,
       redis as unknown as Redis,
       logger.as<PinoLogger>(),
     );
@@ -160,6 +166,22 @@ describe('AuthService', () => {
   });
 
   describe('register', () => {
+    // The default posture: closed. Hiding the page client-side is rendering;
+    // this is the enforcement.
+    it('refuses when registration is disabled', async () => {
+      registrationEnabled = false;
+
+      await expect(
+        service.register({
+          email: 'new@example.com',
+          password: PASSWORD,
+          name: 'New',
+          organizationName: 'Org',
+        }),
+      ).rejects.toThrow(ForbiddenException);
+      expect(repository.createUserWithOrganization).not.toHaveBeenCalled();
+    });
+
     it('creates the user with an organization and issues tokens', async () => {
       repository.createUserWithOrganization!.mockResolvedValue({
         user: { id: 'user-1', email: userRow.email, name: 'Someone' },

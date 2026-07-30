@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   BadRequestException,
   ConflictException,
   Inject,
@@ -6,6 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { FeatureFlags, IAM_REDIS, IamService, SECURITY_CONFIG } from '@pkg/server';
+import { ConfigService } from '@nestjs/config';
 import { k } from '@pkg/locales';
 import {
   type ActiveUser,
@@ -31,6 +33,7 @@ export class AuthService {
     private readonly iamService: IamService,
     private readonly authRepository: AuthRepository,
     private readonly featureFlags: FeatureFlags,
+    private readonly configService: ConfigService,
     @Inject(IAM_REDIS) private readonly redis: Redis,
     @InjectLogger() private readonly logger: PinoLogger,
   ) {}
@@ -38,6 +41,14 @@ export class AuthService {
   async register(
     dto: RegisterRequest,
   ): Promise<{ response: RegisterResponse; accessToken: string; refreshToken: string }> {
+    // CLOSED by default. Most products gate account creation behind their own
+    // onboarding (billing, invites); accounts otherwise come from the seed or
+    // from org admins via user:create. The client hiding its register page is
+    // rendering, not enforcement — this is the enforcement.
+    if (!this.configService.get<boolean>('AUTH_REGISTRATION_ENABLED')) {
+      throw new ForbiddenException(k.auth.errors.registrationDisabled);
+    }
+
     const existing = await this.authRepository.findUserByEmail(dto.email);
     if (existing) {
       // Generic message to prevent email enumeration

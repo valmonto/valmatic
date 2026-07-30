@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router';
+import { REGISTRATION_ENABLED } from '@/shared/lib/registration';
 import { useTranslation } from 'react-i18next';
 import { k } from '@pkg/locales';
 import { PASSWORD_REGEX } from '@pkg/contracts';
@@ -104,15 +105,17 @@ export const AuthView = () => {
           )}
         </Button>
 
-        <p className="text-center text-sm text-muted-foreground">
-          {t(k.auth.dontHaveAccount)}{' '}
-          <Link
-            to="/auth/register"
-            className="font-medium text-primary underline-offset-4 hover:underline"
-          >
-            {t(k.auth.createOne)}
-          </Link>
-        </p>
+        {REGISTRATION_ENABLED && (
+          <p className="text-center text-sm text-muted-foreground">
+            {t(k.auth.dontHaveAccount)}{' '}
+            <Link
+              to="/auth/register"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              {t(k.auth.createOne)}
+            </Link>
+          </p>
+        )}
       </form>
     </AuthShell>
   );
