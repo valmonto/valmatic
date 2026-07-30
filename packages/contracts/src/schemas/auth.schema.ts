@@ -3,6 +3,7 @@ import { EmptyRequestSchema } from './common.schema';
 import { PermissionSchema } from './permission.schema';
 import { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants';
 import { OrganizationUserRoleSchema } from './organization.schema';
+import { SystemRoleSchema } from './user.schema';
 
 // Defined in constants.ts (Zod-free) so the frontend can import them without
 // pulling in the schema graph; re-exported here for existing callers.
@@ -74,7 +75,15 @@ export const CurrentUserResponseSchema = z
     email: z.string().email(),
     name: z.string().optional(),
     displayName: z.string().nullish(),
-    role: OrganizationUserRoleSchema,
+    orgRole: OrganizationUserRoleSchema,
+    /**
+     * Platform standing, independent of any organization.
+     *
+     * Sent so a client can show or hide a platform surface. It grants nothing by
+     * itself — `SystemRolesGuard` enforces it, and it never widens an
+     * organization-scoped route.
+     */
+    systemRole: SystemRoleSchema,
     orgId: z.string().uuid(),
     /**
      * What this user may do in this organization, resolved server-side.

@@ -1,4 +1,4 @@
-import { type Permission } from '@pkg/contracts';
+import { type OrganizationUserRole, type Permission, type SystemRole } from '@pkg/contracts';
 import { useMemo } from 'react';
 import { useAuthStore } from '@/shared/auth/auth-store';
 
@@ -49,9 +49,21 @@ export function usePermissions(): readonly Permission[] {
   return useGranted();
 }
 
-/** The current user's role (or null while loading / logged out). */
-export function useRole() {
-  const role = useAuthStore((s) => s.user?.role);
+/** The current user's role in the active organization. */
+export function useOrgRole(): OrganizationUserRole | null {
+  const orgRole = useAuthStore((s) => s.user?.orgRole);
   const loading = useAuthStore((s) => s.status === 'loading');
-  return loading ? null : (role ?? null);
+  return loading ? null : (orgRole ?? null);
+}
+
+/**
+ * The current user's platform standing, independent of any organization.
+ *
+ * For deciding what to render only — a platform surface is enforced by
+ * `@SystemRoles` on the API, never by this.
+ */
+export function useSystemRole(): SystemRole | null {
+  const systemRole = useAuthStore((s) => s.user?.systemRole);
+  const loading = useAuthStore((s) => s.status === 'loading');
+  return loading ? null : (systemRole ?? null);
 }

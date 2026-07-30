@@ -47,7 +47,7 @@ export class LocalAuthProvider implements IAuthProvider {
     const iat = Math.floor(Date.now() / 1000);
 
     const accessToken = await this.jwtService.signAsync(
-      { sub: dto.userId, orgId: dto.orgId, role: dto.role, iat },
+      { sub: dto.userId, orgId: dto.orgId, orgRole: dto.orgRole, systemRole: dto.systemRole, iat },
       { expiresIn: this.accessTokenTtl },
     );
 
@@ -112,8 +112,12 @@ export class LocalAuthProvider implements IAuthProvider {
       await this.redis.del(key);
       throw new UnauthorizedException(k.auth.errors.orgAccessRevoked);
     }
-    // Update role to current value from DB
-    session.role = access.role;
+
+    // Re-read BOTH roles from the database. Skipping either would freeze it at
+    // the value it held when the session began, so a demotion would keep
+    // applying for the whole session rather than the access-token TTL.
+    session.orgRole = access.orgRole;
+    session.systemRole = access.systemRole;
 
     // Issue new tokens, preserving original session start
     const newRefreshToken = randomBytes(32).toString('hex');
@@ -122,7 +126,13 @@ export class LocalAuthProvider implements IAuthProvider {
     const iat = Math.floor(Date.now() / 1000);
 
     const accessToken = await this.jwtService.signAsync(
-      { sub: session.userId, orgId: session.orgId, role: session.role, iat },
+      {
+        sub: session.userId,
+        orgId: session.orgId,
+        orgRole: session.orgRole,
+        systemRole: session.systemRole,
+        iat,
+      },
       { expiresIn: this.accessTokenTtl },
     );
 

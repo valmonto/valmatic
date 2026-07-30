@@ -75,7 +75,7 @@ export class UserService {
     }
 
     // Only OWNER can create other OWNERs
-    if (dto.role === 'OWNER' && activeUser.role !== 'OWNER') {
+    if (dto.role === 'OWNER' && activeUser.orgRole !== 'OWNER') {
       throw new ForbiddenException(k.users.errors.onlyOwnersCanCreateOwners);
     }
 
@@ -121,7 +121,7 @@ export class UserService {
     }
 
     // Only OWNER can promote to OWNER
-    if (dto.role === 'OWNER' && activeUser.role !== 'OWNER') {
+    if (dto.role === 'OWNER' && activeUser.orgRole !== 'OWNER') {
       throw new ForbiddenException(k.users.errors.onlyOwnersCanPromote);
     }
 
@@ -159,7 +159,7 @@ export class UserService {
     }
 
     // Only OWNER can remove other OWNERs
-    if (existing.role === 'OWNER' && activeUser.role !== 'OWNER') {
+    if (existing.role === 'OWNER' && activeUser.orgRole !== 'OWNER') {
       throw new ForbiddenException(k.users.errors.onlyOwnersCanRemoveOwners);
     }
 

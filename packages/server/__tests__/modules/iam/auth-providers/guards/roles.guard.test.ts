@@ -15,7 +15,7 @@ describe('RolesGuard', () => {
     guard = new RolesGuard(mockReflector);
   });
 
-  const createMockContext = (user?: { role?: string }): ExecutionContext =>
+  const createMockContext = (user?: { orgRole?: string }): ExecutionContext =>
     ({
       getHandler: () => () => {},
       getClass: () => class {},
@@ -33,7 +33,7 @@ describe('RolesGuard', () => {
     });
 
     it('should deny access when no @Roles decorator is present', () => {
-      const context = createMockContext({ role: 'admin' });
+      const context = createMockContext({ orgRole: 'admin' });
       vi.mocked(mockReflector.getAllAndOverride)
         .mockReturnValueOnce(false) // isPublic
         .mockReturnValueOnce(undefined); // requiredRoles
@@ -42,7 +42,7 @@ describe('RolesGuard', () => {
     });
 
     it('should throw correct message when no @Roles decorator', () => {
-      const context = createMockContext({ role: 'admin' });
+      const context = createMockContext({ orgRole: 'admin' });
       vi.mocked(mockReflector.getAllAndOverride)
         .mockReturnValueOnce(false)
         .mockReturnValueOnce(undefined);
@@ -50,8 +50,36 @@ describe('RolesGuard', () => {
       expect(() => guard.canActivate(context)).toThrow('auth.errors.roleAuthorizationRequired');
     });
 
+    /**
+     * A platform route carries only @SystemRoles and is authorized by
+     * SystemRolesGuard, later in the chain. Were the strict check unaware of it,
+     * this guard would reject every such route before that guard ran — and the
+     * decorator would look like it did nothing.
+     */
+    it('should let a @SystemRoles-only route through the strict check', () => {
+      const context = createMockContext({ orgRole: 'member' });
+      vi.mocked(mockReflector.getAllAndOverride)
+        .mockReturnValueOnce(false) // isPublic
+        .mockReturnValueOnce(undefined) // requiredRoles
+        .mockReturnValueOnce(undefined) // permissions
+        .mockReturnValueOnce(['ADMIN']); // systemRoles
+
+      expect(guard.canActivate(context)).toBe(true);
+    });
+
+    it('should still deny when none of the three decorators are present', () => {
+      const context = createMockContext({ orgRole: 'admin' });
+      vi.mocked(mockReflector.getAllAndOverride)
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(undefined)
+        .mockReturnValueOnce(undefined)
+        .mockReturnValueOnce(undefined);
+
+      expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
+    });
+
     it('should deny access when user has no role', () => {
-      const context = createMockContext({ role: undefined });
+      const context = createMockContext({ orgRole: undefined });
       vi.mocked(mockReflector.getAllAndOverride)
         .mockReturnValueOnce(false)
         .mockReturnValueOnce(['admin']);
@@ -60,7 +88,7 @@ describe('RolesGuard', () => {
     });
 
     it('should throw correct message when user has no role', () => {
-      const context = createMockContext({ role: undefined });
+      const context = createMockContext({ orgRole: undefined });
       vi.mocked(mockReflector.getAllAndOverride)
         .mockReturnValueOnce(false)
         .mockReturnValueOnce(['admin']);
@@ -69,7 +97,7 @@ describe('RolesGuard', () => {
     });
 
     it('should deny access when user role is not in required roles', () => {
-      const context = createMockContext({ role: 'member' });
+      const context = createMockContext({ orgRole: 'member' });
       vi.mocked(mockReflector.getAllAndOverride)
         .mockReturnValueOnce(false)
         .mockReturnValueOnce(['admin', 'owner']);
@@ -78,7 +106,7 @@ describe('RolesGuard', () => {
     });
 
     it('should throw correct message for insufficient permissions', () => {
-      const context = createMockContext({ role: 'member' });
+      const context = createMockContext({ orgRole: 'member' });
       vi.mocked(mockReflector.getAllAndOverride)
         .mockReturnValueOnce(false)
         .mockReturnValueOnce(['admin', 'owner']);
@@ -87,7 +115,7 @@ describe('RolesGuard', () => {
     });
 
     it('should allow access when user role matches required roles', () => {
-      const context = createMockContext({ role: 'admin' });
+      const context = createMockContext({ orgRole: 'admin' });
       vi.mocked(mockReflector.getAllAndOverride)
         .mockReturnValueOnce(false)
         .mockReturnValueOnce(['admin', 'owner']);
@@ -96,7 +124,7 @@ describe('RolesGuard', () => {
     });
 
     it('should allow access with single required role', () => {
-      const context = createMockContext({ role: 'owner' });
+      const context = createMockContext({ orgRole: 'owner' });
       vi.mocked(mockReflector.getAllAndOverride)
         .mockReturnValueOnce(false)
         .mockReturnValueOnce(['owner']);

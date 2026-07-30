@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useAuth } from '@/shared/auth/auth-context';
-import type { Permission } from '@pkg/contracts';
+import type { OrganizationUserRole, Permission, SystemRole } from '@pkg/contracts';
 
 /**
  * Permission checks read the list the API resolved and sent with the current
@@ -50,7 +50,18 @@ export function usePermissions(): readonly Permission[] {
 }
 
 /** The current user's role in the active organization. */
-export function useRole() {
+export function useOrgRole(): OrganizationUserRole | null {
   const { user, isLoading } = useAuth();
-  return isLoading ? null : (user?.role ?? null);
+  return isLoading ? null : (user?.orgRole ?? null);
+}
+
+/**
+ * The current user's platform standing, independent of any organization.
+ *
+ * For deciding what to render only — a platform surface is enforced by
+ * `@SystemRoles` on the API, never by this.
+ */
+export function useSystemRole(): SystemRole | null {
+  const { user, isLoading } = useAuth();
+  return isLoading ? null : (user?.systemRole ?? null);
 }

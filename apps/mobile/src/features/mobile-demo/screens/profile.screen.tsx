@@ -109,7 +109,7 @@ export default function ProfileScreen() {
               <Text className="text-xs text-muted-foreground">{email}</Text>
               <View className="mt-2 rounded-full bg-primary/10 px-2.5 py-0.5">
                 <Text className="text-[10px] font-semibold text-primary">
-                  {user?.role ?? 'Product Engineer'}
+                  {user?.orgRole ?? 'Product Engineer'}
                 </Text>
               </View>
             </View>

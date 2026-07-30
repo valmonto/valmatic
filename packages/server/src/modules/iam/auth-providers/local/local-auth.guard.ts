@@ -77,7 +77,13 @@ export class LocalAuthGuard {
       return this.tryRefresh(req, res);
     }
 
-    let payload: { sub: string; orgId: string; role: string; iat: number };
+    let payload: {
+      sub: string;
+      orgId: string;
+      orgRole: ActiveUser['orgRole'];
+      systemRole: ActiveUser['systemRole'];
+      iat: number;
+    };
     try {
       payload = await this.jwtService.verifyAsync(accessToken);
     } catch (err) {
@@ -105,7 +111,8 @@ export class LocalAuthGuard {
     req.user = {
       userId: payload.sub,
       orgId: payload.orgId,
-      role: payload.role,
+      orgRole: payload.orgRole,
+      systemRole: payload.systemRole,
     };
     return true;
   }
@@ -137,7 +144,8 @@ export class LocalAuthGuard {
       req.user = {
         userId: payload.sub,
         orgId: payload.orgId,
-        role: payload.role,
+        orgRole: payload.orgRole,
+        systemRole: payload.systemRole,
       };
 
       return true;

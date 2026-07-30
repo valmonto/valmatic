@@ -6,7 +6,8 @@ describe('extractActiveUser', () => {
   const mockUser: ActiveUser = {
     userId: 'user-123',
     orgId: 'org-456',
-    role: 'ADMIN',
+    orgRole: 'ADMIN',
+    systemRole: 'USER',
   };
 
   describe('with full user object', () => {
@@ -36,10 +37,18 @@ describe('extractActiveUser', () => {
       expect(result).toBe('org-456');
     });
 
-    it('should return role when field is "role"', () => {
-      const result = extractActiveUser(mockUser, 'role');
+    it('should return the organization role when field is "orgRole"', () => {
+      const result = extractActiveUser(mockUser, 'orgRole');
 
       expect(result).toBe('ADMIN');
+    });
+
+    // Both enums contain ADMIN, so a decorator asking for one axis must never
+    // hand back the other.
+    it('should return the system role when field is "systemRole"', () => {
+      const result = extractActiveUser(mockUser, 'systemRole');
+
+      expect(result).toBe('USER');
     });
   });
 

@@ -55,7 +55,8 @@ export class AuthService {
     const activeUser: ActiveUser = {
       orgId: orgUser.orgId,
       userId: orgUser.userId,
-      role: orgUser.role,
+      orgRole: orgUser.role,
+      systemRole: user.systemRole,
     };
 
     const tokens = await this.iamService.auth.issueTokens(activeUser);
@@ -120,7 +121,8 @@ export class AuthService {
     const activeUser: ActiveUser = {
       orgId: orgAccess.orgId,
       userId: orgAccess.userId,
-      role: orgAccess.role,
+      orgRole: orgAccess.role,
+      systemRole: user.systemRole,
     };
 
     const tokens = await this.iamService.auth.issueTokens(activeUser);
@@ -149,9 +151,16 @@ export class AuthService {
 
     // Resolved here rather than by the client, so what a role can do is decided
     // in one place and reaches every client on its next request.
+    //
+    // Permissions come from the organization role only. `systemRole` is sent so
+    // a client can show or hide a platform surface, and grants nothing on its
+    // own — SystemRolesGuard is what enforces it.
+    const { role, ...rest } = userInfo;
+
     return CurrentUserResponseSchema.parse({
-      ...userInfo,
-      permissions: getPermissionsForRole(userInfo.role),
+      ...rest,
+      orgRole: role,
+      permissions: getPermissionsForRole(role),
     });
   }
 

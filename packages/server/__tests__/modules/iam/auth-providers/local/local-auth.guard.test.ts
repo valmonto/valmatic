@@ -172,7 +172,8 @@ describe('LocalAuthGuard', () => {
       vi.mocked(mockJwtService.verifyAsync).mockResolvedValue({
         sub: 'user-123',
         orgId: 'org-456',
-        role: 'ADMIN',
+        orgRole: 'ADMIN',
+        systemRole: 'USER',
         iat: 1234567890,
       });
       vi.mocked(mockAuthProvider.isAccessTokenBlacklisted).mockResolvedValue(false);
@@ -185,7 +186,8 @@ describe('LocalAuthGuard', () => {
       expect(req.user).toEqual({
         userId: 'user-123',
         orgId: 'org-456',
-        role: 'ADMIN',
+        orgRole: 'ADMIN',
+        systemRole: 'USER',
       });
     });
 
@@ -208,7 +210,8 @@ describe('LocalAuthGuard', () => {
       vi.mocked(mockJwtService.verifyAsync).mockResolvedValue({
         sub: 'user-123',
         orgId: 'org-456',
-        role: 'ADMIN',
+        orgRole: 'ADMIN',
+        systemRole: 'USER',
         iat: 1234567890,
       });
       vi.mocked(mockAuthProvider.isAccessTokenBlacklisted).mockResolvedValue(true);
@@ -224,7 +227,8 @@ describe('LocalAuthGuard', () => {
       vi.mocked(mockJwtService.verifyAsync).mockResolvedValue({
         sub: 'user-123',
         orgId: 'org-456',
-        role: 'ADMIN',
+        orgRole: 'ADMIN',
+        systemRole: 'USER',
         iat: 1234567890,
       });
       vi.mocked(mockAuthProvider.isAccessTokenBlacklisted).mockResolvedValue(false);

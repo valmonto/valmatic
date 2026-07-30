@@ -1,7 +1,7 @@
 import { BadRequestException, ConflictException, UnauthorizedException } from '@nestjs/common';
 import type { IamService } from '@pkg/server';
 import { SECURITY_CONFIG } from '@pkg/server';
-import { getPermissionsForRole } from '@pkg/contracts';
+import { getPermissionsForRole, type ActiveUser } from '@pkg/contracts';
 import { FakeLogger } from '@pkg/testing';
 import * as bcrypt from 'bcryptjs';
 import type Redis from 'ioredis';
@@ -23,6 +23,7 @@ const userRow = {
   email: 'someone@example.com',
   name: 'Someone',
   passwordHash: PASSWORD_HASH,
+  systemRole: 'USER' as const,
 };
 
 const orgAccess = { orgId: 'org-1', userId: 'user-1', role: 'OWNER' as const };
@@ -73,7 +74,8 @@ describe('AuthService', () => {
       expect(issueTokens).toHaveBeenCalledWith({
         orgId: 'org-1',
         userId: 'user-1',
-        role: 'OWNER',
+        orgRole: 'OWNER',
+        systemRole: 'USER',
       });
     });
 
@@ -246,13 +248,19 @@ describe('AuthService', () => {
     // The response contract types both ids as uuids, so the fixtures must be real ones.
     const USER_UUID = '11111111-1111-4111-8111-111111111111';
     const ORG_UUID = '22222222-2222-4222-8222-222222222222';
-    const activeUser = { userId: USER_UUID, orgId: ORG_UUID, role: 'OWNER' };
+    const activeUser: ActiveUser = {
+      userId: USER_UUID,
+      orgId: ORG_UUID,
+      orgRole: 'OWNER',
+      systemRole: 'USER',
+    };
     const row = {
       id: USER_UUID,
       email: userRow.email,
       name: 'Someone',
       displayName: null,
       role: 'OWNER',
+      systemRole: 'USER',
       orgId: ORG_UUID,
     };
 

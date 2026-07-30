@@ -221,7 +221,7 @@ describe('LocalAuthProvider', () => {
     it('should throw UnauthorizedException when session expired', async () => {
       const sessionStart = Date.now() - 25 * 60 * 60 * 1000; // 25 hours ago
       vi.mocked(mockRedis.get).mockResolvedValue(
-        JSON.stringify({ userId: 'user-123', orgId: 'org-456', role: 'ADMIN', sessionStart }),
+        JSON.stringify({ userId: 'user-123', orgId: 'org-456', orgRole: 'ADMIN', systemRole: 'USER', sessionStart }),
       );
 
       await expect(provider.refresh({ refreshToken: 'old-token' })).rejects.toThrow(
@@ -232,7 +232,7 @@ describe('LocalAuthProvider', () => {
     it('should throw UnauthorizedException when org access revoked', async () => {
       const sessionStart = Date.now() - 1000; // 1 second ago
       vi.mocked(mockRedis.get).mockResolvedValue(
-        JSON.stringify({ userId: 'user-123', orgId: 'org-456', role: 'ADMIN', sessionStart }),
+        JSON.stringify({ userId: 'user-123', orgId: 'org-456', orgRole: 'ADMIN', systemRole: 'USER', sessionStart }),
       );
       vi.mocked(mockOrgAccess.verifyAccess).mockResolvedValue(null);
 
@@ -241,12 +241,68 @@ describe('LocalAuthProvider', () => {
       );
     });
 
+    /**
+     * Refresh is the only point at which either role is re-read from the
+     * database. A demotion missed here does not expire with the access token —
+     * it keeps applying for the rest of the session, up to maxSessionTtl. One
+     * test per axis, because missing either one is silent.
+     */
+    it('should re-read a demoted organization role rather than reusing the session', async () => {
+      const sessionStart = Date.now() - 1000;
+      vi.mocked(mockRedis.get).mockResolvedValue(
+        JSON.stringify({
+          userId: 'user-123',
+          orgId: 'org-456',
+          orgRole: 'OWNER',
+          systemRole: 'USER',
+          sessionStart,
+        }),
+      );
+      vi.mocked(mockOrgAccess.verifyAccess).mockResolvedValue({
+        orgRole: 'MEMBER',
+        systemRole: 'USER',
+      });
+      vi.mocked(mockJwtService.signAsync).mockResolvedValue('new-access-token');
+
+      await provider.refresh({ refreshToken: 'valid-refresh' });
+
+      expect(mockJwtService.signAsync).toHaveBeenCalledWith(
+        expect.objectContaining({ orgRole: 'MEMBER' }),
+        expect.anything(),
+      );
+    });
+
+    it('should re-read a revoked platform role rather than reusing the session', async () => {
+      const sessionStart = Date.now() - 1000;
+      vi.mocked(mockRedis.get).mockResolvedValue(
+        JSON.stringify({
+          userId: 'user-123',
+          orgId: 'org-456',
+          orgRole: 'MEMBER',
+          systemRole: 'ADMIN',
+          sessionStart,
+        }),
+      );
+      vi.mocked(mockOrgAccess.verifyAccess).mockResolvedValue({
+        orgRole: 'MEMBER',
+        systemRole: 'USER',
+      });
+      vi.mocked(mockJwtService.signAsync).mockResolvedValue('new-access-token');
+
+      await provider.refresh({ refreshToken: 'valid-refresh' });
+
+      expect(mockJwtService.signAsync).toHaveBeenCalledWith(
+        expect.objectContaining({ systemRole: 'USER' }),
+        expect.anything(),
+      );
+    });
+
     it('should return new tokens on successful refresh', async () => {
       const sessionStart = Date.now() - 1000;
       vi.mocked(mockRedis.get).mockResolvedValue(
-        JSON.stringify({ userId: 'user-123', orgId: 'org-456', role: 'ADMIN', sessionStart }),
+        JSON.stringify({ userId: 'user-123', orgId: 'org-456', orgRole: 'ADMIN', systemRole: 'USER', sessionStart }),
       );
-      vi.mocked(mockOrgAccess.verifyAccess).mockResolvedValue({ role: 'ADMIN' });
+      vi.mocked(mockOrgAccess.verifyAccess).mockResolvedValue({ orgRole: 'ADMIN', systemRole: 'USER' });
       vi.mocked(mockJwtService.signAsync).mockResolvedValue('new-access-token');
 
       const result = await provider.refresh({ refreshToken: 'valid-refresh' });
