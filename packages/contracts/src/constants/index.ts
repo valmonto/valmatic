@@ -7,3 +7,4 @@
  */
 export * from './iam';
 export * from './analytics';
+export * from './notification';

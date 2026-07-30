@@ -7,9 +7,8 @@ Read ./README.md before changing this workspace.
 - No new pgEnum columns. A Postgres enum cannot lose a value without rebuilding
   the type, and adding one is its own migration headache. Use varchar with the
   value set enforced by the Zod schema in @pkg/contracts (add a CHECK
-  constraint if you want the database to enforce it too). The existing pgEnums
-  (system_role, notification type/channel) stay until deliberately migrated —
-  do not copy the pattern.
+  constraint if you want the database to enforce it too — see user.ts for the
+  pattern). Zero pgEnums remain; keep it that way.
 - Renames and drops are where generated migrations destroy data. drizzle-kit
   cannot tell "rename column" from "drop + add" and resolves the ambiguity by
   PROMPTING — in a non-interactive run the generated SQL may drop the column
