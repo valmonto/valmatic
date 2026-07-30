@@ -50,11 +50,13 @@ export class NotificationService {
     activeUser: ActiveUser,
     dto: ListNotificationsRequest,
   ): Promise<ListNotificationsResponse> {
-    const { data, total } = await this.notificationRepository.findByUserId(activeUser.userId, {
-      skip: dto.skip,
-      limit: dto.limit,
-      unreadOnly: dto.unreadOnly,
-    });
+    // Scoped to the active organization (plus platform notices): what you see
+    // in one org is not what you see in another.
+    const { data, total } = await this.notificationRepository.findForUser(
+      activeUser.userId,
+      activeUser.orgId,
+      { skip: dto.skip, limit: dto.limit, unreadOnly: dto.unreadOnly },
+    );
 
     return {
       data: data.map((n) => ({
@@ -71,7 +73,7 @@ export class NotificationService {
   }
 
   async getById(activeUser: ActiveUser, id: string): Promise<GetNotificationByIdResponse> {
-    const notification = await this.notificationRepository.findById(id, activeUser.userId);
+    const notification = await this.notificationRepository.findById(id, activeUser.userId, activeUser.orgId);
 
     if (!notification) {
       throw new NotFoundException(k.notifications.errors.notFound);
@@ -85,7 +87,7 @@ export class NotificationService {
   }
 
   async markAsRead(activeUser: ActiveUser, id: string): Promise<MarkNotificationReadResponse> {
-    const notification = await this.notificationRepository.markAsRead(id, activeUser.userId);
+    const notification = await this.notificationRepository.markAsRead(id, activeUser.userId, activeUser.orgId);
 
     if (!notification) {
       throw new NotFoundException(k.notifications.errors.notFound);
@@ -101,7 +103,7 @@ export class NotificationService {
   }
 
   async markAllAsRead(activeUser: ActiveUser): Promise<MarkAllNotificationsReadResponse> {
-    const count = await this.notificationRepository.markAllAsRead(activeUser.userId);
+    const count = await this.notificationRepository.markAllAsRead(activeUser.userId, activeUser.orgId);
 
     this.logger.debug({ userId: activeUser.userId, count }, 'All notifications marked as read');
 
@@ -109,12 +111,12 @@ export class NotificationService {
   }
 
   async getUnreadCount(activeUser: ActiveUser): Promise<GetUnreadCountResponse> {
-    const count = await this.notificationRepository.getUnreadCount(activeUser.userId);
+    const count = await this.notificationRepository.getUnreadCount(activeUser.userId, activeUser.orgId);
     return { count };
   }
 
   async delete(activeUser: ActiveUser, id: string): Promise<void> {
-    const deleted = await this.notificationRepository.delete(id, activeUser.userId);
+    const deleted = await this.notificationRepository.delete(id, activeUser.userId, activeUser.orgId);
 
     if (!deleted) {
       throw new NotFoundException(k.notifications.errors.notFound);
@@ -124,7 +126,7 @@ export class NotificationService {
   }
 
   async deleteAll(activeUser: ActiveUser): Promise<{ count: number }> {
-    const count = await this.notificationRepository.deleteAll(activeUser.userId);
+    const count = await this.notificationRepository.deleteAll(activeUser.userId, activeUser.orgId);
 
     this.logger.debug({ userId: activeUser.userId, count }, 'All notifications deleted');
 
