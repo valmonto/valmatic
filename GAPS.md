@@ -35,9 +35,16 @@ Kept here so the list stays honest about what changed and why.
 
 ## 1. Blocking — fix before this ships anything real
 
-Nothing currently. Error tracking, security headers, rate limiting and the
-registration posture all closed above; the next most consequential items are
-the tests in section 2.
+### No database backups
+
+Postgres lives in a Docker volume on one machine. One disk failure is total,
+unrecoverable loss of every customer's data — the only gap in this document
+where the downside is extinction rather than degradation.
+
+**Cost:** ~2h — nightly `pg_dump` to object storage in a different location,
+30-day retention, and a TESTED restore. Tiers and the full durability
+strategy: [docs/operations.md](docs/operations.md#durability).
+**Value:** the difference between an incident and the end.
 
 ---
 
@@ -145,6 +152,7 @@ verification both.
 
 ## Suggested order
 
-1. **Bull Board** (~3h) — when a product has queues doing real work; needs a
+1. **Database backups** — ~2h, before any paying customer
+2. **Bull Board** (~3h) — when a product has queues doing real work; needs a
    hand-rolled auth preHandler since it mounts outside the Nest guard chain
-2. Then features, starting with email → password reset → verification
+3. Then features, starting with email → password reset → verification

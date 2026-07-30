@@ -36,6 +36,9 @@ worker, Expo mobile app — one pnpm monorepo, one shared contract.
 Each workspace has its own README; start at [`packages/README.md`](packages/README.md).
 [`GAPS.md`](GAPS.md) is the honest list of what is _not_ here yet.
 [`CLAUDE.md`](CLAUDE.md) states the conventions for humans and agents alike.
+[`docs/operations.md`](docs/operations.md) is the growth playbook — capacity,
+costs, durability, scaling out and geography, each decision pre-made with its
+trigger.
 
 ## Run it
 
