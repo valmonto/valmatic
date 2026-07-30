@@ -44,6 +44,8 @@ const pageTitles: Record<string, string> = {
   '/notifications': 'Notifications',
   '/analytics': 'Analytics',
   '/settings': 'Settings',
+  '/admin/orgs': 'Organizations',
+  '/admin/permissions': 'Permissions',
   '/components': 'Components',
 };
 

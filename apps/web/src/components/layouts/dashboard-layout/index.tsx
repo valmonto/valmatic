@@ -13,11 +13,14 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { UserActionsDropdown } from './user-actions-dropdown';
+import { useSystemRole } from '@/shared/hooks/use-permissions';
 import { Link, useLocation } from 'react-router';
 import {
   BarChart3,
+  Building2,
   LayoutDashboard,
   Settings,
+  ShieldCheck,
   Users,
   Hexagon,
   ListTodo,
@@ -50,10 +53,22 @@ const navGroups = [
   },
 ];
 
+// Platform pages exist only for platform admins. Hiding the group is
+// rendering; the API enforces @SystemRoles(ADMIN) regardless.
+const platformGroup = {
+  labelKey: k.admin.platform,
+  items: [
+    { titleKey: k.admin.organizations, url: '/admin/orgs', icon: Building2 },
+    { titleKey: k.admin.permissions, url: '/admin/permissions', icon: ShieldCheck },
+  ],
+};
+
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const { t } = useTranslation();
   const location = useLocation();
   const pathname = location.pathname;
+  const systemRole = useSystemRole();
+  const groups = systemRole === 'ADMIN' ? [...navGroups, platformGroup] : navGroups;
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -79,7 +94,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {navGroups.map((group) => (
+        {groups.map((group) => (
           <SidebarGroup key={group.labelKey}>
             <SidebarGroupLabel className="px-2 text-[11px] font-medium tracking-[0.08em] text-sidebar-foreground/45 uppercase">
               {t(group.labelKey)}

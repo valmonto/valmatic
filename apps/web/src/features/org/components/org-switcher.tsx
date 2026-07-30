@@ -19,7 +19,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Building2, Check, ChevronsUpDown, Loader2, Plus } from 'lucide-react';
-import type { Organization } from '@pkg/contracts';
+
 import { useCreateOrg, useOrgs, useSwitchOrg } from '../hooks/use-orgs';
 
 export function OrgSwitcher() {
