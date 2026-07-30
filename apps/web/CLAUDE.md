@@ -9,3 +9,6 @@ Read ./README.md before changing this workspace.
   (anyOf/allOf vs any/all) and components silently rendered nothing.
 - Org-scoped SWR keys are stale after an org switch — actions that change the
   active org reset all caches, not just their own.
+- UI changes get LOOKED at before they ship: use the Playwright MCP tools
+  (browser is available via .mcp.json) against the dev server with a seed
+  login. Typecheck proves it compiles; only your eyes prove it matches.
