@@ -14,6 +14,12 @@ jobs:
     # Integration suites are written with `describeIntegration`, which skips when
     # DATABASE_URL is unset. Without a database here they would never run
     # anywhere — the repository layer would be covered on paper only.
+    #
+    # There is ONE database, so the root `test` script serializes packages
+    # (--workspace-concurrency=1): the api and worker suites truncate the same
+    # tables, and running them concurrently makes each fail on the other's
+    # truncations roughly two runs in three. Do not parallelize the test step
+    # without giving each suite its own database first.
     services:
       postgres:
         image: postgres:17-alpine

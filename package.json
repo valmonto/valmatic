@@ -15,7 +15,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,yaml,yml,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,json,yaml,yml,md}\"",
     "typecheck": "pnpm -r run typecheck",
-    "test": "pnpm -r run test",
+    "test": "pnpm -r --workspace-concurrency=1 run test",
     "clean": "pnpm -r run clean",
     "dev:api": "pnpm --filter @pkg/api dev",
     "dev:worker": "pnpm --filter @pkg/worker dev",
