@@ -6,9 +6,12 @@ export const ExampleJobActionSchema = z.enum(['send-email', 'generate-report', '
 export type ExampleJobAction = z.infer<typeof ExampleJobActionSchema>;
 
 // --- Create Example Job ---
+// No userId field: the job is attributed to the SESSION user by the API.
+// Accepting an identity from the payload would let any caller enqueue work
+// attributed to someone else — the same class of hole as trusting a body id
+// anywhere else.
 export const CreateExampleJobRequestSchema = z
   .object({
-    userId: z.string().min(1),
     action: ExampleJobActionSchema,
     data: z.record(z.string(), z.unknown()).default({}),
     priority: z.number().int().min(1).max(10).optional(),
