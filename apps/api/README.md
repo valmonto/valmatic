@@ -102,8 +102,10 @@ Routes are protected by default. `@PublicRoute()` opts out; login and register
 are the only ones that do — and register is additionally CLOSED by default
 (`AUTH_REGISTRATION_ENABLED=false`): accounts come from the seed, from org
 admins via `user:create`, or from a product's own onboarding. Login and
-register sit behind strict per-IP rate limits; everything else has a generous
-Redis-backed limit (policy in `src/config/rate-limit.ts`).
+register sit behind strict per-IP rate limits declared AT the routes
+(`@Throttle`); everything else gets a generous Redis-backed default budget per
+verified user. `@SkipThrottle()` opts a route out — health does. Volumetric
+floods are the edge's job, not Node's: see `docs/edge-protection.md`.
 
 Service errors are Nest exceptions carrying **translation keys**, not sentences:
 

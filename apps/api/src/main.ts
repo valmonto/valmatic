@@ -8,10 +8,6 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import fastifyCookie from '@fastify/cookie';
 import fastifyHelmet from '@fastify/helmet';
-import fastifyRateLimit from '@fastify/rate-limit';
-import { IAM_REDIS } from '@pkg/server';
-import Redis from 'ioredis';
-import { rateLimitErrorResponse, rateLimitKey, rateLimitMax } from './config/rate-limit';
 
 async function bootstrap(): Promise<void> {
   // trustProxy must exist before the app does, so it reads the raw env (the
@@ -49,65 +45,6 @@ async function bootstrap(): Promise<void> {
   await app.register(fastifyHelmet, {
     contentSecurityPolicy: false,
     crossOriginResourcePolicy: { policy: 'cross-origin' },
-  });
-
-  // Rate limiting — Redis-backed so limits hold across replicas and restarts.
-  // Policy lives in config/rate-limit.ts (unit-tested): strict per-IP buckets
-  // on login/register, a generous general limit keyed by IP + session
-  // elsewhere. Off under test so suites never fight it.
-  if (config.get<string>('NODE_ENV') !== 'test') {
-    const rateLimitEnv = {
-      max: config.get<number>('RATE_LIMIT_MAX', 300),
-      authMax: config.get<number>('RATE_LIMIT_AUTH_MAX', 10),
-      windowMs: config.get<number>('RATE_LIMIT_WINDOW_MS', 60_000),
-    };
-
-    // A dedicated limiter Redis when configured; the IAM one otherwise. The
-    // keys are namespaced either way, so switching later migrates nothing.
-    const rateLimitRedisHost = config.get<string>('RATE_LIMIT_REDIS_HOST');
-    const rateLimitRedis = rateLimitRedisHost
-      ? new Redis({
-          host: rateLimitRedisHost,
-          port: config.get<number>('RATE_LIMIT_REDIS_PORT', 6379),
-          password: config.get<string>('RATE_LIMIT_REDIS_PASSWORD'),
-        })
-      : app.get<Redis>(IAM_REDIS);
-
-    await app.register(fastifyRateLimit, {
-      global: true,
-      redis: rateLimitRedis,
-      nameSpace: 'rate-limit:',
-      timeWindow: rateLimitEnv.windowMs,
-      max: (req) => rateLimitMax(rateLimitEnv, { ip: req.ip, url: req.url }),
-      keyGenerator: (req) =>
-        rateLimitKey({
-          ip: req.ip,
-          url: req.url,
-          cookies: req.cookies as Record<string, string | undefined>,
-          authorizationHeader: req.headers.authorization,
-        }),
-      allowList: (req) => req.url.split('?')[0] === '/health',
-      errorResponseBuilder: () => rateLimitErrorResponse(),
-    });
-  }
-
-  await app.register(fastifyCookie, {
-    secret: config.getOrThrow<string>('IAM_COOKIE_SECRET'),
-    parseOptions: {},
-  });
-
-  // CORS — browsers (e.g. the Expo web build at localhost:8081, or any SPA on a
-  // different origin) send a preflight that must be allowed. Native apps don't
-  // enforce CORS, so this only matters for web clients. Set CORS_ORIGINS to a
-  // comma-separated allowlist in production; in dev we reflect localhost/LAN.
-  const corsOrigins = config.get<string>('CORS_ORIGINS');
-  app.enableCors({
-    origin: corsOrigins
-      ? corsOrigins.split(',').map((o) => o.trim())
-      : [/^http:\/\/localhost:\d+$/, /^http:\/\/127\.0\.0\.1:\d+$/, /^http:\/\/192\.168\.\d+\.\d+:\d+$/],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Client'],
   });
 
   app.setGlobalPrefix('api', { exclude: ['health'] });

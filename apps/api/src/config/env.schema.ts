@@ -59,8 +59,9 @@ export const envSchema = z.object({
   RATE_LIMIT_REDIS_PORT: z.coerce.number().int().min(1).max(65535).default(6379),
   RATE_LIMIT_REDIS_PASSWORD: z.string().optional(),
 
-  RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(300), // per window, general traffic
-  RATE_LIMIT_AUTH_MAX: z.coerce.number().int().min(1).default(10), // per window, login/register per IP
+  // The global default budget. Stricter per-route limits are declared at the
+  // routes themselves with @Throttle (login/register: 10/min).
+  RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(300),
   RATE_LIMIT_WINDOW_MS: z.coerce.number().int().min(1000).default(60_000),
 
   // Telemetry — all optional; absent means the corresponding service is a
