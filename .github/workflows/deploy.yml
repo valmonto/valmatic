@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  # Manual runs: exercise the e2e gate on demand (auth/session/cookie changes)
+  # without waiting for a deploy.
+  workflow_dispatch:
 
 concurrency:
   group: deploy-main
@@ -15,6 +18,27 @@ jobs:
   # builds and deploys perfectly happily — that is what this catches.
   verify:
     runs-on: ubuntu-latest
+
+    # Same database as verify.yml — without one, describeIntegration suites
+    # skip silently and the DEPLOY gate is weaker than the PR gate.
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: valmatic
+          POSTGRES_PASSWORD: valmatic
+          POSTGRES_DB: valmatic_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U valmatic"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://valmatic:valmatic@localhost:5432/valmatic_test
+
     steps:
       - uses: actions/checkout@v4
 
@@ -27,10 +51,45 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - name: Apply migrations
+        run: |
+          pnpm --filter @pkg/database build
+          pnpm db:migrate
+
       - run: pnpm verify
 
-  deploy:
+  # The whole stack, booted: postgres, redis, api, web behind HTTPS — then the
+  # Playwright specs against it. This is the only place helmet, the throttler,
+  # cookies and login are exercised on a RUNNING server, and it gates
+  # production only: PRs stay fast, an MVP that never deploys never pays for
+  # this. Trigger manually via workflow_dispatch when touching auth/session
+  # code.
+  e2e:
     needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run E2E stack
+        run: |
+          mkdir -p apps/e2e/test-results
+          docker compose -f compose.e2e.yml up --build --abort-on-container-exit --exit-code-from e2e
+
+      - name: Teardown
+        if: always()
+        run: docker compose -f compose.e2e.yml down -v
+
+      - name: Upload Playwright results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: apps/e2e/test-results
+
+  deploy:
+    # Manual workflow_dispatch runs the gates without shipping.
+    if: github.event_name == 'push'
+    needs: [verify, e2e]
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to VPS via SSH
