@@ -26,6 +26,7 @@ Kept here so the list stays honest about what changed and why.
 | No security headers                                       | `@fastify/helmet` on the api (CSP off — JSON API; CORP cross-origin so the SPA can consume responses)                                                                                                                                  |
 | No IP rate limiting                                       | Redis-backed `@nestjs/throttler`: per-route `@Throttle` decorators (login/register strict per IP, closing the cross-email spray), a global budget keyed by VERIFIED userId (carrier-NAT safe), `@SkipThrottle` on health, off under test |
 | `ROLE_PERMISSIONS` untested                               | Invariant tests in `packages/contracts`: no orphan permissions, MEMBER ⊆ ADMIN ⊆ OWNER, every role holds the self-service core; helpers degrade an unknown (stale-JWT) role to 403 instead of crashing the guard                        |
+| E2E never ran anywhere                                    | Deploy gate (`deploy.yml`: verify → e2e → deploy), OPT-IN via the `E2E_GATE=on` Actions variable — a product enables it when its deploys deserve the ~8 min, same philosophy as every other switch. Also runnable on demand via workflow_dispatch. Deliberately not per-PR |
 | Open self-registration                                    | Closed by default (`AUTH_REGISTRATION_ENABLED=false`): accounts come from the seed, org admins, or a product's own onboarding. Server enforces; clients hide the page                                                                   |
 | Feature flags                                             | Shipped: resolved server-side (PostHog when configured, all-off otherwise), delivered in `/auth/me` as `features` beside `permissions`, read via `useFeature()` on web and mobile                                                       |
 
@@ -48,15 +49,6 @@ the tests in section 2.
 rendering of them (permission gates, org switching, auth flows) is not.
 
 **Cost:** ~1–2d for the critical paths.
-
-### E2E never runs in CI
-
-Four Playwright specs exist. `verify.yml` and `deploy.yml` do not invoke them,
-so nothing checks that login works before a deploy.
-
-**Cost:** ~2h (a job using `compose.e2e.yml`).
-**Value:** catches "the app boots but nobody can log in", which the health check
-cannot see.
 
 ### The golden harness is unused
 
@@ -161,5 +153,4 @@ verification both.
 ## Suggested order
 
 1. **Admin UI + Bull Board** — the `@SystemRoles` gate is built; give it a screen
-2. **E2E in CI** — ~2h
-3. Then features, starting with email → password reset → verification
+2. Then features, starting with email → password reset → verification
