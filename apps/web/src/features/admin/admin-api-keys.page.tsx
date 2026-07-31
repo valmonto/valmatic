@@ -155,7 +155,23 @@ function CreateKeyDialog({
           />
         </div>
         <div className="grid gap-2">
-          <Label>{t(k.admin.apiKeys.scopes)}</Label>
+          {/* Master check-all mirrors the group ones, one level up. */}
+          <label className="flex items-center gap-2">
+            <Checkbox
+              checked={
+                scopes.length === 0
+                  ? false
+                  : scopes.length === MCP_SCOPES.length
+                    ? true
+                    : 'indeterminate'
+              }
+              onCheckedChange={(checked) => setScopes(checked === true ? [...MCP_SCOPES] : [])}
+            />
+            <Label className="cursor-pointer">{t(k.admin.apiKeys.scopes)}</Label>
+            <span className="text-xs text-muted-foreground/70 tabular-nums">
+              {scopes.length}/{MCP_SCOPES.length}
+            </span>
+          </label>
           {/* Domain groups tile the width; each group card holds its scopes.
               More domains -> more tiles; more scopes in a domain -> the tile
               grows down. Group check-all goes indeterminate on partial. */}
