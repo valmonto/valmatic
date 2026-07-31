@@ -89,6 +89,7 @@ attachment
   subject_id    uuid         NOT NULL                     -- polymorphic, no FK
   kind          varchar(16)  NOT NULL                     -- image|video|audio|file
   status        varchar(16)  NOT NULL default 'pending'   -- pending|uploaded
+  bucket        varchar(255) NOT NULL default app bucket  -- per-row blob home
   blob_id       uuid NOT NULL
   thumbnail_blob_id uuid
   waveform      jsonb
@@ -153,6 +154,52 @@ Per-tenant storage accounting later = list by prefix. Costs nothing today.
   attachments have no official upload API, repo commits bloat clones forever,
   and quasi-public user-content URLs leak private-org screenshots. rustfs
   inside the tenancy walls is the answer; GitHub gets links, never bytes.
+
+## Backends, multi-tenancy and scale — decisions made 2026-07-31
+
+**Backend is a deployment decision, never a code decision.** The
+provider-blind client means each valmatic deployment points `STORAGE_*`
+wherever it wants:
+
+| Deployment shape | Storage | Config |
+| --- | --- | --- |
+| default (small app, one VPS) | local rustfs container | `STORAGE_ENDPOINT=http://rustfs:9000` |
+| heavier app / rapid growth | OVH Object Storage / R2 / S3 | managed endpoint + keys, nothing else changes |
+| big-customer isolated instance | its own rustfs on its own box | endpoint = that box |
+
+Keep the compose rustfs service easy to omit (profile or documented
+delete-this-block) — a deployment on managed storage should not run a
+vestigial local one. `forcePathStyle` stays auto-on for custom endpoints;
+OVH/R2/MinIO/rustfs all accept it.
+
+**Per-org custom buckets / BYO org storage: rejected for now.** Org isolation
+lives at the API layer + key prefixes; BYO storage would force us to store
+tenant S3 credentials (the no-secrets rule broken in the worst way, with no
+GitHub-App-style one-platform-key trick available) and makes their outages
+our pager. The valmatic answer to "we want our data separate" is an isolated
+per-customer deployment — the template makes that nearly free. Revisit only
+against a signed enterprise contract.
+
+**The one hedge shipped now: every attachment row records where its blob
+lives** (`bucket` column, defaulted to the app bucket). It costs one column
+and buys every future move without backfills.
+
+**Scaling playbook for one growing SaaS** — each stage is additive, none
+requires reworking the previous:
+
+1. Local rustfs (free, fine into hundreds of GB).
+2. Grow the mounted volume (block storage stretches to TBs; zero app change).
+3. Migrate to managed object storage: copy objects, flip env — zero code.
+   This is the expected "rapid growth" move; managed S3-class storage is the
+   cheapest bill in cloud computing and sharding self-hosted nodes to avoid
+   it is ops burden with no upside.
+3b. Self-hosted at scale: rustfs/MinIO cluster below the S3 API — the storage
+   layer's job, app still sees one endpoint.
+4. Last resort, app-level multi-backend routing: a backend registry
+   (id → endpoint/bucket/keys), `backend_id` stamped on new rows, uploads go
+   to the active backend, reads follow the row. Old blobs never move, no
+   rebalancing exists. Possible precisely because of the per-row location
+   hedge — build it only after stage 3 has concretely failed.
 
 ## Module layout (implementation plan)
 
