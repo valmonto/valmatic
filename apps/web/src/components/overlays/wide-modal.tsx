@@ -67,9 +67,12 @@ export function WideModal({
             </div>
           </DialogHeader>
         )}
-        {/* Scroll region — fades at top/bottom hint there's more content. */}
-        <div className="relative flex-1 overflow-hidden">
-          <div className="h-full overflow-y-auto overscroll-contain px-6 py-5">{children}</div>
+        {/* Scroll region — fades at top/bottom hint there's more content.
+            max-h-full, not h-full: h-full is circular when a caller overrides
+            the modal to content height (h-auto) and squashes the children;
+            max-h-full behaves identically at the default fixed height. */}
+        <div className="relative min-h-0 flex-1 overflow-hidden">
+          <div className="max-h-full overflow-y-auto overscroll-contain px-6 py-5">{children}</div>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-background to-transparent" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-background to-transparent" />
         </div>
