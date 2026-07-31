@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { k } from '@pkg/locales';
 import { MCP_SCOPES, type ApiKey, type McpScope } from '@pkg/contracts';
-import { Check, Copy, KeyRound, Loader2, Plus, Trash2 } from 'lucide-react';
+import { Check, Copy, Info, KeyRound, Loader2, Plus, Trash2 } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -33,8 +33,8 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { cn } from '@/shared/lib/utils';
 import { PageHeader } from '@/shared/components/page-header';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { WideModal } from '@/components/overlays/wide-modal';
 import { AdminGate } from './components/admin-gate';
 import {
@@ -155,40 +155,43 @@ function CreateKeyDialog({
           />
         </div>
         <div className="grid gap-2">
-          {/* Master check-all mirrors the group ones, one level up. */}
-          <label className="flex items-center gap-2">
-            <Checkbox
-              checked={
-                scopes.length === 0
-                  ? false
-                  : scopes.length === MCP_SCOPES.length
-                    ? true
-                    : 'indeterminate'
-              }
-              onCheckedChange={(checked) => setScopes(checked === true ? [...MCP_SCOPES] : [])}
-            />
-            <Label className="cursor-pointer">{t(k.admin.apiKeys.scopes)}</Label>
-            <span className="text-xs text-muted-foreground/70 tabular-nums">
-              {scopes.length}/{MCP_SCOPES.length}
-            </span>
-          </label>
-          {/* Domain groups tile the width; each group card holds its scopes.
-              More domains -> more tiles; more scopes in a domain -> the tile
-              grows down. Group check-all goes indeterminate on partial. */}
-          <div className="grid items-start gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {/* Header: label left, master check-all right (indeterminate on partial). */}
+          <div className="flex items-center justify-between">
+            <Label>{t(k.admin.apiKeys.scopes)}</Label>
+            <label className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground/70 tabular-nums">
+                {scopes.length}/{MCP_SCOPES.length}
+              </span>
+              <Checkbox
+                checked={
+                  scopes.length === 0
+                    ? false
+                    : scopes.length === MCP_SCOPES.length
+                      ? true
+                      : 'indeterminate'
+                }
+                onCheckedChange={(checked) => setScopes(checked === true ? [...MCP_SCOPES] : [])}
+              />
+            </label>
+          </div>
+          {/* One row per domain; the domain's actions sit inline as compact
+              chips. Selection reads from the checkbox alone; the description
+              lives in a hover tooltip instead of card chrome. */}
+          <TooltipProvider delayDuration={200}>
+          <div className="divide-y rounded-lg border">
             {scopeGroups.map(([domain, domainScopes]) => {
               const selectedCount = domainScopes.filter((scope) => scopes.includes(scope)).length;
-              const groupState: boolean | 'indeterminate' =
-                selectedCount === 0
-                  ? false
-                  : selectedCount === domainScopes.length
-                    ? true
-                    : 'indeterminate';
               return (
-                <div key={domain} className="grid content-start gap-2">
-                  <label className="flex items-center gap-2 px-0.5">
+                <div key={domain} className="flex flex-wrap items-center gap-x-6 gap-y-2 px-3 py-2.5">
+                  <label className="flex w-32 shrink-0 items-center gap-2">
                     <Checkbox
-                      checked={groupState}
+                      checked={
+                        selectedCount === 0
+                          ? false
+                          : selectedCount === domainScopes.length
+                            ? true
+                            : 'indeterminate'
+                      }
                       onCheckedChange={(checked) =>
                         setScopes((prev) =>
                           checked === true
@@ -200,36 +203,37 @@ function CreateKeyDialog({
                     <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                       {domain}
                     </span>
-                    <span className="text-xs text-muted-foreground/70 tabular-nums">
-                      {selectedCount}/{domainScopes.length}
-                    </span>
                   </label>
-                  <div className="grid gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     {domainScopes.map((scope) => {
                       const selected = scopes.includes(scope);
+                      const action = scope.split(':')[1]!;
                       return (
-                        <button
-                          key={scope}
-                          type="button"
-                          onClick={() => toggleScope(scope)}
-                          aria-pressed={selected}
-                          className={cn(
-                            'flex items-start gap-3 rounded-md border p-3 text-left transition-colors',
-                            selected
-                              ? 'border-primary/50 bg-primary/5'
-                              : 'border-border hover:bg-muted/50',
+                        <Tooltip key={scope}>
+                          <TooltipTrigger asChild>
+                            <button
+                              type="button"
+                              onClick={() => toggleScope(scope)}
+                              aria-pressed={selected}
+                              className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 transition-colors hover:bg-muted/50"
+                            >
+                              <Checkbox
+                                checked={selected}
+                                className="pointer-events-none size-3.5"
+                              />
+                              <code className="font-mono text-xs">{action}</code>
+                              {scopeDesc(scope) && (
+                                <Info className="size-3 text-muted-foreground/50" />
+                              )}
+                            </button>
+                          </TooltipTrigger>
+                          {scopeDesc(scope) && (
+                            <TooltipContent className="max-w-xs">
+                              <p className="mb-0.5 font-mono text-[11px]">{scope}</p>
+                              <p>{scopeDesc(scope)}</p>
+                            </TooltipContent>
                           )}
-                        >
-                          <Checkbox checked={selected} className="pointer-events-none mt-0.5" />
-                          <span className="min-w-0">
-                            <code className="font-mono text-xs font-medium">{scope}</code>
-                            {scopeDesc(scope) && (
-                              <span className="mt-1 block text-xs text-muted-foreground">
-                                {scopeDesc(scope)}
-                              </span>
-                            )}
-                          </span>
-                        </button>
+                        </Tooltip>
                       );
                     })}
                   </div>
@@ -237,6 +241,7 @@ function CreateKeyDialog({
               );
             })}
           </div>
+          </TooltipProvider>
         </div>
         {create.error && <p className="text-sm text-destructive">{t(create.error.message)}</p>}
       </div>
