@@ -76,8 +76,11 @@ services:
       IAM_REDIS_HOST: redis
     # Host-port range so up to 5 replicas each bind a distinct loopback port
     # (3011..3015); point your host proxy's upstreams at this range.
+    # Host ports are .env-configurable (WEB_HOST_PORT / API_HOST_PORT) —
+    # several valmatic-descended apps share one VM, each needs its own
+    # loopback ports, and the host proxy is the only public listener.
     ports:
-      - '127.0.0.1:3011-3015:3000'
+      - '127.0.0.1:${API_HOST_PORT:-3011}-${API_HOST_PORT_MAX:-3015}:3000'
     networks:
       - staging_network
     # Without this, `docker compose up --wait` only waits for the container to
@@ -115,7 +118,7 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - '127.0.0.1:3010:3000'
+      - '127.0.0.1:${WEB_HOST_PORT:-3010}:3000'
     networks:
       - staging_network
     depends_on:
