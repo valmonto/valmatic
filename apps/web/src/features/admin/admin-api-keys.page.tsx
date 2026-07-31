@@ -182,8 +182,11 @@ function CreateKeyDialog({
             {scopeGroups.map(([domain, domainScopes]) => {
               const selectedCount = domainScopes.filter((scope) => scopes.includes(scope)).length;
               return (
-                <div key={domain} className="flex flex-wrap items-center gap-x-6 gap-y-2 px-3 py-2.5">
-                  <label className="flex w-32 shrink-0 items-center gap-2">
+                <div
+                  key={domain}
+                  className="grid grid-cols-[8rem_minmax(0,1fr)] items-start gap-x-4 px-3 py-2.5"
+                >
+                  <label className="flex items-center gap-2 py-1.5">
                     <Checkbox
                       checked={
                         selectedCount === 0
