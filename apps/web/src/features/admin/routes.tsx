@@ -14,4 +14,8 @@ export const adminRoutes: RouteObject[] = [
     path: 'admin/permissions',
     lazy: () => import('./admin-permissions.page').then((m) => ({ Component: m.default })),
   },
+  {
+    path: 'admin/api-keys',
+    lazy: () => import('./admin-api-keys.page').then((m) => ({ Component: m.default })),
+  },
 ];

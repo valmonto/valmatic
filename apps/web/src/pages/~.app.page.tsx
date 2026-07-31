@@ -46,6 +46,7 @@ const pageTitles: Record<string, string> = {
   '/settings': 'Settings',
   '/admin/orgs': 'Organizations',
   '/admin/permissions': 'Permissions',
+  '/admin/api-keys': 'API keys',
   '/components': 'Components',
 };
 
