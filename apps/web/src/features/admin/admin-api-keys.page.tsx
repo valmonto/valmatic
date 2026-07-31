@@ -169,8 +169,8 @@ function CreateKeyDialog({
                     ? true
                     : 'indeterminate';
               return (
-                <div key={domain} className="rounded-lg border bg-card/50 p-3">
-                  <label className="mb-2 flex items-center gap-2">
+                <div key={domain} className="grid content-start gap-2">
+                  <label className="flex items-center gap-2 px-0.5">
                     <Checkbox
                       checked={groupState}
                       onCheckedChange={(checked) =>
@@ -184,7 +184,7 @@ function CreateKeyDialog({
                     <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                       {domain}
                     </span>
-                    <span className="ml-auto text-xs text-muted-foreground tabular-nums">
+                    <span className="text-xs text-muted-foreground/70 tabular-nums">
                       {selectedCount}/{domainScopes.length}
                     </span>
                   </label>
