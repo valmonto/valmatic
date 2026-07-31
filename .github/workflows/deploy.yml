@@ -23,7 +23,8 @@ jobs:
     # skip silently and the DEPLOY gate is weaker than the PR gate.
     services:
       postgres:
-        image: postgres:17-alpine
+        # Must match compose.staging.yml — uuidv7() defaults need PostgreSQL 18.
+        image: postgres:18-alpine
         env:
           POSTGRES_USER: valmatic
           POSTGRES_PASSWORD: valmatic
