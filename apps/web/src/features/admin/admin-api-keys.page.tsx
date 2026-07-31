@@ -154,70 +154,73 @@ function CreateKeyDialog({
             maxLength={64}
           />
         </div>
-        <div className="grid gap-4">
+        <div className="grid gap-2">
           <Label>{t(k.admin.apiKeys.scopes)}</Label>
-          {/* Grouped by domain prefix; each group has a check-all with an
-              indeterminate state — the picker scales as apps grow domains. */}
-          {scopeGroups.map(([domain, domainScopes]) => {
-            const selectedCount = domainScopes.filter((scope) => scopes.includes(scope)).length;
-            const groupState: boolean | 'indeterminate' =
-              selectedCount === 0
-                ? false
-                : selectedCount === domainScopes.length
-                  ? true
-                  : 'indeterminate';
-            return (
-              <div key={domain} className="grid gap-2">
-                <label className="flex items-center gap-2">
-                  <Checkbox
-                    checked={groupState}
-                    onCheckedChange={(checked) =>
-                      setScopes((prev) =>
-                        checked === true
-                          ? [...new Set([...prev, ...domainScopes])]
-                          : prev.filter((scope) => !domainScopes.includes(scope)),
-                      )
-                    }
-                  />
-                  <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                    {domain}
-                  </span>
-                  <span className="text-xs text-muted-foreground tabular-nums">
-                    {selectedCount}/{domainScopes.length}
-                  </span>
-                </label>
-                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {domainScopes.map((scope) => {
-                    const selected = scopes.includes(scope);
-                    return (
-                      <button
-                        key={scope}
-                        type="button"
-                        onClick={() => toggleScope(scope)}
-                        aria-pressed={selected}
-                        className={cn(
-                          'flex items-start gap-3 rounded-lg border p-3 text-left transition-colors',
-                          selected
-                            ? 'border-primary/50 bg-primary/5'
-                            : 'border-border hover:bg-muted/50',
-                        )}
-                      >
-                        <Checkbox checked={selected} className="pointer-events-none mt-0.5" />
-                        <span className="min-w-0">
-                          <code className="font-mono text-xs font-medium">{scope}</code>
-                          {scopeDesc(scope) && (
-                            <span className="mt-1 block text-xs text-muted-foreground">
-                              {scopeDesc(scope)}
-                            </span>
+          {/* Domain groups tile the width; each group card holds its scopes.
+              More domains -> more tiles; more scopes in a domain -> the tile
+              grows down. Group check-all goes indeterminate on partial. */}
+          <div className="grid items-start gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {scopeGroups.map(([domain, domainScopes]) => {
+              const selectedCount = domainScopes.filter((scope) => scopes.includes(scope)).length;
+              const groupState: boolean | 'indeterminate' =
+                selectedCount === 0
+                  ? false
+                  : selectedCount === domainScopes.length
+                    ? true
+                    : 'indeterminate';
+              return (
+                <div key={domain} className="rounded-lg border bg-card/50 p-3">
+                  <label className="mb-2 flex items-center gap-2">
+                    <Checkbox
+                      checked={groupState}
+                      onCheckedChange={(checked) =>
+                        setScopes((prev) =>
+                          checked === true
+                            ? [...new Set([...prev, ...domainScopes])]
+                            : prev.filter((scope) => !domainScopes.includes(scope)),
+                        )
+                      }
+                    />
+                    <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                      {domain}
+                    </span>
+                    <span className="ml-auto text-xs text-muted-foreground tabular-nums">
+                      {selectedCount}/{domainScopes.length}
+                    </span>
+                  </label>
+                  <div className="grid gap-2">
+                    {domainScopes.map((scope) => {
+                      const selected = scopes.includes(scope);
+                      return (
+                        <button
+                          key={scope}
+                          type="button"
+                          onClick={() => toggleScope(scope)}
+                          aria-pressed={selected}
+                          className={cn(
+                            'flex items-start gap-3 rounded-md border p-3 text-left transition-colors',
+                            selected
+                              ? 'border-primary/50 bg-primary/5'
+                              : 'border-border hover:bg-muted/50',
                           )}
-                        </span>
-                      </button>
-                    );
-                  })}
+                        >
+                          <Checkbox checked={selected} className="pointer-events-none mt-0.5" />
+                          <span className="min-w-0">
+                            <code className="font-mono text-xs font-medium">{scope}</code>
+                            {scopeDesc(scope) && (
+                              <span className="mt-1 block text-xs text-muted-foreground">
+                                {scopeDesc(scope)}
+                              </span>
+                            )}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
         {create.error && <p className="text-sm text-destructive">{t(create.error.message)}</p>}
       </div>
