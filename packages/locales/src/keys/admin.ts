@@ -21,6 +21,11 @@ export const admin = {
     namePlaceholder: 'admin.apiKeys.namePlaceholder',
     scopes: 'admin.apiKeys.scopes',
     scopesHint: 'admin.apiKeys.scopesHint',
+    scopeDesc: {
+      'platform:read': 'admin.apiKeys.scopeDesc.platform-read',
+      'orgs:read': 'admin.apiKeys.scopeDesc.orgs-read',
+      'tasks:agent': 'admin.apiKeys.scopeDesc.tasks-agent',
+    },
     prefix: 'admin.apiKeys.prefix',
     lastUsed: 'admin.apiKeys.lastUsed',
     never: 'admin.apiKeys.never',
