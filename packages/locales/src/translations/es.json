@@ -1,5 +1,7 @@
 {
   "admin.activeOrgHint": "Cambia a otra organización antes de eliminar aquella en la que estás activo",
+  "admin.apiKeys.connectHint": "Ejecútalo una vez en la máquina donde trabaja el agente — registra el servidor MCP de esta app con la clave incluida.",
+  "admin.apiKeys.connectTitle": "Conectar Claude Code",
   "admin.apiKeys.copied": "Copiado",
   "admin.apiKeys.copy": "Copiar",
   "admin.apiKeys.createKey": "Crear clave",

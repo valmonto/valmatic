@@ -47,31 +47,49 @@ import {
  * The one moment the plaintext exists client-side. Shown once, copied, gone —
  * closing this dialog is irreversible by design (the server keeps only a hash).
  */
-function KeyRevealDialog({ plaintext, onClose }: { plaintext: string; onClose: () => void }) {
+function CopyBlock({ value, rows }: { value: string; rows?: boolean }) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
-    await navigator.clipboard.writeText(plaintext);
+    await navigator.clipboard.writeText(value);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
+    <div className={rows ? 'grid gap-2' : 'flex items-center gap-2'}>
+      <code className="min-w-0 flex-1 rounded-md bg-muted px-3 py-2 font-mono text-xs break-all select-all">
+        {value}
+      </code>
+      <Button variant="outline" size="sm" className="w-fit" onClick={() => void copy()}>
+        {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+        {t(copied ? k.admin.apiKeys.copied : k.admin.apiKeys.copy)}
+      </Button>
+    </div>
+  );
+}
+
+function KeyRevealDialog({ plaintext, onClose }: { plaintext: string; onClose: () => void }) {
+  const { t } = useTranslation();
+
+  // Built from the current origin so the snippet is correct for whichever
+  // app minted the key; the server name is the deploy's own subdomain label.
+  const serverName = window.location.hostname.split('.')[0] || 'app';
+  const mcpCommand = `claude mcp add --transport http ${serverName} ${window.location.origin}/api/mcp --header "Authorization: Bearer ${plaintext}"`;
+
+  return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>{t(k.admin.apiKeys.keyCreatedTitle)}</DialogTitle>
           <DialogDescription>{t(k.admin.apiKeys.keyCreatedWarning)}</DialogDescription>
         </DialogHeader>
-        <div className="flex items-center gap-2">
-          <code className="min-w-0 flex-1 rounded-md bg-muted px-3 py-2 font-mono text-xs break-all select-all">
-            {plaintext}
-          </code>
-          <Button variant="outline" size="sm" onClick={() => void copy()}>
-            {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-            {t(copied ? k.admin.apiKeys.copied : k.admin.apiKeys.copy)}
-          </Button>
+        <CopyBlock value={plaintext} />
+        <div className="grid gap-1.5">
+          <p className="text-sm font-medium">{t(k.admin.apiKeys.connectTitle)}</p>
+          <p className="text-xs text-muted-foreground">{t(k.admin.apiKeys.connectHint)}</p>
+          <CopyBlock value={mcpCommand} rows />
         </div>
         <DialogFooter>
           <Button onClick={onClose}>{t(k.admin.apiKeys.done)}</Button>

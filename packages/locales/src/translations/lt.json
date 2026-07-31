@@ -1,5 +1,7 @@
 {
   "admin.activeOrgHint": "Prieš ištrindami organizaciją, kurioje esate aktyvus, perjunkite į kitą",
+  "admin.apiKeys.connectHint": "Paleiskite vieną kartą mašinoje, kurioje dirba agentas — užregistruoja šios programos MCP serverį su įtrauktu raktu.",
+  "admin.apiKeys.connectTitle": "Prijungti Claude Code",
   "admin.apiKeys.copied": "Nukopijuota",
   "admin.apiKeys.copy": "Kopijuoti",
   "admin.apiKeys.createKey": "Sukurti raktą",

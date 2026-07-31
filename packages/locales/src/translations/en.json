@@ -1,5 +1,7 @@
 {
   "admin.activeOrgHint": "Switch to another organization before deleting the one you are active in",
+  "admin.apiKeys.connectHint": "Run this once on the machine the agent works from — it registers this app's MCP server with the key baked in.",
+  "admin.apiKeys.connectTitle": "Connect Claude Code",
   "admin.apiKeys.copied": "Copied",
   "admin.apiKeys.copy": "Copy",
   "admin.apiKeys.createKey": "Create key",

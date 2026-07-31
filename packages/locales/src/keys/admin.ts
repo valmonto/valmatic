@@ -38,5 +38,7 @@ export const admin = {
     copy: 'admin.apiKeys.copy',
     copied: 'admin.apiKeys.copied',
     done: 'admin.apiKeys.done',
+    connectTitle: 'admin.apiKeys.connectTitle',
+    connectHint: 'admin.apiKeys.connectHint',
   },
 } as const;
