@@ -201,6 +201,51 @@ requires reworking the previous:
    rebalancing exists. Possible precisely because of the per-row location
    hedge — build it only after stage 3 has concretely failed.
 
+## Provider swaps: the contract, the check, the playbook
+
+Implemented with the specbook build (2026-08-01); port these pieces with it.
+
+**The contract is named twice.** `StorageDriver` (packages/server storage
+types) is the compile-time half — `StorageService implements StorageDriver`,
+and any future non-S3 protocol implements the same interface behind a
+provider option with consumers untouched. The behavioral half is
+`pnpm storage:conformance` (packages/server): a standalone script that runs
+the five moves the attachments protocol actually makes — ensure-bucket,
+presigned PUT exactly as a browser does it, HEAD truthfulness (what confirm
+relies on), presigned GET with content-disposition, delete-and-verify-gone —
+against any `STORAGE_*` endpoint and prints PASS/FAIL per step. Run it
+BEFORE adopting a provider; it turns "I think R2 works" into evidence.
+
+**Compat settings already absorbed at the seam** (StorageService, invisible
+to consumers): `requestChecksumCalculation`/`responseChecksumValidation:
+WHEN_REQUIRED` (the aws-sdk default CRC32 checksums break several
+S3-compatibles; no-op on AWS), and `manageBucket`/`manageCors` capability
+flags (default true) for providers whose tokens cannot CreateBucket or
+PutBucketCors — R2 buckets are dashboard-owned; the flags turn init into a
+clean no-op instead of a boot crash.
+
+**When a check fails — severity and remedy per step:**
+
+| Failing check | Breaks | Play |
+| --- | --- | --- |
+| ensure bucket | boot init | Permissions model, not a bug: pre-create in the provider dashboard, set the manage flags false. Config, minutes. |
+| presigned PUT | every upload | Checksums (defused), path-style toggle, region/signature, clock skew. Config in nearly all cases. |
+| HEAD truthfulness | the confirm step | Serious: shim inside StorageService keyed by a provider option (e.g. ranged-GET parsing Content-Range). This is where a second driver implementation is BORN — from a real divergence, never speculatively. |
+| content-disposition | download filenames | Cosmetic: accept, or proxy only the download path for that provider. Non-blocking. |
+| delete | sweep, user deletion, privacy | Disqualifying. A store where delete does not delete cannot hold user files. Reject the provider. |
+
+Escalation ladder: **config knob → shim in the one seam file → reject the
+provider.** Adapter classes stay deferred until rung two is reached for a
+real provider — the interface shape gets extracted from a second
+implementation, not guessed ahead of it.
+
+**Sweep chunking** (documented here because it was asked): each of the three
+GC predicates is bounded (batch 100 per 15-minute tick), and processed rows
+leave their predicate — so the next tick's identical query naturally returns
+the next chunk. No offset pagination, no memory pressure; a 10k backlog
+drains itself. If mass-expiry ever gets real, the upgrade is batched
+DeleteObjects (1000 keys/call) under a per-tick time budget.
+
 ## Module layout (implementation plan)
 
 ```
