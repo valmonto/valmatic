@@ -51,28 +51,36 @@ export function BottomSheet({ open, onClose, title, description, children }: Bot
           open ? 'opacity-100' : 'opacity-0',
         )}
       />
+      {/* Scrolling lives on the INNER div, never on the translated panel:
+          scrolling an element that carries a transform leaves stale
+          composited layers behind — ghost double-painted text when the user
+          reverses scroll direction. */}
       <div
         className={cn(
-          'absolute inset-x-0 bottom-0 max-h-[85%] overflow-y-auto rounded-t-3xl border-t border-border/60 bg-background shadow-[0_-12px_40px_-12px_rgba(16,18,28,0.3)] transition-transform duration-250 ease-out',
+          'absolute inset-x-0 bottom-0 flex max-h-[85%] flex-col rounded-t-3xl border-t border-border/60 bg-background shadow-[0_-12px_40px_-12px_rgba(16,18,28,0.3)] transition-transform duration-250 ease-out',
           open ? 'translate-y-0' : 'translate-y-full',
         )}
       >
-        <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-muted-foreground/25" />
-        <div className="flex items-start justify-between gap-3 px-5 pt-4 pb-1">
-          <div>
-            <h2 className="text-base font-semibold tracking-tight">{title}</h2>
-            {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-muted-foreground/25" />
+          <div className="flex items-start justify-between gap-3 px-5 pt-4 pb-1">
+            <div>
+              <h2 className="text-base font-semibold tracking-tight">{title}</h2>
+              {description && (
+                <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full bg-muted p-1.5 text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <X className="size-4" />
+              <span className="sr-only">Close</span>
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-full bg-muted p-1.5 text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <X className="size-4" />
-            <span className="sr-only">Close</span>
-          </button>
+          <div className="px-5 pt-3 pb-7">{children}</div>
         </div>
-        <div className="px-5 pt-3 pb-7">{children}</div>
       </div>
     </div>
   );
