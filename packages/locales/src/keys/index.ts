@@ -9,6 +9,7 @@
  *   throw new UnauthorizedException(k.auth.errors.invalidCredentials)
  */
 export { admin } from './admin';
+export { attachments } from './attachments';
 export { auth } from './auth';
 export { users } from './users';
 export { orgs } from './orgs';
@@ -20,6 +21,7 @@ export { validation } from './validation';
 
 // Combined keys object for convenience
 import { admin } from './admin';
+import { attachments } from './attachments';
 import { auth } from './auth';
 import { users } from './users';
 import { orgs } from './orgs';
@@ -31,6 +33,7 @@ import { validation } from './validation';
 
 export const k = {
   admin,
+  attachments,
   auth,
   users,
   orgs,

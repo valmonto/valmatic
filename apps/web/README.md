@@ -11,7 +11,7 @@ src/
 ├── features/     one folder per domain — the app lives here
 ├── pages/        top-level routes and layouts
 ├── components/   ui · layouts · overlays — presentational, domain-free
-├── shared/       api client, auth, permissions, hooks, store
+├── shared/       api client, auth, permissions, hooks, store, attachments kit
 ├── lib/          third-party glue
 ├── api.ts        composes every feature's resource into one `api` object
 └── main.tsx
@@ -75,6 +75,13 @@ primitive and overlay as a live reference.
 
 Anything domain-aware belongs in `features/x/components/` — `components/` stays
 presentational and knows nothing about users, orgs or permissions.
+
+**`shared/attachments/`** is the file-upload kit (docs/storage.md): drop
+`<AttachmentsSection subjectType="task" subjectId={id} />` into any detail
+view and it handles the declare → presigned PUT → confirm protocol, the tile
+grid and the near-fullscreen gallery. It lives in `shared/` (not a feature)
+because any feature may attach files; the subject type must have a resolver
+registered in the API. The components page demos the gallery on stub data.
 
 ## Where API calls go
 

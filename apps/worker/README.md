@@ -15,6 +15,8 @@ src/
 │   │   ├── example.processor.ts       runs the job
 │   │   ├── example.listener.ts        reacts to events the job emits
 │   │   └── notification.repository.ts writes to the database
+│   ├── attachments-sweep/             storage GC (docs/storage.md) — self-
+│   │                                  scheduling repeatable job, 15 min tick
 │   └── queues.module.ts               register processors here
 ├── config/env.schema.ts               Zod-validated env
 └── main.ts
@@ -33,6 +35,12 @@ row, say — not for the work itself.
 The example flow shows both: `ExampleProcessor` runs the job and emits
 started/completed/failed events, and `ExampleListener` turns those into
 notification rows.
+
+A third shape exists for housekeeping: `AttachmentsSweepProcessor` schedules
+itself (`upsertJobScheduler` in `onModuleInit`) — nothing enqueues it. Each
+tick runs the three GC predicates from `docs/storage.md` (stale pendings,
+expiries, aged soft-deletes), bounded per run and idempotent. It needs the
+`STORAGE_*` env because it deletes the swept rows' objects.
 
 ## Adding a queue
 

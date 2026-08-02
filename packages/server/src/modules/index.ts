@@ -2,6 +2,7 @@ export * from './iam';
 export * from './redis';
 export * from './health';
 export * from './queues';
+export * from './storage';
 export * from './events';
 export * from './logging';
 export * from './telemetry';

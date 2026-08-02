@@ -34,6 +34,12 @@ export const PERMISSIONS = [
   'notification:update',
   'notification:delete',
 
+  // Attachment permissions (generic file attachments — docs/storage.md)
+  'attachment:create',
+  'attachment:list',
+  'attachment:read',
+  'attachment:delete',
+
   // Settings permissions
   'settings:read',
   'settings:update',

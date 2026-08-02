@@ -16,4 +16,4 @@ export { DatabaseModule, DATABASE_CLIENT, type DatabaseModuleOptions } from './n
 export * from './schema';
 
 // Re-export drizzle utilities that are commonly needed
-export { eq, ne, gt, gte, lt, lte, and, or, like, ilike, isNull, sql, count, desc, asc } from 'drizzle-orm';
+export { eq, ne, gt, gte, lt, lte, and, or, like, ilike, isNull, isNotNull, sql, count, desc, asc } from 'drizzle-orm';

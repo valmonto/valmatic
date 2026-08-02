@@ -104,6 +104,10 @@ catalog:
   # i18n (server-side)
   nestjs-i18n: 10.8.4
 
+  # Object storage (S3-compatible: rustfs/MinIO/R2/S3 — see docs/storage.md)
+  '@aws-sdk/client-s3': 3.1063.0
+  '@aws-sdk/s3-request-presigner': 3.1063.0
+
   # ═══════════════════════════════════════════════════════════════════════
   #  FRONTEND  (apps/web)
   # ═══════════════════════════════════════════════════════════════════════

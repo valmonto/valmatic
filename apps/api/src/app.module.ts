@@ -12,6 +12,7 @@ import {
   IAM_REDIS,
   LoggerErrorInterceptor,
   LoggingModule,
+  StorageModule,
   TelemetryModule,
   ThrottlerRedisStorage,
 } from '@pkg/server';
@@ -20,6 +21,7 @@ import { UserModule } from './user/user.module';
 import { OrgModule } from './org/org.module';
 import { JobsModule } from './jobs';
 import { NotificationModule } from './notifications';
+import { AttachmentsModule } from './attachments';
 import { ApiKeyModule } from './api-key';
 import { McpModule } from './mcp';
 import { I18nModule } from './i18n';
@@ -82,6 +84,39 @@ import { validateEnv } from './config';
     OrgModule,
     JobsModule,
     NotificationModule,
+    StorageModule.forRootAsync({
+      inject: [ConfigService],
+      // Options factory is typed (...args: unknown[]) — narrow inside.
+      useFactory: (...args: unknown[]) => {
+        const config = args[0] as ConfigService;
+        return {
+          endpoint: config.getOrThrow<string>('STORAGE_ENDPOINT'),
+          region: config.getOrThrow<string>('STORAGE_REGION'),
+          accessKeyId: config.getOrThrow<string>('STORAGE_ACCESS_KEY_ID'),
+          secretAccessKey: config.getOrThrow<string>('STORAGE_SECRET_ACCESS_KEY'),
+          bucket: config.getOrThrow<string>('STORAGE_BUCKET'),
+          corsAllowedOrigins: config
+            .getOrThrow<string>('STORAGE_CORS_ALLOWED_ORIGINS')
+            .split(',')
+            .map((origin: string) => origin.trim()),
+        };
+      },
+    }),
+    // Attachments are domain-blind; the app registers its subjects here.
+    // The template has none yet, so the map is empty — the first feature
+    // that wants files adds its module to `imports` and one resolver line:
+    //
+    //   AttachmentsModule.forRoot({
+    //     imports: [TasksModule],
+    //     subjects: {
+    //       inject: [TaskRepository],
+    //       useFactory: (...args: unknown[]) => {
+    //         const tasks = args[0] as TaskRepository;
+    //         return { task: async (id, orgId) => (await tasks.findById(id, orgId)) !== null };
+    //       },
+    //     },
+    //   }),
+    AttachmentsModule.forRoot({ subjects: {} }),
     ApiKeyModule,
     McpModule,
     SeedModule.forApp(),

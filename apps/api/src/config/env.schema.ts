@@ -77,6 +77,17 @@ export const envSchema = z.object({
     .default('false')
     .transform((v) => v === 'true'),
 
+  // Object storage (S3-compatible; local rustfs in dev — see docs/storage.md).
+  // Dev defaults line up with the rustfs block in compose.dev.yml.
+  STORAGE_ENDPOINT: z.string().url().default('http://localhost:9000'),
+  STORAGE_REGION: z.string().default('us-east-1'),
+  STORAGE_ACCESS_KEY_ID: z.string().default('valmatic'),
+  STORAGE_SECRET_ACCESS_KEY: z.string().default('valmatic'),
+  STORAGE_BUCKET: z.string().default('valmatic-attachments'),
+  // Comma-separated browser origins allowed to PUT/GET against presigned
+  // URLs. A missing origin here is the classic silent upload-killer.
+  STORAGE_CORS_ALLOWED_ORIGINS: z.string().default('http://localhost:5173'),
+
   // Telemetry — all optional; absent means the corresponding service is a
   // no-op. SENTRY_DSN wakes backend error reporting, POSTHOG_KEY wakes
   // product analytics and feature flags.

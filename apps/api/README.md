@@ -11,6 +11,7 @@ src/
 ├── user/           users within an organization
 ├── org/            organizations, switching
 ├── notifications/  the user's notification feed
+├── attachments/    generic file attachments (presigned upload protocol)
 ├── jobs/           enqueues work for apps/worker
 ├── i18n/           request-scoped translation
 ├── seed/           first-run data
@@ -126,6 +127,43 @@ throw new ForbiddenException(k.users.errors.cannotRemoveSelf);
 5. Take `activeUser.orgId` through to the repository, and prove the boundary
    with a two-tenant integration test.
 6. Register the module in `app.module.ts`.
+
+## Attachments — files on any domain object
+
+`src/attachments/` implements the three-step upload protocol from
+`docs/storage.md`: declare (`POST /attachments/uploads` → pending row +
+presigned PUT), the client PUTs bytes **directly to object storage** (the API
+never proxies file bytes), confirm (`POST /attachments/:id/confirm` → the
+server HEADs the object, verifies size against the declaration and the
+per-kind caps in `@pkg/contracts`, flips the row to `uploaded`). Reads and
+lists serve `uploaded` only; delete removes the object and soft-deletes the
+row; a worker sweep GCs everything else.
+
+The module is **domain-blind**: the attachment table's subject is polymorphic
+(`subject_type` + `subject_id`, no FK), and the set of valid subject types is
+whatever the app registers in `app.module.ts`. The template ships unwired —
+`AttachmentsModule.forRoot({ subjects: {} })` — so every declare is a 400
+until a feature claims a subject type. Wiring one is three lines:
+
+```ts
+AttachmentsModule.forRoot({
+  imports: [TasksModule],
+  subjects: {
+    inject: [TaskRepository],
+    useFactory: (...args: unknown[]) => {
+      const tasks = args[0] as TaskRepository;
+      return { task: async (id, orgId) => (await tasks.findById(id, orgId)) !== null };
+    },
+  },
+})
+```
+
+An unregistered `subjectType` → 400; a resolver returning false → 404. Blobs
+live at `org/{orgId}/{subjectType}/{subjectId}/{blobId}`, so deleting a
+subject's files is one prefix delete (`AttachmentsService.deleteSubjectPrefix`).
+Per-subject kind/size policy tightening lives in `@pkg/contracts`
+(`ATTACHMENT_POLICIES`); a subject without a policy accepts every kind at the
+platform caps.
 
 ## MCP — agent access to a running instance
 

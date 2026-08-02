@@ -40,10 +40,30 @@ services:
       timeout: 3s
       retries: 3
 
+  # S3-compatible object storage for attachments (docs/storage.md). Dev
+  # default endpoint http://localhost:9000 lines up with the env schema.
+  # Deployments on managed object storage (S3/R2/OVH) delete this block and
+  # point STORAGE_* at the managed endpoint instead.
+  rustfs:
+    image: docker.io/rustfs/rustfs:1.0.0-beta.7
+    container_name: vboilerplaterustfs
+    environment:
+      RUSTFS_ACCESS_KEY: valmatic
+      RUSTFS_SECRET_KEY: valmatic
+      RUSTFS_VOLUMES: /data
+    ports:
+      - '9000:9000'
+    volumes:
+      - vboilerplaterustfs_data:/data
+    networks:
+      - dev_local_network
+
 volumes:
   vboilerplatedb_data:
     driver: local
   vboilerplateredis_data:
+    driver: local
+  vboilerplaterustfs_data:
     driver: local
 
 networks:
