@@ -15,7 +15,7 @@ Kept here so the list stays honest about what changed and why.
 | Was                                                       | Now                                                                                                                                                                                                                                     |
 | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Multi-tenancy convention, no test would catch a leak      | Every repository has a two-tenant integration suite against real Postgres; `ActiveOrgGuard` enforces `:orgId` = session org. The suites caught two real leaks on their first runs (user cross-tenant write, account-wide notifications) |
-| `apps/api` services untested (1 test file)                | auth, user, org, notifications, jobs covered — 107 tests                                                                                                                                                                                |
+| `apps/api` services untested (1 test file)                | auth, user, org, notifications, jobs, attachments covered — 141 tests                                                                                                                                                                   |
 | Integration tests never ran anywhere                      | `verify.yml` runs Postgres + migrations; `describeIntegration` executes in CI and locally                                                                                                                                               |
 | One ambiguous `role: z.string()` on the session           | Two named axes — `orgRole` (membership) and `systemRole` (platform), both strict enums, both re-read on token refresh; `@SystemRoles` + `/admin/orgs` consume the platform axis                                                         |
 | Caller-supplied identity in job payloads                  | Jobs attributed to the session; payloads carry `userId` + `orgId` from `@ActiveUser`                                                                                                                                                    |
@@ -33,6 +33,7 @@ Kept here so the list stays honest about what changed and why.
 | Spurious logouts + daily forced re-login (all descendants) | Refresh rotation gained a grace window (a just-rotated token answers with the same successor pair — concurrent refreshes and lost responses no longer 401); mobile only destroys tokens on a definitive 401/403, never on a network blip; absolute session lifetime 24h → 30 days with cookie TTLs following the same env vars instead of hardcoded copies |
 | Open self-registration                                    | Closed by default (`AUTH_REGISTRATION_ENABLED=false`): accounts come from the seed, org admins, or a product's own onboarding. Server enforces; clients hide the page                                                                   |
 | Feature flags                                             | Shipped: resolved server-side (PostHog when configured, all-off otherwise), delivered in `/auth/me` as `features` beside `permissions`, read via `useFeature()` on web and mobile                                                       |
+| File uploads (no S3, was a feature-gap row below)         | Generic attachments module per `docs/storage.md`: provider-blind `StorageService` (presigned URLs only, bytes never touch the API), polymorphic org-scoped `attachment` table, declare → PUT → confirm protocol with HEAD verification, worker GC sweep, web upload/gallery kit, rustfs in dev compose. Domain-blind — apps register subject resolvers (template ships an empty map). Multipart stays a deliberate non-goal until an app ships >200 MB files |
 
 ---
 
@@ -144,7 +145,6 @@ boilerplate is honest about what it is not.
 | **Email sending**      | no transport at all, which is why the above is missing                                        | ~4h        |
 | **Email verification** | any address can register                                                                      | ~4h        |
 | **Billing**            | no Stripe, plans or subscriptions                                                             | ~1w        |
-| **File uploads**       | no S3 or multipart handling                                                                   | ~1d        |
 | **Audit log**          | who changed what is unanswerable                                                              | ~1d        |
 | **2FA / SSO**          | expected by any business customer                                                             | ~1w        |
 

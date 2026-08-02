@@ -9,7 +9,7 @@ request/error plumbing. `apps/api` and `apps/worker` are thin on top of it.
 src/
 ├── common/     ZodRequest, GlobalExceptionFilter
 ├── config/     SECURITY_CONFIG, cookie options
-└── modules/    iam · health · logging · queues · redis · events
+└── modules/    iam · health · logging · queues · redis · events · storage
 ```
 
 | Module | What it gives you |
@@ -20,6 +20,15 @@ src/
 | `queues` | BullMQ — api enqueues, worker consumes |
 | `redis` | one shared client behind the `REDIS` token, `@Global` |
 | `events` | in-process emitter; use a queue if it must survive a restart |
+| `storage` | provider-blind S3 client (`StorageService implements StorageDriver`): presigned PUT/GET, HEAD, ensure-bucket + CORS, object/prefix deletes. Configured from `STORAGE_*` env via `StorageModule.forRootAsync`; works against rustfs/MinIO/R2/S3 by config alone. See `docs/storage.md`. |
+
+Before adopting a new storage provider, run the behavioral half of the
+`StorageDriver` contract against it: `pnpm storage:conformance` (with
+`STORAGE_*` pointed at the candidate endpoint) exercises the five moves the
+attachments protocol makes and prints PASS/FAIL per step.
+
+`modules/queues/attachments-sweep/` holds the queue name + cadence constants
+for the storage GC; the processor itself lives in `apps/worker`.
 
 ## Writing a route
 

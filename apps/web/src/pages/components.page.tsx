@@ -24,6 +24,7 @@ import {
 
 import { cn } from '@/shared/lib/utils';
 import { PageHeader } from '@/shared/components/page-header';
+import { AttachmentsShowcaseSection } from '@/features/showcase';
 import { CompactModal, WideModal } from '@/components/overlays';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -1567,6 +1568,9 @@ export default function ComponentsPage() {
             <StickyTable />
           </Row>
         </Section>
+
+        {/* Attachments — the shared upload/gallery kit on stub data */}
+        <AttachmentsShowcaseSection />
       </div>
     </div>
   );

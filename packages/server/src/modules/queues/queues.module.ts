@@ -3,6 +3,7 @@ import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DEFAULT_JOB_OPTIONS } from './queues.config';
 import { EXAMPLE_QUEUE, ExampleProducer } from './example';
+import { ATTACHMENTS_SWEEP_QUEUE } from './attachments-sweep';
 
 /**
  * Shared queues module.
@@ -38,6 +39,7 @@ import { EXAMPLE_QUEUE, ExampleProducer } from './example';
 
     // Register queues
     BullModule.registerQueue({ name: EXAMPLE_QUEUE.name }),
+    BullModule.registerQueue({ name: ATTACHMENTS_SWEEP_QUEUE.name }),
   ],
   providers: [ExampleProducer],
   exports: [BullModule, ExampleProducer],

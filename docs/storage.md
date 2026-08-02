@@ -1,11 +1,21 @@
 # Storage — object storage & attachments for valmatic apps
 
-Design for the template's storage stack, written against the only production
-implementation in the family (servicebook's `storage` + `remote-fs` modules,
-reviewed 2026-07-31). Servicebook proved the shape works; this document keeps
-what earned its place, names what didn't, and specifies the generic module
-valmatic ships so every app (specbook attachments, servicebook media, future
-apps) gets the same hardened core.
+**Status: shipped** (extracted from specbook's production implementation,
+2026-08-02). The module lives at `packages/server/src/modules/storage`
+(StorageService + StorageDriver), `apps/api/src/attachments` (protocol,
+repository, subject-resolver seam), `apps/worker/src/queues/attachments-sweep`
+(GC), `apps/web/src/shared/attachments` (upload/gallery kit), with contracts
+in `@pkg/contracts` and the table in `@pkg/database`. The template ships it
+**unwired** — `AttachmentsModule.forRoot({ subjects: {} })` in app.module —
+and a feature claims a subject type with the three-line resolver registration
+shown below. See `apps/api/README.md` for the wiring recipe.
+
+Originally the design for the template's storage stack, written against the
+only production implementation in the family (servicebook's `storage` +
+`remote-fs` modules, reviewed 2026-07-31). Servicebook proved the shape works;
+this document keeps what earned its place, names what didn't, and specifies
+the generic module valmatic ships so every app (specbook attachments,
+servicebook media, future apps) gets the same hardened core.
 
 ## The architecture that stays
 
@@ -203,7 +213,9 @@ requires reworking the previous:
 
 ## Provider swaps: the contract, the check, the playbook
 
-Implemented with the specbook build (2026-08-01); port these pieces with it.
+Implemented with the specbook build (2026-08-01); ported into this template
+with the 2026-08-02 extraction (`StorageDriver` in storage.types.ts,
+`pnpm storage:conformance` in packages/server).
 
 **The contract is named twice.** `StorageDriver` (packages/server storage
 types) is the compile-time half — `StorageService implements StorageDriver`,
@@ -246,21 +258,32 @@ the next chunk. No offset pagination, no memory pressure; a 10k backlog
 drains itself. If mass-expiry ever gets real, the upgrade is batched
 DeleteObjects (1000 keys/call) under a per-tick time budget.
 
-## Module layout (implementation plan)
+## Module layout (as shipped)
 
 ```
-packages/server/src/modules/storage/       — port from servicebook + fixes §6
-packages/server/src/modules/attachments/   — generic: service, repository seam,
-                                             subject-resolver registry, tokens
+packages/server/src/modules/storage/       — StorageService (+ §6 fixes),
+                                             StorageDriver, StorageModule
+packages/server/scripts/                   — storage-conformance.mjs
+packages/server/…/queues/attachments-sweep — queue name + cadence constants
 packages/contracts: attachment.schema.ts + constants (kinds, limits, statuses)
 packages/database:  schema/attachment.ts (+ migration)
-apps/api/src/attachments/                  — controller (declare/confirm/list/
-                                             read-url/delete), app's subject map
-apps/worker:                               — attachments-sweep repeatable job
-compose*.yml:                              — rustfs service + STORAGE_* env
-                                             (copy servicebook's block; new env
-                                             schema entries with dev defaults)
+apps/api/src/attachments/                  — controller, service, repository,
+                                             subject-resolver registry, tokens;
+                                             app registers its subject map in
+                                             app.module.ts
+apps/worker/src/queues/attachments-sweep/  — the repeatable GC processor
+compose.dev.yml:                           — rustfs service; STORAGE_* env in
+                                             both env schemas with dev defaults
 ```
+
+One delta from the original plan: the generic service/repository landed in
+`apps/api/src/attachments` (following specbook's proven build) rather than a
+`packages/server/attachments` module — the repository needs `@pkg/database`,
+which `@pkg/server` deliberately does not depend on. The module is still
+domain-blind; only its address differs. Subject types are likewise not
+enumerated in contracts constants: the resolver map registered at the
+composition root is the single source of truth (an unregistered type → 400),
+so the table carries CHECKs for `kind`/`status` but not `subject_type`.
 
 REST surface (org-scoped, permission-gated like every module):
 
@@ -272,7 +295,8 @@ GET    /attachments/:id/read-url   presigned GET (optional filename)
 DELETE /attachments/:id            delete object, soft-delete row
 ```
 
-Rollout order tomorrow: (1) port `StorageService` with §6 fixes + unit tests;
+Rollout order (as executed in specbook, 2026-08-01; the template port
+followed the same sequence): (1) port `StorageService` with §6 fixes + unit tests;
 (2) contracts + schema + migration; (3) attachments module with the pending →
 confirm protocol + subject-resolver seam + service tests (orphan, size
 mismatch, unknown subject, org isolation); (4) worker sweep; (5) compose/env;

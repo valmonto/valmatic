@@ -10,3 +10,13 @@ export {
   type FeatureFlag,
 } from './constants/analytics';
 export { MCP_SCOPES, type McpScope } from './constants/mcp';
+export {
+  ATTACHMENT_KINDS,
+  ATTACHMENT_MAX_BYTES,
+  ATTACHMENT_POLICIES,
+  ATTACHMENT_STATUSES,
+  attachmentKindAllowed,
+  attachmentLimitFor,
+  type AttachmentKindName,
+  type AttachmentPolicy,
+} from './constants/attachment';

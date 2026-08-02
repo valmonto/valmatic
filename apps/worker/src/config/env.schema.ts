@@ -21,6 +21,14 @@ export const envSchema = z.object({
   REDIS_PORT: z.coerce.number().int().min(1).max(65535).default(6379),
   REDIS_PASSWORD: z.string().optional(),
 
+  // Object storage (S3-compatible) — the attachments sweep deletes objects.
+  // Same values the API uses; see docs/storage.md.
+  STORAGE_ENDPOINT: z.string().url().default('http://localhost:9000'),
+  STORAGE_REGION: z.string().default('us-east-1'),
+  STORAGE_ACCESS_KEY_ID: z.string().default('valmatic'),
+  STORAGE_SECRET_ACCESS_KEY: z.string().default('valmatic'),
+  STORAGE_BUCKET: z.string().default('valmatic-attachments'),
+
   // Worker
   WORKER_PORT: z.coerce.number().int().min(1).max(65535).default(3001),
 
