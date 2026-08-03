@@ -12,3 +12,13 @@ Read ./README.md before changing this workspace.
 - UI changes get LOOKED at before they ship: use the Playwright MCP tools
   (browser is available via .mcp.json) against the dev server with a seed
   login. Typecheck proves it compiles; only your eyes prove it matches.
+- View state a user expects to survive reload — active tab, selected filter,
+  chosen stage — lives in URL search params (useSearchParams, replace: true),
+  never in bare useState. The clean default gets no param.
+- Pages anchor content to the shell's left edge at full width; no mx-auto
+  centered columns inside the dashboard. Individual controls cap their own
+  width (max-w-*) instead of the page capping everyone's.
+- Opening a Dialog/AlertDialog from a closing DropdownMenu loses the focus
+  race and self-dismisses — defer the open past the menu close
+  (setTimeout(..., 0)), and keep the dialog's labels rendered from the last
+  requested action so they don't morph during the exit animation.
