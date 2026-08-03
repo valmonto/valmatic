@@ -15,6 +15,9 @@ interface ErrorResponse {
   statusCode: number;
   message: string | string[];
   error: string;
+  /** Optional verbatim upstream context (e.g. GitHub's own error text) —
+   *  message stays a translation key; detail is rendered as-is. */
+  detail?: string;
   timestamp: string;
   path: string;
 }
@@ -31,12 +34,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const reply = ctx.getResponse<FastifyReply>();
     const request = ctx.getRequest<FastifyRequest>();
 
-    const { statusCode, message, error } = this.getErrorDetails(exception);
+    const { statusCode, message, error, detail } = this.getErrorDetails(exception);
 
     const errorResponse: ErrorResponse = {
       statusCode,
       message,
       error,
+      ...(detail ? { detail } : {}),
       timestamp: new Date().toISOString(),
       path: request.url,
     };
@@ -65,6 +69,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     statusCode: number;
     message: string | string[];
     error: string;
+    detail?: string;
   } {
     // Handle Zod validation errors
     // Return just the message (without field path) to preserve translation keys
@@ -96,6 +101,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         statusCode: status,
         message: (responseObj.message as string | string[]) || exception.message,
         error: (responseObj.error as string) || HttpStatus[status] || 'Error',
+        ...(typeof responseObj.detail === 'string' ? { detail: responseObj.detail } : {}),
       };
     }
 

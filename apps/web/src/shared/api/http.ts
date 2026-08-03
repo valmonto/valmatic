@@ -1,5 +1,10 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
+/** Backend error: `message` is a translation key, `detail` optional raw context. */
+export class ApiError extends Error {
+  detail?: string;
+}
+
 export class HttpClient {
   private instance: AxiosInstance;
   private onUnauthorized?: () => void;
@@ -25,10 +30,14 @@ export class HttpClient {
           else window.location.href = '/auth/login';
         }
 
-        // Extract backend error message for better UX
+        // Extract backend error message for better UX. `message` is a
+        // translation key; `detail` (when present) is verbatim upstream text
+        // (e.g. GitHub's own words) rendered as-is next to the translation.
         if (axios.isAxiosError(error) && error.response?.data?.message) {
           const message = error.response.data.message;
-          const apiError = new Error(Array.isArray(message) ? message[0] : message);
+          const apiError = new ApiError(Array.isArray(message) ? message[0] : message);
+          const detail = error.response.data.detail;
+          if (typeof detail === 'string') apiError.detail = detail;
           return Promise.reject(apiError);
         }
 
