@@ -5,12 +5,16 @@ RUN npm install -g pnpm@10
 FROM base AS builder
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY .npmrc ./
+# Dependencies resolve from the lockfile ALONE, before any source is copied —
+# this layer survives source edits, so a rebuild re-fetches only when the
+# lockfile (or root manifest) actually changes.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+RUN pnpm fetch
+
 COPY packages ./packages
 COPY apps/worker ./apps/worker
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --offline
 RUN pnpm --filter @pkg/worker... build
 
 # Production stage

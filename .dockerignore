@@ -1,0 +1,13 @@
+# Keep the build context lean and the layer cache honest: nothing here can
+# reach an image except through an explicit COPY, and none of it should.
+node_modules
+**/node_modules
+**/dist
+**/build
+.git
+.playwright-mcp
+**/*.log
+**/.env
+**/.env.*
+coverage
+**/coverage
