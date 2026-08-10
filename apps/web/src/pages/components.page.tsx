@@ -642,7 +642,7 @@ export default function ComponentsPage() {
         description="A living gallery of the design system — primitives, controls, and feedback."
       />
 
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         {/* Buttons */}
         <Section title="Buttons" description="Variants, sizes, icons, and states.">
           <Row label="Variants">
@@ -700,7 +700,7 @@ export default function ComponentsPage() {
 
         {/* Text inputs */}
         <Section title="Inputs" description="Text fields, textarea, and selects.">
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="demo-email">Email</Label>
               <Input id="demo-email" type="email" placeholder="you@example.com" />
@@ -934,7 +934,7 @@ export default function ComponentsPage() {
                   <SheetTitle>Edit profile</SheetTitle>
                   <SheetDescription>Update your details, then save.</SheetDescription>
                 </SheetHeader>
-                <div className="grid gap-4 px-4">
+                <div className="grid grid-cols-1 gap-4 px-4">
                   <div className="space-y-2">
                     <Label htmlFor="sheet-name">Name</Label>
                     <Input id="sheet-name" defaultValue="Initial Owner" />
@@ -1224,7 +1224,7 @@ export default function ComponentsPage() {
 
         {/* More form controls */}
         <Section title="More inputs" description="Select, toggles, and one-time codes.">
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label>Fancy select</Label>
               <Select defaultValue="member">
@@ -1403,13 +1403,17 @@ export default function ComponentsPage() {
           </Row>
           <Separator />
           <Row label="Calendar (date range)">
-            <Calendar
-              mode="range"
-              numberOfMonths={2}
-              selected={range}
-              onSelect={setRange}
-              className="rounded-lg border border-border/60"
-            />
+            {/* Two months are intrinsically ~520px — scroll inside the card
+                on phone widths instead of widening the whole page grid. */}
+            <div className="max-w-full overflow-x-auto">
+              <Calendar
+                mode="range"
+                numberOfMonths={2}
+                selected={range}
+                onSelect={setRange}
+                className="rounded-lg border border-border/60"
+              />
+            </div>
           </Row>
           <Separator />
           <Row label="Calendar (no past dates)">

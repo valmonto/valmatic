@@ -86,7 +86,7 @@ function KeyRevealDialog({ plaintext, onClose }: { plaintext: string; onClose: (
           <DialogDescription>{t(k.admin.apiKeys.keyCreatedWarning)}</DialogDescription>
         </DialogHeader>
         <CopyBlock value={plaintext} />
-        <div className="grid gap-1.5">
+        <div className="grid grid-cols-1 gap-1.5">
           <p className="text-sm font-medium">{t(k.admin.apiKeys.connectTitle)}</p>
           <p className="text-xs text-muted-foreground">{t(k.admin.apiKeys.connectHint)}</p>
           <CopyBlock value={mcpCommand} rows />
@@ -161,7 +161,7 @@ function CreateKeyDialog({
         </>
       }
     >
-      <div className="grid gap-5">
+      <div className="grid grid-cols-1 gap-5">
         <div className="grid max-w-md gap-2">
           <Label htmlFor="key-name">{t(k.admin.apiKeys.name)}</Label>
           <Input
@@ -172,7 +172,7 @@ function CreateKeyDialog({
             maxLength={64}
           />
         </div>
-        <div className="grid gap-2">
+        <div className="grid grid-cols-1 gap-2">
           {/* Header: label left, master check-all right (indeterminate on partial). */}
           <div className="flex items-center justify-between">
             <Label>{t(k.admin.apiKeys.scopes)}</Label>
