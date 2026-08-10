@@ -74,24 +74,32 @@ export default function AppLayout() {
     <SidebarProvider>
       <AppSidebar variant="inset" />
       <CommandMenu />
-      <SidebarInset className="md:peer-data-[variant=inset]:shadow-[0_1px_3px_rgba(16,18,28,0.05),0_16px_40px_-20px_rgba(16,18,28,0.18)] md:peer-data-[variant=inset]:ring-1 md:peer-data-[variant=inset]:ring-border/60 dark:md:peer-data-[variant=inset]:ring-white/[0.06]">
+      <SidebarInset className="min-w-0 md:peer-data-[variant=inset]:shadow-[0_1px_3px_rgba(16,18,28,0.05),0_16px_40px_-20px_rgba(16,18,28,0.18)] md:peer-data-[variant=inset]:ring-1 md:peer-data-[variant=inset]:ring-border/60 dark:md:peer-data-[variant=inset]:ring-white/[0.06]">
         <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 rounded-t-xl border-b border-border/50 bg-background/70 px-3 backdrop-blur-xl transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-1.5">
+          {/* min-w-0 + truncate: on phone widths a long page title shrinks
+              with an ellipsis rather than fighting the right cluster for
+              space and pushing the header past the viewport. */}
+          <div className="flex min-w-0 items-center gap-1.5">
             <SidebarTrigger className="-ml-0.5 text-muted-foreground" />
             <Separator orientation="vertical" className="mr-1 h-4!" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="text-sm font-medium">{pageTitle}</BreadcrumbPage>
+            <Breadcrumb className="min-w-0">
+              <BreadcrumbList className="flex-nowrap">
+                <BreadcrumbItem className="min-w-0">
+                  <BreadcrumbPage className="truncate text-sm font-medium">
+                    {pageTitle}
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <div className="ml-auto flex items-center gap-2">
+          {/* min-w-0 + a shrinkable org switcher: on phone widths this cluster
+              must compress (icon-only search, truncated org name) instead of
+              widening the document and giving the whole page an x-scrollbar. */}
+          <div className="ml-auto flex min-w-0 items-center gap-2">
             <button
               type="button"
               onClick={openCommandMenu}
-              className="group flex h-8 w-44 items-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-2.5 text-sm text-muted-foreground transition-colors hover:border-border hover:bg-muted/70 lg:w-60"
+              className="group flex h-8 w-8 shrink-0 items-center justify-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-0 text-sm text-muted-foreground transition-colors hover:border-border hover:bg-muted/70 md:w-44 md:justify-start md:px-2.5 lg:w-60"
             >
               <Search className="size-3.5 shrink-0" />
               <span className="hidden truncate md:inline">{t(k.common.command.search)}</span>
@@ -100,23 +108,27 @@ export default function AppLayout() {
               </kbd>
             </button>
             <OrgSwitcher />
-            <Separator orientation="vertical" className="mx-0.5 h-5" />
+            <Separator orientation="vertical" className="mx-0.5 hidden h-5 md:block" />
             <div className="flex items-center gap-0.5">
               <NotificationBell />
-              <LanguageSwitcher />
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                className="text-muted-foreground hover:text-foreground"
-                onClick={toggleTheme}
-              >
-                {theme === 'light' ? <Moon className="size-4" /> : <Sun className="size-4" />}
-                <span className="sr-only">Toggle theme</span>
-              </Button>
+              {/* Language + theme are secondary controls: below md they leave
+                  the crowded top bar and live in the sidebar's user menu. */}
+              <div className="hidden items-center gap-0.5 md:flex">
+                <LanguageSwitcher />
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="text-muted-foreground hover:text-foreground"
+                  onClick={toggleTheme}
+                >
+                  {theme === 'light' ? <Moon className="size-4" /> : <Sun className="size-4" />}
+                  <span className="sr-only">Toggle theme</span>
+                </Button>
+              </div>
             </div>
           </div>
         </header>
-        <main className="flex-1 p-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <main className="min-w-0 flex-1 overflow-x-hidden p-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Outlet />
           </ErrorBoundary>

@@ -59,7 +59,7 @@ function AttachmentTile({
           type="button"
           onClick={onDelete}
           disabled={deleting}
-          className="text-muted-foreground/60 opacity-0 transition-opacity group-hover:opacity-100 hover:text-destructive"
+          className="text-muted-foreground/60 opacity-0 transition-opacity group-hover:opacity-100 hover:text-destructive pointer-coarse:opacity-100"
           aria-label={t(k.common.actions.delete)}
         >
           <Trash2 className="size-3.5" />

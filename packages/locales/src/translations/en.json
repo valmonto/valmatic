@@ -138,6 +138,7 @@
   "common.analytics.description": "View detailed analytics and performance metrics.",
   "common.comingSoon": "Coming Soon",
   "common.command.actions": "Actions",
+  "common.command.changeLanguage": "Change language",
   "common.command.navigation": "Navigation",
   "common.command.noResults": "No results found.",
   "common.command.search": "Search or jump to…",

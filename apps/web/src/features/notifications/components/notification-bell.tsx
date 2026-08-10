@@ -86,7 +86,7 @@ function NotificationItem({
       <Button
         variant="ghost"
         size="icon-sm"
-        className="shrink-0 size-7 text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-destructive"
+        className="shrink-0 size-7 text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-destructive pointer-coarse:opacity-100"
         onClick={(e) => {
           e.stopPropagation();
           onDelete(notification.id);

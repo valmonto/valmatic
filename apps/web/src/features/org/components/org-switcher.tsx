@@ -68,7 +68,12 @@ export function OrgSwitcher() {
           <Button
             variant="outline"
             size="sm"
-            className="gap-2 min-w-[140px] justify-between"
+            // shrink overrides the Button base's shrink-0: in the phone-width
+            // header this trigger is the one flexible item — it truncates the
+            // org name instead of pushing the icon cluster off-screen. The
+            // min-w-16 floor keeps the org icon + chevron visible even when
+            // truncation eats the whole name.
+            className="gap-2 min-w-16 shrink justify-between sm:min-w-[140px]"
             disabled={isSwitching}
           >
             <div className="flex items-center gap-2 truncate">

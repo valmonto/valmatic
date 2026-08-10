@@ -39,6 +39,7 @@ export const common = {
   // Command palette
   command: {
     search: 'common.command.search',
+    changeLanguage: 'common.command.changeLanguage',
     noResults: 'common.command.noResults',
     navigation: 'common.command.navigation',
     actions: 'common.command.actions',

@@ -132,7 +132,7 @@ export function OverlaysSection() {
               <SheetTitle>Edit profile</SheetTitle>
               <SheetDescription>Update your details, then save.</SheetDescription>
             </SheetHeader>
-            <div className="grid gap-4 px-4">
+            <div className="grid grid-cols-1 gap-4 px-4">
               <div className="space-y-2">
                 <Label htmlFor="sheet-name">Name</Label>
                 <Input id="sheet-name" defaultValue="Initial Owner" />

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { k } from '@pkg/locales';
+import { k, supportedLanguages, type SupportedLanguage } from '@pkg/locales';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -7,6 +7,9 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -16,13 +19,22 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { useAuth } from '@/shared/auth/auth-context';
-import { ChevronsUpDown, LogOut, Settings, User } from 'lucide-react';
+import { useTheme } from '@/shared/components/theme-provider';
+import { Check, ChevronsUpDown, Languages, LogOut, Moon, Settings, Sun, User } from 'lucide-react';
 import { useMemo } from 'react';
 
+const languageNames: Record<SupportedLanguage, string> = {
+  en: 'English',
+  es: 'Español',
+  lt: 'Lietuvių',
+};
+
 export function UserActionsDropdown() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, logout } = useAuth();
   const { isMobile } = useSidebar();
+  const { theme, toggleTheme } = useTheme();
+  const currentLanguage = (i18n.language?.split('-')[0] || 'en') as SupportedLanguage;
 
   const avatarFallback = useMemo(() => {
     if (!user) return '';
@@ -87,6 +99,46 @@ export function UserActionsDropdown() {
               <Settings className="mr-2 h-4 w-4" />
               <span>{t(k.common.nav.settings)}</span>
             </DropdownMenuItem>
+            {/* Below md the top bar drops its language + theme controls to
+                stay uncluttered — they resurface here. Conditionally rendered
+                (not CSS-hidden): display:none menu items would still catch
+                Radix keyboard navigation on desktop. */}
+            {isMobile && (
+              <>
+                <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                  toggleTheme();
+                }}
+              >
+                {theme === 'light' ? (
+                  <Moon className="mr-2 h-4 w-4" />
+                ) : (
+                  <Sun className="mr-2 h-4 w-4" />
+                )}
+                <span>{t(k.common.command.toggleTheme)}</span>
+              </DropdownMenuItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <Languages className="mr-2 h-4 w-4" />
+                  <span>{t(k.common.command.changeLanguage)}</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  {supportedLanguages.map((lang) => (
+                    <DropdownMenuItem key={lang} onClick={() => i18n.changeLanguage(lang)}>
+                      {currentLanguage === lang ? (
+                        <Check className="mr-2 h-4 w-4" />
+                      ) : (
+                        <span className="mr-2 h-4 w-4" />
+                      )}
+                      <span>{languageNames[lang]}</span>
+                    </DropdownMenuItem>
+                  ))}
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+              </>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
               <LogOut className="mr-2 h-4 w-4" />
