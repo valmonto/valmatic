@@ -25,7 +25,7 @@ describe('ApiKeyService', () => {
       listActive: vi.fn().mockResolvedValue([]),
       findActiveByHash: vi.fn().mockResolvedValue(null),
       revoke: vi.fn().mockResolvedValue(true),
-      touchLastUsed: vi.fn(),
+      touchLastUsed: vi.fn().mockResolvedValue(undefined),
     };
     service = new ApiKeyService(
       repository as unknown as ApiKeyRepository,
