@@ -55,8 +55,21 @@ export class ApiKeyRepository {
     return result.length > 0;
   }
 
-  touchLastUsed(id: string): void {
-    // Fire-and-forget: a failed timestamp must never fail the request.
-    void this.dbClient.db.update(apiKey).set({ lastUsedAt: new Date() }).where(eq(apiKey.id, id));
+  /**
+   * Stamp last-used. Returns a real, executing promise: a drizzle builder is
+   * lazy and only touches the database when awaited or `.then`'d — a bare
+   * `void builder` evaluates the object and silently never runs (which left
+   * `last_used_at` null forever despite constant use). `.then(() => undefined)`
+   * forces execution and normalizes the result to void while letting a rejection
+   * propagate — the fire-and-forget policy and its logging live at the caller,
+   * so a failure here is observable rather than swallowed in silence (silence is
+   * exactly what hid the original no-op).
+   */
+  touchLastUsed(id: string): Promise<void> {
+    return this.dbClient.db
+      .update(apiKey)
+      .set({ lastUsedAt: new Date() })
+      .where(eq(apiKey.id, id))
+      .then(() => undefined);
   }
 }
