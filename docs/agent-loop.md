@@ -72,3 +72,27 @@ Merged ≠ deployed, in every mode: production sits behind its own gates
 2. Native paths (tokens.ts, push, haptics): emulator — `pnpm emu:setup` /
    `emu:start`, then mobile-mcp tools.
 3. Irreducibly human: haptics feel, end-to-end push delivery — a phone.
+
+## Build hygiene: teardown of dev stacks + worktrees
+
+Build agents run inside a git worktree (under `.claude/worktrees/`) and boot a
+throwaway api+vite stack for their browser check. Both must be torn down or a
+box accumulates orphaned Vite listeners and multi-GB worktrees. Two layers keep
+that from happening:
+
+- **`scripts/dev-stack.sh`** boots the browser-check stack on a throwaway port
+  set (`API_PORT` 3002 / `WEB_PORT` 5175, never the live :3000/:5173) against a
+  throwaway `devstack_*` Postgres DB, and installs `trap cleanup EXIT INT TERM`
+  so the stack is killed by its ports and the DB dropped even on failure or
+  interrupt. It refuses the live ports and any DB name outside `devstack_*`, and
+  Vite proxies `/api` to the stack's own api via `API_PROXY_TARGET`. Pass a
+  command to run-then-teardown, or none to hold until interrupted.
+- **`scripts/reap-build-leaks.mjs`** is the periodic / start-of-run broom for
+  what a bad exit left behind. Its ONE kill criterion is a process whose cwd is
+  strictly under `.claude/worktrees/`; a live dev stack in the main checkout is
+  a sibling of that root and is never touched. It prunes only orphaned worktrees
+  (unlocked, no live process inside). **Dry-run by default** — pass `--apply`
+  (alias `--force`) to actually kill + prune. The discriminator (`classifyCwd` /
+  `classifyWorktree`) is unit-tested in
+  `packages/server/__tests__/scripts/reap-build-leaks.test.ts`, so the
+  never-touch-live rule is proven without running anything destructive.

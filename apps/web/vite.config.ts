@@ -55,7 +55,10 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': 'http://localhost:3000',
+      // Defaults to the local dev api. A throwaway build stack (scripts/dev-stack.sh)
+      // runs the api on a non-default port and points the proxy there via
+      // API_PROXY_TARGET so its Vite serves /api from its own api, not :3000.
+      '/api': process.env.API_PROXY_TARGET || 'http://localhost:3000',
     },
   },
 });
