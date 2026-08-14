@@ -23,6 +23,15 @@ coverage/
 # Logs
 *.log
 
+# Debug / browser-test artifacts (Playwright MCP screenshots, page-*.yml,
+# console logs) — ephemeral, never committed. Durable evidence for a task is
+# the ticket attachment, not a repo file.
+.debug/
+.playwright-mcp/
+
+# Build-agent worktrees (scripts/reap-build-leaks.mjs prunes stale ones).
+.claude/worktrees/
+
 ignored
 
 
