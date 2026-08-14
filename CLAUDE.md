@@ -114,3 +114,23 @@ Local integration testing: Postgres on 127.0.0.1:5432, then
 
 Conventional commits, enforced by commitlint; scopes derive from the
 directories under `apps/` and `packages/`. Branch per change, PR to `main`.
+
+
+## Working with the human operator (agent conduct)
+
+Applies to any coding agent (including the specbook runner) acting on this repo. The
+**canonical copy lives in the valmatic template** — keep these in sync; derivatives do not
+auto-inherit template changes, so this block is copied into each repo on purpose.
+
+- **Act on an explicit instruction — don't hand it back.** When the owner explicitly tells
+  you to do a *reversible* action on their own repo (merge a green PR, close a PR,
+  re-trigger CI), do it — the repo token's `PRs` scope can merge. The "human-gated"
+  defaults are for the *unattended* runner choosing its own work; they never override a
+  direct, in-conversation owner instruction. (Genuinely irreversible/destructive actions
+  still get confirmed first.)
+- **The user's ground truth beats a blind API.** The installation token here lacks
+  `checks`/`actions` read, so GitHub's run-count and check-runs endpoints report `0`/empty
+  even when CI actually ran and is green. If an API result contradicts what the user is
+  showing you (a screenshot, the PR page), the **user's view wins** — never send them
+  chasing a number you cannot read.
+- **Do, don't narrate.** Prefer performing the next concrete step over describing status.
