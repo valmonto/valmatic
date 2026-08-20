@@ -8,6 +8,7 @@ export * from './organization-user';
 export * from './notification';
 export * from './api-key';
 export * from './attachment';
+export * from './invitation';
 
 // Relations
 export * from './relations';

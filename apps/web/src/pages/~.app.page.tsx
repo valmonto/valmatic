@@ -16,6 +16,7 @@ import { useTheme } from '@/shared/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, Moon, RefreshCw, Search, Sun } from 'lucide-react';
 import { OrgSwitcher } from '@/features/org';
+import { OrgInviteButton } from '@/features/invitations';
 import { NotificationBell } from '@/features/notifications';
 import { LanguageSwitcher } from '@/shared/components/language-switcher';
 import { CommandMenu, openCommandMenu } from '@/shared/components/command-menu';
@@ -108,6 +109,7 @@ export default function AppLayout() {
               </kbd>
             </button>
             <OrgSwitcher />
+            <OrgInviteButton />
             <Separator orientation="vertical" className="mx-0.5 hidden h-5 md:block" />
             <div className="flex items-center gap-0.5">
               <NotificationBell />

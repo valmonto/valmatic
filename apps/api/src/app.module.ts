@@ -23,6 +23,7 @@ import { JobsModule } from './jobs';
 import { NotificationModule } from './notifications';
 import { AttachmentsModule } from './attachments';
 import { ApiKeyModule } from './api-key';
+import { InvitationModule } from './invitations';
 import { McpModule } from './mcp';
 import { I18nModule } from './i18n';
 import { SeedModule } from './seed/seed.module';
@@ -118,6 +119,7 @@ import { validateEnv } from './config';
     //   }),
     AttachmentsModule.forRoot({ subjects: {} }),
     ApiKeyModule,
+    InvitationModule,
     McpModule,
     SeedModule.forApp(),
   ],

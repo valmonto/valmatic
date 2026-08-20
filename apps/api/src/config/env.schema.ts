@@ -98,6 +98,10 @@ export const envSchema = z.object({
   // Server
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
 
+  // Public base URL of the web app, used to build copyable links the API hands
+  // back (e.g. an invitation accept link). Dev default matches the Vite server.
+  WEB_APP_URL: z.string().url().default('http://localhost:5173'),
+
   // Logging — show NestJS framework bootstrap logs (module/route mapping). Off by default.
   LOG_FRAMEWORK: z
     .enum(['true', 'false'])
