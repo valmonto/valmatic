@@ -14,6 +14,7 @@ export const PERMISSIONS = [
   'org:create',
   'org:update',
   'org:switch',
+  'org:invite', // Invite a user into the active organization (owner/admin)
 
   // User management permissions
   'user:list',

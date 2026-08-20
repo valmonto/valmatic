@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, Navigate } from 'react-router';
+import { Link, Navigate, useSearchParams } from 'react-router';
 import { REGISTRATION_ENABLED } from '@/shared/lib/registration';
 import { useTranslation } from 'react-i18next';
 import { k } from '@pkg/locales';
@@ -23,6 +23,12 @@ const validatePassword = (password: string) => {
 export const AuthView = () => {
   const { t } = useTranslation();
   const { isAuthenticated, isLoading } = useAuth();
+  const [searchParams] = useSearchParams();
+  // Where to land after login. Only same-app relative paths are honoured
+  // (must start with a single "/") so a crafted `?next=//evil.com` can never
+  // turn login into an open redirect. Flows like accepting an invitation set it.
+  const nextParam = searchParams.get('next');
+  const redirectTo = nextParam && /^\/(?!\/)/.test(nextParam) ? nextParam : '/';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -54,7 +60,7 @@ export const AuthView = () => {
   }
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={redirectTo} replace />;
   }
 
   return (

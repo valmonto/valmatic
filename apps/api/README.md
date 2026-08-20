@@ -10,6 +10,7 @@ src/
 ├── auth/           login, tokens, password change, OrgAccessProvider
 ├── user/           users within an organization
 ├── org/            organizations, switching
+├── invitations/    invite-by-link into an org + accept (hashed token, email-bound)
 ├── notifications/  the user's notification feed
 ├── attachments/    generic file attachments (presigned upload protocol)
 ├── jobs/           enqueues work for apps/worker

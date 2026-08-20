@@ -7,7 +7,7 @@ them up. Owns the tables; everything that queries them goes through here.
 
 ```
 src/
-├── schema/        user · organization · organization-user · notification
+├── schema/        user · organization · organization-user · invitation · notification
 │                  helpers.ts (pk), relations.ts
 ├── client.ts      createDatabaseClient — pooled postgres.js + Drizzle
 ├── migrate.ts     runMigrations

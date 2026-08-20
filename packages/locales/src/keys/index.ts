@@ -13,6 +13,7 @@ export { attachments } from './attachments';
 export { auth } from './auth';
 export { users } from './users';
 export { orgs } from './orgs';
+export { invitations } from './invitations';
 export { jobs } from './jobs';
 export { notifications } from './notifications';
 export { mcp } from './mcp';
@@ -25,6 +26,7 @@ import { attachments } from './attachments';
 import { auth } from './auth';
 import { users } from './users';
 import { orgs } from './orgs';
+import { invitations } from './invitations';
 import { jobs } from './jobs';
 import { notifications } from './notifications';
 import { mcp } from './mcp';
@@ -37,6 +39,7 @@ export const k = {
   auth,
   users,
   orgs,
+  invitations,
   jobs,
   notifications,
   mcp,

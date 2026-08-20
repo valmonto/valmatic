@@ -164,6 +164,50 @@ export class UserRepository {
     });
   }
 
+  /**
+   * The user's email and name by id — for callers that hold a session userId
+   * but no org membership yet (e.g. accepting an invitation into a NEW org, so
+   * `findUserInOrg` would find nothing). Not org-scoped on purpose: the account
+   * itself is a platform record, and identity here comes from the verified
+   * session, never a payload.
+   */
+  async findAccountById(userId: string): Promise<{ id: string; email: string; name: string } | null> {
+    const [row] = await this.dbClient.db
+      .select({ id: user.id, email: user.email, name: user.name })
+      .from(user)
+      .where(eq(user.id, userId))
+      .limit(1);
+
+    return row ?? null;
+  }
+
+  /** True when the user already belongs to the org — the idempotency guard. */
+  async isMember(userId: string, orgId: string): Promise<boolean> {
+    const [row] = await this.dbClient.db
+      .select({ userId: organizationUser.userId })
+      .from(organizationUser)
+      .where(and(eq(organizationUser.userId, userId), eq(organizationUser.orgId, orgId)))
+      .limit(1);
+
+    return Boolean(row);
+  }
+
+  /**
+   * Add an existing user to an organization at a role. Idempotent: a repeated
+   * call for an existing membership is a no-op (never a duplicate row, which the
+   * composite PK would reject anyway), so accepting the same invite twice is
+   * safe. Returns true when a new membership was created.
+   */
+  async addOrgMembership(userId: string, orgId: string, role: OrganizationUserRole): Promise<boolean> {
+    const inserted = await this.dbClient.db
+      .insert(organizationUser)
+      .values({ orgId, userId, role })
+      .onConflictDoNothing()
+      .returning();
+
+    return inserted.length > 0;
+  }
+
   async updateUser(
     userId: string,
     orgId: string,

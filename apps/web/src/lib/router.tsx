@@ -8,10 +8,13 @@ import { notificationsRoutes } from '@/features/notifications';
 import { authRoutes } from '@/features/auth';
 import { adminRoutes } from '@/features/admin';
 import { mobileDemoRoutes } from '@/features/mobile-demo';
+import { invitationRoutes } from '@/features/invitations';
 
 const router = createBrowserRouter([
   // Auth routes - no app layout (navbar, sidebar, etc.)
   ...authRoutes,
+  // Invitation accept - public, no app shell (a new invitee has no account yet)
+  ...invitationRoutes,
   // Mobile demo - full-viewport phone layout, no app shell
   ...mobileDemoRoutes,
   // App routes - with main layout
