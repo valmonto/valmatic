@@ -22,6 +22,13 @@ src/
 
 Routes are prefixed `/api`, except `/health`.
 
+Config note: env vars that are safe to default in dev but dangerous to default
+in production are **required in production** by the schema's `superRefine` —
+`SEED_INITIAL_EMAIL`/`SEED_INITIAL_PASSWORD`, and `WEB_APP_URL` (the base URL for
+copyable links like invite links; its `http://localhost:5173` default is dev/test
+only, so a production deploy can never hand out a localhost invite link). Boot
+fails loud with a clear message if one is missing.
+
 ## A feature module
 
 Four files, one job each:
