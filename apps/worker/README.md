@@ -28,7 +28,7 @@ src/
 a `@Processor` here consumes it. Survives a restart, retries on failure.
 
 **Events** — in-process, same service. A processor emits `AppEvents.*`, an
-`@OnEvent` listener reacts. Does *not* survive a restart, and never crosses to
+`@OnEvent` listener reacts. Does _not_ survive a restart, and never crosses to
 another service. It is for fan-out after work succeeds — writing a notification
 row, say — not for the work itself.
 
@@ -93,6 +93,9 @@ is enough.
 - It listens on `WORKER_PORT` (default 3001) for `/health`, which probes both
   Postgres and Redis. Redis matters most here: it is the only way jobs arrive,
   so a worker that cannot reach it processes nothing.
+  The same route serves the worker's build identity (`sha`, `builtAt`) from the
+  image's `GIT_SHA`/`BUILT_AT` build args, so a stale worker image is as
+  visible as a stale api.
 - Env is validated at boot by `validateEnv`; a bad `DATABASE_URL` fails the
   process rather than surfacing on first query.
 - Scale by running more replicas. `concurrency` is per replica.

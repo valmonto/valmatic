@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HealthService } from '../../../src/modules/health/health.service';
 
 type Db = { sql: ReturnType<typeof vi.fn> };
@@ -13,6 +13,36 @@ const build = (db?: unknown, redis?: unknown) => new HealthService(db as any, re
 describe('HealthService', () => {
   beforeEach(() => {
     vi.useRealTimers();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it('serves build identity alongside status and uptime', async () => {
+    const sha = 'a'.repeat(40);
+    vi.stubEnv('GIT_SHA', sha);
+    vi.stubEnv('BUILT_AT', '2026-09-03T18:50:40Z');
+
+    const report = await build(okDb(), okRedis()).check();
+
+    expect(report).toMatchObject({
+      status: 'ok',
+      sha,
+      shortSha: 'aaaaaaa',
+      builtAt: '2026-09-03T18:50:40.000Z',
+    });
+  });
+
+  it('reports sha: null rather than a fabricated value when GIT_SHA is unset', async () => {
+    vi.stubEnv('GIT_SHA', '');
+    vi.stubEnv('BUILT_AT', '');
+
+    const report = await build(okDb(), okRedis()).check();
+
+    expect(report.sha).toBeNull();
+    expect(report.shortSha).toBeNull();
+    expect(report.builtAt).toBeNull();
   });
 
   it('reports ok when both dependencies respond', async () => {

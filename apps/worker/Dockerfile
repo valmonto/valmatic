@@ -21,6 +21,14 @@ RUN pnpm --filter @pkg/worker... build
 FROM node:26-alpine AS runner
 WORKDIR /app
 
+# Build identity, served by /health. Passed by the deploy workflow
+# (`GIT_SHA=$(git rev-parse HEAD)` via compose build args) — never hand-set.
+# Left empty (local builds) the app reports `sha: null`, which is the truth.
+ARG GIT_SHA=
+ARG BUILT_AT=
+ENV GIT_SHA=$GIT_SHA \
+    BUILT_AT=$BUILT_AT
+
 COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
 COPY --from=builder /app/.npmrc ./
 COPY --from=builder /app/node_modules ./node_modules

@@ -115,6 +115,13 @@ jobs:
           script: |
             cd /opt/vboilerplate
             git pull origin main
+            # Build identity for /health. Read from the tree that is ACTUALLY
+            # built — if the pull above silently failed, this is the old SHA,
+            # and /health will say so (that is the point: a green deploy that
+            # shipped nothing becomes visible instead of trusted).
+            export GIT_SHA=$(git rev-parse HEAD)
+            export BUILT_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+            echo "Building $GIT_SHA at $BUILT_AT"
             # --wait blocks until services are healthy and exits non-zero if any
             # container is unhealthy or crash-looping (so a bad deploy is RED, not a
             # silently-green deploy hiding a rebooting api). On failure, dump status +
@@ -131,3 +138,15 @@ jobs:
               exit 1
             fi
             echo "Deploy healthy."
+            # Prove the running api is the build we just made, not a survivor.
+            # The container's own GIT_SHA is baked in at build time, so the
+            # expected value is passed in separately. `node` runs in the image
+            # (the host may not have curl/jq).
+            if ! docker compose -f compose.staging.yml exec -T -e EXPECTED_SHA="$GIT_SHA" api node -e "
+              fetch('http://127.0.0.1:3000/health').then(r => r.json()).then(h => {
+                console.log('running sha=' + h.sha + ' uptime=' + h.uptime + 's');
+                if (h.sha !== process.env.EXPECTED_SHA) { console.error('expected ' + process.env.EXPECTED_SHA); process.exit(1); }
+              })"; then
+              echo "===== DEPLOYED CODE DOES NOT MATCH THE SHA JUST BUILT ====="
+              exit 1
+            fi
