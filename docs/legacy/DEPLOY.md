@@ -67,10 +67,10 @@ yourdomain.com {
 
 Repo → Settings → Secrets and variables → Actions:
 
-| Secret            | Value                                              |
-| ----------------- | -------------------------------------------------- |
-| `SSH_HOST`        | server IP/hostname                                 |
-| `SSH_USER`        | `deploy`                                           |
+| Secret            | Value                                                              |
+| ----------------- | ------------------------------------------------------------------ |
+| `SSH_HOST`        | server IP/hostname                                                 |
+| `SSH_USER`        | `deploy`                                                           |
 | `SSH_PRIVATE_KEY` | private key whose public half is in `~deploy/.ssh/authorized_keys` |
 
 ```bash
@@ -79,7 +79,38 @@ ssh-copy-id -i gh_deploy_key.pub deploy@<server-ip>
 cat gh_deploy_key   # paste into SSH_PRIVATE_KEY
 ```
 
-Done — pushes to `main` now deploy. Watch the **Actions** tab.
+Done — pushes to `main` now deploy. Watch the **Actions** tab — but a green run only
+proves the workflow finished, not which code is live. For that, ask the app:
+
+## Which code is running?
+
+Every image is built with `GIT_SHA=$(git rev-parse HEAD)` and `BUILT_AT` (deploy.yml passes
+them as compose build args; the Dockerfiles bake them into env), and `/health` serves them
+beside `status` and `uptime`:
+
+```bash
+curl -s https://yourdomain.com/api/health
+# {"status":"ok","timestamp":"…","uptime":37,"sha":"1b029f6c…","shortSha":"1b029f6","builtAt":"2026-09-03T18:50:40.000Z"}
+```
+
+`sha: null` means the image was built without the arg (a local `docker compose up`, or a
+workflow that dropped it) — it is never a placeholder that could pass for a real commit.
+
+To compare against `main` from any checkout, credential-free:
+
+```bash
+pnpm deploy:status https://yourdomain.com/api --fetch
+# LIVE      1b029f6 is origin/main (uptime 37s, built 2026-09-03T18:50:40.000Z)
+# BEHIND    1b029f6 is 2 commit(s) behind origin/main (9c4e2a1); uptime 18.9h
+# UNKNOWN   unreachable: ECONNREFUSED
+```
+
+Exit code 0 = live, 1 = behind/diverged, 2 = unknown. **Unknown is not behind**: it means
+the probe failed (app down, no sha, sha not in your checkout), and the fix is to the probe,
+not the deploy. Read `uptime` with the verdict — a "successful" deploy followed by an uptime
+of hours means the container was never replaced, which is exactly what a swallowed
+`git pull` failure looks like. The deploy workflow now runs this comparison itself after
+`--wait` and fails the run when the served sha is not the one it just built.
 
 ## Operations
 
@@ -100,6 +131,9 @@ docker compose -f compose.staging.yml exec -T postgres \
 
 ## Troubleshooting
 
+- **Deploy green but the change is not live** — `pnpm deploy:status <url>`. `BEHIND` with a
+  long uptime: the pull on the VPS did not move (check `git -C /opt/vboilerplate log -1` and
+  the remote's credentials). `UNKNOWN no_sha`: the image was built without `GIT_SHA`.
 - **SSH step fails** — check `SSH_*` secrets; test `ssh deploy@<host>`.
 - **`migrate` exits non-zero** — api/worker won't start (they depend on it). Check its logs.
 - **502 from proxy** — container down or wrong loopback port (`docker compose ps`).

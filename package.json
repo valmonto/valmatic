@@ -51,6 +51,7 @@
     "prepare": "husky || true",
     "verify": "pnpm typecheck && pnpm lint && pnpm test",
     "verify:affected": "node scripts/verify/affected.mjs",
+    "deploy:status": "node scripts/deployment-status.mjs",
     "lint:mobile": "pnpm --filter @pkg/mobile run lint"
   },
   "devDependencies": {

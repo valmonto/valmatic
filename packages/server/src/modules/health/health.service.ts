@@ -1,6 +1,7 @@
 import { Inject, Injectable, Optional } from '@nestjs/common';
 import type Redis from 'ioredis';
 import { REDIS } from '../redis';
+import { readBuildInfo, type BuildInfo } from './build-info';
 
 /**
  * Matches `@pkg/database`'s provider token and the slice of its client used
@@ -15,9 +16,10 @@ interface PingableDatabase {
 
 export type HealthStatus = 'ok' | 'degraded';
 
-export interface HealthReport {
+export interface HealthReport extends BuildInfo {
   status: HealthStatus;
   timestamp: string;
+  /** Seconds since this process started — drops to ~0 when a container is actually replaced. */
   uptime: number;
 }
 
@@ -42,6 +44,8 @@ const PROBE_TIMEOUT_MS = 2_000;
 @Injectable()
 export class HealthService {
   private readonly startTime = Date.now();
+  /** Read once: env cannot change under a running container. */
+  private readonly build = readBuildInfo();
   private cached?: { at: number; status: HealthStatus };
   /** In-flight probe, shared by concurrent callers so a burst causes one check. */
   private inFlight?: Promise<HealthStatus>;
@@ -56,6 +60,7 @@ export class HealthService {
       status: await this.dependencyStatus(),
       timestamp: new Date().toISOString(),
       uptime: Math.floor((Date.now() - this.startTime) / 1000),
+      ...this.build,
     };
   }
 
