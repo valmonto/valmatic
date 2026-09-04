@@ -39,7 +39,7 @@ catalog:
   git-cliff: 2.13.1
   husky: 9.1.7
   prettier: 3.8.4
-  release-it: 20.2.0
+  release-it: 21.0.2
 
   # ═══════════════════════════════════════════════════════════════════════
   #  SHARED TOOLCHAIN  (TS / lint / test — used by every package)
