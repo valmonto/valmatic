@@ -145,7 +145,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - A lightweight carousel library with fluid motion and great swipe precision
 - **fast-check** (4.9.0) - [Homepage](https://fast-check.dev/)
   - Property based testing framework for JavaScript (like QuickCheck)
-- **fastify** (5.12.1) - [Homepage](https://fastify.dev/)
+- **fastify** (5.12.3) - [Homepage](https://fastify.dev/)
   - Fast and low overhead web framework, for Node.js
 - **husky** (9.1.7) - [Homepage](https://github.com/typicode/husky#readme)
   - Modern native Git hooks
@@ -390,12 +390,12 @@ These packages are installed as dependencies of direct dependencies:
 - **source-map** (0.5.7, 0.6.1, 0.7.6) - [Homepage](https://github.com/mozilla/source-map)
 - **source-map-js** (1.2.1) - [Homepage](https://github.com/7rulnik/source-map-js)
 - **tmpl** (1.0.5) - [Homepage](https://github.com/daaku/nodejs-tmpl)
-- **tough-cookie** (6.0.1, 6.0.2) - [Homepage](https://github.com/salesforce/tough-cookie)
+- **tough-cookie** (6.0.2) - [Homepage](https://github.com/salesforce/tough-cookie)
 
 ### BlueOak-1.0.0
 
 - **glob** (13.0.6) - [Homepage](https://github.com/isaacs/node-glob#readme)
-- **lru-cache** (11.5.1, 11.5.2) - [Homepage](https://github.com/isaacs/node-lru-cache#readme)
+- **lru-cache** (11.5.2) - [Homepage](https://github.com/isaacs/node-lru-cache#readme)
 - **minimatch** (10.2.6) - [Homepage](https://github.com/isaacs/minimatch#readme)
 - **minipass** (7.1.3) - [Homepage](https://github.com/isaacs/minipass#readme)
 - **path-scurry** (2.0.2) - [Homepage](https://github.com/isaacs/path-scurry#readme)
@@ -1120,7 +1120,7 @@ These packages are installed as dependencies of direct dependencies:
 - **fill-range** (7.1.1) - [Homepage](https://github.com/jonschlinkert/fill-range)
 - **filter-obj** (1.1.0) - [Homepage](https://github.com/sindresorhus/filter-obj#readme)
 - **finalhandler** (1.1.2, 2.1.1) - [Homepage](https://github.com/pillarjs/finalhandler#readme)
-- **find-my-way** (9.6.0, 9.9.0) - [Homepage](https://github.com/delvedor/find-my-way#readme)
+- **find-my-way** (9.9.0) - [Homepage](https://github.com/delvedor/find-my-way#readme)
 - **find-up** (5.0.0) - [Homepage](https://github.com/sindresorhus/find-up#readme)
 - **flat-cache** (4.0.1) - [Homepage](https://github.com/jaredwray/flat-cache#readme)
 - **flow-enums-runtime** (0.0.6) - [Homepage](https://github.com/facebook/flow#readme)
