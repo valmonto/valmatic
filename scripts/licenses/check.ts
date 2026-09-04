@@ -94,7 +94,20 @@ function getLicenseData(): LicenseData {
 }
 
 function normalizeLicense(license: string): string {
-  return license.trim();
+  // SPDX expressions may arrive wrapped in parentheses — "(Apache-2.0 AND MIT)"
+  // and "Apache-2.0 AND MIT" are the same policy decision. Strip ONE outer pair
+  // so the allow list is written once, without the parenthesised twin.
+  const trimmed = license.trim();
+  const unwrapped = /^\(.*\)$/.test(trimmed) ? trimmed.slice(1, -1).trim() : trimmed;
+  return unwrapped;
+}
+
+function expressionAllowed(expr: string, allowed: Set<string>): boolean {
+  const orParts = expr.split(/\s+or\s+/);
+  if (orParts.length > 1) return orParts.some((part) => expressionAllowed(part.trim(), allowed));
+  const andParts = expr.split(/\s+and\s+/);
+  if (andParts.length > 1) return andParts.every((part) => expressionAllowed(part.trim(), allowed));
+  return allowed.has(expr);
 }
 
 function validateLicenses(data: LicenseData, config: LicenseConfig): ValidationResult {
@@ -124,8 +137,10 @@ function validateLicenses(data: LicenseData, config: LicenseConfig): ValidationR
         ? config.overrides[pkg.name].toLowerCase()
         : normalizedLicense;
 
-      // Categorize
-      if (allowedSet.has(effectiveLicense)) {
+      // Categorize. A compound SPDX expression is evaluated, not string-matched:
+      // "A OR B" is allowed when we may pick an allowed side; "A AND B" only
+      // when every side is allowed. One operator level is enough for npm.
+      if (allowedSet.has(effectiveLicense) || expressionAllowed(effectiveLicense, allowedSet)) {
         result.allowed.push({ ...pkg, license });
       } else if (reviewSet.has(effectiveLicense)) {
         result.reviewRequired.push({ ...pkg, license });

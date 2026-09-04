@@ -34,8 +34,8 @@ catalog:
   #  REPO TOOLING  (root devDependencies)
   #  Release automation, changelog, git hooks, commit linting, formatting.
   # ═══════════════════════════════════════════════════════════════════════
-  '@commitlint/cli': 21.0.2
-  '@commitlint/config-conventional': 21.0.2
+  '@commitlint/cli': 21.2.2
+  '@commitlint/config-conventional': 21.2.2
   git-cliff: 2.13.1
   husky: 9.1.7
   prettier: 3.8.4
@@ -45,25 +45,24 @@ catalog:
   #  SHARED TOOLCHAIN  (TS / lint / test — used by every package)
   # ═══════════════════════════════════════════════════════════════════════
   typescript: 6.0.3
-  typescript-eslint: 8.60.1
-  eslint: 10.4.1
+  typescript-eslint: 8.69.0
+  eslint: 10.9.1
   '@eslint/js': 10.0.1
   eslint-config-prettier: 10.1.8
   eslint-plugin-prettier: 5.5.6
   eslint-plugin-react-hooks: 7.1.1
   eslint-plugin-boundaries: 6.0.2
-  globals: 17.6.0
+  globals: 17.12.0
   '@types/node': 25.9.2
   vitest: 4.1.8
   '@vitest/coverage-v8': 4.1.8
-  tsdown: 0.22.2 # library bundler for packages/*
+  tsdown: 0.23.0 # library bundler for packages/*
 
   # ═══════════════════════════════════════════════════════════════════════
   #  SHARED RUNTIME  (imported by both frontend and backend app code)
   # ═══════════════════════════════════════════════════════════════════════
-  axios: 1.17.0
-  zod: 4.4.3
-
+  axios: 1.20.0
+  zod: 4.5.4
   # ═══════════════════════════════════════════════════════════════════════
   #  BACKEND  (apps/api, apps/worker, packages/server, packages/database)
   # ═══════════════════════════════════════════════════════════════════════
@@ -103,11 +102,9 @@ catalog:
 
   # MCP — agent access to a deployed instance, env-gated off
   '@modelcontextprotocol/sdk': 1.20.0
-
   # Telemetry (server) — error reporting + product analytics, env-gated no-ops
-  '@sentry/node': 10.69.0
-  posthog-node: 5.46.1
-
+  '@sentry/node': 10.73.0
+  posthog-node: 5.51.6
   # Logging (Pino)
   nestjs-pino: 5.1.0
   pino: 10.3.1
@@ -118,68 +115,65 @@ catalog:
   nestjs-i18n: 10.8.5
 
   # Object storage (S3-compatible: rustfs/MinIO/R2/S3 — see docs/storage.md)
-  '@aws-sdk/client-s3': 3.1063.0
-  '@aws-sdk/s3-request-presigner': 3.1063.0
-
+  '@aws-sdk/client-s3': 3.1126.0
+  '@aws-sdk/s3-request-presigner': 3.1126.0
   # ═══════════════════════════════════════════════════════════════════════
   #  FRONTEND  (apps/web)
   # ═══════════════════════════════════════════════════════════════════════
 
   # React core + routing
-  react: 19.2.7
-  react-dom: 19.2.7
+  react: 19.2.8
+  react-dom: 19.2.8
   react-router: 7.17.0
-  '@types/react': 19.2.17
-  '@types/react-dom': 19.2.3
-
+  '@types/react': 19.2.18
+  '@types/react-dom': 19.2.7
   # Data / state / forms
-  swr: 2.4.1
-  zustand: 5.0.14
-  react-hook-form: 7.78.0
-  react-error-boundary: 6.1.2
+  swr: 2.5.1
+  zustand: 5.0.15
+  react-hook-form: 7.87.0
+  react-error-boundary: 6.1.4
   date-fns: 4.4.0
 
   # UI components / primitives
-  radix-ui: 1.5.0
-  '@base-ui/react': 1.5.0
-  lucide-react: 1.17.0
+  radix-ui: 1.6.7
+  '@base-ui/react': 1.8.0
+  lucide-react: 1.40.0
+  '@fontsource-variable/inter': 5.3.0
+  '@fontsource-variable/jetbrains-mono': 5.3.0
   cmdk: 1.1.1
-  sonner: 2.0.7
+  sonner: 2.0.8
   vaul: 1.1.2
-  input-otp: 1.4.2
+  input-otp: 1.5.0
   next-themes: 0.4.6
   embla-carousel-react: 8.6.0
   react-day-picker: 10.0.1
-  react-resizable-panels: 4.11.2
-  recharts: 3.8.1
+  react-resizable-panels: 4.12.3
+  recharts: 3.10.1
   framer-motion: 12.40.0
 
   # Styling
-  tailwindcss: 4.3.0
-  '@tailwindcss/vite': 4.3.0
+  tailwindcss: 4.3.3
+  '@tailwindcss/vite': 4.3.3
   tailwind-merge: 3.6.0
   tw-animate-css: 1.4.0
   class-variance-authority: 0.7.1
   clsx: 2.1.1
 
   # i18n (client-side)
-  i18next: 26.3.1
+  i18next: 26.4.2
   i18next-browser-languagedetector: 8.2.1
-  react-i18next: 17.0.8
-
+  react-i18next: 17.0.13
   # Telemetry (web) — analytics, session replay, frontend errors; env-gated
-  posthog-js: 1.407.6
-
+  posthog-js: 1.426.4
   # Build + test (web)
-  vite: 8.0.16
-  '@vitejs/plugin-react-swc': 4.3.1
+  vite: 8.2.2
+  '@vitejs/plugin-react-swc': 4.3.3
   jsdom: 29.1.1
-  msw: 2.14.6
+  msw: 2.15.0
   fast-check: 4.9.0
-  '@testing-library/react': 16.3.2
+  '@testing-library/react': 16.3.3
   '@testing-library/jest-dom': 6.9.1
-  '@testing-library/user-event': 14.6.1
-
+  '@testing-library/user-event': 14.6.7
   # ═══════════════════════════════════════════════════════════════════════
   #  MOBILE  (apps/mobile) — Expo + React Native
   #  All mobile pins live in the named `mobile` catalog below (see `catalogs:`),
@@ -192,8 +186,7 @@ catalog:
   # ═══════════════════════════════════════════════════════════════════════
   #  E2E  (apps/e2e)
   # ═══════════════════════════════════════════════════════════════════════
-  '@playwright/test': 1.60.0
-
+  '@playwright/test': 1.62.1
 # ---------------------------------------------------------------------------
 # Named catalogs — version groups that can't share the default catalog.
 # ---------------------------------------------------------------------------
@@ -208,7 +201,7 @@ catalogs:
     # React — Expo's pinned version (differs from web's default-catalog React)
     react: 19.2.3
     react-dom: 19.2.3
-    '@types/react': ~19.2.2
+    '@types/react': ~19.2.18
 
     # Expo SDK + modules
     expo: ~57.0.2
@@ -317,9 +310,9 @@ minimumReleaseAgeExclude:
   - '@expo/cli@57.0.4'
   - '@expo/config-plugins@57.0.2'
   - '@expo/config@57.0.2'
-  - '@expo/env@2.4.1'
-  - '@expo/fingerprint@0.20.2'
-  - '@expo/image-utils@0.11.1'
+  - '@expo/env@2.3.1 || 2.4.1'
+  - '@expo/fingerprint@0.19.6 || 0.20.2'
+  - '@expo/image-utils@0.10.2 || 0.11.1'
   - '@expo/local-build-cache-provider@57.0.2'
   - '@expo/metro-config@57.0.3'
   - '@expo/metro-runtime@57.0.3'
@@ -361,8 +354,17 @@ minimumReleaseAgeExclude:
   - '@rn-primitives/toggle@1.5.2'
   - '@rn-primitives/tooltip@1.5.2'
   - '@rn-primitives/utils@1.5.2'
-  - '@expo/env@2.3.1'
-  - '@expo/fingerprint@0.19.6'
-  - '@expo/image-utils@0.10.2'
   - '@expo/inline-modules@0.0.13'
   - '@fastify/rate-limit@11.2.0'
+  - '@aws-sdk/client-s3@3.1126.0'
+  - '@aws-sdk/s3-request-presigner@3.1126.0'
+  - '@base-ui/react@1.8.0'
+  - '@base-ui/utils@0.4.0'
+  - '@posthog/browser-common@0.7.2'
+  - '@posthog/core@1.50.4'
+  - '@posthog/types@1.408.1'
+  - '@types/react-dom@19.2.7'
+  - i18next@26.4.2
+  - posthog-js@1.426.4
+  - rolldown-plugin-dts@0.28.5
+  - tsdown@0.23.0
