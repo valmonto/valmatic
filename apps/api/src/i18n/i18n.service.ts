@@ -44,6 +44,14 @@ export class I18nService {
 
   private interpolate(text: string, args?: Record<string, unknown>): string {
     if (!args) return text;
-    return text.replace(/\{\{(\w+)\}\}/g, (_, key) => String(args[key] ?? `{{${key}}}`));
+    return text.replace(/\{\{(\w+)\}\}/g, (_, key: string) => {
+      const value = args[key];
+      // Only scalars interpolate; an object would render as "[object Object]",
+      // so it is left as the placeholder rather than leaked into a message.
+      if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+        return String(value);
+      }
+      return `{{${key}}}`;
+    });
   }
 }

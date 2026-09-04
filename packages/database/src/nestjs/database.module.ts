@@ -1,4 +1,10 @@
-import { Module, Global, type DynamicModule } from '@nestjs/common';
+import {
+  Module,
+  Global,
+  type DynamicModule,
+  type FactoryProvider,
+  type ModuleMetadata,
+} from '@nestjs/common';
 import { createDatabaseClient, type DatabaseConfig } from '../client.js';
 
 export const DATABASE_CLIENT = 'DATABASE_CLIENT';
@@ -32,9 +38,9 @@ export class DatabaseModule {
    * The client will automatically close connections on NestJS shutdown.
    */
   static forRootAsync(options: {
-    imports?: any[];
-    inject?: any[];
-    useFactory: (...args: any[]) => DatabaseModuleOptions | Promise<DatabaseModuleOptions>;
+    imports?: ModuleMetadata['imports'];
+    inject?: FactoryProvider['inject'];
+    useFactory: (...args: never[]) => DatabaseModuleOptions | Promise<DatabaseModuleOptions>;
   }): DynamicModule {
     return {
       module: DatabaseModule,
@@ -42,7 +48,7 @@ export class DatabaseModule {
       providers: [
         {
           provide: DATABASE_CLIENT,
-          useFactory: async (...args: any[]) => {
+          useFactory: async (...args: never[]) => {
             const config = await options.useFactory(...args);
             return createDatabaseClient(config);
           },

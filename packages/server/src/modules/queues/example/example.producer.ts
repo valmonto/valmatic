@@ -1,6 +1,6 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
-import { Queue, type JobsOptions } from 'bullmq';
+import { Queue, type Job, type JobsOptions } from 'bullmq';
 import { EXAMPLE_QUEUE } from './example.constants.js';
 import { EXAMPLE_JOB_NAMES, type ExampleJobPayload } from './example.types.js';
 import { InjectLogger, PinoLogger } from '../../logging/index.js';
@@ -45,7 +45,10 @@ export class ExampleProducer {
    * @param options - Optional job configuration
    * @returns The created job
    */
-  async enqueue(payload: ExampleJobPayload, options?: { priority?: number; delay?: number }) {
+  async enqueue(
+    payload: ExampleJobPayload,
+    options?: { priority?: number; delay?: number },
+  ): Promise<Job<ExampleJobPayload>> {
     const jobOptions: JobsOptions = {
       priority: options?.priority,
       delay: options?.delay,
@@ -64,7 +67,7 @@ export class ExampleProducer {
    * @param payloads - Array of job payloads
    * @returns Array of created jobs
    */
-  async enqueueBulk(payloads: ExampleJobPayload[]) {
+  async enqueueBulk(payloads: ExampleJobPayload[]): Promise<Job<ExampleJobPayload>[]> {
     const jobs = payloads.map((payload) => ({
       name: EXAMPLE_JOB_NAMES.PROCESS,
       data: payload,

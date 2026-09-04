@@ -33,4 +33,5 @@ export const Role = {
  * @Roles(Role.OWNER, Role.ADMIN)             // OWNER or ADMIN
  * @Roles(Role.OWNER, Role.ADMIN, Role.MEMBER) // All authenticated users
  */
-export const Roles = (...roles: OrganizationUserRole[]) => SetMetadata(ROLES_KEY, roles);
+export const Roles = (...roles: OrganizationUserRole[]): ReturnType<typeof SetMetadata> =>
+  SetMetadata(ROLES_KEY, roles);

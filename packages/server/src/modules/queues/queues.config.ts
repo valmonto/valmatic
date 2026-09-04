@@ -4,7 +4,15 @@ import type { RegisterQueueOptions } from '@nestjs/bullmq';
  * Shared Redis connection config for BullMQ.
  * Uses environment variables with sensible defaults.
  */
-export function getRedisConfig() {
+export interface RedisConnectionConfig {
+  host: string;
+  port: number;
+  password: string | undefined;
+  /** BullMQ requires this to be null: it manages retries itself. */
+  maxRetriesPerRequest: null;
+}
+
+export function getRedisConfig(): RedisConnectionConfig {
   return {
     host: process.env.REDIS_HOST ?? 'localhost',
     port: parseInt(process.env.REDIS_PORT ?? '6379', 10),

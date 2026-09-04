@@ -252,19 +252,19 @@ export class LocalAuthProvider implements IAuthProvider {
     return result !== null;
   }
 
-  private blacklistKey(token: string) {
+  private blacklistKey(token: string): string {
     return `iam:blacklist:${token}`;
   }
 
-  private refreshTokenKey(token: string) {
+  private refreshTokenKey(token: string): string {
     return `iam:refresh:${token}`;
   }
 
-  private logoutAllKey(userId: string) {
+  private logoutAllKey(userId: string): string {
     return `iam:logout-all:${userId}`;
   }
 
-  private userSessionsKey(userId: string) {
+  private userSessionsKey(userId: string): string {
     return `iam:user-sessions:${userId}`;
   }
 }
