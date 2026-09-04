@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FEATURE_FLAGS, type ActiveUser, type FeatureFlag } from '@pkg/contracts';
-import { Analytics } from './analytics';
+import { Analytics } from './analytics.js';
 
 /**
  * Resolves which feature flags are on for a user — SERVER-side, so every

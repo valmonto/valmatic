@@ -1,14 +1,14 @@
 import { z } from 'zod';
-import { INVITATION_STATUSES } from '../constants';
-import { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants';
-import { EmptyRequestSchema } from './common.schema';
-import { OrganizationUserRoleSchema } from './organization.schema';
-import { AuthTokensSchema } from './auth.schema';
+import { INVITATION_STATUSES } from '../constants/index.js';
+import { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants/index.js';
+import { EmptyRequestSchema } from './common.schema.js';
+import { OrganizationUserRoleSchema } from './organization.schema.js';
+import { AuthTokensSchema } from './auth.schema.js';
 
 // --- Status enum ---
 // Derived from ../constants — the same value set the database CHECK constraint
 // enforces, defined exactly once.
-export { INVITATION_STATUSES, INVITATION_EXPIRY_DAYS } from '../constants';
+export { INVITATION_STATUSES, INVITATION_EXPIRY_DAYS } from '../constants/index.js';
 export const InvitationStatusSchema = z.enum(INVITATION_STATUSES);
 export type InvitationStatus = z.infer<typeof InvitationStatusSchema>;
 

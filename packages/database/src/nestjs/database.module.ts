@@ -1,5 +1,5 @@
 import { Module, Global, type DynamicModule } from '@nestjs/common';
-import { createDatabaseClient, type DatabaseConfig } from '../client';
+import { createDatabaseClient, type DatabaseConfig } from '../client.js';
 
 export const DATABASE_CLIENT = 'DATABASE_CLIENT';
 

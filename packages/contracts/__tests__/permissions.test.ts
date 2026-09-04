@@ -5,9 +5,9 @@ import {
   hasAnyPermission,
   hasPermission,
   ORGANIZATION_USER_ROLES,
-} from '../src';
-import { PERMISSIONS } from '../src/permissions/list';
-import { ROLE_PERMISSIONS } from '../src/permissions/roles';
+} from '../src/index.js';
+import { PERMISSIONS } from '../src/permissions/list.js';
+import { ROLE_PERMISSIONS } from '../src/permissions/roles.js';
 
 describe('the permission table', () => {
   // A permission no role holds is a feature silently dead for everyone —

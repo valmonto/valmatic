@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { readBuildInfo } from '../../../src/modules/health/build-info';
+import { readBuildInfo } from '../../../src/modules/health/build-info.js';
 
 const SHA = '1b029f6c1d5e8a3b9f0e7d6c5b4a3f2e1d0c9b8a';
 

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import type { ActiveUser } from '@pkg/contracts';
-import { extractActiveUser } from '../../../../../src/modules/iam/auth-providers/decorators/active-user.decorator';
+import { extractActiveUser } from '../../../../../src/modules/iam/auth-providers/decorators/active-user.decorator.js';
 
 describe('extractActiveUser', () => {
   const mockUser: ActiveUser = {

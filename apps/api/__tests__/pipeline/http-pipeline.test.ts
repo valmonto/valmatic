@@ -74,7 +74,7 @@ async function boot(env: Record<string, string | undefined>): Promise<{
   // so each boot needs a fresh module graph or the second app inherits the
   // first one's config. Imported lazily, after the env above is in place.
   vi.resetModules();
-  const { createApp } = await import('@/app.factory');
+  const { createApp } = await import('@/app.factory.js');
   const app = await createApp();
   await app.init();
   await app.getHttpAdapter().getInstance().ready();

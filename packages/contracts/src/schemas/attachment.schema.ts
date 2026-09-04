@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ATTACHMENT_KINDS, ATTACHMENT_STATUSES } from '../constants/attachment';
+import { ATTACHMENT_KINDS, ATTACHMENT_STATUSES } from '../constants/attachment.js';
 
 // --- Enums (value sets from ../constants, defined exactly once) ---
 export const AttachmentKindSchema = z.enum(ATTACHMENT_KINDS);

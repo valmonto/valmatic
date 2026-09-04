@@ -1,14 +1,14 @@
 // Helpers
-export * from './helpers';
+export * from './helpers.js';
 
 // Core entities
-export * from './user';
-export * from './organization';
-export * from './organization-user';
-export * from './notification';
-export * from './api-key';
-export * from './attachment';
-export * from './invitation';
+export * from './user.js';
+export * from './organization.js';
+export * from './organization-user.js';
+export * from './notification.js';
+export * from './api-key.js';
+export * from './attachment.js';
+export * from './invitation.js';
 
 // Relations
-export * from './relations';
+export * from './relations.js';

@@ -1,9 +1,9 @@
 import type { ConfigService } from '@nestjs/config';
 import type { ActiveUser } from '@pkg/contracts';
 import { describe, expect, it, vi } from 'vitest';
-import { Analytics } from '../../../src/modules/telemetry/analytics';
-import { ErrorReporter } from '../../../src/modules/telemetry/error-reporting';
-import { FeatureFlags } from '../../../src/modules/telemetry/feature-flags';
+import { Analytics } from '../../../src/modules/telemetry/analytics.js';
+import { ErrorReporter } from '../../../src/modules/telemetry/error-reporting.js';
+import { FeatureFlags } from '../../../src/modules/telemetry/feature-flags.js';
 
 const configWith = (values: Record<string, string>): ConfigService =>
   ({

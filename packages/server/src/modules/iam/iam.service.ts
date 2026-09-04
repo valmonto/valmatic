@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { AuthProvider } from './auth-providers/decorators/auth-provider.decorator';
-import { type IAuthProvider } from './auth-providers/auth-provider';
+import { AuthProvider } from './auth-providers/decorators/auth-provider.decorator.js';
+import { type IAuthProvider } from './auth-providers/auth-provider.js';
 
 @Injectable()
 export class IamService {

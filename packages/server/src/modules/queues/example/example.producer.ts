@@ -1,9 +1,9 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { Queue, type JobsOptions } from 'bullmq';
-import { EXAMPLE_QUEUE } from './example.constants';
-import { EXAMPLE_JOB_NAMES, type ExampleJobPayload } from './example.types';
-import { InjectLogger, PinoLogger } from '../../logging';
+import { EXAMPLE_QUEUE } from './example.constants.js';
+import { EXAMPLE_JOB_NAMES, type ExampleJobPayload } from './example.types.js';
+import { InjectLogger, PinoLogger } from '../../logging/index.js';
 
 /**
  * Producer service for the example queue.

@@ -1,6 +1,6 @@
-export * from './schemas';
-export * from './permissions';
-// Explicit rather than `export * from './constants'`: several constants are
+export * from './schemas/index.js';
+export * from './permissions/index.js';
+// Explicit rather than `export * from './constants/index.js'`: several constants are
 // already re-exported through schema files, and colliding star exports drop
 // names silently.
 export {
@@ -8,8 +8,8 @@ export {
   FEATURE_FLAGS,
   type AnalyticsEvent,
   type FeatureFlag,
-} from './constants/analytics';
-export { MCP_SCOPES, type McpScope } from './constants/mcp';
+} from './constants/analytics.js';
+export { MCP_SCOPES, type McpScope } from './constants/mcp.js';
 export {
   ATTACHMENT_KINDS,
   ATTACHMENT_MAX_BYTES,
@@ -19,4 +19,4 @@ export {
   attachmentLimitFor,
   type AttachmentKindName,
   type AttachmentPolicy,
-} from './constants/attachment';
+} from './constants/attachment.js';

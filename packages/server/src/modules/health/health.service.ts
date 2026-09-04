@@ -1,7 +1,7 @@
 import { Inject, Injectable, Optional } from '@nestjs/common';
-import type Redis from 'ioredis';
-import { REDIS } from '../redis';
-import { readBuildInfo, type BuildInfo } from './build-info';
+import type { Redis } from 'ioredis';
+import { REDIS } from '../redis/index.js';
+import { readBuildInfo, type BuildInfo } from './build-info.js';
 
 /**
  * Matches `@pkg/database`'s provider token and the slice of its client used

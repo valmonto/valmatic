@@ -1,14 +1,14 @@
 import { z } from 'zod';
-import { EmptyRequestSchema } from './common.schema';
-import { PermissionSchema } from './permission.schema';
-import { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants';
-import { OrganizationUserRoleSchema } from './organization.schema';
-import { SystemRoleSchema } from './user.schema';
-import { FEATURE_FLAGS } from '../constants';
+import { EmptyRequestSchema } from './common.schema.js';
+import { PermissionSchema } from './permission.schema.js';
+import { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants/index.js';
+import { OrganizationUserRoleSchema } from './organization.schema.js';
+import { SystemRoleSchema } from './user.schema.js';
+import { FEATURE_FLAGS } from '../constants/index.js';
 
 // Defined in constants.ts (Zod-free) so the frontend can import them without
 // pulling in the schema graph; re-exported here for existing callers.
-export { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants';
+export { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants/index.js';
 
 /**
  * Bearer tokens returned to non-cookie clients (e.g. the mobile app),

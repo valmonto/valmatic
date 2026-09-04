@@ -1,2 +1,2 @@
-export * from './decorators';
-export * from './filters';
+export * from './decorators/index.js';
+export * from './filters/index.js';

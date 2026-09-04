@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
-import { IamService } from './iam.service';
-import { AuthProviderModule } from './auth-providers/auth.provider.module';
-import { IamRedisModule } from './iam.redis';
+import { IamService } from './iam.service.js';
+import { AuthProviderModule } from './auth-providers/auth.provider.module.js';
+import { IamRedisModule } from './iam.redis.js';
 
 @Global()
 @Module({

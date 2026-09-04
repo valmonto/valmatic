@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { runMigrations } from '../migrate';
+import { runMigrations } from '../migrate.js';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 

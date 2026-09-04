@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { tryCatch } from '../src/try-catch';
+import { tryCatch } from '../src/try-catch.js';
 
 describe('tryCatch', () => {
   describe('successful promises', () => {

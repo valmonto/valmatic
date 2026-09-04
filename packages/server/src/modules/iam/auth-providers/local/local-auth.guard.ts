@@ -3,9 +3,9 @@ import { Reflector } from '@nestjs/core';
 import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import type { ActiveUser } from '@pkg/contracts';
 import { k } from '@pkg/locales';
-import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator';
-import { AUTH_PROVIDER, type IAuthProvider } from '../auth-provider';
-import { COOKIE_OPTIONS, COOKIE_TTL } from '../../../../config';
+import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator.js';
+import { AUTH_PROVIDER, type IAuthProvider } from '../auth-provider.js';
+import { COOKIE_OPTIONS, COOKIE_TTL } from '../../../../config/index.js';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import '@fastify/cookie';
 

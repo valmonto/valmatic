@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FakeLogger, hasDatabase } from '../src/index';
+import { FakeLogger, hasDatabase } from '../src/index.js';
 
 describe('FakeLogger', () => {
   it('records entries by level', () => {

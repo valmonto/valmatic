@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ForbiddenException, type ExecutionContext } from '@nestjs/common';
 import type { Reflector } from '@nestjs/core';
-import { RolesGuard } from '../../../../../src/modules/iam/auth-providers/guards/roles.guard';
+import { RolesGuard } from '../../../../../src/modules/iam/auth-providers/guards/roles.guard.js';
 
 describe('RolesGuard', () => {
   let guard: RolesGuard;

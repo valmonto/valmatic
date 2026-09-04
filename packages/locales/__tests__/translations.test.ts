@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { k, supportedLanguages, translations } from '../src/index';
+import { k, supportedLanguages, translations } from '../src/index.js';
 
 /** Every leaf value in `k`, i.e. every key the apps can actually reference. */
 function catalogue(node: unknown, found: string[] = []): string[] {

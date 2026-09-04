@@ -1,6 +1,6 @@
 import { pgTable, varchar, timestamp, check } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
-import { pk } from './helpers';
+import { pk } from './helpers.js';
 import { SYSTEM_ROLES, type SystemRole as SystemRoleType } from '@pkg/contracts';
 
 export const user = pgTable(

@@ -61,6 +61,8 @@
     "@types/node": "catalog:",
     "git-cliff": "catalog:",
     "husky": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
     "prettier": "catalog:",
     "release-it": "catalog:"
   }

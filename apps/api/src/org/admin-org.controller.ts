@@ -2,10 +2,10 @@ import { Controller, Delete, Get } from '@nestjs/common';
 import { OrgService } from './org.service';
 import { ActiveUser, SystemRole, SystemRoles, ZodRequest } from '@pkg/server';
 import {
-  AdminDeleteOrgRequest,
+  type AdminDeleteOrgRequest,
   AdminDeleteOrgRequestSchema,
   AdminDeleteOrgResponse,
-  AdminListOrgsRequest,
+  type AdminListOrgsRequest,
   AdminListOrgsRequestSchema,
   AdminListOrgsResponse,
   type ActiveUser as ActiveUserType,

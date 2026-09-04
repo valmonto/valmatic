@@ -1,14 +1,14 @@
 import { Global, Module } from '@nestjs/common';
-import { AUTH_PROVIDER } from './auth-provider';
+import { AUTH_PROVIDER } from './auth-provider.js';
 import { APP_GUARD } from '@nestjs/core';
-import { ActiveOrgGuard } from './guards/active-org.guard';
-import { AuthGuard } from './guards/auth.guard';
-import { PermissionsGuard } from './guards/permissions.guard';
-import { RolesGuard } from './guards/roles.guard';
-import { SystemRolesGuard } from './guards/system-roles.guard';
+import { ActiveOrgGuard } from './guards/active-org.guard.js';
+import { AuthGuard } from './guards/auth.guard.js';
+import { PermissionsGuard } from './guards/permissions.guard.js';
+import { RolesGuard } from './guards/roles.guard.js';
+import { SystemRolesGuard } from './guards/system-roles.guard.js';
 import { ConfigService } from '@nestjs/config';
-import { LocalAuthProvider } from './local/local-auth.provider';
-import { LocalAuthGuard } from './local/local-auth.guard';
+import { LocalAuthProvider } from './local/local-auth.provider.js';
+import { LocalAuthGuard } from './local/local-auth.guard.js';
 import { JwtModule } from '@nestjs/jwt';
 
 @Global()

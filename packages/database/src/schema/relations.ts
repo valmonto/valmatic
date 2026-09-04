@@ -1,8 +1,8 @@
 import { defineRelations } from 'drizzle-orm';
-import { user } from './user';
-import { organization } from './organization';
-import { organizationUser } from './organization-user';
-import { notification } from './notification';
+import { user } from './user.js';
+import { organization } from './organization.js';
+import { organizationUser } from './organization-user.js';
+import { notification } from './notification.js';
 
 /**
  * Relational config for the relational query builder (drizzle v1 API).

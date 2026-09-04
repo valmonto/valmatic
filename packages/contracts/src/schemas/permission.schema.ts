@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PERMISSIONS } from '../permissions/list';
+import { PERMISSIONS } from '../permissions/list.js';
 
 /**
  * Runtime schema for a permission string, built from the same const as the

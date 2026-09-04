@@ -3,9 +3,9 @@ import type { Reflector } from '@nestjs/core';
 import type { ExecutionContext } from '@nestjs/common';
 import type { ActiveUser } from '@pkg/contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { SystemRolesGuard } from '../../../../../src/modules/iam/auth-providers/guards/system-roles.guard';
-import { SYSTEM_ROLES_KEY } from '../../../../../src/modules/iam/auth-providers/decorators/system-roles.decorator';
-import { IS_PUBLIC_KEY } from '../../../../../src/modules/iam/auth-providers/decorators/public-route.decorator';
+import { SystemRolesGuard } from '../../../../../src/modules/iam/auth-providers/guards/system-roles.guard.js';
+import { SYSTEM_ROLES_KEY } from '../../../../../src/modules/iam/auth-providers/decorators/system-roles.decorator.js';
+import { IS_PUBLIC_KEY } from '../../../../../src/modules/iam/auth-providers/decorators/public-route.decorator.js';
 
 function contextFor(user?: Partial<ActiveUser>): ExecutionContext {
   return {

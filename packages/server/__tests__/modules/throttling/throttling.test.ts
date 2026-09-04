@@ -1,7 +1,7 @@
-import type Redis from 'ioredis';
+import type { Redis } from 'ioredis';
 import { describe, expect, it, vi } from 'vitest';
-import { throttlerTracker } from '../../../src/modules/throttling/throttler.guard';
-import { ThrottlerRedisStorage } from '../../../src/modules/throttling/throttler.storage';
+import { throttlerTracker } from '../../../src/modules/throttling/throttler.guard.js';
+import { ThrottlerRedisStorage } from '../../../src/modules/throttling/throttler.storage.js';
 
 describe('throttlerTracker', () => {
   const user = {

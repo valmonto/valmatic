@@ -7,8 +7,8 @@ import {
 import { Reflector } from '@nestjs/core';
 import { hasAnyPermission, hasAllPermissions, type ActiveUser } from '@pkg/contracts';
 import { k } from '@pkg/locales';
-import { PERMISSIONS_KEY, type PermissionsMetadata } from '../decorators/permissions.decorator';
-import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator';
+import { PERMISSIONS_KEY, type PermissionsMetadata } from '../decorators/permissions.decorator.js';
+import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator.js';
 
 /**
  * Permission-based Access Control Guard

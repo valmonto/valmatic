@@ -1,3 +1,3 @@
-export * from './example.constants';
-export * from './example.types';
-export * from './example.producer';
+export * from './example.constants.js';
+export * from './example.types.js';
+export * from './example.producer.js';

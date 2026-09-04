@@ -6,9 +6,9 @@ import {
   type InvitationStatus as InvitationStatusType,
   type OrganizationUserRole as OrganizationUserRoleType,
 } from '@pkg/contracts';
-import { pk } from './helpers';
-import { organization } from './organization';
-import { user } from './user';
+import { pk } from './helpers.js';
+import { organization } from './organization.js';
+import { user } from './user.js';
 
 /**
  * An invitation to join an organization at a given role.

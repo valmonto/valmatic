@@ -1,5 +1,5 @@
 import z from 'zod';
-import { ORGANIZATION_USER_ROLES, SYSTEM_ROLES } from '../constants';
+import { ORGANIZATION_USER_ROLES, SYSTEM_ROLES } from '../constants/index.js';
 
 /**
  * Who the caller is, for the length of one request.

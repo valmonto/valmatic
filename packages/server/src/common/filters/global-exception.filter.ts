@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { ZodError } from 'zod';
-import { InjectLogger, PinoLogger } from '../../modules/logging';
-import { ErrorReporter } from '../../modules/telemetry';
+import { InjectLogger, PinoLogger } from '../../modules/logging/index.js';
+import { ErrorReporter } from '../../modules/telemetry/index.js';
 import type { ActiveUser } from '@pkg/contracts';
 
 interface ErrorResponse {

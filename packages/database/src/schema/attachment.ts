@@ -10,9 +10,9 @@ import {
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 import { ATTACHMENT_KINDS, ATTACHMENT_STATUSES } from '@pkg/contracts';
-import { pk } from './helpers';
-import { organization } from './organization';
-import { user } from './user';
+import { pk } from './helpers.js';
+import { organization } from './organization.js';
+import { user } from './user.js';
 
 /**
  * Files are rows first; the object store holds only opaque blobs at

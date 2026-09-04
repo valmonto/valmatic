@@ -1,13 +1,13 @@
 import { Controller, Delete, Get, Post } from '@nestjs/common';
 import { ActiveUser, SystemRole, SystemRoles, ZodRequest } from '@pkg/server';
 import {
-  CreateApiKeyRequest,
+  type CreateApiKeyRequest,
   CreateApiKeyRequestSchema,
   CreateApiKeyResponse,
-  ListApiKeysRequest,
+  type ListApiKeysRequest,
   ListApiKeysRequestSchema,
   ListApiKeysResponse,
-  RevokeApiKeyRequest,
+  type RevokeApiKeyRequest,
   RevokeApiKeyRequestSchema,
   RevokeApiKeyResponse,
   type ActiveUser as ActiveUserType,

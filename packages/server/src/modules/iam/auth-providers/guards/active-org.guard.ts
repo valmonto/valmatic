@@ -3,7 +3,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { k } from '@pkg/locales';
 import type { ActiveUser } from '@pkg/contracts';
-import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator';
+import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator.js';
 
 /**
  * Keeps the organization in the URL honest.

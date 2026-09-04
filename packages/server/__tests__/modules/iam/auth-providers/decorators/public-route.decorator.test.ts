@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import {
   PublicRoute,
   IS_PUBLIC_KEY,
-} from '../../../../../src/modules/iam/auth-providers/decorators/public-route.decorator';
+} from '../../../../../src/modules/iam/auth-providers/decorators/public-route.decorator.js';
 
 describe('PublicRoute', () => {
   const reflector = new Reflector();

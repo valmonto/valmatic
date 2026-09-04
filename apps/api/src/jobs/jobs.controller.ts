@@ -3,10 +3,10 @@ import { ExampleProducer, type ExampleJobPayload } from '@pkg/server';
 import { ActiveUser, Permissions, ZodRequest } from '@pkg/server';
 import {
   type ActiveUser as ActiveUserType,
-  CreateExampleJobRequest,
+  type CreateExampleJobRequest,
   CreateExampleJobRequestSchema,
   CreateExampleJobResponse,
-  CreateExampleJobsBulkRequest,
+  type CreateExampleJobsBulkRequest,
   CreateExampleJobsBulkRequestSchema,
   CreateExampleJobsBulkResponse,
 } from '@pkg/contracts';

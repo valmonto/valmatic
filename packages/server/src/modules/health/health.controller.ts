@@ -1,8 +1,8 @@
 import { SkipThrottle } from '@nestjs/throttler';
 import { Controller, Get, HttpCode, HttpStatus, Res } from '@nestjs/common';
 import type { FastifyReply } from 'fastify';
-import { PublicRoute } from '../iam';
-import { HealthService, type HealthReport } from './health.service';
+import { PublicRoute } from '../iam/index.js';
+import { HealthService, type HealthReport } from './health.service.js';
 
 @SkipThrottle() // orchestration probes must never be limited
 @Controller('health')
