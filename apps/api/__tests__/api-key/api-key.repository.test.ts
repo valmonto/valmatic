@@ -3,6 +3,8 @@ import {
   apiKey,
   user,
   type DatabaseClient,
+  organization,
+  organizationUser,
 } from '@pkg/database';
 import { describeIntegration, truncate } from '@pkg/testing';
 import { afterAll, beforeEach, expect, it } from 'vitest';
@@ -22,7 +24,7 @@ describeIntegration('ApiKeyRepository — touchLastUsed persists (lazy-builder g
   let userId: string;
 
   beforeEach(async () => {
-    await truncate(client.db, [apiKey, user]);
+    await truncate(client.db, [apiKey, organizationUser, organization, user]);
     const [owner] = await client.db
       .insert(user)
       .values({ email: 'key-owner@example.com', name: 'key-owner', passwordHash: 'x' })
@@ -31,7 +33,7 @@ describeIntegration('ApiKeyRepository — touchLastUsed persists (lazy-builder g
   });
 
   afterAll(async () => {
-    await truncate(client.db, [apiKey, user]);
+    await truncate(client.db, [apiKey, organizationUser, organization, user]);
     await client.close();
   });
 

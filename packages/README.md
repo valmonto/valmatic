@@ -19,7 +19,6 @@ recipes; this is the map.
 |---|---|
 | [`testing`](testing) | test fakes, golden harness, and the testing conventions |
 | [`vitest-config`](vitest-config) | shared Vitest config |
-| [`eslint-config`](eslint-config) | shared ESLint config |
 | [`tsconfig`](tsconfig) | shared TypeScript config |
 
 ## How they fit together

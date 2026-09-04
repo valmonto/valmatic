@@ -13,16 +13,13 @@
   "types": "./src/index.ts",
   "scripts": {
     "test": "vitest run",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "oxlint",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@pkg/eslint-config": "workspace:*",
     "@pkg/tsconfig": "workspace:*",
     "@pkg/vitest-config": "workspace:*",
     "@types/node": "catalog:",
-    "eslint": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

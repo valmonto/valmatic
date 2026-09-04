@@ -91,7 +91,6 @@
     "zustand": "catalog:"
   },
   "devDependencies": {
-    "@pkg/eslint-config": "workspace:*",
     "@pkg/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "catalog:mobile",
     "@types/react": "catalog:mobile",

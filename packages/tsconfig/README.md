@@ -21,9 +21,9 @@ packages.
 }
 ```
 
-Include `__tests__` as well as `src` — typescript-eslint parses through the
-project service, so a spec outside `include` fails linting with a parsing error
-rather than a type error. Where the build must stay clean of tests, add a
+Include `__tests__` as well as `src` — the typecheck and oxlint's type-aware
+rules both read the project through `tsconfig.json`, so a spec outside
+`include` is invisible to one and unparseable to the other. Where the build must stay clean of tests, add a
 `tsconfig.build.json` that narrows `include` back to `src` (Nest picks it up
 automatically); `apps/api` and `apps/worker` do this.
 

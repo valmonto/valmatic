@@ -16,8 +16,7 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "oxlint --type-aware",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
     "test": "vitest run",
@@ -71,12 +70,10 @@
   "devDependencies": {
     "@fastify/cookie": "catalog:",
     "@nestjs/testing": "catalog:",
-    "@pkg/eslint-config": "workspace:*",
     "@pkg/testing": "workspace:*",
     "@pkg/tsconfig": "workspace:*",
     "@pkg/vitest-config": "workspace:*",
     "@types/node": "catalog:",
-    "eslint": "catalog:",
     "fastify": "catalog:",
     "reflect-metadata": "catalog:",
     "tsdown": "catalog:",
