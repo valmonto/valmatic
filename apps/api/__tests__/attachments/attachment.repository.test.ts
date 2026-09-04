@@ -130,7 +130,10 @@ describeIntegration('AttachmentRepository', () => {
 
   it('confirm is a compare-and-swap: the second confirm updates nothing', async () => {
     const mine = await insertAttachment(orgA, ownerA);
-    const first = await repository.confirm(mine.id, orgA, { sizeBytes: 977, thumbnailBlobId: null });
+    const first = await repository.confirm(mine.id, orgA, {
+      sizeBytes: 977,
+      thumbnailBlobId: null,
+    });
     expect(first?.status).toBe('uploaded');
 
     const second = await repository.confirm(mine.id, orgA, { sizeBytes: 1, thumbnailBlobId: null });
@@ -161,9 +164,11 @@ describeIntegration('AttachmentRepository', () => {
         key,
         url: `https://storage/get/${key}`,
       })),
-      headObject: vi.fn().mockResolvedValue(
-        headSize === null ? null : { contentLength: headSize, contentType: 'image/png' },
-      ),
+      headObject: vi
+        .fn()
+        .mockResolvedValue(
+          headSize === null ? null : { contentLength: headSize, contentType: 'image/png' },
+        ),
       deleteFile: vi.fn().mockResolvedValue(undefined),
       deleteDirectory: vi.fn().mockResolvedValue(undefined),
     }) as unknown as StorageService;

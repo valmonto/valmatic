@@ -32,22 +32,36 @@ function NumberInput({
 
   return (
     <View
-      className={cn('border-border bg-card flex-row items-center self-start rounded-full border', className)}>
+      className={cn(
+        'border-border bg-card flex-row items-center self-start rounded-full border',
+        className,
+      )}
+    >
       <Pressable
         onPress={() => set(value - step)}
         disabled={atMin}
         accessibilityRole="button"
         accessibilityLabel="Decrease"
-        className={cn('size-11 items-center justify-center rounded-l-full active:bg-muted', atMin && 'opacity-40')}>
+        className={cn(
+          'size-11 items-center justify-center rounded-l-full active:bg-muted',
+          atMin && 'opacity-40',
+        )}
+      >
         <Icon as={Minus} size={18} className="text-foreground" />
       </Pressable>
-      <Text className="w-12 text-center text-base font-medium tabular-nums text-foreground">{value}</Text>
+      <Text className="w-12 text-center text-base font-medium tabular-nums text-foreground">
+        {value}
+      </Text>
       <Pressable
         onPress={() => set(value + step)}
         disabled={atMax}
         accessibilityRole="button"
         accessibilityLabel="Increase"
-        className={cn('size-11 items-center justify-center rounded-r-full active:bg-muted', atMax && 'opacity-40')}>
+        className={cn(
+          'size-11 items-center justify-center rounded-r-full active:bg-muted',
+          atMax && 'opacity-40',
+        )}
+      >
         <Icon as={Plus} size={18} className="text-foreground" />
       </Pressable>
     </View>

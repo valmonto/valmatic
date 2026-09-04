@@ -79,8 +79,9 @@ function OTPInput({
           'aspect-square flex-1 items-center justify-center rounded-2xl border border-border bg-muted',
           isActive && 'border-primary',
           invalid && 'border-destructive',
-          disabled && 'opacity-50'
-        )}>
+          disabled && 'opacity-50',
+        )}
+      >
         {filled ? (
           <Text className="text-2xl font-semibold text-foreground">{masked ? '•' : char}</Text>
         ) : isActive ? (
@@ -94,7 +95,8 @@ function OTPInput({
     <Pressable
       onPress={() => inputRef.current?.focus()}
       disabled={disabled}
-      className={cn('flex-row items-center justify-center gap-2.5', className)}>
+      className={cn('flex-row items-center justify-center gap-2.5', className)}
+    >
       {groups.map((group, gi) => (
         <React.Fragment key={gi}>
           {gi > 0 ? <View className="mx-1 h-0.5 w-3 rounded-full bg-muted-foreground/40" /> : null}

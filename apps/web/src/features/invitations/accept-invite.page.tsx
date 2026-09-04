@@ -164,13 +164,7 @@ function Outcome({
   );
 }
 
-function SignupBranch({
-  token,
-  preview,
-}: {
-  token: string;
-  preview: PreviewInvitationResponse;
-}) {
+function SignupBranch({ token, preview }: { token: string; preview: PreviewInvitationResponse }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { execute: accept, isLoading, error } = useAcceptInvitation();

@@ -30,7 +30,8 @@ export default function BlockDetailScreen() {
           hitSlop={8}
           accessibilityRole="button"
           accessibilityLabel="Back"
-          className="border-border bg-card/90 m-3 size-9 items-center justify-center rounded-full border active:opacity-70">
+          className="border-border bg-card/90 m-3 size-9 items-center justify-center rounded-full border active:opacity-70"
+        >
           <Icon as={ChevronLeft} size={20} className="text-foreground" />
         </Pressable>
       </SafeAreaView>

@@ -5,7 +5,10 @@ import type { DemoPriority } from './store';
  * Split into the pill container (bg + border) and its text colour so the two
  * don't both paint a background.
  */
-export const priorityMeta: Record<DemoPriority, { label: string; container: string; text: string }> = {
+export const priorityMeta: Record<
+  DemoPriority,
+  { label: string; container: string; text: string }
+> = {
   urgent: {
     label: 'Urgent',
     container: 'bg-red-500/10 border border-red-500/20',

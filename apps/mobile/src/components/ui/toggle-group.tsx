@@ -15,16 +15,16 @@ function ToggleGroup({
   size,
   children,
   ...props
-}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
-  VariantProps<typeof toggleVariants>) {
+}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> & VariantProps<typeof toggleVariants>) {
   return (
     <ToggleGroupPrimitive.Root
       className={cn(
         'bg-muted border-border flex flex-row items-center gap-1 rounded-full border p-1',
         Platform.select({ web: 'w-fit' }),
-        className
+        className,
       )}
-      {...props}>
+      {...props}
+    >
       <ToggleGroupContext.Provider value={{ variant, size }}>
         {children}
       </ToggleGroupContext.Provider>
@@ -36,7 +36,7 @@ function useToggleGroupContext() {
   const context = React.useContext(ToggleGroupContext);
   if (context === null) {
     throw new Error(
-      'ToggleGroup compound components cannot be rendered outside the ToggleGroup component'
+      'ToggleGroup compound components cannot be rendered outside the ToggleGroup component',
     );
   }
   return context;
@@ -61,10 +61,8 @@ function ToggleGroupItem({
 
   return (
     <TextClassContext.Provider
-      value={cn(
-        'text-sm font-medium',
-        isSelected ? 'text-foreground' : 'text-muted-foreground'
-      )}>
+      value={cn('text-sm font-medium', isSelected ? 'text-foreground' : 'text-muted-foreground')}
+    >
       <ToggleGroupPrimitive.Item
         className={cn(
           'flex h-9 min-w-9 shrink-0 flex-row items-center justify-center gap-2 rounded-full border border-transparent px-3',
@@ -75,9 +73,10 @@ function ToggleGroupItem({
           Platform.select({
             web: 'flex-1 cursor-default focus:z-10 focus-visible:z-10 [&_svg]:pointer-events-none',
           }),
-          className
+          className,
         )}
-        {...props}>
+        {...props}
+      >
         {children}
       </ToggleGroupPrimitive.Item>
     </TextClassContext.Provider>

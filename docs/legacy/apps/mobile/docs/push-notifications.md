@@ -50,23 +50,31 @@ but has **no device-token storage and no push sending**. To target real devices,
 (Drizzle schema → Zod contract → NestJS controller/service/repository).
 
 ### 1. Database — a `device` table
+
 `packages/database/src/schema/device.ts` (mirror `notification.ts`); register it in
 `schema/index.ts` and generate a migration (the repo's drizzle migrate flow).
 
 ```ts
 export const devicePlatformEnum = pgEnum('device_platform', ['ios', 'android', 'web']);
 
-export const device = pgTable('device', {
-  id: pk(),
-  userId: uuid('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
-  token: varchar('token', { length: 255 }).notNull().unique(), // ExponentPushToken[…]
-  platform: devicePlatformEnum('platform').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  lastSeenAt: timestamp('last_seen_at', { withTimezone: true }).notNull().defaultNow(),
-}, (t) => [index('device_user_id_idx').on(t.userId)]);
+export const device = pgTable(
+  'device',
+  {
+    id: pk(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    token: varchar('token', { length: 255 }).notNull().unique(), // ExponentPushToken[…]
+    platform: devicePlatformEnum('platform').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    lastSeenAt: timestamp('last_seen_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index('device_user_id_idx').on(t.userId)],
+);
 ```
 
 ### 2. Contracts — `device.schema.ts`
+
 `packages/contracts/src/schemas/device.schema.ts` (export from `schemas/index.ts`):
 
 ```ts
@@ -79,6 +87,7 @@ export type RegisterDeviceRequest = z.infer<typeof RegisterDeviceRequestSchema>;
 ```
 
 ### 3. API module — `apps/api/src/devices/`
+
 Controller/service/repository/module like `notifications`; register in `app.module.ts`.
 Add `device:*` permissions (see `@pkg/contracts` `permissions.ts` / the `@Permissions` decorator).
 
@@ -97,6 +106,7 @@ export class DeviceController {
 can move between users). `unregister` deletes the row — call it on logout.
 
 ### 4. Push sender — `expo-server-sdk`
+
 Add `expo-server-sdk` to `apps/api` (or `apps/worker` if you send from jobs). A `PushService`
 sends to a user's tokens; wire it into `NotificationService.create()` so creating a
 notification with `channel: 'push'` also delivers a push:
@@ -122,11 +132,13 @@ async send(tokens: string[], n: { title: string; body?: string; path?: string })
 > Expo and hit FCM/APNs directly, then the API needs those keys.
 
 ### 5. Client hookups (the two `// TODO`s)
+
 - `use-push-notifications.ts` → after `registerForPushNotificationsAsync()`, `POST /devices`
   (add `features/devices/api.ts`, same pattern as `features/notifications`).
 - `auth-store.ts` `signOut()` → `DELETE /devices/:token` before clearing the session.
 
 ### Payload convention
+
 Server push `data.path` ⇄ client deep-link. Keep them in sync (e.g. the notification's
 `link` column → `data.path`).
 

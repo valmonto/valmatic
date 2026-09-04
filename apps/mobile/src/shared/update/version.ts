@@ -33,7 +33,9 @@ export function getConfiguredMinVersion(): string | undefined {
 export function openStore(appStoreId?: string): void {
   const androidPackage = Constants.expoConfig?.android?.package;
   const url = Platform.select({
-    ios: appStoreId ? `itms-apps://apps.apple.com/app/id${appStoreId}` : 'itms-apps://apps.apple.com',
+    ios: appStoreId
+      ? `itms-apps://apps.apple.com/app/id${appStoreId}`
+      : 'itms-apps://apps.apple.com',
     android: androidPackage
       ? `market://details?id=${androidPackage}`
       : 'https://play.google.com/store',

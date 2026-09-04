@@ -38,13 +38,13 @@ FEATURE (N builders on N tickets), never per layer.
 
 Every other quality concern is covered without a standing agent:
 
-| Concern | Covered by |
-|---|---|
-| dead code | knip (a tool — deterministic; trigger: wire `pnpm hygiene` when it earns its keep) |
-| security | a reviewer dimension + occasional deliberate audit sweeps |
-| readability | a reviewer dimension + "polish <module>" as an on-demand ticket |
-| untested code | coverage report + reviewer judging which gaps matter |
-| anything periodic | a monthly TICKET through the same loop — no cron machinery |
+| Concern           | Covered by                                                                         |
+| ----------------- | ---------------------------------------------------------------------------------- |
+| dead code         | knip (a tool — deterministic; trigger: wire `pnpm hygiene` when it earns its keep) |
+| security          | a reviewer dimension + occasional deliberate audit sweeps                          |
+| readability       | a reviewer dimension + "polish <module>" as an on-demand ticket                    |
+| untested code     | coverage report + reviewer judging which gaps matter                               |
+| anything periodic | a monthly TICKET through the same loop — no cron machinery                         |
 
 ## Modes
 

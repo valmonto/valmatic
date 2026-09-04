@@ -7,14 +7,7 @@ import { BlurView } from 'expo-blur';
 import { Check, ChevronDown, ChevronRight, ChevronUp } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import * as React from 'react';
-import {
-  Platform,
-  type StyleProp,
-  StyleSheet,
-  Text,
-  View,
-  type ViewStyle,
-} from 'react-native';
+import { Platform, type StyleProp, StyleSheet, Text, View, type ViewStyle } from 'react-native';
 import { FadeIn, ReduceMotion } from 'react-native-reanimated';
 import { FullWindowOverlay as RNFullWindowOverlay } from 'react-native-screens';
 
@@ -31,18 +24,19 @@ function ContextMenuSubTrigger({
   iconClassName,
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> & {
-    children?: React.ReactNode;
-    iconClassName?: string;
-    inset?: boolean;
-  }) {
+  children?: React.ReactNode;
+  iconClassName?: string;
+  inset?: boolean;
+}) {
   const { open } = ContextMenuPrimitive.useSubContext();
   const icon = Platform.OS === 'web' ? ChevronRight : open ? ChevronUp : ChevronDown;
   return (
     <TextClassContext.Provider
       value={cn(
         'text-sm select-none group-active:text-accent-foreground',
-        open && 'text-accent-foreground'
-      )}>
+        open && 'text-accent-foreground',
+      )}
+    >
       <ContextMenuPrimitive.SubTrigger
         className={cn(
           'active:bg-accent group flex flex-row items-center rounded-lg px-2 py-2 sm:py-1.5',
@@ -51,9 +45,10 @@ function ContextMenuSubTrigger({
           }),
           className,
           open && cn('bg-accent', Platform.select({ native: 'mb-1' })),
-          inset && 'pl-8'
+          inset && 'pl-8',
         )}
-        {...props}>
+        {...props}
+      >
         <>{children}</>
         <Icon as={icon} className={cn('text-foreground ml-auto size-4 shrink-0', iconClassName)} />
       </ContextMenuPrimitive.SubTrigger>
@@ -74,9 +69,10 @@ function ContextMenuSubContent({
           Platform.select({
             web: 'bg-popover p-1 animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 fade-in-0 data-[state=closed]:zoom-out-95 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-(--radix-context-menu-content-transform-origin) z-50 min-w-[12rem]',
           }),
-          className
+          className,
         )}
-        {...props}>
+        {...props}
+      >
         {Platform.OS === 'web' ? children : <MenuGlass>{children as React.ReactNode}</MenuGlass>}
       </ContextMenuPrimitive.SubContent>
     </NativeOnlyAnimatedView>
@@ -93,10 +89,12 @@ function MenuGlass({ children }: { children: React.ReactNode }) {
     <BlurView
       intensity={isDark ? 60 : 80}
       tint={isDark ? 'dark' : 'light'}
-      blurMethod="dimezisBlurView">
+      blurMethod="dimezisBlurView"
+    >
       <View
         className="p-1"
-        style={{ backgroundColor: isDark ? 'rgba(24,24,30,0.94)' : 'rgba(255,255,255,0.95)' }}>
+        style={{ backgroundColor: isDark ? 'rgba(24,24,30,0.94)' : 'rgba(255,255,255,0.95)' }}
+      >
         {children}
       </View>
     </BlurView>
@@ -112,10 +110,10 @@ function ContextMenuContent({
   insets,
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.Content> & {
-    overlayStyle?: StyleProp<ViewStyle>;
-    overlayClassName?: string;
-    portalHost?: string;
-  }) {
+  overlayStyle?: StyleProp<ViewStyle>;
+  overlayClassName?: string;
+  portalHost?: string;
+}) {
   // Keep the menu off the screen edges (collision-avoidance padding) so it
   // never sits glued into a corner.
   const edgeInsets = insets ?? { top: 12, bottom: 12, left: 12, right: 12 };
@@ -134,8 +132,12 @@ function ContextMenuContent({
             ]),
           })}
           className={overlayClassName}
-          asChild={Platform.OS !== 'web'}>
-          <NativeOnlyAnimatedView entering={FadeIn.reduceMotion(ReduceMotion.System)} as="Pressable">
+          asChild={Platform.OS !== 'web'}
+        >
+          <NativeOnlyAnimatedView
+            entering={FadeIn.reduceMotion(ReduceMotion.System)}
+            as="Pressable"
+          >
             <TextClassContext.Provider value="text-popover-foreground">
               <ContextMenuPrimitive.Content
                 className={cn(
@@ -144,14 +146,19 @@ function ContextMenuContent({
                     web: cn(
                       'bg-popover p-1 animate-in fade-in-0 zoom-in-95 max-h-(--radix-context-menu-content-available-height) origin-(--radix-context-menu-content-transform-origin) z-50 cursor-default',
                       props.side === 'bottom' && 'slide-in-from-top-2',
-                      props.side === 'top' && 'slide-in-from-bottom-2'
+                      props.side === 'top' && 'slide-in-from-bottom-2',
                     ),
                   }),
-                  className
+                  className,
                 )}
                 insets={edgeInsets}
-                {...props}>
-                {Platform.OS === 'web' ? children : <MenuGlass>{children as React.ReactNode}</MenuGlass>}
+                {...props}
+              >
+                {Platform.OS === 'web' ? (
+                  children
+                ) : (
+                  <MenuGlass>{children as React.ReactNode}</MenuGlass>
+                )}
               </ContextMenuPrimitive.Content>
             </TextClassContext.Provider>
           </NativeOnlyAnimatedView>
@@ -167,29 +174,30 @@ function ContextMenuItem({
   variant,
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.Item> & {
-    className?: string;
-    inset?: boolean;
-    variant?: 'default' | 'destructive';
-  }) {
+  className?: string;
+  inset?: boolean;
+  variant?: 'default' | 'destructive';
+}) {
   return (
     <TextClassContext.Provider
       value={cn(
         'select-none text-sm text-popover-foreground group-active:text-popover-foreground',
-        variant === 'destructive' && 'text-destructive group-active:text-destructive'
-      )}>
+        variant === 'destructive' && 'text-destructive group-active:text-destructive',
+      )}
+    >
       <ContextMenuPrimitive.Item
         className={cn(
           'active:bg-accent group relative flex flex-row items-center gap-2 rounded-lg px-2 py-2 sm:py-1.5',
           Platform.select({
             web: cn(
               'focus:bg-accent focus:text-accent-foreground cursor-default outline-none data-[disabled]:pointer-events-none',
-              variant === 'destructive' && 'focus:bg-destructive/10 dark:focus:bg-destructive/20'
+              variant === 'destructive' && 'focus:bg-destructive/10 dark:focus:bg-destructive/20',
             ),
           }),
           variant === 'destructive' && 'active:bg-destructive/10 dark:active:bg-destructive/20',
           props.disabled && 'opacity-50',
           inset && 'pl-8',
-          className
+          className,
         )}
         {...props}
       />
@@ -202,8 +210,8 @@ function ContextMenuCheckboxItem({
   children,
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.CheckboxItem> & {
-    children?: React.ReactNode;
-  }) {
+  children?: React.ReactNode;
+}) {
   return (
     <TextClassContext.Provider value="text-sm text-popover-foreground select-none group-active:text-accent-foreground">
       <ContextMenuPrimitive.CheckboxItem
@@ -213,16 +221,17 @@ function ContextMenuCheckboxItem({
             web: 'focus:bg-accent focus:text-accent-foreground cursor-default outline-none data-[disabled]:pointer-events-none',
           }),
           props.disabled && 'opacity-50',
-          className
+          className,
         )}
-        {...props}>
+        {...props}
+      >
         <View className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
           <ContextMenuPrimitive.ItemIndicator>
             <Icon
               as={Check}
               className={cn(
                 'text-foreground size-4',
-                Platform.select({ web: 'pointer-events-none' })
+                Platform.select({ web: 'pointer-events-none' }),
               )}
             />
           </ContextMenuPrimitive.ItemIndicator>
@@ -238,8 +247,8 @@ function ContextMenuRadioItem({
   children,
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.RadioItem> & {
-    children?: React.ReactNode;
-  }) {
+  children?: React.ReactNode;
+}) {
   return (
     <TextClassContext.Provider value="text-sm text-popover-foreground select-none group-active:text-accent-foreground">
       <ContextMenuPrimitive.RadioItem
@@ -249,9 +258,10 @@ function ContextMenuRadioItem({
             web: 'focus:bg-accent focus:text-accent-foreground cursor-default outline-none data-[disabled]:pointer-events-none',
           }),
           props.disabled && 'opacity-50',
-          className
+          className,
         )}
-        {...props}>
+        {...props}
+      >
         <View className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
           <ContextMenuPrimitive.ItemIndicator>
             <View className="bg-foreground h-2 w-2 rounded-full" />
@@ -268,15 +278,15 @@ function ContextMenuLabel({
   inset,
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.Label> & {
-    className?: string;
-    inset?: boolean;
-  }) {
+  className?: string;
+  inset?: boolean;
+}) {
   return (
     <ContextMenuPrimitive.Label
       className={cn(
         'text-foreground px-2 py-2 text-sm font-medium sm:py-1.5',
         inset && 'pl-8',
-        className
+        className,
       )}
       {...props}
     />

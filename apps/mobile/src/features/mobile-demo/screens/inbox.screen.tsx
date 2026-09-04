@@ -13,11 +13,7 @@ import {
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { cn } from '@/shared/lib/utils';
-import {
-  useMobileDemoStore,
-  type DemoNotification,
-  type DemoNotificationKind,
-} from '../store';
+import { useMobileDemoStore, type DemoNotification, type DemoNotificationKind } from '../store';
 
 const kindMeta: Record<DemoNotificationKind, { icon: LucideIcon; bg: string; fg: string }> = {
   mention: { icon: AtSign, bg: 'bg-primary/10', fg: 'text-primary' },
@@ -34,7 +30,9 @@ function NotificationRow({ notification }: { notification: DemoNotification }) {
       onPress={() => markRead(notification.id)}
       className={cn(
         'flex-row items-start gap-3 rounded-2xl border p-3.5 active:opacity-80',
-        notification.read ? 'border-border bg-card/50' : 'border-border bg-card shadow-sm shadow-black/5'
+        notification.read
+          ? 'border-border bg-card/50'
+          : 'border-border bg-card shadow-sm shadow-black/5',
       )}
     >
       <View className={cn('h-9 w-9 items-center justify-center rounded-full', meta.bg)}>
@@ -46,7 +44,9 @@ function NotificationRow({ notification }: { notification: DemoNotification }) {
             numberOfLines={1}
             className={cn(
               'flex-1 text-[13px]',
-              notification.read ? 'font-medium text-muted-foreground' : 'font-semibold text-foreground'
+              notification.read
+                ? 'font-medium text-muted-foreground'
+                : 'font-semibold text-foreground',
             )}
           >
             {notification.title}
@@ -58,7 +58,7 @@ function NotificationRow({ notification }: { notification: DemoNotification }) {
           numberOfLines={2}
           className={cn(
             'mt-0.5 text-xs leading-relaxed',
-            notification.read ? 'text-muted-foreground/70' : 'text-muted-foreground'
+            notification.read ? 'text-muted-foreground/70' : 'text-muted-foreground',
           )}
         >
           {notification.body}
@@ -94,7 +94,10 @@ export default function InboxScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         <View className="gap-4 px-5 pt-4">
           <View className="flex-row items-end justify-between">
             <View>

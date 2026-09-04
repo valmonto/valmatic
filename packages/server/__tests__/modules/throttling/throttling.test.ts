@@ -57,7 +57,10 @@ describe('ThrottlerRedisStorage', () => {
   });
 
   it('blocks past the limit and reports when the window ends', async () => {
-    const redis = redisWith({ incr: vi.fn().mockResolvedValue(301), pttl: vi.fn().mockResolvedValue(42_000) });
+    const redis = redisWith({
+      incr: vi.fn().mockResolvedValue(301),
+      pttl: vi.fn().mockResolvedValue(42_000),
+    });
     const storage = new ThrottlerRedisStorage(redis);
 
     const record = await storage.increment('user:u1', 60_000, 300, 0, 'default');
@@ -68,7 +71,10 @@ describe('ThrottlerRedisStorage', () => {
   // A counter without a TTL throttles forever. PTTL returning -1 means the
   // expiry was lost (a race, a failover) — re-arm it rather than trusting it.
   it('never leaves a counter that lives forever', async () => {
-    const redis = redisWith({ incr: vi.fn().mockResolvedValue(5), pttl: vi.fn().mockResolvedValue(-1) });
+    const redis = redisWith({
+      incr: vi.fn().mockResolvedValue(5),
+      pttl: vi.fn().mockResolvedValue(-1),
+    });
     const storage = new ThrottlerRedisStorage(redis);
 
     const record = await storage.increment('user:u1', 60_000, 300, 0, 'default');

@@ -2,47 +2,28 @@
   "version": "8",
   "dialect": "postgres",
   "id": "b3e16e49-557b-485e-b370-f375980d935e",
-  "prevIds": [
-    "00000000-0000-0000-0000-000000000000"
-  ],
+  "prevIds": ["00000000-0000-0000-0000-000000000000"],
   "ddl": [
     {
-      "values": [
-        "USER",
-        "MODERATOR",
-        "ADMIN"
-      ],
+      "values": ["USER", "MODERATOR", "ADMIN"],
       "name": "system_role",
       "entityType": "enums",
       "schema": "public"
     },
     {
-      "values": [
-        "OWNER",
-        "ADMIN",
-        "MEMBER"
-      ],
+      "values": ["OWNER", "ADMIN", "MEMBER"],
       "name": "organization_user_role",
       "entityType": "enums",
       "schema": "public"
     },
     {
-      "values": [
-        "in_app",
-        "email",
-        "push"
-      ],
+      "values": ["in_app", "email", "push"],
       "name": "notification_channel",
       "entityType": "enums",
       "schema": "public"
     },
     {
-      "values": [
-        "info",
-        "success",
-        "warning",
-        "error"
-      ],
+      "values": ["info", "success", "warning", "error"],
       "name": "notification_type",
       "entityType": "enums",
       "schema": "public"
@@ -596,14 +577,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "owner_id"
-      ],
+      "columns": ["owner_id"],
       "schemaTo": "public",
       "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "RESTRICT",
       "name": "organization_owner_id_user_id_fkey",
@@ -613,14 +590,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "org_id"
-      ],
+      "columns": ["org_id"],
       "schemaTo": "public",
       "tableTo": "organization",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "organization_user_org_id_organization_id_fkey",
@@ -630,14 +603,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
+      "columns": ["user_id"],
       "schemaTo": "public",
       "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "organization_user_user_id_user_id_fkey",
@@ -647,14 +616,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
+      "columns": ["user_id"],
       "schemaTo": "public",
       "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "notification_user_id_user_id_fkey",
@@ -664,14 +629,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "org_id"
-      ],
+      "columns": ["org_id"],
       "schemaTo": "public",
       "tableTo": "organization",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "notification_org_id_organization_id_fkey",
@@ -680,10 +641,7 @@
       "table": "notification"
     },
     {
-      "columns": [
-        "org_id",
-        "user_id"
-      ],
+      "columns": ["org_id", "user_id"],
       "nameExplicit": false,
       "name": "organization_user_pkey",
       "entityType": "pks",
@@ -691,9 +649,7 @@
       "table": "organization_user"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "user_pkey",
       "schema": "public",
@@ -701,9 +657,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "organization_pkey",
       "schema": "public",
@@ -711,9 +665,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "notification_pkey",
       "schema": "public",
@@ -722,9 +674,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "email"
-      ],
+      "columns": ["email"],
       "nullsNotDistinct": false,
       "name": "user_email_key",
       "schema": "public",

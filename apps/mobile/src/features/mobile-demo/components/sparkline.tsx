@@ -30,7 +30,9 @@ export function Sparkline({
     return [x, y] as const;
   });
 
-  const line = points.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
+  const line = points
+    .map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`)
+    .join(' ');
   const area = `${line} L${width},${height} L0,${height} Z`;
   const id = `spark-${color.replace(/[^a-z0-9]/gi, '')}`;
 

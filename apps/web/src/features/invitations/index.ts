@@ -5,8 +5,4 @@
 export { invitationRoutes } from './routes';
 export { invitationsResource } from './api';
 export { OrgInviteButton } from './components/org-invite-button';
-export {
-  useInvitations,
-  useCreateInvitation,
-  useRevokeInvitation,
-} from './hooks/use-invitations';
+export { useInvitations, useCreateInvitation, useRevokeInvitation } from './hooks/use-invitations';

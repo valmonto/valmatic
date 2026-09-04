@@ -115,7 +115,12 @@ export function AttachmentGalleryDialog({
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="icon" onClick={() => step(-1)} disabled={items.length < 2}>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => step(-1)}
+            disabled={items.length < 2}
+          >
             <ChevronLeft className="size-4" />
           </Button>
           <Button variant="outline" size="icon" onClick={() => step(1)} disabled={items.length < 2}>

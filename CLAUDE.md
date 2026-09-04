@@ -130,9 +130,9 @@ Applies to any coding agent (including the specbook runner) acting on this repo.
 auto-inherit template changes, so this block is copied into each repo on purpose.
 
 - **Act on an explicit instruction — don't hand it back.** When the owner explicitly tells
-  you to do a *reversible* action on their own repo (merge a green PR, close a PR,
+  you to do a _reversible_ action on their own repo (merge a green PR, close a PR,
   re-trigger CI), do it — the repo token's `PRs` scope can merge. The "human-gated"
-  defaults are for the *unattended* runner choosing its own work; they never override a
+  defaults are for the _unattended_ runner choosing its own work; they never override a
   direct, in-conversation owner instruction. (Genuinely irreversible/destructive actions
   still get confirmed first.)
 - **The user's ground truth beats a blind API.** The installation token here lacks

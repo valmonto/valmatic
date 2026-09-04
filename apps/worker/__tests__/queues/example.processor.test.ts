@@ -38,7 +38,9 @@ describe('ExampleProcessor', () => {
   const eventNames = () => emitted.map((e) => e.event);
 
   it('returns a success result for a known action', async () => {
-    const result = await processor.process(jobOf({ action: 'send-email', userId: 'u1', orgId: 'org-1', data: {} }));
+    const result = await processor.process(
+      jobOf({ action: 'send-email', userId: 'u1', orgId: 'org-1', data: {} }),
+    );
 
     expect(result.success).toBe(true);
     expect(result.message).toContain('send-email');
@@ -47,17 +49,30 @@ describe('ExampleProcessor', () => {
   it('emits started then completed around successful work', async () => {
     await processor.process(jobOf({ action: 'sync-data', userId: 'u1', orgId: 'org-1', data: {} }));
 
-    expect(eventNames()).toEqual([AppEvents.EXAMPLE_TASK_STARTED, AppEvents.EXAMPLE_TASK_COMPLETED]);
+    expect(eventNames()).toEqual([
+      AppEvents.EXAMPLE_TASK_STARTED,
+      AppEvents.EXAMPLE_TASK_COMPLETED,
+    ]);
   });
 
   it('rethrows on an unknown action so BullMQ can retry', async () => {
-    const job = jobOf({ action: 'not-a-real-action', userId: 'u1', orgId: 'org-1', data: {} } as unknown as ExampleJobPayload);
+    const job = jobOf({
+      action: 'not-a-real-action',
+      userId: 'u1',
+      orgId: 'org-1',
+      data: {},
+    } as unknown as ExampleJobPayload);
 
     await expect(processor.process(job)).rejects.toThrow(/Unknown action/);
   });
 
   it('emits started then failed when the work throws', async () => {
-    const job = jobOf({ action: 'nope', userId: 'u1', orgId: 'org-1', data: {} } as unknown as ExampleJobPayload);
+    const job = jobOf({
+      action: 'nope',
+      userId: 'u1',
+      orgId: 'org-1',
+      data: {},
+    } as unknown as ExampleJobPayload);
 
     await expect(processor.process(job)).rejects.toThrow();
 
@@ -66,7 +81,9 @@ describe('ExampleProcessor', () => {
   });
 
   it('carries the job id and initiator through to the events', async () => {
-    await processor.process(jobOf({ action: 'send-email', userId: 'user-42', orgId: 'org-1', data: {} }, 'job-99'));
+    await processor.process(
+      jobOf({ action: 'send-email', userId: 'user-42', orgId: 'org-1', data: {} }, 'job-99'),
+    );
 
     for (const { payload } of emitted) {
       expect(payload).toMatchObject({ taskId: 'job-99', initiatedBy: 'user-42' });

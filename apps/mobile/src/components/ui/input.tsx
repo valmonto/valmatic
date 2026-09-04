@@ -17,7 +17,16 @@ type InputProps = React.ComponentProps<typeof TextInput> &
  * field with an optional leading icon, a primary focus ring, and an error state.
  * `className` styles the field container; text-editing props pass to the input.
  */
-function Input({ className, icon, invalid, style, onFocus, onBlur, secureTextEntry, ...props }: InputProps) {
+function Input({
+  className,
+  icon,
+  invalid,
+  style,
+  onFocus,
+  onBlur,
+  secureTextEntry,
+  ...props
+}: InputProps) {
   const [focused, setFocused] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const disabled = props.editable === false;
@@ -29,13 +38,18 @@ function Input({ className, icon, invalid, style, onFocus, onBlur, secureTextEnt
         focused && 'border-primary',
         invalid && 'border-destructive',
         disabled && 'opacity-50',
-        className
-      )}>
+        className,
+      )}
+    >
       {icon ? (
         <Icon
           as={icon}
           size={18}
-          className={cn('text-muted-foreground', focused && 'text-primary', invalid && 'text-destructive')}
+          className={cn(
+            'text-muted-foreground',
+            focused && 'text-primary',
+            invalid && 'text-destructive',
+          )}
         />
       ) : null}
       <TextInput
@@ -45,7 +59,7 @@ function Input({ className, icon, invalid, style, onFocus, onBlur, secureTextEnt
           Platform.select({
             native: 'placeholder:text-muted-foreground/50',
             web: 'outline-none placeholder:text-muted-foreground',
-          })
+          }),
         )}
         secureTextEntry={isPassword && !revealed}
         onFocus={(e) => {
@@ -64,7 +78,8 @@ function Input({ className, icon, invalid, style, onFocus, onBlur, secureTextEnt
           hitSlop={8}
           accessibilityRole="button"
           accessibilityLabel={revealed ? 'Hide password' : 'Show password'}
-          className="active:opacity-60">
+          className="active:opacity-60"
+        >
           <Icon as={revealed ? EyeOff : Eye} size={18} className="text-muted-foreground" />
         </Pressable>
       ) : null}

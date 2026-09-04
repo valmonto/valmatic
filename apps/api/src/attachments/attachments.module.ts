@@ -35,7 +35,8 @@ export interface AttachmentsModuleOptions {
 
 const isFactory = (
   subjects: AttachmentsModuleOptions['subjects'],
-): subjects is SubjectResolversFactory => typeof (subjects as SubjectResolversFactory).useFactory === 'function';
+): subjects is SubjectResolversFactory =>
+  typeof (subjects as SubjectResolversFactory).useFactory === 'function';
 
 /**
  * Domain-blind by construction: this file names no feature module. The app's

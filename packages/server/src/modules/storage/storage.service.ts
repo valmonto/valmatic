@@ -145,7 +145,9 @@ export class StorageService implements StorageDriver {
       Key: key,
       // A real filename on downloads instead of the opaque blob id.
       ...(input.filename
-        ? { ResponseContentDisposition: `attachment; filename="${input.filename.replaceAll('"', '')}"` }
+        ? {
+            ResponseContentDisposition: `attachment; filename="${input.filename.replaceAll('"', '')}"`,
+          }
         : {}),
       ...(input.responseContentType ? { ResponseContentType: input.responseContentType } : {}),
     });

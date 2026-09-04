@@ -46,11 +46,11 @@ under `app/`.
 
 This is the difference that matters most.
 
-| | Web | Mobile |
-|---|---|---|
-| Token transport | httpOnly cookies | `Authorization: Bearer` |
-| Storage | the browser | device keychain / keystore |
-| Signalled by | — | `X-Client: mobile` header |
+|                 | Web              | Mobile                     |
+| --------------- | ---------------- | -------------------------- |
+| Token transport | httpOnly cookies | `Authorization: Bearer`    |
+| Storage         | the browser      | device keychain / keystore |
+| Signalled by    | —                | `X-Client: mobile` header  |
 
 The API returns tokens in the response body **only** when it sees
 `X-Client: mobile`; web clients get cookies and never see the token. Every
@@ -81,7 +81,7 @@ belongs in `features/x/`.
 
 1. `features/thing/` with `api.ts`, `screens/`, `index.ts`.
 2. Types from `@pkg/contracts` — `import type`, never a hand-written shape.
-3. Add a file under `app/` that renders the screen; that *is* the route.
+3. Add a file under `app/` that renders the screen; that _is_ the route.
 4. Data through SWR, mutations through the shared hooks.
 
 ## Lint

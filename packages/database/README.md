@@ -18,10 +18,10 @@ src/
 
 ## Entry points
 
-| Import | Contains |
-|---|---|
-| `@pkg/database` | client, Nest module, migrations, schema, and the Drizzle operators (`eq`, `and`, `desc`, …) |
-| `@pkg/database/schema` | tables only — for anything that needs the shape but not a connection |
+| Import                 | Contains                                                                                    |
+| ---------------------- | ------------------------------------------------------------------------------------------- |
+| `@pkg/database`        | client, Nest module, migrations, schema, and the Drizzle operators (`eq`, `and`, `desc`, …) |
+| `@pkg/database/schema` | tables only — for anything that needs the shape but not a connection                        |
 
 ## Schema conventions
 
@@ -34,7 +34,9 @@ export const user = pgTable('user', {
   email: varchar('email', { length: 255 }).notNull().unique(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
-    .notNull().defaultNow().$onUpdate(() => new Date()),
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 export type User = typeof user.$inferSelect;

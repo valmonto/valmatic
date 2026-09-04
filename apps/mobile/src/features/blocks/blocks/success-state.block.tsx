@@ -15,7 +15,13 @@ export function SuccessStateBlock() {
         <View className="items-center justify-center">
           <LinearGradient
             colors={['#10b981', 'transparent']}
-            style={{ position: 'absolute', width: 200, height: 200, borderRadius: 100, opacity: 0.28 }}
+            style={{
+              position: 'absolute',
+              width: 200,
+              height: 200,
+              borderRadius: 100,
+              opacity: 0.28,
+            }}
           />
           <LinearGradient
             colors={['#10b981', '#059669']}
@@ -32,13 +38,16 @@ export function SuccessStateBlock() {
               shadowRadius: 22,
               shadowOffset: { width: 0, height: 12 },
               elevation: 12,
-            }}>
+            }}
+          >
             <Icon as={Check} size={52} className="text-white" />
           </LinearGradient>
         </View>
 
         <View className="items-center gap-2">
-          <Text variant="h1" className="text-2xl">Payment successful</Text>
+          <Text variant="h1" className="text-2xl">
+            Payment successful
+          </Text>
           <Text variant="muted" className="max-w-xs text-center text-base leading-relaxed">
             Your Pro plan is now active. A receipt has been sent to your email.
           </Text>

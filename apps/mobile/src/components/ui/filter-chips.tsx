@@ -39,7 +39,8 @@ function FilterChips(props: FilterChipsProps) {
       horizontal
       showsHorizontalScrollIndicator={false}
       className={className}
-      contentContainerStyle={{ gap: 8, paddingRight: 8 }}>
+      contentContainerStyle={{ gap: 8, paddingRight: 8 }}
+    >
       {options.map((option) => {
         const selected = isSelected(option.value);
         return (
@@ -48,8 +49,9 @@ function FilterChips(props: FilterChipsProps) {
             onPress={() => toggle(option.value)}
             className={cn(
               'flex-row items-center gap-1.5 rounded-full border px-3.5 py-2 active:opacity-80',
-              selected ? 'border-primary bg-primary' : 'border-border bg-card'
-            )}>
+              selected ? 'border-primary bg-primary' : 'border-border bg-card',
+            )}
+          >
             {option.icon ? (
               <Icon
                 as={option.icon}
@@ -60,16 +62,18 @@ function FilterChips(props: FilterChipsProps) {
             <Text
               className={cn(
                 'text-sm font-medium',
-                selected ? 'text-primary-foreground' : 'text-foreground'
-              )}>
+                selected ? 'text-primary-foreground' : 'text-foreground',
+              )}
+            >
               {option.label}
             </Text>
             {option.count != null ? (
               <Text
                 className={cn(
                   'text-xs tabular-nums',
-                  selected ? 'text-primary-foreground/80' : 'text-muted-foreground'
-                )}>
+                  selected ? 'text-primary-foreground/80' : 'text-muted-foreground',
+                )}
+              >
                 {option.count}
               </Text>
             ) : null}

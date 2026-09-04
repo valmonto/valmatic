@@ -9,15 +9,37 @@ import { Plus, Search } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
-type Deal = { company: string; contact: string; amount: string; stage: 'active' | 'won' | 'lost'; initials: string };
+type Deal = {
+  company: string;
+  contact: string;
+  amount: string;
+  stage: 'active' | 'won' | 'lost';
+  initials: string;
+};
 const DEALS: Deal[] = [
   { company: 'Acme Inc', contact: 'Ada Lovelace', amount: '$12,400', stage: 'won', initials: 'AC' },
   { company: 'Globex', contact: 'Alan Turing', amount: '$8,900', stage: 'active', initials: 'GX' },
-  { company: 'Initech', contact: 'Grace Hopper', amount: '$21,000', stage: 'active', initials: 'IN' },
-  { company: 'Umbrella', contact: 'Linus Pauling', amount: '$4,200', stage: 'lost', initials: 'UM' },
+  {
+    company: 'Initech',
+    contact: 'Grace Hopper',
+    amount: '$21,000',
+    stage: 'active',
+    initials: 'IN',
+  },
+  {
+    company: 'Umbrella',
+    contact: 'Linus Pauling',
+    amount: '$4,200',
+    stage: 'lost',
+    initials: 'UM',
+  },
 ];
 const STAGE_LABEL = { active: 'In progress', won: 'Won', lost: 'Lost' } as const;
-const STAGE_COLOR = { active: 'text-foreground', won: 'text-green-600 dark:text-green-500', lost: 'text-muted-foreground' } as const;
+const STAGE_COLOR = {
+  active: 'text-foreground',
+  won: 'text-green-600 dark:text-green-500',
+  lost: 'text-muted-foreground',
+} as const;
 
 /** Records list / index — search, filter chips, rows, and a create FAB. */
 export function RecordsListBlock() {
@@ -29,7 +51,7 @@ export function RecordsListBlock() {
     return DEALS.filter(
       (d) =>
         (stage === 'all' || d.stage === stage) &&
-        (!q || d.company.toLowerCase().includes(q) || d.contact.toLowerCase().includes(q))
+        (!q || d.company.toLowerCase().includes(q) || d.contact.toLowerCase().includes(q)),
     );
   }, [query, stage]);
 
@@ -39,9 +61,18 @@ export function RecordsListBlock() {
         <Text className="text-base font-semibold text-foreground">Deals</Text>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 96 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 96 }}
+      >
         <View className="gap-4 px-5 pt-2">
-          <Input icon={Search} value={query} onChangeText={setQuery} placeholder="Search deals" autoCapitalize="none" />
+          <Input
+            icon={Search}
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search deals"
+            autoCapitalize="none"
+          />
           <FilterChips
             value={stage}
             onChange={setStage}
@@ -75,7 +106,9 @@ export function RecordsListBlock() {
             </List>
           ) : (
             <View className="items-center rounded-2xl border border-dashed border-border py-12">
-              <Text variant="muted" className="text-sm">No deals match.</Text>
+              <Text variant="muted" className="text-sm">
+                No deals match.
+              </Text>
             </View>
           )}
         </View>

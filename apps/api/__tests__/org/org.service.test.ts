@@ -14,7 +14,13 @@ const now = new Date('2026-01-01T00:00:00.000Z');
 
 const owner: ActiveUser = { userId: USER, orgId: ORG_A, orgRole: 'OWNER', systemRole: 'USER' };
 
-const orgRecord = { id: ORG_A, name: 'Org A', role: 'OWNER' as const, createdAt: now, updatedAt: now };
+const orgRecord = {
+  id: ORG_A,
+  name: 'Org A',
+  role: 'OWNER' as const,
+  createdAt: now,
+  updatedAt: now,
+};
 
 const TOKENS = { accessToken: 'access', refreshToken: 'refresh' };
 
@@ -91,9 +97,7 @@ describe('OrgService', () => {
     it('reports an unknown organization as not found', async () => {
       repository.findOrgById!.mockResolvedValue(null);
 
-      await expect(service.adminDeleteOrg(platformAdmin, ORG_B)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(service.adminDeleteOrg(platformAdmin, ORG_B)).rejects.toThrow(NotFoundException);
     });
 
     it('deletes an organization the admin is not a member of', async () => {

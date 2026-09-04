@@ -37,31 +37,85 @@ export function SettingsBlock() {
         <Text className="text-base font-semibold text-foreground">Settings</Text>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 32 }}
+      >
         <View className="gap-5 px-5 pt-2">
           <View className="gap-2">
             <SectionLabel>Account</SectionLabel>
             <List>
-              <ListItem icon={User} title="Profile" description="Name, photo and bio" showChevron onPress={() => {}} />
-              <ListItem icon={ShieldCheck} iconTone="muted" title="Security" description="Password and 2FA" showChevron onPress={() => {}} />
-              <ListItem icon={Bell} iconTone="muted" title="Notifications" value="On" showChevron onPress={() => {}} />
+              <ListItem
+                icon={User}
+                title="Profile"
+                description="Name, photo and bio"
+                showChevron
+                onPress={() => {}}
+              />
+              <ListItem
+                icon={ShieldCheck}
+                iconTone="muted"
+                title="Security"
+                description="Password and 2FA"
+                showChevron
+                onPress={() => {}}
+              />
+              <ListItem
+                icon={Bell}
+                iconTone="muted"
+                title="Notifications"
+                value="On"
+                showChevron
+                onPress={() => {}}
+              />
             </List>
           </View>
 
           <View className="gap-2">
             <SectionLabel>Preferences</SectionLabel>
             <List>
-              <ListItem icon={Moon} iconTone="muted" title="Dark mode" trailing={<Switch checked={colorScheme === 'dark'} onCheckedChange={toggleColorScheme} />} />
-              <ListItem icon={Vibrate} iconTone="muted" title="Haptic feedback" trailing={<Switch checked={haptics} onCheckedChange={setHaptics} />} />
-              <ListItem icon={Globe} iconTone="muted" title="Language" value="English" showChevron onPress={() => {}} />
+              <ListItem
+                icon={Moon}
+                iconTone="muted"
+                title="Dark mode"
+                trailing={
+                  <Switch checked={colorScheme === 'dark'} onCheckedChange={toggleColorScheme} />
+                }
+              />
+              <ListItem
+                icon={Vibrate}
+                iconTone="muted"
+                title="Haptic feedback"
+                trailing={<Switch checked={haptics} onCheckedChange={setHaptics} />}
+              />
+              <ListItem
+                icon={Globe}
+                iconTone="muted"
+                title="Language"
+                value="English"
+                showChevron
+                onPress={() => {}}
+              />
             </List>
           </View>
 
           <View className="gap-2">
             <SectionLabel>Support</SectionLabel>
             <List>
-              <ListItem icon={CircleHelp} iconTone="muted" title="Help center" showChevron onPress={() => {}} />
-              <ListItem icon={FileText} iconTone="muted" title="Terms & privacy" showChevron onPress={() => {}} />
+              <ListItem
+                icon={CircleHelp}
+                iconTone="muted"
+                title="Help center"
+                showChevron
+                onPress={() => {}}
+              />
+              <ListItem
+                icon={FileText}
+                iconTone="muted"
+                title="Terms & privacy"
+                showChevron
+                onPress={() => {}}
+              />
             </List>
           </View>
 
@@ -69,7 +123,9 @@ export function SettingsBlock() {
             <ListItem icon={LogOut} destructive title="Sign out" onPress={() => {}} />
           </List>
 
-          <Text className="pt-1 text-center text-[11px] text-muted-foreground">Valmatic v1.0.0</Text>
+          <Text className="pt-1 text-center text-[11px] text-muted-foreground">
+            Valmatic v1.0.0
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -36,7 +36,7 @@ function Spinner({ size = 20, className, duration = 800, as = Loader2 }: Spinner
     rotation.value = withRepeat(
       withTiming(360, { duration, easing: Easing.linear }),
       -1, // infinite
-      false
+      false,
     );
     return () => cancelAnimation(rotation);
   }, [duration, rotation]);

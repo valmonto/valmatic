@@ -1,5 +1,14 @@
 import * as React from 'react';
-import { Copy, LogOut, MoreHorizontal, PanelRight, Pencil, Settings, Trash2, User } from 'lucide-react';
+import {
+  Copy,
+  LogOut,
+  MoreHorizontal,
+  PanelRight,
+  Pencil,
+  Settings,
+  Trash2,
+  User,
+} from 'lucide-react';
 
 import { CompactModal, WideModal } from '@/components/overlays';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';

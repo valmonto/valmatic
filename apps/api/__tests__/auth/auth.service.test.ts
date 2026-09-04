@@ -1,4 +1,9 @@
-import { BadRequestException, ConflictException, ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import type { FeatureFlags, IamService } from '@pkg/server';
 import type { ConfigService } from '@nestjs/config';
 import { SECURITY_CONFIG } from '@pkg/server';
@@ -65,7 +70,8 @@ describe('AuthService', () => {
       repository as unknown as AuthRepository,
       { resolveFeatures } as unknown as FeatureFlags,
       {
-        get: (key: string) => (key === 'AUTH_REGISTRATION_ENABLED' ? registrationEnabled : undefined),
+        get: (key: string) =>
+          key === 'AUTH_REGISTRATION_ENABLED' ? registrationEnabled : undefined,
       } as unknown as ConfigService,
       redis as unknown as Redis,
       logger.as<PinoLogger>(),
@@ -135,9 +141,9 @@ describe('AuthService', () => {
     it('rejects an unknown email without touching redis', async () => {
       repository.findUserByEmail!.mockResolvedValue(null);
 
-      await expect(service.login({ email: 'nobody@example.com', password: PASSWORD })).rejects.toThrow(
-        UnauthorizedException,
-      );
+      await expect(
+        service.login({ email: 'nobody@example.com', password: PASSWORD }),
+      ).rejects.toThrow(UnauthorizedException);
       // Writing attempt counters for addresses that do not exist would let an
       // attacker fill redis with arbitrary keys.
       expect(redis.incr).not.toHaveBeenCalled();
@@ -146,10 +152,14 @@ describe('AuthService', () => {
 
     it('gives the same error for an unknown email and a wrong password', async () => {
       repository.findUserByEmail!.mockResolvedValue(null);
-      const unknown = await service.login({ email: 'nobody@example.com', password: PASSWORD }).catch((e) => e);
+      const unknown = await service
+        .login({ email: 'nobody@example.com', password: PASSWORD })
+        .catch((e) => e);
 
       repository.findUserByEmail!.mockResolvedValue(userRow);
-      const wrong = await service.login({ email: userRow.email, password: 'wrong' }).catch((e) => e);
+      const wrong = await service
+        .login({ email: userRow.email, password: 'wrong' })
+        .catch((e) => e);
 
       // Different messages would let an attacker enumerate registered addresses.
       expect(unknown.message).toBe(wrong.message);

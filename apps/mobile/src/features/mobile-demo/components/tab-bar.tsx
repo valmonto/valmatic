@@ -55,7 +55,7 @@ function TabButton({
       <Text
         className={cn(
           'text-[10px] leading-none',
-          active ? 'font-semibold text-primary' : 'font-medium text-muted-foreground'
+          active ? 'font-semibold text-primary' : 'font-medium text-muted-foreground',
         )}
       >
         {t(meta.labelKey)}
@@ -79,9 +79,7 @@ export function TabBar({ state, navigation }: TabBarProps) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const scheme = useColorScheme();
-  const unread = useMobileDemoStore(
-    (s) => s.notifications.filter((n) => !n.read).length
-  );
+  const unread = useMobileDemoStore((s) => s.notifications.filter((n) => !n.read).length);
 
   const go = (name: string, key: string, focused: boolean) => {
     const event = navigation.emit({ type: 'tabPress', target: key, canPreventDefault: true });

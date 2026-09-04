@@ -19,7 +19,15 @@ type SparklineProps = {
  * A tiny inline trend line (for stat tiles, list rows). No axes — just the shape
  * of the series. Primary-hued by default.
  */
-function Sparkline({ data, width = 88, height = 28, strokeWidth = 2, fill, color, className }: SparklineProps) {
+function Sparkline({
+  data,
+  width = 88,
+  height = 28,
+  strokeWidth = 2,
+  fill,
+  color,
+  className,
+}: SparklineProps) {
   const colors = useThemeColors();
   const stroke = color ?? colors.primary;
 

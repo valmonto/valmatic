@@ -8,10 +8,10 @@ the platform you want to run on.
 > JavaScript/TypeScript bundled by **Metro** and hot-reloaded onto a device. What
 > differs per OS + target is only the **native build** and **how you attach a device**:
 >
-> | Target | Linux | macOS | Windows |
-> | --- | --- | --- | --- |
-> | **Android** | ✅ | ✅ | ✅ |
-> | **iOS** | ❌ | ✅ (Mac required) | ❌ |
+> | Target      | Linux | macOS             | Windows |
+> | ----------- | ----- | ----------------- | ------- |
+> | **Android** | ✅    | ✅                | ✅      |
+> | **iOS**     | ❌    | ✅ (Mac required) | ❌      |
 >
 > So: everyone does §1–§3 below. Then → **[Android setup](./setup-android.md)** and/or
 > **[iOS setup](./setup-ios.md)** (iOS needs a Mac). Come back here for §4 (daily dev).
@@ -24,11 +24,11 @@ the platform you want to run on.
 
 ## 1. Shared prerequisites (every OS)
 
-| Tool | Version | Install |
-| --- | --- | --- |
-| **Git** | any | your OS package manager |
-| **Node.js** | **≥ 26** (repo `engines`) | [nodejs.org](https://nodejs.org) LTS ≥26, or `nvm`/`fnm` |
-| **pnpm** | **11.5.2** (pinned in `packageManager`) | `npm install -g pnpm@11.5.2` (or see [pnpm.io/installation](https://pnpm.io/installation)) |
+| Tool        | Version                                 | Install                                                                                    |
+| ----------- | --------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **Git**     | any                                     | your OS package manager                                                                    |
+| **Node.js** | **≥ 26** (repo `engines`)               | [nodejs.org](https://nodejs.org) LTS ≥26, or `nvm`/`fnm`                                   |
+| **pnpm**    | **11.5.2** (pinned in `packageManager`) | `npm install -g pnpm@11.5.2` (or see [pnpm.io/installation](https://pnpm.io/installation)) |
 
 Verify:
 
@@ -54,7 +54,7 @@ That's the only install command — pnpm resolves the mobile app's dependencies 
 ## 3. Configure the API URL (`.env`) — **do not skip this**
 
 The app talks to the backend API (defaults to port **3000**). On a **real phone or a
-device that isn't the same machine as the API**, `localhost` means *the phone itself*,
+device that isn't the same machine as the API**, `localhost` means _the phone itself_,
 so it must point at your **computer's LAN IP**.
 
 1. Copy the example env file:
@@ -66,10 +66,10 @@ so it must point at your **computer's LAN IP**.
 
 2. Find your computer's LAN IP:
 
-   | OS | Command |
-   | --- | --- |
-   | Linux | `hostname -I \| awk '{print $1}'` |
-   | macOS | `ipconfig getifaddr en0` (Wi-Fi) |
+   | OS      | Command                                            |
+   | ------- | -------------------------------------------------- |
+   | Linux   | `hostname -I \| awk '{print $1}'`                  |
+   | macOS   | `ipconfig getifaddr en0` (Wi-Fi)                   |
    | Windows | `ipconfig` → your Wi-Fi adapter's **IPv4 Address** |
 
 3. Set it in `apps/mobile/.env`:
@@ -84,7 +84,7 @@ so it must point at your **computer's LAN IP**.
    (simulator) — a **physical phone always needs the LAN IP**.
 
 > Requirement: the phone and your computer must be on the **same Wi-Fi/LAN**, and it
-> must not be a "guest" network with *client isolation* (those block phone↔computer
+> must not be a "guest" network with _client isolation_ (those block phone↔computer
 > traffic). See [Networking troubleshooting](#networking-troubleshooting) below.
 
 ---
@@ -103,7 +103,7 @@ pnpm start          # Metro bundler; press "a" (Android) or "i" (iOS)
 Scripts (`apps/mobile/package.json`): `pnpm typecheck`, `pnpm lint`,
 `pnpm clean` (clears `.expo`/caches).
 
-**You only need to rebuild** (`pnpm android` / `pnpm ios`) when *native* things change:
+**You only need to rebuild** (`pnpm android` / `pnpm ios`) when _native_ things change:
 adding a native module, editing `app.json` plugins, or bumping the Expo SDK.
 
 ### Deep-linking to a screen (handy in dev)
@@ -123,12 +123,12 @@ xcrun simctl openurl booted "valmatic://showcase/button"
 
 The #1 source of "it installed but login fails / Metro won't connect":
 
-| Symptom | Cause & fix |
-| --- | --- |
-| Login/API calls fail on a real phone | `EXPO_PUBLIC_API_URL` is `localhost` or wrong LAN IP. Set it to the computer's LAN IP (§3). Restart Metro after editing `.env`. |
-| API unreachable even with LAN IP | API is bound to `localhost` only → bind it to `0.0.0.0`; open firewall port 3000. |
-| Metro won't connect to the phone | Phone and computer not on the same LAN, or a **guest/corporate Wi-Fi blocks it**. Use the same normal Wi-Fi, or run `pnpm start --tunnel` (routes via Expo's servers — slower but bypasses LAN issues). |
-| Works on emulator, not on phone | Emulator/simulator can use `localhost`; a physical device cannot — it needs the LAN IP. |
+| Symptom                              | Cause & fix                                                                                                                                                                                             |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Login/API calls fail on a real phone | `EXPO_PUBLIC_API_URL` is `localhost` or wrong LAN IP. Set it to the computer's LAN IP (§3). Restart Metro after editing `.env`.                                                                         |
+| API unreachable even with LAN IP     | API is bound to `localhost` only → bind it to `0.0.0.0`; open firewall port 3000.                                                                                                                       |
+| Metro won't connect to the phone     | Phone and computer not on the same LAN, or a **guest/corporate Wi-Fi blocks it**. Use the same normal Wi-Fi, or run `pnpm start --tunnel` (routes via Expo's servers — slower but bypasses LAN issues). |
+| Works on emulator, not on phone      | Emulator/simulator can use `localhost`; a physical device cannot — it needs the LAN IP.                                                                                                                 |
 
 ---
 

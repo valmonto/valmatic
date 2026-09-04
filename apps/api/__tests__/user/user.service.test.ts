@@ -162,9 +162,9 @@ describe('UserService', () => {
     it('refuses an OWNER changing their own role', async () => {
       repository.findUserInOrg!.mockResolvedValue({ ...ownerRecord, id: owner.userId });
 
-      await expect(
-        service.updateUser(owner, { id: owner.userId, role: 'MEMBER' }),
-      ).rejects.toThrow(ForbiddenException);
+      await expect(service.updateUser(owner, { id: owner.userId, role: 'MEMBER' })).rejects.toThrow(
+        ForbiddenException,
+      );
     });
 
     it('lets an OWNER change their own name', async () => {

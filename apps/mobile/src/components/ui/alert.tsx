@@ -30,7 +30,8 @@ const alertVariants: Record<
     description: 'text-blue-700/80 dark:text-blue-200/80',
   },
   success: {
-    container: 'border-emerald-500/25 bg-emerald-500/10 dark:border-emerald-400/35 dark:bg-emerald-400/15',
+    container:
+      'border-emerald-500/25 bg-emerald-500/10 dark:border-emerald-400/35 dark:bg-emerald-400/15',
     icon: 'text-emerald-600 dark:text-emerald-400',
     title: 'text-emerald-700 dark:text-emerald-300',
     description: 'text-emerald-700/80 dark:text-emerald-200/80',
@@ -58,11 +59,12 @@ function Alert({
   icon,
   iconClassName,
   ...props
-}: React.ComponentProps<typeof View> & React.RefAttributes<View> & {
-  icon: LucideIcon;
-  variant?: AlertVariant;
-  iconClassName?: string;
-}) {
+}: React.ComponentProps<typeof View> &
+  React.RefAttributes<View> & {
+    icon: LucideIcon;
+    variant?: AlertVariant;
+    iconClassName?: string;
+  }) {
   const meta = alertVariants[variant];
   return (
     <AlertVariantContext.Provider value={variant}>
@@ -71,9 +73,10 @@ function Alert({
         className={cn(
           'w-full flex-row items-start gap-3 rounded-2xl border p-4 shadow-sm shadow-black/5',
           meta.container,
-          className
+          className,
         )}
-        {...props}>
+        {...props}
+      >
         <Icon as={icon} size={18} className={cn('mt-px shrink-0', meta.icon, iconClassName)} />
         <View className="flex-1">{children}</View>
       </View>
@@ -88,7 +91,7 @@ function AlertTitle({ className, ...props }: React.ComponentProps<typeof Text>) 
       className={cn(
         'font-medium leading-none tracking-tight',
         alertVariants[variant].title,
-        className
+        className,
       )}
       {...props}
     />

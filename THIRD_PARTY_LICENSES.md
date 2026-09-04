@@ -13,32 +13,32 @@ This project uses the following third-party packages:
 
 ### License Breakdown
 
-| License | Direct | Transitive | Total |
-|---------|--------|------------|-------|
-| (Apache-2.0 AND MIT) | 1 | 0 | 1 |
-| (BSD-3-Clause OR GPL-2.0) | 0 | 1 | 1 |
-| (MIT OR Apache-2.0) | 0 | 1 | 1 |
-| (MIT OR CC0-1.0) | 0 | 1 | 1 |
-| (MPL-2.0 OR Apache-2.0) | 0 | 1 | 1 |
-| 0BSD | 0 | 2 | 2 |
-| Apache-2.0 | 8 | 74 | 82 |
-| Apache-2.0 AND MIT | 0 | 1 | 1 |
-| BSD-2-Clause | 0 | 24 | 24 |
-| BSD-3-Clause | 1 | 21 | 22 |
-| BlueOak-1.0.0 | 0 | 6 | 6 |
-| CC-BY-4.0 | 0 | 1 | 1 |
-| CC0-1.0 | 0 | 1 | 1 |
-| ISC | 1 | 56 | 57 |
-| MIT | 73 | 1158 | 1231 |
-| MIT AND Apache-2.0 | 0 | 1 | 1 |
-| MIT AND ISC | 0 | 1 | 1 |
-| MIT AND OFL-1.1 | 0 | 1 | 1 |
-| MIT OR Apache-2.0 | 1 | 1 | 2 |
-| MIT-0 | 0 | 2 | 2 |
-| MPL-2.0 | 0 | 2 | 2 |
-| OFL-1.1 | 2 | 0 | 2 |
-| Python-2.0 | 0 | 1 | 1 |
-| Unlicense | 1 | 4 | 5 |
+| License                   | Direct | Transitive | Total |
+| ------------------------- | ------ | ---------- | ----- |
+| (Apache-2.0 AND MIT)      | 1      | 0          | 1     |
+| (BSD-3-Clause OR GPL-2.0) | 0      | 1          | 1     |
+| (MIT OR Apache-2.0)       | 0      | 1          | 1     |
+| (MIT OR CC0-1.0)          | 0      | 1          | 1     |
+| (MPL-2.0 OR Apache-2.0)   | 0      | 1          | 1     |
+| 0BSD                      | 0      | 2          | 2     |
+| Apache-2.0                | 8      | 74         | 82    |
+| Apache-2.0 AND MIT        | 0      | 1          | 1     |
+| BSD-2-Clause              | 0      | 24         | 24    |
+| BSD-3-Clause              | 1      | 21         | 22    |
+| BlueOak-1.0.0             | 0      | 6          | 6     |
+| CC-BY-4.0                 | 0      | 1          | 1     |
+| CC0-1.0                   | 0      | 1          | 1     |
+| ISC                       | 1      | 56         | 57    |
+| MIT                       | 73     | 1158       | 1231  |
+| MIT AND Apache-2.0        | 0      | 1          | 1     |
+| MIT AND ISC               | 0      | 1          | 1     |
+| MIT AND OFL-1.1           | 0      | 1          | 1     |
+| MIT OR Apache-2.0         | 1      | 1          | 2     |
+| MIT-0                     | 0      | 2          | 2     |
+| MPL-2.0                   | 0      | 2          | 2     |
+| OFL-1.1                   | 2      | 0          | 2     |
+| Python-2.0                | 0      | 1          | 1     |
+| Unlicense                 | 1      | 4          | 5     |
 
 ## Direct Dependencies
 
@@ -176,7 +176,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Prettifier for Pino log lines
 - **posthog-node** (5.51.6) - [Homepage](https://github.com/PostHog/posthog-js#readme)
   - PostHog Node.js integration
-- **prettier** (3.8.4) - [Homepage](https://prettier.io)
+- **prettier** (3.9.6) - [Homepage](https://prettier.io)
   - Prettier is an opinionated code formatter
 - **radix-ui** (1.6.7) - [Homepage](https://radix-ui.com/primitives)
 - **react** (19.2.3, 19.2.8) - [Homepage](https://react.dev/)

@@ -22,14 +22,14 @@ junk drawer.
 
 ## Entry points
 
-| Import | Contains | Zod | Built size |
-|---|---|---|---|
-| `@pkg/contracts` | server: everything | yes | — |
-| `@pkg/contracts/client` | types + constants + permissions | **no** | 465 B |
-| `@pkg/contracts/types` | types only | no | 11 B |
-| `@pkg/contracts/constants` | password rules, role enums | no | 1.0 kB |
-| `@pkg/contracts/permissions` | catalogue, role table, checks | no | 2.8 kB |
-| `@pkg/contracts/schemas` | the Zod schemas | yes | 11.4 kB |
+| Import                       | Contains                        | Zod    | Built size |
+| ---------------------------- | ------------------------------- | ------ | ---------- |
+| `@pkg/contracts`             | server: everything              | yes    | —          |
+| `@pkg/contracts/client`      | types + constants + permissions | **no** | 465 B      |
+| `@pkg/contracts/types`       | types only                      | no     | 11 B       |
+| `@pkg/contracts/constants`   | password rules, role enums      | no     | 1.0 kB     |
+| `@pkg/contracts/permissions` | catalogue, role table, checks   | no     | 2.8 kB     |
+| `@pkg/contracts/schemas`     | the Zod schemas                 | yes    | 11.4 kB    |
 
 **Web and mobile alias `@pkg/contracts` to `/client`** (`vite.config.ts`,
 `metro.config.js`). So in frontend code the bare specifier is already the safe
@@ -71,12 +71,12 @@ export const ROLE_PERMISSIONS: Record<OrganizationUserRole, readonly Permission[
 Helpers: `hasPermission`, `hasAnyPermission`, `hasAllPermissions`,
 `getPermissionsForRole`.
 
-| | API | Web / mobile |
-|---|---|---|
-| Enforce | `@Permissions('user:create')` | — |
-| Hide a control | — | `<Can permission="user:create">` |
-| Block a view | — | `<RequirePermission permission="user:list">` |
-| In code | guard rejects the request | `useCan` / `useCanAny` / `useCanAll` |
+|                | API                           | Web / mobile                                 |
+| -------------- | ----------------------------- | -------------------------------------------- |
+| Enforce        | `@Permissions('user:create')` | —                                            |
+| Hide a control | —                             | `<Can permission="user:create">`             |
+| Block a view   | —                             | `<RequirePermission permission="user:list">` |
+| In code        | guard rejects the request     | `useCan` / `useCanAny` / `useCanAll`         |
 
 **Only the API enforces.** Client checks decide what to show; a hidden button is
 not a security boundary.

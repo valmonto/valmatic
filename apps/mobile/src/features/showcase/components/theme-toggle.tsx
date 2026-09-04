@@ -17,7 +17,8 @@ export function ThemeToggle() {
       hitSlop={8}
       accessibilityRole="button"
       accessibilityLabel={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="h-9 w-9 items-center justify-center rounded-full border border-border bg-card active:opacity-70">
+      className="h-9 w-9 items-center justify-center rounded-full border border-border bg-card active:opacity-70"
+    >
       <Icon as={isDark ? Sun : Moon} size={16} className="text-foreground" />
     </Pressable>
   );

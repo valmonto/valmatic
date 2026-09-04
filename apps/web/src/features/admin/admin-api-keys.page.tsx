@@ -114,7 +114,9 @@ function CreateKeyDialog({
   const [scopes, setScopes] = useState<McpScope[]>([]);
 
   const toggleScope = (scope: McpScope) =>
-    setScopes((prev) => (prev.includes(scope) ? prev.filter((s) => s !== scope) : [...prev, scope]));
+    setScopes((prev) =>
+      prev.includes(scope) ? prev.filter((s) => s !== scope) : [...prev, scope],
+    );
 
   const submit = async () => {
     const res = await create.execute({ name: name.trim(), scopes });
@@ -129,8 +131,7 @@ function CreateKeyDialog({
   // Groups derive from the scope naming convention (domain:action), so a new
   // domain groups itself with zero UI changes.
   const scopeGroups = [...new Set(MCP_SCOPES.map((scope) => scope.split(':')[0]!))].map(
-    (domain) =>
-      [domain, MCP_SCOPES.filter((scope) => scope.startsWith(`${domain}:`))] as const,
+    (domain) => [domain, MCP_SCOPES.filter((scope) => scope.startsWith(`${domain}:`))] as const,
   );
 
   // Scope descriptions are looked up defensively: a scope added to
@@ -196,72 +197,72 @@ function CreateKeyDialog({
               chips. Selection reads from the checkbox alone; the description
               lives in a hover tooltip instead of card chrome. */}
           <TooltipProvider delayDuration={200}>
-          <div className="divide-y rounded-lg border">
-            {scopeGroups.map(([domain, domainScopes]) => {
-              const selectedCount = domainScopes.filter((scope) => scopes.includes(scope)).length;
-              return (
-                <div
-                  key={domain}
-                  className="grid grid-cols-[8rem_minmax(0,1fr)] items-start gap-x-4 px-3 py-2.5"
-                >
-                  <label className="flex items-center gap-2 py-1.5">
-                    <Checkbox
-                      checked={
-                        selectedCount === 0
-                          ? false
-                          : selectedCount === domainScopes.length
-                            ? true
-                            : 'indeterminate'
-                      }
-                      onCheckedChange={(checked) =>
-                        setScopes((prev) =>
-                          checked === true
-                            ? [...new Set([...prev, ...domainScopes])]
-                            : prev.filter((scope) => !domainScopes.includes(scope)),
-                        )
-                      }
-                    />
-                    <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                      {domain}
-                    </span>
-                  </label>
-                  <div className="flex flex-wrap items-center gap-2">
-                    {domainScopes.map((scope) => {
-                      const selected = scopes.includes(scope);
-                      const action = scope.split(':')[1]!;
-                      return (
-                        <Tooltip key={scope}>
-                          <TooltipTrigger asChild>
-                            <button
-                              type="button"
-                              onClick={() => toggleScope(scope)}
-                              aria-pressed={selected}
-                              className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 transition-colors hover:bg-muted/50"
-                            >
-                              <Checkbox
-                                checked={selected}
-                                className="pointer-events-none size-3.5"
-                              />
-                              <code className="font-mono text-xs">{action}</code>
-                              {scopeDesc(scope) && (
-                                <Info className="size-3 text-muted-foreground/50" />
-                              )}
-                            </button>
-                          </TooltipTrigger>
-                          {scopeDesc(scope) && (
-                            <TooltipContent className="max-w-xs">
-                              <p className="mb-0.5 font-mono text-[11px]">{scope}</p>
-                              <p>{scopeDesc(scope)}</p>
-                            </TooltipContent>
-                          )}
-                        </Tooltip>
-                      );
-                    })}
+            <div className="divide-y rounded-lg border">
+              {scopeGroups.map(([domain, domainScopes]) => {
+                const selectedCount = domainScopes.filter((scope) => scopes.includes(scope)).length;
+                return (
+                  <div
+                    key={domain}
+                    className="grid grid-cols-[8rem_minmax(0,1fr)] items-start gap-x-4 px-3 py-2.5"
+                  >
+                    <label className="flex items-center gap-2 py-1.5">
+                      <Checkbox
+                        checked={
+                          selectedCount === 0
+                            ? false
+                            : selectedCount === domainScopes.length
+                              ? true
+                              : 'indeterminate'
+                        }
+                        onCheckedChange={(checked) =>
+                          setScopes((prev) =>
+                            checked === true
+                              ? [...new Set([...prev, ...domainScopes])]
+                              : prev.filter((scope) => !domainScopes.includes(scope)),
+                          )
+                        }
+                      />
+                      <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                        {domain}
+                      </span>
+                    </label>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {domainScopes.map((scope) => {
+                        const selected = scopes.includes(scope);
+                        const action = scope.split(':')[1]!;
+                        return (
+                          <Tooltip key={scope}>
+                            <TooltipTrigger asChild>
+                              <button
+                                type="button"
+                                onClick={() => toggleScope(scope)}
+                                aria-pressed={selected}
+                                className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 transition-colors hover:bg-muted/50"
+                              >
+                                <Checkbox
+                                  checked={selected}
+                                  className="pointer-events-none size-3.5"
+                                />
+                                <code className="font-mono text-xs">{action}</code>
+                                {scopeDesc(scope) && (
+                                  <Info className="size-3 text-muted-foreground/50" />
+                                )}
+                              </button>
+                            </TooltipTrigger>
+                            {scopeDesc(scope) && (
+                              <TooltipContent className="max-w-xs">
+                                <p className="mb-0.5 font-mono text-[11px]">{scope}</p>
+                                <p>{scopeDesc(scope)}</p>
+                              </TooltipContent>
+                            )}
+                          </Tooltip>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
           </TooltipProvider>
         </div>
         {create.error && <p className="text-sm text-destructive">{t(create.error.message)}</p>}

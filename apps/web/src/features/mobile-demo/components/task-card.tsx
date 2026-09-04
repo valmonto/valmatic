@@ -64,7 +64,12 @@ export function TaskCard({ task }: { task: DemoTask }) {
               <span className={cn('size-1.5 rounded-full', task.projectColor)} />
               {task.project}
             </span>
-            <span className={cn('flex items-center gap-1', task.dueToday && !done && 'text-orange-600 dark:text-orange-400')}>
+            <span
+              className={cn(
+                'flex items-center gap-1',
+                task.dueToday && !done && 'text-orange-600 dark:text-orange-400',
+              )}
+            >
               <Clock className="size-3" />
               {task.due}
             </span>

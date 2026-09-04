@@ -27,7 +27,10 @@ function Stepper({ steps, current, className }: StepperProps) {
           <React.Fragment key={i}>
             {i > 0 ? (
               <View
-                className={cn('h-0.5 flex-1 rounded-full', i <= current ? 'bg-primary' : 'bg-border')}
+                className={cn(
+                  'h-0.5 flex-1 rounded-full',
+                  i <= current ? 'bg-primary' : 'bg-border',
+                )}
                 style={{ marginTop: 15 }}
               />
             ) : null}
@@ -35,16 +38,18 @@ function Stepper({ steps, current, className }: StepperProps) {
               <View
                 className={cn(
                   'size-8 items-center justify-center rounded-full border-2',
-                  completed || active ? 'border-primary bg-primary' : 'border-border bg-card'
-                )}>
+                  completed || active ? 'border-primary bg-primary' : 'border-border bg-card',
+                )}
+              >
                 {completed ? (
                   <Icon as={Check} size={16} className="text-primary-foreground" />
                 ) : (
                   <Text
                     className={cn(
                       'text-xs font-semibold tabular-nums',
-                      active ? 'text-primary-foreground' : 'text-muted-foreground'
-                    )}>
+                      active ? 'text-primary-foreground' : 'text-muted-foreground',
+                    )}
+                  >
                     {i + 1}
                   </Text>
                 )}
@@ -53,8 +58,9 @@ function Stepper({ steps, current, className }: StepperProps) {
                 numberOfLines={1}
                 className={cn(
                   'text-xs',
-                  active ? 'font-medium text-foreground' : 'text-muted-foreground'
-                )}>
+                  active ? 'font-medium text-foreground' : 'text-muted-foreground',
+                )}
+              >
                 {label}
               </Text>
             </View>

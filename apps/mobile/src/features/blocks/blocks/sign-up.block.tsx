@@ -14,16 +14,26 @@ export function SignUpBlock() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+        >
           <View className="gap-8 px-6 py-8">
             <View className="items-center gap-4">
               <View className="size-16 items-center justify-center rounded-3xl bg-primary shadow-lg shadow-primary/40">
                 <Text className="text-3xl font-bold text-primary-foreground">V</Text>
               </View>
               <View className="items-center gap-1.5">
-                <Text variant="h1" className="text-3xl">Create account</Text>
-                <Text variant="muted" className="text-center text-base">Start your 14-day free trial</Text>
+                <Text variant="h1" className="text-3xl">
+                  Create account
+                </Text>
+                <Text variant="muted" className="text-center text-base">
+                  Start your 14-day free trial
+                </Text>
               </View>
             </View>
 
@@ -34,14 +44,22 @@ export function SignUpBlock() {
               </View>
               <View className="gap-1.5">
                 <Label>Email</Label>
-                <Input icon={Mail} placeholder="you@example.com" autoCapitalize="none" keyboardType="email-address" />
+                <Input
+                  icon={Mail}
+                  placeholder="you@example.com"
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                />
               </View>
               <View className="gap-1.5">
                 <Label>Password</Label>
                 <Input icon={Lock} placeholder="At least 8 characters" secureTextEntry />
               </View>
 
-              <Pressable onPress={() => setAgreed((v) => !v)} className="mt-1 flex-row items-center gap-2.5 active:opacity-70">
+              <Pressable
+                onPress={() => setAgreed((v) => !v)}
+                className="mt-1 flex-row items-center gap-2.5 active:opacity-70"
+              >
                 <Checkbox checked={agreed} onCheckedChange={setAgreed} />
                 <Text className="flex-1 text-sm text-muted-foreground">
                   I agree to the <Text className="font-medium text-primary">Terms</Text> and{' '}
@@ -49,7 +67,10 @@ export function SignUpBlock() {
                 </Text>
               </Pressable>
 
-              <Button disabled={!agreed} className="mt-1 h-13 rounded-2xl shadow-lg shadow-primary/25">
+              <Button
+                disabled={!agreed}
+                className="mt-1 h-13 rounded-2xl shadow-lg shadow-primary/25"
+              >
                 <Text className="text-base font-semibold">Create account</Text>
               </Button>
             </View>

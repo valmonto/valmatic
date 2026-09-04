@@ -60,8 +60,9 @@ function Textarea({
         focused && 'border-foreground/40',
         invalid && 'border-destructive',
         editable === false && 'opacity-50',
-        containerClassName
-      )}>
+        containerClassName,
+      )}
+    >
       <TextInput
         style={[{ fontFamily: 'Inter_400Regular' }, style]}
         className={cn(
@@ -70,7 +71,7 @@ function Textarea({
             native: 'placeholder:text-muted-foreground',
             web: 'placeholder:text-muted-foreground field-sizing-content resize-y outline-none md:text-sm',
           }),
-          className
+          className,
         )}
         placeholderClassName={cn('text-muted-foreground', placeholderClassName)}
         multiline={multiline}
@@ -90,8 +91,9 @@ function Textarea({
           <Text
             className={cn(
               'text-muted-foreground text-xs tabular-nums',
-              nearLimit && 'text-destructive font-medium'
-            )}>
+              nearLimit && 'text-destructive font-medium',
+            )}
+          >
             {currentCount}
             {maxLength != null ? ` / ${maxLength}` : ''}
           </Text>

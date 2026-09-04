@@ -24,13 +24,15 @@ After this, `app.json` will contain `extra.eas.projectId` and `updates.url` — 
 ## What's already configured
 
 - **`eas.json`** — three build profiles:
-  | Profile | Use | Notes |
-  |---|---|---|
+
+  | Profile       | Use                                               | Notes                                                       |
+  | ------------- | ------------------------------------------------- | ----------------------------------------------------------- |
   | `development` | Dev client for testing native modules on a device | `developmentClient`, internal distribution, Android **APK** |
-  | `preview` | Share an installable build with testers | internal distribution, Android **APK** |
-  | `production` | Store builds | `autoIncrement` build number, App Store / Play formats |
+  | `preview`     | Share an installable build with testers           | internal distribution, Android **APK**                      |
+  | `production`  | Store builds                                      | `autoIncrement` build number, App Store / Play formats      |
 
   Each maps to an **OTA channel** of the same name (`development` / `preview` / `production`).
+
 - **`app.json`** — `runtimeVersion.policy: "appVersion"` (OTA updates only apply to a build
   with the same app `version`, so native changes never mismatch JS), iOS `bundleIdentifier`
   and Android `package` set.

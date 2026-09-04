@@ -33,10 +33,7 @@ export function useAttachments(subjectType: string, subjectId: string | null) {
  * straight to storage against the presigned URL, confirm. The row only
  * becomes visible after the server verifies what actually landed.
  */
-export function useUploadAttachment(
-  subjectType: string,
-  onDone: () => Promise<unknown> | void,
-) {
+export function useUploadAttachment(subjectType: string, onDone: () => Promise<unknown> | void) {
   const [isUploading, setUploading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 

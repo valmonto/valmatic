@@ -128,9 +128,7 @@ export const AcceptInvitationAsMemberResponseSchema = z.object({
   orgName: z.string(),
 });
 
-export type AcceptInvitationAsMemberRequest = z.infer<
-  typeof AcceptInvitationAsMemberRequestSchema
->;
+export type AcceptInvitationAsMemberRequest = z.infer<typeof AcceptInvitationAsMemberRequestSchema>;
 export type AcceptInvitationAsMemberResponse = z.infer<
   typeof AcceptInvitationAsMemberResponseSchema
 >;

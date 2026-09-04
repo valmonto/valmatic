@@ -61,7 +61,9 @@ function PreferenceRow({
   border?: boolean;
 }) {
   return (
-    <View className={cn('flex-row items-center gap-3 px-3.5 py-3', border && 'border-t border-border')}>
+    <View
+      className={cn('flex-row items-center gap-3 px-3.5 py-3', border && 'border-t border-border')}
+    >
       <View className="h-8 w-8 items-center justify-center rounded-full bg-muted">
         <Icon as={icon} size={16} className="text-muted-foreground" />
       </View>
@@ -86,11 +88,19 @@ export default function ProfileScreen() {
 
   const name = user?.displayName ?? user?.name ?? 'Alex Morgan';
   const email = user?.email ?? 'alex@acme.dev';
-  const initials = name.split(' ').map((p) => p[0]).join('').slice(0, 2).toUpperCase();
+  const initials = name
+    .split(' ')
+    .map((p) => p[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         <View className="gap-4 px-5 pt-4">
           <Text className="text-2xl font-semibold text-foreground">Profile</Text>
 
@@ -101,7 +111,13 @@ export default function ProfileScreen() {
                 colors={['#5a60c2', '#7c82d9']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                style={{ height: 64, width: 64, borderRadius: 999, alignItems: 'center', justifyContent: 'center' }}
+                style={{
+                  height: 64,
+                  width: 64,
+                  borderRadius: 999,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
               >
                 <Text className="text-lg font-semibold text-primary-foreground">{initials}</Text>
               </LinearGradient>
@@ -169,7 +185,8 @@ export default function ProfileScreen() {
                 <View className="min-w-0 flex-1">
                   <Text className="text-[13px] font-medium text-foreground">Language</Text>
                   <Text className="text-[11px] text-muted-foreground">
-                    {LANGUAGE_META[i18n.language]?.flag} {LANGUAGE_META[i18n.language]?.native ?? i18n.language}
+                    {LANGUAGE_META[i18n.language]?.flag}{' '}
+                    {LANGUAGE_META[i18n.language]?.native ?? i18n.language}
                   </Text>
                 </View>
                 <Icon as={ChevronRight} size={16} className="text-muted-foreground/50" />
@@ -177,7 +194,12 @@ export default function ProfileScreen() {
             </View>
           </View>
 
-          <Sheet open={langOpen} onOpenChange={setLangOpen} title="Language" description="Choose your language">
+          <Sheet
+            open={langOpen}
+            onOpenChange={setLangOpen}
+            title="Language"
+            description="Choose your language"
+          >
             <View className="gap-1">
               {supportedLanguages.map((lang) => {
                 const meta = LANGUAGE_META[lang];
@@ -191,11 +213,13 @@ export default function ProfileScreen() {
                     }}
                     className={cn(
                       'flex-row items-center gap-3 rounded-xl px-3 py-3 active:bg-muted',
-                      active && 'bg-muted'
+                      active && 'bg-muted',
                     )}
                   >
                     <Text className="text-2xl">{meta?.flag}</Text>
-                    <Text className="flex-1 text-[15px] text-foreground">{meta?.native ?? lang}</Text>
+                    <Text className="flex-1 text-[15px] text-foreground">
+                      {meta?.native ?? lang}
+                    </Text>
                     {active ? <Icon as={Check} size={18} className="text-primary" /> : null}
                   </Pressable>
                 );
@@ -212,16 +236,20 @@ export default function ProfileScreen() {
               {menuItems.map((item, index) => (
                 <Pressable
                   key={item.label}
-                  onPress={() => toast('Demo only', { description: 'This screen is not part of the demo.' })}
+                  onPress={() =>
+                    toast('Demo only', { description: 'This screen is not part of the demo.' })
+                  }
                   className={cn(
                     'flex-row items-center gap-3 px-3.5 py-3 active:bg-muted/40',
-                    index > 0 && 'border-t border-border'
+                    index > 0 && 'border-t border-border',
                   )}
                 >
                   <View className="h-8 w-8 items-center justify-center rounded-full bg-muted">
                     <Icon as={item.icon} size={16} className="text-muted-foreground" />
                   </View>
-                  <Text className="flex-1 text-[13px] font-medium text-foreground">{item.label}</Text>
+                  <Text className="flex-1 text-[13px] font-medium text-foreground">
+                    {item.label}
+                  </Text>
                   <Icon as={ChevronRight} size={16} className="text-muted-foreground/50" />
                 </Pressable>
               ))}
@@ -242,8 +270,12 @@ export default function ProfileScreen() {
                   <Icon as={LayoutGrid} size={16} className="text-primary" />
                 </View>
                 <View className="flex-1">
-                  <Text className="text-[13px] font-medium text-foreground">Component showcase</Text>
-                  <Text className="text-[11px] text-muted-foreground">Browse all UI components</Text>
+                  <Text className="text-[13px] font-medium text-foreground">
+                    Component showcase
+                  </Text>
+                  <Text className="text-[11px] text-muted-foreground">
+                    Browse all UI components
+                  </Text>
                 </View>
                 <Icon as={ChevronRight} size={16} className="text-muted-foreground/50" />
               </Pressable>
@@ -257,7 +289,9 @@ export default function ProfileScreen() {
                 </View>
                 <View className="flex-1">
                   <Text className="text-[13px] font-medium text-foreground">Blocks</Text>
-                  <Text className="text-[11px] text-muted-foreground">Ready-made screen templates</Text>
+                  <Text className="text-[11px] text-muted-foreground">
+                    Ready-made screen templates
+                  </Text>
                 </View>
                 <Icon as={ChevronRight} size={16} className="text-muted-foreground/50" />
               </Pressable>

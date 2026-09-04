@@ -39,7 +39,7 @@ function Ring({ delay }: { delay: number }) {
   useEffect(() => {
     progress.value = withDelay(
       delay,
-      withRepeat(withTiming(1, { duration: 2200, easing: Easing.out(Easing.cubic) }), -1, false)
+      withRepeat(withTiming(1, { duration: 2200, easing: Easing.out(Easing.cubic) }), -1, false),
     );
   }, [delay, progress]);
 
@@ -57,7 +57,7 @@ function WordmarkLetter({ letter, index }: { letter: string; index: number }) {
   useEffect(() => {
     progress.value = withDelay(
       450 + index * 55,
-      withTiming(1, { duration: 500, easing: Easing.out(Easing.cubic) })
+      withTiming(1, { duration: 500, easing: Easing.out(Easing.cubic) }),
     );
   }, [index, progress]);
 
@@ -93,10 +93,10 @@ export function AnimatedSplash({ ready, onFinish }: { ready: boolean; onFinish: 
     logoPulse.value = withRepeat(
       withSequence(
         withTiming(1, { duration: 1000, easing: Easing.inOut(Easing.quad) }),
-        withTiming(0, { duration: 1000, easing: Easing.inOut(Easing.quad) })
+        withTiming(0, { duration: 1000, easing: Easing.inOut(Easing.quad) }),
       ),
       -1,
-      true
+      true,
     );
     // Depth gradient fades in after handoff so the flat native color comes alive.
     bloom.value = withDelay(150, withTiming(1, { duration: 900, easing: Easing.out(Easing.quad) }));
@@ -111,7 +111,7 @@ export function AnimatedSplash({ ready, onFinish }: { ready: boolean; onFinish: 
       { duration: EXIT_MS, easing: Easing.in(Easing.cubic) },
       (finished) => {
         if (finished) runOnJS(onFinish)();
-      }
+      },
     );
   }, [ready, minTimeElapsed, exit, onFinish]);
 

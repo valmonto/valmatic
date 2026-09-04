@@ -73,7 +73,11 @@ export class NotificationService {
   }
 
   async getById(activeUser: ActiveUser, id: string): Promise<GetNotificationByIdResponse> {
-    const notification = await this.notificationRepository.findById(id, activeUser.userId, activeUser.orgId);
+    const notification = await this.notificationRepository.findById(
+      id,
+      activeUser.userId,
+      activeUser.orgId,
+    );
 
     if (!notification) {
       throw new NotFoundException(k.notifications.errors.notFound);
@@ -87,7 +91,11 @@ export class NotificationService {
   }
 
   async markAsRead(activeUser: ActiveUser, id: string): Promise<MarkNotificationReadResponse> {
-    const notification = await this.notificationRepository.markAsRead(id, activeUser.userId, activeUser.orgId);
+    const notification = await this.notificationRepository.markAsRead(
+      id,
+      activeUser.userId,
+      activeUser.orgId,
+    );
 
     if (!notification) {
       throw new NotFoundException(k.notifications.errors.notFound);
@@ -103,7 +111,10 @@ export class NotificationService {
   }
 
   async markAllAsRead(activeUser: ActiveUser): Promise<MarkAllNotificationsReadResponse> {
-    const count = await this.notificationRepository.markAllAsRead(activeUser.userId, activeUser.orgId);
+    const count = await this.notificationRepository.markAllAsRead(
+      activeUser.userId,
+      activeUser.orgId,
+    );
 
     this.logger.debug({ userId: activeUser.userId, count }, 'All notifications marked as read');
 
@@ -111,12 +122,19 @@ export class NotificationService {
   }
 
   async getUnreadCount(activeUser: ActiveUser): Promise<GetUnreadCountResponse> {
-    const count = await this.notificationRepository.getUnreadCount(activeUser.userId, activeUser.orgId);
+    const count = await this.notificationRepository.getUnreadCount(
+      activeUser.userId,
+      activeUser.orgId,
+    );
     return { count };
   }
 
   async delete(activeUser: ActiveUser, id: string): Promise<void> {
-    const deleted = await this.notificationRepository.delete(id, activeUser.userId, activeUser.orgId);
+    const deleted = await this.notificationRepository.delete(
+      id,
+      activeUser.userId,
+      activeUser.orgId,
+    );
 
     if (!deleted) {
       throw new NotFoundException(k.notifications.errors.notFound);

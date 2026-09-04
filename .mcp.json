@@ -2,19 +2,11 @@
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@playwright/mcp@0.0.78",
-        "--output-dir",
-        ".debug/playwright"
-      ]
+      "args": ["-y", "@playwright/mcp@0.0.78", "--output-dir", ".debug/playwright"]
     },
     "mobile": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@mobilenext/mobile-mcp@0.0.62"
-      ]
+      "args": ["-y", "@mobilenext/mobile-mcp@0.0.62"]
     }
   }
 }

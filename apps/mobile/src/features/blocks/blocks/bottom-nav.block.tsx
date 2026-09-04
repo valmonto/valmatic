@@ -36,8 +36,19 @@ function ClassicBar() {
     <View className="flex-row items-center justify-around rounded-2xl border border-border bg-card px-2 py-2.5">
       {TABS.map((t, i) => (
         <View key={t.label} className="items-center gap-1">
-          <Icon as={t.icon} size={22} className={i === 0 ? 'text-primary' : 'text-muted-foreground'} />
-          <Text className={cn('text-[10px]', i === 0 ? 'font-semibold text-primary' : 'text-muted-foreground')}>{t.label}</Text>
+          <Icon
+            as={t.icon}
+            size={22}
+            className={i === 0 ? 'text-primary' : 'text-muted-foreground'}
+          />
+          <Text
+            className={cn(
+              'text-[10px]',
+              i === 0 ? 'font-semibold text-primary' : 'text-muted-foreground',
+            )}
+          >
+            {t.label}
+          </Text>
         </View>
       ))}
     </View>
@@ -50,7 +61,10 @@ function PillBar() {
     <View className="flex-row items-center justify-around rounded-2xl border border-border bg-card px-2 py-2">
       {TABS.map((t, i) =>
         i === 0 ? (
-          <View key={t.label} className="flex-row items-center gap-1.5 rounded-full bg-primary/12 px-3.5 py-2">
+          <View
+            key={t.label}
+            className="flex-row items-center gap-1.5 rounded-full bg-primary/12 px-3.5 py-2"
+          >
             <Icon as={t.icon} size={20} className="text-primary" />
             <Text className="text-[13px] font-semibold text-primary">{t.label}</Text>
           </View>
@@ -58,7 +72,7 @@ function PillBar() {
           <View key={t.label} className="px-3.5 py-2">
             <Icon as={t.icon} size={22} className="text-muted-foreground" />
           </View>
-        )
+        ),
       )}
     </View>
   );
@@ -70,8 +84,14 @@ function IconsBar() {
     <View className="flex-row items-center justify-around rounded-2xl border border-border bg-card py-3.5">
       {TABS.map((t, i) => (
         <View key={t.label} className="items-center gap-1.5">
-          <Icon as={t.icon} size={23} className={i === 0 ? 'text-primary' : 'text-muted-foreground'} />
-          <View className={cn('size-1.5 rounded-full', i === 0 ? 'bg-primary' : 'bg-transparent')} />
+          <Icon
+            as={t.icon}
+            size={23}
+            className={i === 0 ? 'text-primary' : 'text-muted-foreground'}
+          />
+          <View
+            className={cn('size-1.5 rounded-full', i === 0 ? 'bg-primary' : 'bg-transparent')}
+          />
         </View>
       ))}
     </View>
@@ -84,7 +104,12 @@ function FloatingBar() {
     <View className="items-center">
       <View className="flex-row items-center gap-8 rounded-full border border-border bg-card px-7 py-3.5 shadow-lg shadow-black/20">
         {TABS.map((t, i) => (
-          <Icon key={t.label} as={t.icon} size={23} className={i === 0 ? 'text-primary' : 'text-muted-foreground'} />
+          <Icon
+            key={t.label}
+            as={t.icon}
+            size={23}
+            className={i === 0 ? 'text-primary' : 'text-muted-foreground'}
+          />
         ))}
       </View>
     </View>
@@ -96,7 +121,14 @@ function FabBar() {
   const tab = (t: Tab, active: boolean) => (
     <View key={t.label} className="flex-1 items-center gap-1">
       <Icon as={t.icon} size={22} className={active ? 'text-primary' : 'text-muted-foreground'} />
-      <Text className={cn('text-[10px]', active ? 'font-semibold text-primary' : 'text-muted-foreground')}>{t.label}</Text>
+      <Text
+        className={cn(
+          'text-[10px]',
+          active ? 'font-semibold text-primary' : 'text-muted-foreground',
+        )}
+      >
+        {t.label}
+      </Text>
     </View>
   );
   return (
@@ -120,9 +152,25 @@ function IndicatorBar() {
     <View className="flex-row items-stretch justify-around overflow-hidden rounded-2xl border border-border bg-card">
       {TABS.map((t, i) => (
         <View key={t.label} className="flex-1 items-center gap-1 py-2.5">
-          <View className={cn('absolute top-0 h-0.5 w-8 rounded-full', i === 0 ? 'bg-primary' : 'bg-transparent')} />
-          <Icon as={t.icon} size={22} className={i === 0 ? 'text-primary' : 'text-muted-foreground'} />
-          <Text className={cn('text-[10px]', i === 0 ? 'font-semibold text-primary' : 'text-muted-foreground')}>{t.label}</Text>
+          <View
+            className={cn(
+              'absolute top-0 h-0.5 w-8 rounded-full',
+              i === 0 ? 'bg-primary' : 'bg-transparent',
+            )}
+          />
+          <Icon
+            as={t.icon}
+            size={22}
+            className={i === 0 ? 'text-primary' : 'text-muted-foreground'}
+          />
+          <Text
+            className={cn(
+              'text-[10px]',
+              i === 0 ? 'font-semibold text-primary' : 'text-muted-foreground',
+            )}
+          >
+            {t.label}
+          </Text>
         </View>
       ))}
     </View>
@@ -142,9 +190,16 @@ function FloatingLabeledBar() {
     <View className="items-center">
       <View className="flex-row items-center gap-0.5 rounded-full border border-border bg-card px-2 py-2 shadow-lg shadow-black/15">
         {tabs.map((t, i) => (
-          <View key={t.label} className={cn('items-center gap-0.5 rounded-full px-3 py-1.5', i === 0 && 'bg-muted')}>
+          <View
+            key={t.label}
+            className={cn('items-center gap-0.5 rounded-full px-3 py-1.5', i === 0 && 'bg-muted')}
+          >
             <View>
-              <Icon as={t.icon} size={20} className={i === 0 ? 'text-foreground' : 'text-muted-foreground'} />
+              <Icon
+                as={t.icon}
+                size={20}
+                className={i === 0 ? 'text-foreground' : 'text-muted-foreground'}
+              />
               {i === 4 ? (
                 <View className="bg-background absolute -right-2 -top-1 rounded-full p-0.5">
                   <View className="bg-destructive size-3.5 items-center justify-center rounded-full">
@@ -153,7 +208,14 @@ function FloatingLabeledBar() {
                 </View>
               ) : null}
             </View>
-            <Text className={cn('text-[9px]', i === 0 ? 'font-semibold text-foreground' : 'text-muted-foreground')}>{t.label}</Text>
+            <Text
+              className={cn(
+                'text-[9px]',
+                i === 0 ? 'font-semibold text-foreground' : 'text-muted-foreground',
+              )}
+            >
+              {t.label}
+            </Text>
           </View>
         ))}
       </View>
@@ -194,10 +256,26 @@ function AccentCircleBar() {
       <View className="flex-row items-center gap-4 rounded-full border border-border bg-card px-5 py-2.5 shadow-lg shadow-black/15">
         {tabs.map((t, i) => (
           <View key={t.label} className="items-center gap-1">
-            <View className={cn('size-9 items-center justify-center rounded-full', i === 2 && 'bg-primary')}>
-              <Icon as={t.icon} size={18} className={i === 2 ? 'text-primary-foreground' : 'text-muted-foreground'} />
+            <View
+              className={cn(
+                'size-9 items-center justify-center rounded-full',
+                i === 2 && 'bg-primary',
+              )}
+            >
+              <Icon
+                as={t.icon}
+                size={18}
+                className={i === 2 ? 'text-primary-foreground' : 'text-muted-foreground'}
+              />
             </View>
-            <Text className={cn('text-[9px]', i === 2 ? 'font-medium text-foreground' : 'text-muted-foreground')}>{t.label}</Text>
+            <Text
+              className={cn(
+                'text-[9px]',
+                i === 2 ? 'font-medium text-foreground' : 'text-muted-foreground',
+              )}
+            >
+              {t.label}
+            </Text>
           </View>
         ))}
       </View>
@@ -226,10 +304,21 @@ function InlineCreateBar() {
           </View>
         ) : (
           <View key={t.label} className="items-center gap-1">
-            <Icon as={t.icon} size={22} className={i === 0 ? 'text-primary' : 'text-muted-foreground'} />
-            <Text className={cn('text-[9px]', i === 0 ? 'font-semibold text-primary' : 'text-muted-foreground')}>{t.label}</Text>
+            <Icon
+              as={t.icon}
+              size={22}
+              className={i === 0 ? 'text-primary' : 'text-muted-foreground'}
+            />
+            <Text
+              className={cn(
+                'text-[9px]',
+                i === 0 ? 'font-semibold text-primary' : 'text-muted-foreground',
+              )}
+            >
+              {t.label}
+            </Text>
           </View>
-        )
+        ),
       )}
     </View>
   );
@@ -243,14 +332,27 @@ function SolidActionBar() {
       <View className="flex-row items-center gap-3 rounded-full border border-border bg-card px-3 py-2 shadow-lg shadow-black/15">
         {items.map((t, i) =>
           t === 'create' ? (
-            <View key="create" className="bg-foreground size-11 items-center justify-center rounded-full">
+            <View
+              key="create"
+              className="bg-foreground size-11 items-center justify-center rounded-full"
+            >
               <Icon as={Plus} size={24} className="text-background" />
             </View>
           ) : (
-            <View key={i} className={cn('size-10 items-center justify-center rounded-full', i === 0 && 'bg-muted')}>
-              <Icon as={t} size={22} className={i === 0 ? 'text-foreground' : 'text-muted-foreground'} />
+            <View
+              key={i}
+              className={cn(
+                'size-10 items-center justify-center rounded-full',
+                i === 0 && 'bg-muted',
+              )}
+            >
+              <Icon
+                as={t}
+                size={22}
+                className={i === 0 ? 'text-foreground' : 'text-muted-foreground'}
+              />
             </View>
-          )
+          ),
         )}
       </View>
     </View>
@@ -278,12 +380,19 @@ export function BottomNavBlock() {
       <View className="h-11 flex-row items-center justify-center px-14">
         <Text className="text-base font-semibold text-foreground">Bottom navigation</Text>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
         <View className="gap-7 px-5 pt-2">
-          <Text variant="muted" className="text-sm">The most common tab-bar styles — pick one for your app.</Text>
+          <Text variant="muted" className="text-sm">
+            The most common tab-bar styles — pick one for your app.
+          </Text>
           {STYLES.map((s) => (
             <View key={s.name} className="gap-2">
-              <Text className="px-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{s.name}</Text>
+              <Text className="px-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                {s.name}
+              </Text>
               {s.render()}
             </View>
           ))}

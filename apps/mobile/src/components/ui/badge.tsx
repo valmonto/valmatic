@@ -83,8 +83,11 @@ function Badge({ className, variant, asChild, ...props }: BadgeProps) {
           intensity={isDark ? 55 : 75}
           tint={isDark ? 'dark' : 'light'}
           blurMethod="dimezisBlurView"
-          className="self-start overflow-hidden rounded-full">
-          <View style={{ backgroundColor: isDark ? 'rgba(20,20,24,0.35)' : 'rgba(255,255,255,0.45)' }}>
+          className="self-start overflow-hidden rounded-full"
+        >
+          <View
+            style={{ backgroundColor: isDark ? 'rgba(20,20,24,0.35)' : 'rgba(255,255,255,0.45)' }}
+          >
             {badge}
           </View>
         </BlurView>

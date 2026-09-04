@@ -5,21 +5,21 @@ recipes; this is the map.
 
 ## Runtime
 
-| Package | What it owns | Depends on |
-|---|---|---|
-| [`contracts`](contracts) | Zod schemas, inferred types, the permission model | — |
-| [`database`](database) | Drizzle schema, Postgres client, migrations | contracts |
-| [`server`](server) | the shared NestJS layer — auth, guards, health, queues | contracts, locales |
-| [`locales`](locales) | translation keys and strings | — |
-| [`utils`](utils) | framework-agnostic helpers | — |
+| Package                  | What it owns                                           | Depends on         |
+| ------------------------ | ------------------------------------------------------ | ------------------ |
+| [`contracts`](contracts) | Zod schemas, inferred types, the permission model      | —                  |
+| [`database`](database)   | Drizzle schema, Postgres client, migrations            | contracts          |
+| [`server`](server)       | the shared NestJS layer — auth, guards, health, queues | contracts, locales |
+| [`locales`](locales)     | translation keys and strings                           | —                  |
+| [`utils`](utils)         | framework-agnostic helpers                             | —                  |
 
 ## Tooling
 
-| Package | What it owns |
-|---|---|
-| [`testing`](testing) | test fakes, golden harness, and the testing conventions |
-| [`vitest-config`](vitest-config) | shared Vitest config |
-| [`tsconfig`](tsconfig) | shared TypeScript config |
+| Package                          | What it owns                                            |
+| -------------------------------- | ------------------------------------------------------- |
+| [`testing`](testing)             | test fakes, golden harness, and the testing conventions |
+| [`vitest-config`](vitest-config) | shared Vitest config                                    |
+| [`tsconfig`](tsconfig)           | shared TypeScript config                                |
 
 ## How they fit together
 
@@ -40,17 +40,17 @@ Nothing depends on `utils`; everything may.
 
 ## Which package does this belong in?
 
-| It needs | Put it in |
-|---|---|
+| It needs                               | Put it in   |
+| -------------------------------------- | ----------- |
 | a request/response shape, a permission | `contracts` |
-| a table, a query, a migration | `database` |
-| a guard, a filter, transport wiring | `server` |
-| user-facing text | `locales` |
-| a pure helper two workspaces want | `utils` |
-| a test fake or harness | `testing` |
+| a table, a query, a migration          | `database`  |
+| a guard, a filter, transport wiring    | `server`    |
+| user-facing text                       | `locales`   |
+| a pure helper two workspaces want      | `utils`     |
+| a test fake or harness                 | `testing`   |
 
-Feature logic belongs in the app, not here. `server` owns *that requests are
-authenticated*; `apps/api/src/user/` owns users.
+Feature logic belongs in the app, not here. `server` owns _that requests are
+authenticated_; `apps/api/src/user/` owns users.
 
 The bar for adding to a shared package is **a second consumer** — until then it
 lives in the workspace that needs it, where it can change freely.

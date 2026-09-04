@@ -1,7 +1,6 @@
 import type { OrganizationUserRole } from '../schemas/organization.schema.js';
 import type { Permission } from './list.js';
 
-
 /**
  * Role to permissions mapping.
  * Each role has an explicit list of permissions - no inheritance.

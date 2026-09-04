@@ -28,14 +28,17 @@ function Card({
           },
           style,
         ]}
-        {...props}>
+        {...props}
+      >
         <BlurView
           intensity={isDark ? 24 : 32}
           tint={isDark ? 'dark' : 'light'}
-          blurMethod="dimezisBlurView">
+          blurMethod="dimezisBlurView"
+        >
           <View
             className="flex flex-col gap-5 py-5"
-            style={{ backgroundColor: isDark ? 'rgba(22,22,27,0.55)' : 'rgba(255,255,255,0.55)' }}>
+            style={{ backgroundColor: isDark ? 'rgba(22,22,27,0.55)' : 'rgba(255,255,255,0.55)' }}
+          >
             {children}
           </View>
         </BlurView>
@@ -44,7 +47,10 @@ function Card({
   );
 }
 
-function CardHeader({ className, ...props }: React.ComponentProps<typeof View> & React.RefAttributes<View>) {
+function CardHeader({
+  className,
+  ...props
+}: React.ComponentProps<typeof View> & React.RefAttributes<View>) {
   return <View className={cn('flex flex-col gap-1.5 px-5', className)} {...props} />;
 }
 
@@ -53,7 +59,6 @@ function CardTitle({
   ref,
   ...props
 }: React.ComponentProps<typeof Text> & React.RefAttributes<typeof Text>) {
-
   return (
     <Text
       ref={ref}
@@ -72,11 +77,17 @@ function CardDescription({
   return <Text className={cn('text-muted-foreground text-sm', className)} {...props} />;
 }
 
-function CardContent({ className, ...props }: React.ComponentProps<typeof View> & React.RefAttributes<View>) {
+function CardContent({
+  className,
+  ...props
+}: React.ComponentProps<typeof View> & React.RefAttributes<View>) {
   return <View className={cn('px-5', className)} {...props} />;
 }
 
-function CardFooter({ className, ...props }: React.ComponentProps<typeof View> & React.RefAttributes<View>) {
+function CardFooter({
+  className,
+  ...props
+}: React.ComponentProps<typeof View> & React.RefAttributes<View>) {
   return <View className={cn('flex flex-row items-center px-5', className)} {...props} />;
 }
 

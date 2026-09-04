@@ -3,7 +3,13 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { FilterChips } from '@/components/ui/filter-chips';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Text } from '@/components/ui/text';
 import { Textarea } from '@/components/ui/textarea';
 import { SafeAreaView } from '@/shared/components/safe-area-view';
@@ -28,8 +34,15 @@ export function NewRecordBlock() {
         </Pressable>
       </View>
 
-      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingBottom: 40 }}>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ paddingBottom: 40 }}
+        >
           <View className="gap-5 px-5 pt-3">
             <View className="gap-1.5">
               <Label>Deal name</Label>
@@ -46,13 +59,25 @@ export function NewRecordBlock() {
             <View className="gap-1.5">
               <Label>Stage</Label>
               <Select>
-                <SelectTrigger className="w-full"><SelectValue placeholder="Select a stage" /></SelectTrigger>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a stage" />
+                </SelectTrigger>
                 <SelectContent insets={insets}>
-                  <SelectItem label="Lead" value="lead">Lead</SelectItem>
-                  <SelectItem label="Qualified" value="qualified">Qualified</SelectItem>
-                  <SelectItem label="Proposal" value="proposal">Proposal</SelectItem>
-                  <SelectItem label="Won" value="won">Won</SelectItem>
-                  <SelectItem label="Lost" value="lost">Lost</SelectItem>
+                  <SelectItem label="Lead" value="lead">
+                    Lead
+                  </SelectItem>
+                  <SelectItem label="Qualified" value="qualified">
+                    Qualified
+                  </SelectItem>
+                  <SelectItem label="Proposal" value="proposal">
+                    Proposal
+                  </SelectItem>
+                  <SelectItem label="Won" value="won">
+                    Won
+                  </SelectItem>
+                  <SelectItem label="Lost" value="lost">
+                    Lost
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </View>

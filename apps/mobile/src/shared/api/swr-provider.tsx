@@ -26,7 +26,8 @@ export function SWRProvider({ children }: { children: React.ReactNode }) {
         initFocus,
         revalidateOnFocus: true,
         shouldRetryOnError: false,
-      }}>
+      }}
+    >
       {children}
     </SWRConfig>
   );

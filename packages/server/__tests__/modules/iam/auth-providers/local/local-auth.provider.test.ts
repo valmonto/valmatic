@@ -221,7 +221,13 @@ describe('LocalAuthProvider', () => {
     it('should throw UnauthorizedException when session expired', async () => {
       const sessionStart = Date.now() - 31 * 24 * 60 * 60 * 1000; // 31 days ago — past the 30-day default
       vi.mocked(mockRedis.get).mockResolvedValue(
-        JSON.stringify({ userId: 'user-123', orgId: 'org-456', orgRole: 'ADMIN', systemRole: 'USER', sessionStart }),
+        JSON.stringify({
+          userId: 'user-123',
+          orgId: 'org-456',
+          orgRole: 'ADMIN',
+          systemRole: 'USER',
+          sessionStart,
+        }),
       );
 
       await expect(provider.refresh({ refreshToken: 'old-token' })).rejects.toThrow(
@@ -232,7 +238,13 @@ describe('LocalAuthProvider', () => {
     it('should throw UnauthorizedException when org access revoked', async () => {
       const sessionStart = Date.now() - 1000; // 1 second ago
       vi.mocked(mockRedis.get).mockResolvedValue(
-        JSON.stringify({ userId: 'user-123', orgId: 'org-456', orgRole: 'ADMIN', systemRole: 'USER', sessionStart }),
+        JSON.stringify({
+          userId: 'user-123',
+          orgId: 'org-456',
+          orgRole: 'ADMIN',
+          systemRole: 'USER',
+          sessionStart,
+        }),
       );
       vi.mocked(mockOrgAccess.verifyAccess).mockResolvedValue(null);
 
@@ -300,9 +312,18 @@ describe('LocalAuthProvider', () => {
     it('should return new tokens on successful refresh', async () => {
       const sessionStart = Date.now() - 1000;
       vi.mocked(mockRedis.get).mockResolvedValue(
-        JSON.stringify({ userId: 'user-123', orgId: 'org-456', orgRole: 'ADMIN', systemRole: 'USER', sessionStart }),
+        JSON.stringify({
+          userId: 'user-123',
+          orgId: 'org-456',
+          orgRole: 'ADMIN',
+          systemRole: 'USER',
+          sessionStart,
+        }),
       );
-      vi.mocked(mockOrgAccess.verifyAccess).mockResolvedValue({ orgRole: 'ADMIN', systemRole: 'USER' });
+      vi.mocked(mockOrgAccess.verifyAccess).mockResolvedValue({
+        orgRole: 'ADMIN',
+        systemRole: 'USER',
+      });
       vi.mocked(mockJwtService.signAsync).mockResolvedValue('new-access-token');
 
       const result = await provider.refresh({ refreshToken: 'valid-refresh' });
@@ -377,15 +398,9 @@ describe('refresh rotation grace window', () => {
     jwt = { signAsync: vi.fn(), verifyAsync: vi.fn(), decode: vi.fn() } as unknown as JwtService;
     orgAccess = { verifyAccess: vi.fn() } as unknown as IOrgAccessProvider;
 
-    provider = new LocalAuthProvider(
-      new FakeLogger().as<PinoLogger>(),
-      redis,
-      jwt,
-      orgAccess,
-      {
-        get: vi.fn().mockImplementation((_k: string, d: number) => d),
-      } as unknown as ConfigService,
-    );
+    provider = new LocalAuthProvider(new FakeLogger().as<PinoLogger>(), redis, jwt, orgAccess, {
+      get: vi.fn().mockImplementation((_k: string, d: number) => d),
+    } as unknown as ConfigService);
   });
 
   it('answers a just-rotated token with the SAME successor pair, not a 401', async () => {

@@ -94,8 +94,9 @@ function Modal({
               }
               className={cn(
                 'border-border overflow-hidden border',
-                fullscreen ? 'rounded-t-3xl' : 'rounded-3xl'
-              )}>
+                fullscreen ? 'rounded-t-3xl' : 'rounded-3xl',
+              )}
+            >
               {/* No BlurView here: the panel floats over a dark dimmed scrim, so
                   the blur just picks up black (invisible under the near-opaque
                   tint) and — worse — flashes dark while its opacity animates out
@@ -153,7 +154,8 @@ function Modal({
                   <ScrollView
                     style={fullscreen ? { flex: 1 } : undefined}
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16 }}>
+                    contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16 }}
+                  >
                     {children}
                   </ScrollView>
                   <LinearGradient
@@ -210,7 +212,8 @@ function ModalOverlay({
         height,
         alignItems: 'center',
         justifyContent: fullscreen ? 'flex-end' : 'center',
-      }}>
+      }}
+    >
       {/* Scrim fades in/out with the panel — as its own animated layer, so the
           panel doesn't fade away first and leave the dark backdrop lingering. */}
       <NativeOnlyAnimatedView

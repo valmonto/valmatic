@@ -171,7 +171,9 @@ export class UserRepository {
    * itself is a platform record, and identity here comes from the verified
    * session, never a payload.
    */
-  async findAccountById(userId: string): Promise<{ id: string; email: string; name: string } | null> {
+  async findAccountById(
+    userId: string,
+  ): Promise<{ id: string; email: string; name: string } | null> {
     const [row] = await this.dbClient.db
       .select({ id: user.id, email: user.email, name: user.name })
       .from(user)
@@ -198,7 +200,11 @@ export class UserRepository {
    * composite PK would reject anyway), so accepting the same invite twice is
    * safe. Returns true when a new membership was created.
    */
-  async addOrgMembership(userId: string, orgId: string, role: OrganizationUserRole): Promise<boolean> {
+  async addOrgMembership(
+    userId: string,
+    orgId: string,
+    role: OrganizationUserRole,
+  ): Promise<boolean> {
     const inserted = await this.dbClient.db
       .insert(organizationUser)
       .values({ orgId, userId, role })

@@ -36,11 +36,16 @@ export const http: AxiosInstance = axios.create({
  * response body directly. Paths are relative to `/api` (e.g. `/notifications`).
  */
 export const api = {
-  get: <T>(url: string, config?: AxiosRequestConfig): Promise<T> => http.get<T>(url, config).then((r) => r.data),
-  post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> => http.post<T>(url, data, config).then((r) => r.data),
-  patch: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> => http.patch<T>(url, data, config).then((r) => r.data),
-  put: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> => http.put<T>(url, data, config).then((r) => r.data),
-  delete: <T>(url: string, config?: AxiosRequestConfig): Promise<T> => http.delete<T>(url, config).then((r) => r.data),
+  get: <T>(url: string, config?: AxiosRequestConfig): Promise<T> =>
+    http.get<T>(url, config).then((r) => r.data),
+  post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> =>
+    http.post<T>(url, data, config).then((r) => r.data),
+  patch: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> =>
+    http.patch<T>(url, data, config).then((r) => r.data),
+  put: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> =>
+    http.put<T>(url, data, config).then((r) => r.data),
+  delete: <T>(url: string, config?: AxiosRequestConfig): Promise<T> =>
+    http.delete<T>(url, config).then((r) => r.data),
 };
 
 export type Api = typeof api;
@@ -87,7 +92,8 @@ async function refreshTokens(): Promise<AuthTokens | 'unrecoverable' | null> {
 http.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const original = error.config as (InternalAxiosRequestConfig & { _retry?: boolean }) | undefined;
+    const original = error.config as
+      (InternalAxiosRequestConfig & { _retry?: boolean }) | undefined;
 
     // Only try to recover from a 401 once per request.
     if (error.response?.status !== 401 || !original || original._retry) {
@@ -112,5 +118,5 @@ http.interceptors.response.use(
 
     original.headers.set('Authorization', `Bearer ${tokens.accessToken}`);
     return http(original);
-  }
+  },
 );

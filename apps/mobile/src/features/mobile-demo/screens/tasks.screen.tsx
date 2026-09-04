@@ -39,7 +39,10 @@ export default function TasksScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         <View className="gap-4 px-5 pt-4">
           <View>
             <Text className="text-2xl font-semibold text-foreground">Tasks</Text>
@@ -70,13 +73,13 @@ export default function TasksScreen() {
                   onPress={() => setFilter(option.value)}
                   className={cn(
                     'flex-1 rounded-lg py-1.5',
-                    active && 'bg-background shadow-sm shadow-black/10'
+                    active && 'bg-background shadow-sm shadow-black/10',
                   )}
                 >
                   <Text
                     className={cn(
                       'text-center text-xs font-medium',
-                      active ? 'text-foreground' : 'text-muted-foreground'
+                      active ? 'text-foreground' : 'text-muted-foreground',
                     )}
                   >
                     {option.label}

@@ -40,7 +40,8 @@ function Rating({ value, onChange, max = 5, size = 24, readOnly, className }: Ra
             accessibilityRole="button"
             accessibilityLabel={`Rate ${i + 1}`}
             onPress={() => onChange!(i + 1)}
-            className="active:opacity-70">
+            className="active:opacity-70"
+          >
             {star}
           </Pressable>
         ) : (

@@ -105,7 +105,9 @@ describe('AttachmentsService — the three-step protocol', () => {
 
     expect(taskExists).toHaveBeenCalledWith(SUBJECT, ORG);
     expect(result.uploadUrl).toContain(`org/${ORG}/task/${SUBJECT}/`);
-    expect(repo.insert).toHaveBeenCalledWith(expect.objectContaining({ orgId: ORG, kind: 'image' }));
+    expect(repo.insert).toHaveBeenCalledWith(
+      expect.objectContaining({ orgId: ORG, kind: 'image' }),
+    );
   });
 
   it('rejects a subject that does not exist in the org', async () => {
@@ -167,7 +169,11 @@ describe('AttachmentsService — the three-step protocol', () => {
     storage.headObject!.mockResolvedValue({ contentLength: 987 });
     const result = await service.confirm(human, { id: ATT });
 
-    expect(repo.confirm).toHaveBeenCalledWith(ATT, ORG, expect.objectContaining({ sizeBytes: 987 }));
+    expect(repo.confirm).toHaveBeenCalledWith(
+      ATT,
+      ORG,
+      expect.objectContaining({ sizeBytes: 987 }),
+    );
     expect(result.status).toBe('uploaded');
   });
 
@@ -193,7 +199,9 @@ describe('AttachmentsService — the three-step protocol', () => {
   });
 
   it('drops a promised-but-missing thumbnail instead of failing the confirm', async () => {
-    repo.findById!.mockResolvedValue(row({ thumbnailBlobId: '66666666-6666-4666-8666-666666666666' }));
+    repo.findById!.mockResolvedValue(
+      row({ thumbnailBlobId: '66666666-6666-4666-8666-666666666666' }),
+    );
     storage.headObject!.mockResolvedValueOnce({ contentLength: 1000 }).mockResolvedValueOnce(null);
     await service.confirm(human, { id: ATT });
     expect(repo.confirm).toHaveBeenCalledWith(
@@ -226,7 +234,9 @@ describe('AttachmentsService — the three-step protocol', () => {
   // --- Bucket init resilience (the servicebook bug, fixed) ---
 
   it('retries bucket init after a failure instead of caching the rejection', async () => {
-    storage.ensureBucket!.mockRejectedValueOnce(new Error('boot blip')).mockResolvedValue(undefined);
+    storage
+      .ensureBucket!.mockRejectedValueOnce(new Error('boot blip'))
+      .mockResolvedValue(undefined);
     const dto = {
       subjectType: 'task',
       subjectId: SUBJECT,

@@ -12,12 +12,14 @@ valmatic://blocks/sign-in
 ```
 
 Test on a device:
+
 ```bash
 # Android
 adb shell am start -a android.intent.action.VIEW -d "valmatic://showcase/button"
 # iOS Simulator
 xcrun simctl openurl booted "valmatic://showcase/button"
 ```
+
 This is also what push-notification taps use (`data.path`, see push-notifications.md).
 
 ## 2. Universal / App Links — `https://…` (needs your domain)
@@ -35,18 +37,19 @@ browser. Configured in `app.json`:
 
 **iOS — `https://app.valmonto.com/.well-known/apple-app-site-association`** (JSON, served
 as `application/json`, no redirects):
+
 ```json
 {
   "applinks": {
-    "details": [
-      { "appIDs": ["<TEAM_ID>.com.valmonto.valmatic"], "components": [{ "/": "/*" }] }
-    ]
+    "details": [{ "appIDs": ["<TEAM_ID>.com.valmonto.valmatic"], "components": [{ "/": "/*" }] }]
   }
 }
 ```
+
 `TEAM_ID` = your Apple Developer Team ID (Apple Developer → Membership).
 
 **Android — `https://app.valmonto.com/.well-known/assetlinks.json`**:
+
 ```json
 [
   {
@@ -59,7 +62,9 @@ as `application/json`, no redirects):
   }
 ]
 ```
+
 Get the fingerprint from EAS (the signing cert used for the build):
+
 ```bash
 npx eas-cli@latest credentials   # Android → shows the SHA-256 fingerprint
 ```
@@ -71,6 +76,7 @@ npx eas-cli@latest credentials   # Android → shows the SHA-256 fingerprint
 - iOS: tap an `https://app.valmonto.com/…` link in Notes/Messages on a device with the app installed.
 
 ### Checklist before this works
+
 - [ ] Replace `app.valmonto.com` with your real domain (and `com.anonymous.valmatic` with your id).
 - [ ] Host both `.well-known` files over HTTPS (correct content-type, no redirects).
 - [ ] Fill `TEAM_ID` (iOS) and the SHA-256 fingerprint (Android).

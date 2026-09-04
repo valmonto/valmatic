@@ -277,9 +277,7 @@ export const useMobileDemoStore = create<MobileDemoState>((set) => ({
   toggleTaskStatus: (taskId) =>
     set((state) => ({
       tasks: state.tasks.map((task) =>
-        task.id === taskId
-          ? { ...task, status: task.status === 'done' ? 'todo' : 'done' }
-          : task,
+        task.id === taskId ? { ...task, status: task.status === 'done' ? 'todo' : 'done' } : task,
       ),
     })),
 

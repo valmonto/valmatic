@@ -44,13 +44,20 @@ function Combobox({
         <Pressable
           className={cn(
             'h-12 flex-row items-center justify-between gap-2 rounded-2xl border border-border bg-card px-3.5 shadow-sm shadow-black/5 active:opacity-90',
-            className
-          )}>
+            className,
+          )}
+        >
           <View className="flex-1 flex-row items-center gap-2.5">
-            {selected?.icon ? <Icon as={selected.icon} size={18} className="text-muted-foreground" /> : null}
+            {selected?.icon ? (
+              <Icon as={selected.icon} size={18} className="text-muted-foreground" />
+            ) : null}
             <Text
               numberOfLines={1}
-              className={cn('flex-1 text-base', selected ? 'text-foreground' : 'text-muted-foreground')}>
+              className={cn(
+                'flex-1 text-base',
+                selected ? 'text-foreground' : 'text-muted-foreground',
+              )}
+            >
               {selected ? selected.label : placeholder}
             </Text>
           </View>
@@ -113,7 +120,8 @@ function ComboPanel({
       <ScrollView
         style={{ maxHeight: 224 }}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+      >
         {filtered.length === 0 ? (
           <View className="py-6">
             <Text variant="muted" className="text-center text-sm">
@@ -132,8 +140,9 @@ function ComboPanel({
                 }}
                 className={cn(
                   'flex-row items-center gap-2.5 rounded-lg px-2.5 py-2.5 active:bg-accent',
-                  isSelected && 'bg-accent'
-                )}>
+                  isSelected && 'bg-accent',
+                )}
+              >
                 {o.icon ? <Icon as={o.icon} size={16} className="text-muted-foreground" /> : null}
                 <Text numberOfLines={1} className="flex-1 text-[15px] text-foreground">
                   {o.label}

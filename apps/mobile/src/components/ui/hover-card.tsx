@@ -29,11 +29,13 @@ function HoverCardContent({
       <FullWindowOverlay>
         <HoverCardPrimitive.Overlay
           style={Platform.select({ native: StyleSheet.absoluteFill })}
-          asChild={Platform.OS !== 'web'}>
+          asChild={Platform.OS !== 'web'}
+        >
           <NativeOnlyAnimatedView
             entering={FadeIn.reduceMotion(ReduceMotion.System)}
             exiting={FadeOut.reduceMotion(ReduceMotion.System)}
-            as="Pressable">
+            as="Pressable"
+          >
             <TextClassContext.Provider value="text-popover-foreground">
               {/* Frosted glass card (matches Card / the other overlays). */}
               <HoverCardPrimitive.Content
@@ -45,22 +47,27 @@ function HoverCardContent({
                     web: cn(
                       'bg-popover p-4 animate-in fade-in-0 zoom-in-95 origin-(--radix-hover-card-content-transform-origin) cursor-default [&>*]:cursor-auto',
                       props.side === 'bottom' && 'slide-in-from-top-2',
-                      props.side === 'top' && 'slide-in-from-bottom-2'
+                      props.side === 'top' && 'slide-in-from-bottom-2',
                     ),
                   }),
-                  className
+                  className,
                 )}
-                {...props}>
+                {...props}
+              >
                 {Platform.OS === 'web' ? (
                   children
                 ) : (
                   <BlurView
                     intensity={isDark ? 60 : 80}
                     tint={isDark ? 'dark' : 'light'}
-                    blurMethod="dimezisBlurView">
+                    blurMethod="dimezisBlurView"
+                  >
                     <View
                       className="p-4"
-                      style={{ backgroundColor: isDark ? 'rgba(24,24,30,0.94)' : 'rgba(255,255,255,0.95)' }}>
+                      style={{
+                        backgroundColor: isDark ? 'rgba(24,24,30,0.94)' : 'rgba(255,255,255,0.95)',
+                      }}
+                    >
                       {children as React.ReactNode}
                     </View>
                   </BlurView>

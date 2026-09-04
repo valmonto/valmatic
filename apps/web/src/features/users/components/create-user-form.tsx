@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { k } from '@pkg/locales';
-import { type CreateUserResponse, ORGANIZATION_USER_ROLES, type OrganizationUserRole } from '@pkg/contracts';
+import {
+  type CreateUserResponse,
+  ORGANIZATION_USER_ROLES,
+  type OrganizationUserRole,
+} from '@pkg/contracts';
 // Validates client-side for instant field errors, so it reaches past the
 // client entry for the schema itself. The server validates regardless.
 import { CreateUserRequestSchema } from '@pkg/contracts/schemas';

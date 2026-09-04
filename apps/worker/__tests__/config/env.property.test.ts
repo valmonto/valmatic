@@ -75,7 +75,9 @@ describe('validateEnv — properties', () => {
         fc.constantFrom('postgres', 'postgresql'),
         fc.stringMatching(/^[a-z]{1,8}$/),
         (scheme, host) => {
-          expect(() => validateEnv({ DATABASE_URL: `${scheme}://u:p@${host}:5432/db` })).not.toThrow();
+          expect(() =>
+            validateEnv({ DATABASE_URL: `${scheme}://u:p@${host}:5432/db` }),
+          ).not.toThrow();
         },
       ),
     );

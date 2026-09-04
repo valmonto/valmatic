@@ -58,7 +58,7 @@ function DialogOverlay({
           Platform.select({
             web: 'animate-in fade-in-0 fixed inset-0 flex items-center justify-center bg-black/50 p-4 cursor-default [&>*]:cursor-auto',
           }),
-          className
+          className,
         )}
         {...props}
         onPress={Platform.select({ web: onOverlayPress })}
@@ -74,7 +74,8 @@ function DialogOverlay({
             padding: 24,
             backgroundColor: 'rgba(0,0,0,0.5)',
           },
-        })}>
+        })}
+      >
         {Platform.OS === 'web' ? (
           <>{children}</>
         ) : (
@@ -82,7 +83,8 @@ function DialogOverlay({
             <Pressable style={StyleSheet.absoluteFill} onPress={() => onOpenChange(false)} />
             <NativeOnlyAnimatedView
               entering={FadeIn.duration(200).reduceMotion(ReduceMotion.System)}
-              exiting={FadeOut.duration(150).reduceMotion(ReduceMotion.System)}>
+              exiting={FadeOut.duration(150).reduceMotion(ReduceMotion.System)}
+            >
               <>{children}</>
             </NativeOnlyAnimatedView>
           </>
@@ -108,9 +110,10 @@ function DialogContent({
         'absolute right-4 top-4 rounded opacity-70 active:opacity-100',
         Platform.select({
           web: 'ring-offset-background focus:ring-ring data-[state=open]:bg-accent transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2',
-        })
+        }),
       )}
-      hitSlop={12}>
+      hitSlop={12}
+    >
       <Icon as={X} className={cn('text-foreground web:pointer-events-none size-5 shrink-0')} />
       <Text className="sr-only">Close</Text>
     </DialogPrimitive.Close>
@@ -126,10 +129,11 @@ function DialogContent({
             Platform.select({
               web: 'bg-background flex flex-col gap-4 p-6 animate-in fade-in-0 zoom-in-95 duration-200',
             }),
-            className
+            className,
           )}
           style={{ boxShadow: '0px 16px 48px -12px rgba(0,0,0,0.45)' }}
-          {...props}>
+          {...props}
+        >
           {Platform.OS === 'web' ? (
             <>
               {children}
@@ -139,12 +143,14 @@ function DialogContent({
             <BlurView
               intensity={isDark ? 40 : 60}
               tint={isDark ? 'dark' : 'light'}
-              blurMethod="dimezisBlurView">
+              blurMethod="dimezisBlurView"
+            >
               <View
                 className="flex flex-col gap-4 p-6"
                 style={{
                   backgroundColor: isDark ? 'rgba(28,28,34,0.82)' : 'rgba(255,255,255,0.82)',
-                }}>
+                }}
+              >
                 {children}
                 {closeButton}
               </View>

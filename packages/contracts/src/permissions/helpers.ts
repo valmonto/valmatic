@@ -2,7 +2,6 @@ import type { OrganizationUserRole } from '../schemas/organization.schema.js';
 import type { Permission } from './list.js';
 import { ROLE_PERMISSIONS } from './roles.js';
 
-
 /**
  * Check if a role has a specific permission.
  *

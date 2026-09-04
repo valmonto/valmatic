@@ -23,8 +23,8 @@ Keys are constants, not strings typed at the call site:
 
 ```ts
 import { k } from '@pkg/locales';
-t(k.auth.welcomeBack);        // ✅ a typo is a compile error
-t('auth.welcomeBack');        // ✗ a typo renders the raw key to the user
+t(k.auth.welcomeBack); // ✅ a typo is a compile error
+t('auth.welcomeBack'); // ✗ a typo renders the raw key to the user
 ```
 
 Each entry maps a path to the flat key used in the JSON:

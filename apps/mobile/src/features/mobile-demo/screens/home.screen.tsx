@@ -25,12 +25,37 @@ const sparkData = {
   velocity: [30, 42, 38, 50, 47, 58, 64],
 };
 
-const activity: { id: string; icon: LucideIcon; iconClass: string; title: string; meta: string }[] = [
-  { id: 'a1', icon: Rocket, iconClass: 'bg-primary/10 text-primary', title: 'api@2.14.0 deployed to production', meta: 'Deploy bot · 38m ago' },
-  { id: 'a2', icon: MessageSquare, iconClass: 'bg-sky-500/10 text-sky-500', title: 'Grace commented on Ship onboarding redesign', meta: 'TSK-128 · 45m ago' },
-  { id: 'a3', icon: GitCommitHorizontal, iconClass: 'bg-emerald-500/10 text-emerald-500', title: 'Linus merged retry-with-backoff', meta: 'TSK-127 · 1h ago' },
-  { id: 'a4', icon: UserPlus, iconClass: 'bg-amber-500/10 text-amber-500', title: 'Katherine joined the Operations project', meta: 'Workspace · 3h ago' },
-];
+const activity: { id: string; icon: LucideIcon; iconClass: string; title: string; meta: string }[] =
+  [
+    {
+      id: 'a1',
+      icon: Rocket,
+      iconClass: 'bg-primary/10 text-primary',
+      title: 'api@2.14.0 deployed to production',
+      meta: 'Deploy bot · 38m ago',
+    },
+    {
+      id: 'a2',
+      icon: MessageSquare,
+      iconClass: 'bg-sky-500/10 text-sky-500',
+      title: 'Grace commented on Ship onboarding redesign',
+      meta: 'TSK-128 · 45m ago',
+    },
+    {
+      id: 'a3',
+      icon: GitCommitHorizontal,
+      iconClass: 'bg-emerald-500/10 text-emerald-500',
+      title: 'Linus merged retry-with-backoff',
+      meta: 'TSK-127 · 1h ago',
+    },
+    {
+      id: 'a4',
+      icon: UserPlus,
+      iconClass: 'bg-amber-500/10 text-amber-500',
+      title: 'Katherine joined the Operations project',
+      meta: 'Workspace · 3h ago',
+    },
+  ];
 
 function greeting(): string {
   const h = new Date().getHours();
@@ -42,8 +67,9 @@ function greeting(): string {
 export default function HomeScreen() {
   const tasks = useMobileDemoStore((s) => s.tasks);
   const today = useMemo(
-    () => new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' }),
-    []
+    () =>
+      new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' }),
+    [],
   );
 
   const todaysTasks = tasks.filter((t) => t.dueToday);
@@ -53,14 +79,29 @@ export default function HomeScreen() {
   const openToday = todaysTasks.filter((t) => t.status !== 'done');
 
   const stats = [
-    { label: 'Active tasks', value: String(activeCount), change: '+2', data: sparkData.active, color: '#5a60c2' },
-    { label: 'Done this week', value: '9', change: '+38%', data: sparkData.completed, color: '#10b981' },
+    {
+      label: 'Active tasks',
+      value: String(activeCount),
+      change: '+2',
+      data: sparkData.active,
+      color: '#5a60c2',
+    },
+    {
+      label: 'Done this week',
+      value: '9',
+      change: '+38%',
+      data: sparkData.completed,
+      color: '#10b981',
+    },
     { label: 'Velocity', value: '64', change: '+12%', data: sparkData.velocity, color: '#0ea5e9' },
   ];
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         <View className="gap-6 px-5 pt-2">
           {/* Greeting */}
           <View className="flex-row items-center justify-between pt-2">
@@ -68,7 +109,9 @@ export default function HomeScreen() {
               <Text className="text-[11px] font-medium uppercase tracking-[1.5px] text-muted-foreground">
                 {today}
               </Text>
-              <Text className="mt-0.5 text-2xl font-semibold text-foreground">{greeting()}, Alex</Text>
+              <Text className="mt-0.5 text-2xl font-semibold text-foreground">
+                {greeting()}, Alex
+              </Text>
             </View>
             <View className="h-10 w-10 items-center justify-center rounded-full bg-primary shadow-md shadow-primary/30">
               <Text className="text-sm font-semibold text-primary-foreground">AM</Text>
@@ -92,7 +135,10 @@ export default function HomeScreen() {
               <Text className="text-lg font-semibold text-primary">{progress}%</Text>
             </View>
             <View className="mt-3 overflow-hidden rounded-full bg-muted" style={{ height: 6 }}>
-              <View className="rounded-full bg-primary" style={{ height: 6, width: `${progress}%` }} />
+              <View
+                className="rounded-full bg-primary"
+                style={{ height: 6, width: `${progress}%` }}
+              />
             </View>
           </View>
 
@@ -132,7 +178,9 @@ export default function HomeScreen() {
             </View>
             {openToday.length === 0 ? (
               <View className="rounded-2xl border border-dashed border-border py-8">
-                <Text className="text-center text-sm font-medium text-foreground">All clear for today 🎉</Text>
+                <Text className="text-center text-sm font-medium text-foreground">
+                  All clear for today 🎉
+                </Text>
               </View>
             ) : (
               <View className="gap-2.5">
@@ -154,10 +202,12 @@ export default function HomeScreen() {
                     key={item.id}
                     className={cn(
                       'flex-row items-center gap-3 px-3.5 py-3',
-                      index > 0 && 'border-t border-border'
+                      index > 0 && 'border-t border-border',
                     )}
                   >
-                    <View className={cn('h-8 w-8 items-center justify-center rounded-full', bgClass)}>
+                    <View
+                      className={cn('h-8 w-8 items-center justify-center rounded-full', bgClass)}
+                    >
                       <Icon as={item.icon} size={16} className={textClass} />
                     </View>
                     <View className="min-w-0 flex-1">
