@@ -48,8 +48,8 @@ catalog:
   oxlint: 1.81.0
   oxlint-tsgolint: 7.0.2001
   '@types/node': 26.4.1
-  vitest: 4.1.8
-  '@vitest/coverage-v8': 4.1.8
+  vitest: 5.0.0
+  '@vitest/coverage-v8': 5.0.0
   tsdown: 0.23.0 # library bundler for packages/*
 
   # ═══════════════════════════════════════════════════════════════════════
@@ -131,7 +131,7 @@ catalog:
   # UI components / primitives
   radix-ui: 1.6.7
   '@base-ui/react': 1.8.0
-  lucide-react: 1.40.0
+  lucide-react: 1.41.0
   '@fontsource-variable/inter': 5.3.0
   '@fontsource-variable/jetbrains-mono': 5.3.0
   cmdk: 1.1.1
@@ -157,15 +157,15 @@ catalog:
   i18next-browser-languagedetector: 8.2.1
   react-i18next: 17.0.13
   # Telemetry (web) — analytics, session replay, frontend errors; env-gated
-  posthog-js: 1.426.4
+  posthog-js: 1.427.0
   # Build + test (web)
   vite: 8.2.2
   '@vitejs/plugin-react-swc': 4.3.3
-  jsdom: 29.1.1
+  jsdom: 30.0.1
   msw: 2.15.0
   fast-check: 4.9.0
   '@testing-library/react': 16.3.3
-  '@testing-library/jest-dom': 6.9.1
+  '@testing-library/jest-dom': 7.0.1
   '@testing-library/user-event': 14.6.7
   # ═══════════════════════════════════════════════════════════════════════
   #  MOBILE  (apps/mobile) — Expo + React Native
@@ -364,10 +364,11 @@ minimumReleaseAgeExclude:
   - '@base-ui/react@1.8.0'
   - '@base-ui/utils@0.4.0'
   - '@posthog/browser-common@0.7.2'
-  - '@posthog/core@1.50.4'
-  - '@posthog/types@1.408.1'
+  - '@posthog/core@1.50.4 || 1.50.5'
+  - '@posthog/types@1.408.1 || 1.409.0'
   - '@types/react-dom@19.2.7'
   - i18next@26.4.2
-  - posthog-js@1.426.4
+  - posthog-js@1.426.4 || 1.427.0
   - rolldown-plugin-dts@0.28.5
   - tsdown@0.23.0
+  - lucide-react@1.41.0
