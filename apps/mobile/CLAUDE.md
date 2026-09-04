@@ -18,3 +18,9 @@ Read ./README.md before changing this workspace.
   use the mobile-mcp TOOLS (screenshot, tap by label, inspect) — do not shell
   out to adb for what the tools already do. Haptics feel and end-to-end push
   delivery remain human-verified on a device.
+- expo-secure-store and expo-notifications have NO web implementation: a direct
+  call at module scope or in an unguarded effect throws on the web preview and
+  Expo's error overlay blocks every page. Persist through
+  `shared/lib/secure-storage` (keychain on device, localStorage on web) and
+  guard notification calls with `Platform.OS === 'web'`. Both happened once
+  and took the whole `expo start --web` path down.
