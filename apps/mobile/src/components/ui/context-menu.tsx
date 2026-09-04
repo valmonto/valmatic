@@ -125,7 +125,7 @@ function ContextMenuContent({
         <ContextMenuPrimitive.Overlay
           // A subtle scrim dims the page so the floating menu reads clearly
           // (the transparent overlay made the trigger show through before).
-          style={Platform.select({
+          style={Platform.select<StyleProp<ViewStyle>>({
             web: overlayStyle ?? undefined,
             native: StyleSheet.flatten([
               StyleSheet.absoluteFill,

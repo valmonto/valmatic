@@ -43,7 +43,7 @@
     "fast-check": "catalog:",
     "fastify": "catalog:",
     "pino-pretty": "catalog:",
-    "typescript": "catalog:",
+    "typescript": "catalog:ts6",
     "vitest": "catalog:"
   }
 }

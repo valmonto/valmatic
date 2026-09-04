@@ -97,6 +97,6 @@
     "eslint": "catalog:mobile",
     "eslint-config-expo": "catalog:mobile",
     "tailwindcss": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:ts6"
   }
 }

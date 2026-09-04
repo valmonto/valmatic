@@ -132,7 +132,7 @@ function DropdownMenuContent({
       <FullWindowOverlay>
         <DropdownMenuPrimitive.Overlay
           // Subtle scrim dims the page behind the floating glass menu.
-          style={Platform.select({
+          style={Platform.select<StyleProp<ViewStyle>>({
             web: overlayStyle ?? undefined,
             native: StyleSheet.flatten([
               StyleSheet.absoluteFill,
