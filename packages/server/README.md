@@ -53,6 +53,14 @@ create(@ZodRequest(CreateUserRequestSchema) dto: CreateUserRequest, @ActiveUser(
 without `@PublicRoute()` requires a valid token. A route carrying none of
 `@Roles`, `@Permissions` or `@SystemRoles` is refused rather than exposed.
 
+**Global guard order is scan order, and the root module scans first.** A
+global guard declared in the app's root module runs _before_ every guard from
+an imported module, whatever the imports list says. The throttler
+(`ThrottlingModule`) depends on this: it must see `req.user`, so the app
+imports it _after_ the IAM modules rather than declaring the `APP_GUARD` in
+`AppModule` — declared there, it ran before `AuthGuard` and keyed every caller
+by IP. The in-process pipeline suite pins the order with two users on one IP.
+
 **There are two role axes, and both enums contain `ADMIN`.** `orgRole`
 (`OWNER|ADMIN|MEMBER`) is a membership and decides what you may do inside the
 active organization. `systemRole` (`USER|MODERATOR|ADMIN`) belongs to the

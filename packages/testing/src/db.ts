@@ -22,6 +22,25 @@ export const describeIntegration: typeof describe | typeof describe.skip = proce
 export const hasDatabase = Boolean(process.env.DATABASE_URL);
 
 /**
+ * Suites that boot the whole app in-process — Nest, Fastify, guards, filters,
+ * the throttler — and drive it over HTTP. They need everything the app needs:
+ * a database AND a Redis (sessions, rate limiting, queues).
+ *
+ * Runs when both `DATABASE_URL` and `IAM_REDIS_HOST` are set, skips otherwise.
+ * CI sets both; locally, point them at the dev containers.
+ *
+ * This is the layer that catches what mocks cannot: a guard the framework no
+ * longer invokes, an exception filter whose body changed shape, a plugin
+ * registration that fell out of the bootstrap. A framework upgrade is only
+ * proven here or in a real browser.
+ */
+export const describeStack: typeof describe | typeof describe.skip =
+  process.env.DATABASE_URL && process.env.IAM_REDIS_HOST ? describe : describe.skip;
+
+/** True when stack suites will actually run. */
+export const hasStack = Boolean(process.env.DATABASE_URL && process.env.IAM_REDIS_HOST);
+
+/**
  * Anything exposing Drizzle's `.delete(table)`.
  *
  * The parameter is `never` so any concrete table type satisfies it — method

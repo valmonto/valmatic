@@ -36,9 +36,23 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+      # The in-process pipeline suite (describeStack) boots the whole api —
+      # sessions, throttling and queues all need Redis. Without it that suite
+      # skips and a framework change to guards/filters goes unproven.
+      redis:
+        image: redis:8-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
 
     env:
       DATABASE_URL: postgresql://valmatic:valmatic@localhost:5432/valmatic_test
+      IAM_REDIS_HOST: 127.0.0.1
+      IAM_REDIS_PORT: 6379
 
     steps:
       - uses: actions/checkout@v4

@@ -9,29 +9,30 @@ Import it as a dev dependency wherever you write tests.
 
 ## The stack
 
-| Tool | For | Where |
-|---|---|---|
-| **vitest** | the runner, `expect`, mocks, fake timers | every workspace |
-| **@pkg/vitest-config** | shared config; aliases `@pkg/*` to source | every workspace |
-| **@pkg/testing** | the fakes and helpers below | wherever you need them |
-| **fast-check** | property tests — generated inputs | pure functions |
-| **msw** | HTTP interception | web |
-| **@nestjs/testing** | `Test.createTestingModule` for DI | api, worker, server |
-| **@testing-library/react** | rendering and queries | web |
-| **@playwright/test** | end-to-end, real browser | `apps/e2e` only |
+| Tool                       | For                                       | Where                  |
+| -------------------------- | ----------------------------------------- | ---------------------- |
+| **vitest**                 | the runner, `expect`, mocks, fake timers  | every workspace        |
+| **@pkg/vitest-config**     | shared config; aliases `@pkg/*` to source | every workspace        |
+| **@pkg/testing**           | the fakes and helpers below               | wherever you need them |
+| **fast-check**             | property tests — generated inputs         | pure functions         |
+| **msw**                    | HTTP interception                         | web                    |
+| **@nestjs/testing**        | `Test.createTestingModule` for DI         | api, worker, server    |
+| **@testing-library/react** | rendering and queries                     | web                    |
+| **@playwright/test**       | end-to-end, real browser                  | `apps/e2e` only        |
 
 All versions are catalog-managed in `pnpm-workspace.yaml`.
 
 ## Which kind of test
 
-| Question | Test |
-|---|---|
-| Does this function do the right thing? | unit — vitest, in the workspace |
-| Does it hold for any input? | property — fast-check |
-| Does this service behave with its collaborators? | `Test.createTestingModule` + fakes |
-| Does the SQL work? | `describeIntegration` |
-| Does the screen render and respond? | testing-library + msw, in `apps/web` |
-| Does the whole stack work end to end? | Playwright, in `apps/e2e` |
+| Question                                                               | Test                                                        |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Does this function do the right thing?                                 | unit — vitest, in the workspace                             |
+| Does it hold for any input?                                            | property — fast-check                                       |
+| Does this service behave with its collaborators?                       | `Test.createTestingModule` + fakes                          |
+| Does the SQL work?                                                     | `describeIntegration`                                       |
+| Does Nest still run our guards, filters and plugins on a real request? | `describeStack` — the app booted in-process, `app.inject()` |
+| Does the screen render and respond?                                    | testing-library + msw, in `apps/web`                        |
+| Does the whole stack work end to end?                                  | Playwright, in `apps/e2e`                                   |
 
 Reach for the cheapest one that can answer the question. A rule about a pure
 function is a unit test, not a browser starting up.
@@ -45,6 +46,16 @@ It stays out of `pnpm verify` deliberately — slow, needs ports and a database,
 and parallel runs collide. It runs as its own step (`pnpm e2e`, or
 `pnpm e2e:docker` for the containerised stack), while `verify` stays fast enough
 to run after every change. See `apps/e2e` for writing and debugging specs.
+
+## Stack tests — the layer mocks cannot cover
+
+Guard and filter unit tests hand-build their `ExecutionContext`, so they pass
+whether or not the framework still invokes them. `describeStack` suites boot
+the real app in-process (`apps/api/__tests__/pipeline/`) through the same
+factory production uses and drive it with `app.inject()` — no listener, no
+browser. They run when `DATABASE_URL` and `IAM_REDIS_HOST` are both set and
+skip otherwise, like `describeIntegration`. This is the before/after baseline
+for a framework upgrade: run it green on the old version first.
 
 ## Property tests
 
@@ -68,12 +79,13 @@ trips. Cap it with `{ numRuns: 20 }` where a property is expensive.
 
 ## What's in it
 
-| Export | Use it for |
-|---|---|
-| `FakeLogger` | pino logger that records instead of printing |
-| `describeIntegration` | a suite that needs a real database |
-| `truncate` | empty tables between integration tests |
-| `loadFixture` / `expectGolden` | pin recorded input and exact output |
+| Export                         | Use it for                                                                       |
+| ------------------------------ | -------------------------------------------------------------------------------- |
+| `FakeLogger`                   | pino logger that records instead of printing                                     |
+| `describeIntegration`          | a suite that needs a real database                                               |
+| `describeStack`                | a suite that boots the whole app — needs a database AND Redis (`IAM_REDIS_HOST`) |
+| `truncate`                     | empty tables between integration tests                                           |
+| `loadFixture` / `expectGolden` | pin recorded input and exact output                                              |
 
 ## FakeLogger
 
@@ -119,9 +131,7 @@ in `server.ts`, started in `setup.ts` with `onUnhandledRequest: 'error'` — so 
 request nobody stubbed fails the test rather than silently hitting the network.
 
 ```ts
-server.use(
-  http.get('/api/users', () => HttpResponse.json({ users: [] })),
-);
+server.use(http.get('/api/users', () => HttpResponse.json({ users: [] })));
 ```
 
 Override per test with `server.use(...)`; `setup.ts` resets handlers after each.

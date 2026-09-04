@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import Redis from 'ioredis';
 import { DatabaseModule } from '@pkg/database';
 import {
-  AppThrottlerGuard,
   EventsModule,
   GlobalExceptionFilter,
   HealthModule,
@@ -15,6 +14,7 @@ import {
   StorageModule,
   TelemetryModule,
   ThrottlerRedisStorage,
+  ThrottlingModule,
 } from '@pkg/server';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
@@ -122,15 +122,16 @@ import { validateEnv } from './config';
     InvitationModule,
     McpModule,
     SeedModule.forApp(),
+    // LAST on purpose: global guards run in scan order and the root module's
+    // own providers scan before any import's, so the throttler must live in
+    // an imported module placed after the IAM modules to see req.user. See
+    // ThrottlingModule for the bug this fixed.
+    ThrottlingModule,
   ],
   controllers: [],
   providers: [
     { provide: APP_FILTER, useClass: GlobalExceptionFilter },
     { provide: APP_INTERCEPTOR, useClass: LoggerErrorInterceptor },
-    // Runs after the auth chain (imported modules register their guards
-    // first), so the tracker keys by VERIFIED userId — and a 429 still fires
-    // before any handler or bcrypt work.
-    { provide: APP_GUARD, useClass: AppThrottlerGuard },
   ],
 })
 export class AppModule {}

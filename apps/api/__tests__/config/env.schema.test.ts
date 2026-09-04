@@ -49,3 +49,21 @@ describe('WEB_APP_URL config validation', () => {
     expect(env.WEB_APP_URL).toBe('http://localhost:5173');
   });
 });
+
+const base = () => ({
+  NODE_ENV: 'test',
+  DATABASE_URL: 'postgresql://user:pass@localhost:5432/db',
+  IAM_JWT_SECRET: 'x'.repeat(32),
+  IAM_COOKIE_SECRET: 'y'.repeat(32),
+});
+
+describe('AUTH_RATE_LIMIT_MAX', () => {
+  it('defaults to the production spray limit and coerces an override', () => {
+    expect(validateEnv(base()).AUTH_RATE_LIMIT_MAX).toBe(10);
+    expect(validateEnv({ ...base(), AUTH_RATE_LIMIT_MAX: '1000' }).AUTH_RATE_LIMIT_MAX).toBe(1000);
+  });
+
+  it('rejects a non-positive override', () => {
+    expect(() => validateEnv({ ...base(), AUTH_RATE_LIMIT_MAX: '0' })).toThrow();
+  });
+});
