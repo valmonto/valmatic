@@ -8,8 +8,8 @@ This project uses the following third-party packages:
 ## Summary
 
 - **Direct dependencies:** 88 packages (from pnpm catalog)
-- **Transitive dependencies:** 1359 packages
-- **Total:** 1447 packages
+- **Transitive dependencies:** 1360 packages
+- **Total:** 1448 packages
 
 ### License Breakdown
 
@@ -29,7 +29,7 @@ This project uses the following third-party packages:
 | CC-BY-4.0 | 0 | 1 | 1 |
 | CC0-1.0 | 0 | 1 | 1 |
 | ISC | 1 | 56 | 57 |
-| MIT | 73 | 1157 | 1230 |
+| MIT | 73 | 1158 | 1231 |
 | MIT AND Apache-2.0 | 0 | 1 | 1 |
 | MIT AND ISC | 0 | 1 | 1 |
 | MIT AND OFL-1.1 | 0 | 1 | 1 |
@@ -192,7 +192,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
 - **react-i18next** (17.0.13) - [Homepage](https://github.com/i18next/react-i18next)
   - Internationalization for react done right. Using the i18next i18n ecosystem.
 - **react-resizable-panels** (4.12.3) - [Homepage](https://react-resizable-panels.vercel.app/)
-- **react-router** (7.17.0) - [Homepage](https://github.com/remix-run/react-router#readme)
+- **react-router** (8.3.1) - [Homepage](https://github.com/remix-run/react-router#readme)
   - Declarative routing for React
 - **recharts** (3.10.1) - [Homepage](https://github.com/recharts/recharts)
   - React charts
@@ -979,6 +979,7 @@ These packages are installed as dependencies of direct dependencies:
 - **conventional-commits-parser** (7.0.0) - [Homepage](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-commits-parser#readme)
 - **convert-source-map** (2.0.0) - [Homepage](https://github.com/thlorenz/convert-source-map)
 - **cookie** (0.7.2, 1.1.1, 2.0.1) - [Homepage](https://github.com/jshttp/cookie#readme)
+- **cookie-es** (3.1.1) - [Homepage](https://github.com/unjs/cookie-es#readme)
 - **cookie-signature** (1.2.2) - [Homepage](https://github.com/visionmedia/node-cookie-signature#readme)
 - **core-js** (3.49.0) - [Homepage](https://core-js.io)
 - **core-js-compat** (3.49.0) - [Homepage](https://core-js.io)
