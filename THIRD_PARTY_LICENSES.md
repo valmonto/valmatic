@@ -7,9 +7,9 @@ This project uses the following third-party packages:
 
 ## Summary
 
-- **Direct dependencies:** 92 packages (from pnpm catalog)
-- **Transitive dependencies:** 1383 packages
-- **Total:** 1475 packages
+- **Direct dependencies:** 94 packages (from pnpm catalog)
+- **Transitive dependencies:** 1360 packages
+- **Total:** 1454 packages
 
 ### License Breakdown
 
@@ -21,22 +21,22 @@ This project uses the following third-party packages:
 | (MIT OR CC0-1.0) | 0 | 1 | 1 |
 | (MPL-2.0 OR Apache-2.0) | 0 | 1 | 1 |
 | 0BSD | 0 | 2 | 2 |
-| Apache-2.0 | 8 | 87 | 95 |
+| Apache-2.0 | 8 | 74 | 82 |
 | Apache-2.0 AND MIT | 0 | 1 | 1 |
 | BSD-2-Clause | 0 | 23 | 23 |
 | BSD-3-Clause | 1 | 21 | 22 |
 | BlueOak-1.0.0 | 0 | 6 | 6 |
 | CC-BY-4.0 | 0 | 1 | 1 |
 | CC0-1.0 | 0 | 1 | 1 |
-| ISC | 1 | 57 | 58 |
-| MIT | 79 | 1165 | 1244 |
+| ISC | 1 | 56 | 57 |
+| MIT | 79 | 1158 | 1237 |
 | MIT AND Apache-2.0 | 0 | 1 | 1 |
 | MIT AND ISC | 0 | 1 | 1 |
 | MIT AND OFL-1.1 | 0 | 1 | 1 |
 | MIT OR Apache-2.0 | 1 | 1 | 2 |
 | MIT-0 | 0 | 2 | 2 |
 | MPL-2.0 | 0 | 2 | 2 |
-| OFL-1.1 | 0 | 2 | 2 |
+| OFL-1.1 | 2 | 0 | 2 |
 | Python-2.0 | 0 | 1 | 1 |
 | Unlicense | 1 | 4 | 5 |
 
@@ -46,15 +46,15 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
 
 ### (Apache-2.0 AND MIT)
 
-- **posthog-js** (1.407.6) - [Homepage](https://posthog.com/docs/libraries/js)
+- **posthog-js** (1.426.4) - [Homepage](https://posthog.com/docs/libraries/js)
   - Posthog-js allows you to automatically capture usage and send events to PostHog.
 
 ### Apache-2.0
 
-- **@aws-sdk/client-s3** (3.1063.0) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/clients/client-s3)
+- **@aws-sdk/client-s3** (3.1126.0) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/clients/client-s3)
   - AWS SDK for JavaScript S3 Client for Node.js, Browser and React Native
-- **@aws-sdk/s3-request-presigner** (3.1063.0) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages/s3-request-presigner)
-- **@playwright/test** (1.60.0) - [Homepage](https://playwright.dev)
+- **@aws-sdk/s3-request-presigner** (3.1126.0) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages/s3-request-presigner)
+- **@playwright/test** (1.62.1) - [Homepage](https://playwright.dev)
   - A high-level API to automate web browsers
 - **class-variance-authority** (0.7.1) - [Homepage](https://github.com/joe-bell/cva#readme)
   - Class Variance Authority 🧬
@@ -74,16 +74,16 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
 
 ### ISC
 
-- **lucide-react** (1.17.0) - [Homepage](https://lucide.dev)
+- **lucide-react** (1.40.0) - [Homepage](https://lucide.dev)
   - A Lucide icon library package for React applications.
 
 ### MIT
 
-- **@base-ui/react** (1.5.0) - [Homepage](https://base-ui.com)
+- **@base-ui/react** (1.8.0) - [Homepage](https://base-ui.com)
   - Base UI is a library of headless ('unstyled') React components and low-level hooks. You gain complete control over your app's CSS and accessibility features.
-- **@commitlint/cli** (21.0.2) - [Homepage](https://commitlint.js.org/)
+- **@commitlint/cli** (21.2.2) - [Homepage](https://commitlint.js.org/)
   - Lint your commit messages
-- **@commitlint/config-conventional** (21.0.2) - [Homepage](https://commitlint.js.org/)
+- **@commitlint/config-conventional** (21.2.2) - [Homepage](https://commitlint.js.org/)
   - Shareable commitlint config enforcing conventional commits
 - **@eslint/js** (9.39.4, 10.0.1) - [Homepage](https://eslint.org)
   - ESLint JavaScript language implementation
@@ -113,29 +113,29 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Nest - modern, fast, powerful node.js web framework (@testing)
 - **@nestjs/throttler** (6.5.0) - [Homepage](https://github.com/nestjs/throttler#readme)
   - A Rate-Limiting module for NestJS to work on Express, Fastify, Websockets, Socket.IO, and GraphQL, all rolled up into a simple package.
-- **@sentry/node** (10.69.0) - [Homepage](https://github.com/getsentry/sentry-javascript/tree/master/packages/node)
+- **@sentry/node** (10.73.0) - [Homepage](https://github.com/getsentry/sentry-javascript/tree/master/packages/node)
   - Sentry Node SDK using OpenTelemetry for performance instrumentation
-- **@tailwindcss/vite** (4.3.0) - [Homepage](https://tailwindcss.com)
+- **@tailwindcss/vite** (4.3.3) - [Homepage](https://tailwindcss.com)
   - A utility-first CSS framework for rapidly building custom user interfaces.
 - **@testing-library/jest-dom** (6.9.1) - [Homepage](https://github.com/testing-library/jest-dom#readme)
   - Custom jest matchers to test the state of the DOM
-- **@testing-library/react** (16.3.2) - [Homepage](https://github.com/testing-library/react-testing-library#readme)
+- **@testing-library/react** (16.3.3) - [Homepage](https://github.com/testing-library/react-testing-library#readme)
   - Simple and complete React DOM testing utilities that encourage good testing practices.
-- **@testing-library/user-event** (14.6.1) - [Homepage](https://github.com/testing-library/user-event#readme)
+- **@testing-library/user-event** (14.6.1, 14.6.7) - [Homepage](https://github.com/testing-library/user-event#readme)
   - Fire events the same way the user does
 - **@types/node** (25.9.2, 26.1.0) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node)
   - TypeScript definitions for node
-- **@types/react** (19.2.17) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react)
+- **@types/react** (19.2.18) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react)
   - TypeScript definitions for react
-- **@types/react-dom** (19.2.3) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-dom)
+- **@types/react-dom** (19.2.7) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-dom)
   - TypeScript definitions for react-dom
-- **@vitejs/plugin-react-swc** (4.3.1) - [Homepage](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react-swc#readme)
+- **@vitejs/plugin-react-swc** (4.3.3) - [Homepage](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react-swc#readme)
   - Speed up your Vite dev server with SWC
 - **@vitest/coverage-v8** (4.1.8) - [Homepage](https://vitest.dev/guide/coverage)
   - V8 coverage provider for Vitest
-- **axios** (1.17.0) - [Homepage](https://axios-http.com)
+- **axios** (1.20.0) - [Homepage](https://axios-http.com)
   - Promise based HTTP client for the browser and node.js
-- **bullmq** (5.78.0) - [Homepage](https://bullmq.io/)
+- **bullmq** (6.3.4) - [Homepage](https://bullmq.io/)
   - Queue for messages and jobs based on Redis
 - **clsx** (2.1.1) - [Homepage](https://github.com/lukeed/clsx#readme)
   - A tiny (239B) utility for constructing className strings conditionally.
@@ -145,7 +145,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
 - **drizzle-kit** (1.0.0-rc.3) - [Homepage](https://orm.drizzle.team)
 - **embla-carousel-react** (8.6.0) - [Homepage](https://www.embla-carousel.com)
   - A lightweight carousel library with fluid motion and great swipe precision
-- **eslint** (9.39.4, 10.4.1) - [Homepage](https://eslint.org)
+- **eslint** (9.39.4, 10.9.1) - [Homepage](https://eslint.org)
   - An AST-based pattern checker for JavaScript.
 - **eslint-config-prettier** (10.1.8) - [Homepage](https://github.com/prettier/eslint-config-prettier#readme)
   - Turns off all rules that are unnecessary or might conflict with Prettier.
@@ -159,21 +159,21 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Property based testing framework for JavaScript (like QuickCheck)
 - **fastify** (5.12.1) - [Homepage](https://fastify.dev/)
   - Fast and low overhead web framework, for Node.js
-- **globals** (14.0.0, 16.5.0, 17.6.0) - [Homepage](https://github.com/sindresorhus/globals#readme)
+- **globals** (14.0.0, 16.5.0, 17.12.0) - [Homepage](https://github.com/sindresorhus/globals#readme)
   - Global identifiers from different JavaScript environments
 - **husky** (9.1.7) - [Homepage](https://github.com/typicode/husky#readme)
   - Modern native Git hooks
-- **i18next** (26.3.1) - [Homepage](https://www.i18next.com)
+- **i18next** (26.4.2) - [Homepage](https://www.i18next.com)
   - i18next internationalization framework
 - **i18next-browser-languagedetector** (8.2.1) - [Homepage](https://github.com/i18next/i18next-browser-languageDetector)
   - language detector used in browser environment for i18next
-- **input-otp** (1.4.2) - [Homepage](https://input-otp.rodz.dev/)
+- **input-otp** (1.5.0) - [Homepage](https://input-otp.rodz.dev/)
   - One-time password input component for React.
-- **ioredis** (5.10.1, 5.11.1) - [Homepage](https://github.com/luin/ioredis#readme)
+- **ioredis** (6.0.0) - [Homepage](https://github.com/redis/ioredis#readme)
   - A robust, performance-focused and full-featured Redis client for Node.js.
 - **jsdom** (29.1.1) - [Homepage](https://github.com/jsdom/jsdom#readme)
   - A JavaScript implementation of many web standards
-- **msw** (2.14.6) - [Homepage](https://mswjs.io)
+- **msw** (2.15.0) - [Homepage](https://mswjs.io)
   - Seamless REST/GraphQL API mocking library for browser and Node.js.
 - **nestjs-pino** (5.1.0) - [Homepage](https://github.com/iamolegga/nestjs-pino#readme)
   - Pino logger for NestJS
@@ -184,59 +184,66 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - High-speed HTTP logger for Node.js
 - **pino-pretty** (13.1.3) - [Homepage](https://github.com/pinojs/pino-pretty#readme)
   - Prettifier for Pino log lines
-- **posthog-node** (5.46.1) - [Homepage](https://github.com/PostHog/posthog-js#readme)
+- **posthog-node** (5.51.6) - [Homepage](https://github.com/PostHog/posthog-js#readme)
   - PostHog Node.js integration
 - **prettier** (3.8.4) - [Homepage](https://prettier.io)
   - Prettier is an opinionated code formatter
-- **radix-ui** (1.5.0) - [Homepage](https://radix-ui.com/primitives)
-- **react** (19.2.3, 19.2.7) - [Homepage](https://react.dev/)
+- **radix-ui** (1.6.7) - [Homepage](https://radix-ui.com/primitives)
+- **react** (19.2.3, 19.2.8) - [Homepage](https://react.dev/)
   - React is a JavaScript library for building user interfaces.
 - **react-day-picker** (10.0.1) - [Homepage](https://daypicker.dev)
   - Customizable Date Picker for React
-- **react-dom** (19.2.3, 19.2.7) - [Homepage](https://react.dev/)
+- **react-dom** (19.2.3, 19.2.8) - [Homepage](https://react.dev/)
   - React package for working with the DOM.
-- **react-error-boundary** (6.1.2) - [Homepage](https://react-error-boundary-lib.vercel.app/)
+- **react-error-boundary** (6.1.4) - [Homepage](https://react-error-boundary-lib.vercel.app/)
   - Simple reusable React error boundary component
-- **react-hook-form** (7.78.0) - [Homepage](https://react-hook-form.com)
+- **react-hook-form** (7.87.0) - [Homepage](https://react-hook-form.com)
   - Performant, flexible and extensible forms library for React Hooks
-- **react-i18next** (17.0.8) - [Homepage](https://github.com/i18next/react-i18next)
+- **react-i18next** (17.0.13) - [Homepage](https://github.com/i18next/react-i18next)
   - Internationalization for react done right. Using the i18next i18n ecosystem.
-- **react-resizable-panels** (4.11.2) - [Homepage](https://react-resizable-panels.vercel.app/)
+- **react-resizable-panels** (4.12.3) - [Homepage](https://react-resizable-panels.vercel.app/)
 - **react-router** (7.17.0) - [Homepage](https://github.com/remix-run/react-router#readme)
   - Declarative routing for React
-- **recharts** (3.8.1) - [Homepage](https://github.com/recharts/recharts)
+- **recharts** (3.10.1) - [Homepage](https://github.com/recharts/recharts)
   - React charts
 - **release-it** (20.2.0) - [Homepage](https://github.com/release-it/release-it#readme)
   - Generic CLI tool to automate versioning and package publishing-related tasks.
-- **sonner** (2.0.7) - [Homepage](https://sonner.emilkowal.ski/)
+- **sonner** (2.0.8) - [Homepage](https://sonner.emilkowal.ski/)
   - An opinionated toast component for React.
-- **swr** (2.4.1) - [Homepage](https://swr.vercel.app)
+- **swr** (2.5.1) - [Homepage](https://swr.vercel.app)
   - React Hooks library for remote data fetching
 - **tailwind-merge** (3.6.0) - [Homepage](https://github.com/dcastil/tailwind-merge)
   - Merge Tailwind CSS classes without style conflicts
-- **tailwindcss** (4.3.0) - [Homepage](https://tailwindcss.com)
+- **tailwindcss** (4.3.0, 4.3.3) - [Homepage](https://tailwindcss.com)
   - A utility-first CSS framework for rapidly building custom user interfaces.
-- **tsdown** (0.22.2) - [Homepage](http://tsdown.dev/)
+- **tsdown** (0.23.0) - [Homepage](http://tsdown.dev/)
   - The Elegant Bundler for Libraries
 - **tw-animate-css** (1.4.0) - [Homepage](https://github.com/Wombosvideo/tw-animate-css#readme)
   - TailwindCSS v4.0 compatible replacement for `tailwindcss-animate`.
-- **typescript-eslint** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/typescript-eslint)
+- **typescript-eslint** (8.69.0) - [Homepage](https://typescript-eslint.io/packages/typescript-eslint)
   - Tooling which enables you to use TypeScript with ESLint
 - **vaul** (1.1.2) - [Homepage](https://vaul.emilkowal.ski/)
   - Drawer component for React.
-- **vite** (8.0.16) - [Homepage](https://vite.dev)
+- **vite** (8.2.2) - [Homepage](https://vite.dev)
   - Native-ESM powered web dev build tool
 - **vitest** (4.1.8) - [Homepage](https://vitest.dev)
   - Next generation testing framework powered by Vite
-- **zod** (3.25.76, 4.4.3) - [Homepage](https://zod.dev)
+- **zod** (3.25.76, 4.4.3, 4.5.4) - [Homepage](https://zod.dev)
   - TypeScript-first schema declaration and validation library with static type inference
-- **zustand** (5.0.14) - [Homepage](https://github.com/pmndrs/zustand)
+- **zustand** (5.0.15) - [Homepage](https://github.com/pmndrs/zustand)
   - 🐻 Bear necessities for state management in React
 
 ### MIT OR Apache-2.0
 
 - **git-cliff** (2.13.1) - [Homepage](https://github.com/orhun/git-cliff#readme)
   - A highly customizable Changelog Generator that follows Conventional Commit specifications ⛰️
+
+### OFL-1.1
+
+- **@fontsource-variable/inter** (5.3.0) - [Homepage](https://fontsource.org/fonts/inter)
+  - Self-host the Inter font in a neatly bundled NPM package.
+- **@fontsource-variable/jetbrains-mono** (5.3.0) - [Homepage](https://fontsource.org/fonts/jetbrains-mono)
+  - Self-host the JetBrains Mono font in a neatly bundled NPM package.
 
 ### Unlicense
 
@@ -261,7 +268,7 @@ These packages are installed as dependencies of direct dependencies:
 
 ### (MPL-2.0 OR Apache-2.0)
 
-- **dompurify** (3.4.12) - [Homepage](https://github.com/cure53/DOMPurify)
+- **dompurify** (3.4.14) - [Homepage](https://github.com/cure53/DOMPurify)
 
 ### 0BSD
 
@@ -270,35 +277,26 @@ These packages are installed as dependencies of direct dependencies:
 
 ### Apache-2.0
 
-- **@apm-js-collab/code-transformer** (0.18.1) - [Homepage](https://github.com/nodejs/orchestrion-js#readme)
-- **@apm-js-collab/tracing-hooks** (0.13.0) - [Homepage](https://github.com/apm-js-collab/tracing-hooks#readme)
-- **@aws-crypto/sha1-browser** (5.2.0) - [Homepage](https://github.com/aws/aws-sdk-js-crypto-helpers/tree/master/packages/sha1-browser)
-- **@aws-crypto/sha256-browser** (5.2.0) - [Homepage](https://github.com/aws/aws-sdk-js-crypto-helpers/tree/master/packages/sha256-browser)
-- **@aws-crypto/sha256-js** (5.2.0) - [Homepage](https://github.com/aws/aws-sdk-js-crypto-helpers/tree/master/packages/sha256-js)
-- **@aws-crypto/supports-web-crypto** (5.2.0) - [Homepage](https://github.com/aws/aws-sdk-js-crypto-helpers/tree/master/packages/supports-web-crypto)
-- **@aws-crypto/util** (5.2.0) - [Homepage](https://github.com/aws/aws-sdk-js-crypto-helpers/tree/master/packages/util)
-- **@aws-sdk/checksums** (3.1000.24) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/checksums)
-- **@aws-sdk/core** (3.977.4) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/core)
-- **@aws-sdk/credential-provider-env** (3.972.65) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-env)
-- **@aws-sdk/credential-provider-http** (3.972.67) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-http)
-- **@aws-sdk/credential-provider-ini** (3.973.10) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-ini)
-- **@aws-sdk/credential-provider-login** (3.972.72) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-login)
-- **@aws-sdk/credential-provider-node** (3.972.76) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-node)
-- **@aws-sdk/credential-provider-process** (3.972.65) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-process)
-- **@aws-sdk/credential-provider-sso** (3.973.9) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-sso)
-- **@aws-sdk/credential-provider-web-identity** (3.972.71) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-web-identity)
-- **@aws-sdk/middleware-flexible-checksums** (3.974.49) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/middleware-flexible-checksums)
-- **@aws-sdk/middleware-sdk-s3** (3.972.70) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/middleware-sdk-s3)
-- **@aws-sdk/nested-clients** (3.997.39) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages/nested-clients)
-- **@aws-sdk/signature-v4-multi-region** (3.996.43) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages/signature-v4-multi-region)
-- **@aws-sdk/token-providers** (3.1100.0) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages/token-providers)
-- **@aws-sdk/types** (3.974.2) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/types)
-- **@aws-sdk/util-locate-window** (3.965.8) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/util-locate-window)
-- **@aws-sdk/xml-builder** (3.972.37) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/xml-builder)
+- **@aws-sdk/checksums** (3.1000.29) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/checksums)
+- **@aws-sdk/core** (3.977.9) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/core)
+- **@aws-sdk/credential-provider-env** (3.972.70) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-env)
+- **@aws-sdk/credential-provider-http** (3.972.72) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-http)
+- **@aws-sdk/credential-provider-ini** (3.973.15) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-ini)
+- **@aws-sdk/credential-provider-login** (3.972.77) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-login)
+- **@aws-sdk/credential-provider-node** (3.972.82) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-node)
+- **@aws-sdk/credential-provider-process** (3.972.70) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-process)
+- **@aws-sdk/credential-provider-sso** (3.973.14) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-sso)
+- **@aws-sdk/credential-provider-web-identity** (3.972.76) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/credential-provider-web-identity)
+- **@aws-sdk/middleware-sdk-s3** (3.972.75) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/middleware-sdk-s3)
+- **@aws-sdk/nested-clients** (3.997.44) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages/nested-clients)
+- **@aws-sdk/signature-v4-multi-region** (3.996.46) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages/signature-v4-multi-region)
+- **@aws-sdk/token-providers** (3.1116.0) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages/token-providers)
+- **@aws-sdk/types** (3.974.5) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/types)
+- **@aws-sdk/xml-builder** (3.972.40) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/xml-builder)
 - **@aws/lambda-invoke-store** (0.3.0) - [Homepage](https://github.com/awslabs/aws-lambda-invoke-store)
 - **@drizzle-team/brocli** (0.11.0) - [Homepage](https://github.com/drizzle-team/brocli)
 - **@eslint/config-array** (0.21.2, 0.23.5) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/config-array#readme)
-- **@eslint/config-helpers** (0.4.2, 0.6.0) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/config-helpers#readme)
+- **@eslint/config-helpers** (0.4.2, 0.7.0) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/config-helpers#readme)
 - **@eslint/core** (0.17.0, 1.2.1) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/core#readme)
 - **@eslint/object-schema** (2.1.7, 3.0.5) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/object-schema#readme)
 - **@eslint/plugin-kit** (0.4.1, 0.7.2) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/plugin-kit#readme)
@@ -315,18 +313,15 @@ These packages are installed as dependencies of direct dependencies:
 - **@opentelemetry/sdk-trace** (2.10.0) - [Homepage](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/sdk-trace)
 - **@opentelemetry/sdk-trace-base** (2.10.0) - [Homepage](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)
 - **@opentelemetry/semantic-conventions** (1.43.0) - [Homepage](https://github.com/open-telemetry/opentelemetry-js/tree/main/semantic-conventions)
-- **@smithy/core** (3.31.1) - [Homepage](https://github.com/smithy-lang/smithy-typescript/tree/main/packages/core)
+- **@smithy/core** (3.31.1, 3.33.3) - [Homepage](https://github.com/smithy-lang/smithy-typescript/tree/main/packages/core)
 - **@smithy/credential-provider-imds** (4.4.16) - [Homepage](https://github.com/smithy-lang/smithy-typescript/tree/main/packages/credential-provider-imds)
-- **@smithy/fetch-http-handler** (5.6.13) - [Homepage](https://github.com/smithy-lang/smithy-typescript/tree/main/packages/fetch-http-handler)
-- **@smithy/is-array-buffer** (2.2.0) - [Homepage](https://github.com/awslabs/smithy-typescript/tree/main/packages/is-array-buffer)
-- **@smithy/node-http-handler** (4.9.13) - [Homepage](https://github.com/smithy-lang/smithy-typescript/tree/main/packages/node-http-handler)
+- **@smithy/fetch-http-handler** (5.7.2) - [Homepage](https://github.com/smithy-lang/smithy-typescript/tree/main/packages/fetch-http-handler)
+- **@smithy/node-http-handler** (4.11.3) - [Homepage](https://github.com/smithy-lang/smithy-typescript/tree/main/packages/node-http-handler)
 - **@smithy/signature-v4** (5.6.12) - [Homepage](https://github.com/smithy-lang/smithy-typescript/tree/main/packages/signature-v4)
-- **@smithy/types** (4.16.1) - [Homepage](https://github.com/smithy-lang/smithy-typescript/tree/main/packages/types)
-- **@smithy/util-buffer-from** (2.2.0) - [Homepage](https://github.com/awslabs/smithy-typescript/tree/main/packages/util-buffer-from)
-- **@smithy/util-utf8** (2.3.0) - [Homepage](https://github.com/awslabs/smithy-typescript/tree/main/packages/util-utf8)
-- **@swc/core** (1.15.43) - [Homepage](https://swc.rs)
+- **@smithy/types** (4.16.1, 4.17.2) - [Homepage](https://github.com/smithy-lang/smithy-typescript/tree/main/packages/types)
+- **@swc/core** (1.16.1) - [Homepage](https://swc.rs)
 - **@swc/counter** (0.1.3) - [Homepage](https://swc.rs)
-- **@swc/types** (0.1.27) - [Homepage](https://swc.rs)
+- **@swc/types** (0.1.28) - [Homepage](https://swc.rs)
 - **@webassemblyjs/leb128** (1.13.2) - [Homepage](https://github.com/xtuc/webassemblyjs#readme)
 - **@xtuc/long** (4.2.2) - [Homepage](https://github.com/dcodeIO/long.js#readme)
 - **aria-query** (5.3.0, 5.3.2) - [Homepage](https://github.com/A11yance/aria-query#readme)
@@ -335,7 +330,7 @@ These packages are installed as dependencies of direct dependencies:
 - **bser** (2.1.1) - [Homepage](https://facebook.github.io/watchman/docs/bser.html)
 - **chrome-launcher** (0.15.2) - [Homepage](https://github.com/GoogleChrome/chrome-launcher#readme)
 - **chromium-edge-launcher** (0.3.0) - [Homepage](https://github.com/cezaraugusto/chromium-edge-launcher#readme)
-- **cluster-key-slot** (1.1.1, 1.1.2) - [Homepage](https://github.com/Salakar/cluster-key-slot#readme)
+- **cluster-key-slot** (1.1.1) - [Homepage](https://github.com/Salakar/cluster-key-slot#readme)
 - **denque** (2.1.0) - [Homepage](https://docs.page/invertase/denque)
 - **detect-libc** (2.1.2) - [Homepage](https://github.com/lovell/detect-libc#readme)
 - **doctrine** (2.1.0) - [Homepage](https://github.com/eslint/doctrine)
@@ -350,17 +345,16 @@ These packages are installed as dependencies of direct dependencies:
 - **jsbi** (4.3.2) - [Homepage](https://github.com/GoogleChromeLabs/jsbi#readme)
 - **lighthouse-logger** (1.4.2)
 - **marky** (1.3.0) - [Homepage](https://github.com/nolanlawson/marky#readme)
-- **playwright** (1.60.0) - [Homepage](https://playwright.dev)
-- **playwright-core** (1.60.0) - [Homepage](https://playwright.dev)
-- **semifies** (1.0.0) - [Homepage](https://github.com/holepunchto/semifies)
+- **playwright** (1.62.1) - [Homepage](https://playwright.dev)
+- **playwright-core** (1.62.1) - [Homepage](https://playwright.dev)
 - **walker** (1.0.8) - [Homepage](https://github.com/daaku/nodejs-walker)
-- **web-vitals** (5.3.0) - [Homepage](https://github.com/GoogleChrome/web-vitals#readme)
+- **web-vitals** (6.2.1) - [Homepage](https://github.com/GoogleChrome/web-vitals#readme)
 - **xcode** (3.0.1) - [Homepage](https://github.com/apache/cordova-node-xcode#readme)
 - **xml-name-validator** (5.0.0) - [Homepage](https://github.com/jsdom/xml-name-validator#readme)
 
 ### Apache-2.0 AND MIT
 
-- **@swc/core-linux-x64-gnu** (1.15.43) - [Homepage](https://swc.rs)
+- **@swc/core-linux-x64-gnu** (1.16.1) - [Homepage](https://swc.rs)
 
 ### BSD-2-Clause
 
@@ -416,7 +410,7 @@ These packages are installed as dependencies of direct dependencies:
 
 - **glob** (13.0.6) - [Homepage](https://github.com/isaacs/node-glob#readme)
 - **lru-cache** (11.5.1) - [Homepage](https://github.com/isaacs/node-lru-cache#readme)
-- **minimatch** (10.2.5, 10.2.6) - [Homepage](https://github.com/isaacs/minimatch#readme)
+- **minimatch** (10.2.6) - [Homepage](https://github.com/isaacs/minimatch#readme)
 - **minipass** (7.1.3) - [Homepage](https://github.com/isaacs/minipass#readme)
 - **path-scurry** (2.0.2) - [Homepage](https://github.com/isaacs/path-scurry#readme)
 - **sax** (1.6.0) - [Homepage](https://github.com/isaacs/sax-js#readme)
@@ -439,7 +433,7 @@ These packages are installed as dependencies of direct dependencies:
 - **cli-width** (4.1.0) - [Homepage](https://github.com/knownasilya/cli-width)
 - **cliui** (8.0.1, 9.0.1) - [Homepage](https://github.com/yargs/cliui#readme)
 - **conventional-changelog-angular** (9.2.0) - [Homepage](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular#readme)
-- **conventional-changelog-conventionalcommits** (9.3.1) - [Homepage](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-conventionalcommits#readme)
+- **conventional-changelog-conventionalcommits** (10.4.0) - [Homepage](https://conventional-changelog.js.org/presets/conventional-commits/)
 - **d3-array** (3.2.4) - [Homepage](https://d3js.org/d3-array/)
 - **d3-color** (3.1.0) - [Homepage](https://d3js.org/d3-color/)
 - **d3-format** (3.1.2) - [Homepage](https://d3js.org/d3-format/)
@@ -465,7 +459,6 @@ These packages are installed as dependencies of direct dependencies:
 - **iterare** (1.2.1) - [Homepage](https://github.com/felixfbecker/iterare#readme)
 - **lru-cache** (5.1.1, 7.18.3, 10.4.3) - [Homepage](https://github.com/isaacs/node-lru-cache#readme)
 - **lucide-react-native** (1.21.0) - [Homepage](https://lucide.dev)
-- **meriyah** (6.1.4) - [Homepage](https://github.com/meriyah/meriyah)
 - **minimatch** (3.1.5) - [Homepage](https://github.com/isaacs/minimatch#readme)
 - **mute-stream** (3.0.0) - [Homepage](https://github.com/npm/mute-stream#readme)
 - **npm-package-arg** (11.0.3) - [Homepage](https://github.com/npm/npm-package-arg)
@@ -473,7 +466,7 @@ These packages are installed as dependencies of direct dependencies:
 - **picocolors** (1.1.1) - [Homepage](https://github.com/alexeyraspopov/picocolors#readme)
 - **proc-log** (4.2.0) - [Homepage](https://github.com/npm/proc-log#readme)
 - **saxes** (6.0.0) - [Homepage](https://github.com/lddubeau/saxes#readme)
-- **semver** (6.3.1, 7.7.4, 7.8.0, 7.8.5) - [Homepage](https://github.com/npm/node-semver#readme)
+- **semver** (6.3.1, 7.7.4, 7.8.5) - [Homepage](https://github.com/npm/node-semver#readme)
 - **setprototypeof** (1.2.0) - [Homepage](https://github.com/wesleytodd/setprototypeof)
 - **siginfo** (2.0.0) - [Homepage](https://github.com/emilbayes/siginfo#readme)
 - **signal-exit** (3.0.7, 4.1.0) - [Homepage](https://github.com/tapjs/signal-exit#readme)
@@ -496,7 +489,6 @@ These packages are installed as dependencies of direct dependencies:
 - **@angular-devkit/core** (22.1.5) - [Homepage](https://github.com/angular/angular-cli)
 - **@angular-devkit/schematics** (22.1.5) - [Homepage](https://github.com/angular/angular-cli)
 - **@angular-devkit/schematics-cli** (22.1.5) - [Homepage](https://github.com/angular/angular-cli)
-- **@apm-js-collab/code-transformer-bundler-plugins** (0.7.3) - [Homepage](https://github.com/apm-js-collab/code-transformer-bundler-plugins#readme)
 - **@asamuzakjp/css-color** (5.1.11) - [Homepage](https://github.com/asamuzaK/cssColor#readme)
 - **@asamuzakjp/dom-selector** (7.1.1) - [Homepage](https://github.com/asamuzaK/domSelector#readme)
 - **@asamuzakjp/generational-cache** (1.0.1) - [Homepage](https://github.com/asamuzaK/generationalCache)
@@ -504,7 +496,7 @@ These packages are installed as dependencies of direct dependencies:
 - **@babel/code-frame** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-code-frame)
 - **@babel/compat-data** (7.29.7) - [Homepage](https://github.com/babel/babel#readme)
 - **@babel/core** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-core)
-- **@babel/generator** (7.29.7, 8.0.0-rc.6) - [Homepage](https://babel.dev/docs/en/next/babel-generator)
+- **@babel/generator** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-generator)
 - **@babel/helper-annotate-as-pure** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-helper-annotate-as-pure)
 - **@babel/helper-compilation-targets** (7.29.7) - [Homepage](https://github.com/babel/babel#readme)
 - **@babel/helper-create-class-features-plugin** (7.29.7) - [Homepage](https://github.com/babel/babel#readme)
@@ -519,12 +511,12 @@ These packages are installed as dependencies of direct dependencies:
 - **@babel/helper-remap-async-to-generator** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-helper-remap-async-to-generator)
 - **@babel/helper-replace-supers** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-helper-replace-supers)
 - **@babel/helper-skip-transparent-expression-wrappers** (7.29.7) - [Homepage](https://github.com/babel/babel#readme)
-- **@babel/helper-string-parser** (7.29.7, 8.0.0) - [Homepage](https://babel.dev/docs/en/next/babel-helper-string-parser)
-- **@babel/helper-validator-identifier** (7.29.7, 8.0.0-rc.6, 8.0.2) - [Homepage](https://github.com/babel/babel#readme)
+- **@babel/helper-string-parser** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-helper-string-parser)
+- **@babel/helper-validator-identifier** (7.29.7) - [Homepage](https://github.com/babel/babel#readme)
 - **@babel/helper-validator-option** (7.29.7) - [Homepage](https://github.com/babel/babel#readme)
 - **@babel/helper-wrap-function** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-helper-wrap-function)
 - **@babel/helpers** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-helpers)
-- **@babel/parser** (7.29.7, 8.0.0-rc.6, 8.0.0) - [Homepage](https://babel.dev/docs/en/next/babel-parser)
+- **@babel/parser** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-parser)
 - **@babel/plugin-proposal-decorators** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-plugin-proposal-decorators)
 - **@babel/plugin-proposal-export-default-from** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-plugin-proposal-export-default-from)
 - **@babel/plugin-syntax-decorators** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-plugin-syntax-decorators)
@@ -572,8 +564,8 @@ These packages are installed as dependencies of direct dependencies:
 - **@babel/runtime** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-runtime)
 - **@babel/template** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-template)
 - **@babel/traverse** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-traverse)
-- **@babel/types** (7.29.7, 8.0.0) - [Homepage](https://babel.dev/docs/en/next/babel-types)
-- **@base-ui/utils** (0.2.9) - [Homepage](https://github.com/mui/base-ui#readme)
+- **@babel/types** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-types)
+- **@base-ui/utils** (0.4.0) - [Homepage](https://github.com/mui/base-ui#readme)
 - **@bcoe/v8-coverage** (1.0.2) - [Homepage](https://github.com/bcoe/v8-coverage#readme)
 - **@borewit/text-codec** (0.2.2) - [Homepage](https://github.com/Borewit/text-codec#readme)
 - **@boundaries/elements** (2.0.1) - [Homepage](https://github.com/javierbrea/eslint-plugin-boundaries#readme)
@@ -582,20 +574,20 @@ These packages are installed as dependencies of direct dependencies:
 - **@commitlint/config-validator** (21.2.0) - [Homepage](https://commitlint.js.org/)
 - **@commitlint/ensure** (21.2.0) - [Homepage](https://commitlint.js.org/)
 - **@commitlint/execute-rule** (21.0.1) - [Homepage](https://commitlint.js.org/)
-- **@commitlint/format** (21.2.0) - [Homepage](https://commitlint.js.org/)
-- **@commitlint/is-ignored** (21.2.0) - [Homepage](https://commitlint.js.org/)
-- **@commitlint/lint** (21.2.0) - [Homepage](https://commitlint.js.org/)
-- **@commitlint/load** (21.2.0) - [Homepage](https://commitlint.js.org/)
+- **@commitlint/format** (21.2.2) - [Homepage](https://commitlint.js.org/)
+- **@commitlint/is-ignored** (21.2.2) - [Homepage](https://commitlint.js.org/)
+- **@commitlint/lint** (21.2.2) - [Homepage](https://commitlint.js.org/)
+- **@commitlint/load** (21.2.2) - [Homepage](https://commitlint.js.org/)
 - **@commitlint/message** (21.2.0) - [Homepage](https://commitlint.js.org/)
-- **@commitlint/parse** (21.2.0) - [Homepage](https://commitlint.js.org/)
-- **@commitlint/read** (21.2.0) - [Homepage](https://commitlint.js.org/)
-- **@commitlint/resolve-extends** (21.2.0) - [Homepage](https://commitlint.js.org/)
-- **@commitlint/rules** (21.2.0) - [Homepage](https://commitlint.js.org/)
+- **@commitlint/parse** (21.2.2) - [Homepage](https://commitlint.js.org/)
+- **@commitlint/read** (21.2.1) - [Homepage](https://commitlint.js.org/)
+- **@commitlint/resolve-extends** (21.2.2) - [Homepage](https://commitlint.js.org/)
+- **@commitlint/rules** (21.2.2) - [Homepage](https://commitlint.js.org/)
 - **@commitlint/to-lines** (21.0.1) - [Homepage](https://commitlint.js.org/)
 - **@commitlint/top-level** (21.2.0) - [Homepage](https://commitlint.js.org/)
 - **@commitlint/types** (21.2.0) - [Homepage](https://commitlint.js.org/)
-- **@conventional-changelog/git-client** (2.7.0) - [Homepage](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/git-client#readme)
-- **@conventional-changelog/template** (1.2.0) - [Homepage](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/template#readme)
+- **@conventional-changelog/git-client** (3.1.2) - [Homepage](https://conventional-changelog.js.org/git-client/)
+- **@conventional-changelog/template** (1.2.0, 1.4.0) - [Homepage](https://conventional-changelog.js.org/template/)
 - **@csstools/css-calc** (3.2.1) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/css-calc#readme)
 - **@csstools/css-color-parser** (4.1.9) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/css-color-parser#readme)
 - **@csstools/css-parser-algorithms** (4.0.0) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/css-parser-algorithms#readme)
@@ -647,13 +639,13 @@ These packages are installed as dependencies of direct dependencies:
 - **@fastify/forwarded** (3.0.1) - [Homepage](https://github.com/fastify/forwarded#readme)
 - **@fastify/merge-json-schemas** (0.2.1) - [Homepage](https://github.com/fastify/merge-json-schemas#readme)
 - **@fastify/proxy-addr** (5.1.0) - [Homepage](https://github.com/fastify/proxy-addr#readme)
-- **@floating-ui/core** (1.7.5) - [Homepage](https://floating-ui.com)
-- **@floating-ui/dom** (1.7.6) - [Homepage](https://floating-ui.com)
-- **@floating-ui/react-dom** (2.1.8) - [Homepage](https://floating-ui.com/docs/react-dom)
-- **@floating-ui/utils** (0.2.11) - [Homepage](https://floating-ui.com)
+- **@floating-ui/core** (1.7.5, 1.8.0) - [Homepage](https://floating-ui.com)
+- **@floating-ui/dom** (1.7.6, 1.8.0) - [Homepage](https://floating-ui.com)
+- **@floating-ui/react-dom** (2.1.8, 2.1.9) - [Homepage](https://floating-ui.com/docs/react-dom)
+- **@floating-ui/utils** (0.2.11, 0.2.12) - [Homepage](https://floating-ui.com)
 - **@inquirer/ansi** (2.0.7, 2.0.8) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/ansi/README.md)
 - **@inquirer/checkbox** (5.2.1, 5.2.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/checkbox/README.md)
-- **@inquirer/confirm** (6.1.1, 6.3.1) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/confirm/README.md)
+- **@inquirer/confirm** (6.3.1) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/confirm/README.md)
 - **@inquirer/core** (11.2.1, 12.0.2) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/core/README.md)
 - **@inquirer/editor** (5.2.2, 5.3.2) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/editor/README.md)
 - **@inquirer/expand** (5.1.1, 5.1.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/expand/README.md)
@@ -667,7 +659,7 @@ These packages are installed as dependencies of direct dependencies:
 - **@inquirer/search** (4.2.1, 4.3.2) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/search/README.md)
 - **@inquirer/select** (5.2.1, 5.2.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/select/README.md)
 - **@inquirer/type** (4.0.7, 4.1.1) - [Homepage](https://github.com/SBoudrias/Inquirer.js#readme)
-- **@ioredis/commands** (1.5.1, 1.10.0) - [Homepage](https://github.com/ioredis/commands)
+- **@ioredis/commands** (2.0.0) - [Homepage](https://github.com/ioredis/commands)
 - **@jest/schemas** (29.6.3) - [Homepage](https://github.com/jestjs/jest#readme)
 - **@jest/types** (29.6.3) - [Homepage](https://github.com/jestjs/jest#readme)
 - **@jridgewell/gen-mapping** (0.3.13) - [Homepage](https://github.com/jridgewell/sourcemaps/tree/main/packages/gen-mapping)
@@ -697,74 +689,74 @@ These packages are installed as dependencies of direct dependencies:
 - **@open-draft/deferred-promise** (2.2.0, 3.0.0) - [Homepage](https://github.com/open-draft/deferred-promise#readme)
 - **@open-draft/logger** (0.3.0) - [Homepage](https://github.com/open-draft/logger#readme)
 - **@open-draft/until** (2.1.0) - [Homepage](https://github.com/open-draft/until#readme)
-- **@oxc-project/types** (0.133.0, 0.138.0) - [Homepage](https://oxc.rs)
+- **@oxc-project/types** (0.148.0) - [Homepage](https://oxc.rs)
 - **@phun-ky/typeof** (2.0.3) - [Homepage](https://phun-ky.net/projects/typeof)
 - **@pinojs/redact** (0.4.0) - [Homepage](https://github.com/pinojs/redact#readme)
 - **@pkgr/core** (0.3.6) - [Homepage](https://github.com/un-ts/pkgr/blob/master/packages/core)
-- **@posthog/browser-common** (0.2.4) - [Homepage](https://github.com/PostHog/posthog-js#readme)
-- **@posthog/core** (1.45.1) - [Homepage](https://github.com/PostHog/posthog-js#readme)
-- **@posthog/types** (1.398.0) - [Homepage](https://github.com/PostHog/posthog-js#readme)
+- **@posthog/browser-common** (0.7.2) - [Homepage](https://github.com/PostHog/posthog-js#readme)
+- **@posthog/core** (1.50.2, 1.50.4) - [Homepage](https://github.com/PostHog/posthog-js#readme)
+- **@posthog/types** (1.408.0, 1.408.1) - [Homepage](https://github.com/PostHog/posthog-js#readme)
 - **@quansync/fs** (1.0.0) - [Homepage](https://github.com/quansync-dev/fs#readme)
-- **@radix-ui/number** (1.1.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/primitive** (1.1.4) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-accessible-icon** (1.1.9) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-accordion** (1.2.13, 1.2.15) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-alert-dialog** (1.1.16, 1.1.18) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-arrow** (1.1.9, 1.1.11) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-aspect-ratio** (1.1.9) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-avatar** (1.1.12) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-checkbox** (1.3.4, 1.3.6) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-collapsible** (1.1.13, 1.1.15) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-collection** (1.1.9, 1.1.11) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-compose-refs** (1.1.3) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-context** (1.1.4) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-context-menu** (2.3.0, 2.3.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-dialog** (1.1.16, 1.1.18) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-direction** (1.1.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-dismissable-layer** (1.1.12, 1.1.14) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-dropdown-menu** (2.1.17, 2.1.19) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-focus-guards** (1.1.4) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-focus-scope** (1.1.9, 1.1.11) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-form** (0.1.9) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-hover-card** (1.1.16, 1.1.18) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-id** (1.1.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-label** (2.1.9, 2.1.11) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-menu** (2.1.17, 2.1.19) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-menubar** (1.1.17, 1.1.19) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-navigation-menu** (1.2.15) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-one-time-password-field** (0.1.9) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-password-toggle-field** (0.1.4) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-popover** (1.1.16, 1.1.18) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-popper** (1.3.0, 1.3.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-portal** (1.1.11, 1.1.13) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-presence** (1.1.6) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-primitive** (2.1.5, 2.1.7) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-progress** (1.1.9, 1.1.11) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-radio-group** (1.4.0, 1.4.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-roving-focus** (1.1.12, 1.1.14) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-scroll-area** (1.2.11) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-select** (2.3.0, 2.3.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-separator** (1.1.9, 1.1.11) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-slider** (1.4.0) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-slot** (1.2.5, 1.3.0) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-switch** (1.3.0, 1.3.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-tabs** (1.1.14, 1.1.16) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-toast** (1.2.16) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-toggle** (1.1.11, 1.1.13) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-toggle-group** (1.1.12, 1.1.14) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-toolbar** (1.1.12) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-tooltip** (1.2.9, 1.2.11) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-use-callback-ref** (1.1.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-use-controllable-state** (1.2.3) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-use-effect-event** (0.0.3) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-use-escape-keydown** (1.1.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-use-is-hydrated** (0.1.1) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-use-layout-effect** (1.1.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-use-previous** (1.1.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-use-rect** (1.1.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-use-size** (1.1.2) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/react-visually-hidden** (1.2.5, 1.2.7) - [Homepage](https://radix-ui.com/primitives)
-- **@radix-ui/rect** (1.1.2) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/number** (1.1.2, 1.1.3) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/primitive** (1.1.4, 1.1.7) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-accessible-icon** (1.1.15) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-accordion** (1.2.15, 1.2.20) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-alert-dialog** (1.1.18, 1.1.23) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-arrow** (1.1.11, 1.1.15) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-aspect-ratio** (1.1.15) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-avatar** (1.2.6) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-checkbox** (1.3.6, 1.3.11) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-collapsible** (1.1.15, 1.1.20) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-collection** (1.1.11, 1.1.15) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-compose-refs** (1.1.3, 1.1.5) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-context** (1.1.4, 1.2.2) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-context-menu** (2.3.2, 2.3.7) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-dialog** (1.1.18, 1.1.23) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-direction** (1.1.2, 1.1.4) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-dismissable-layer** (1.1.14, 1.1.19) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-dropdown-menu** (2.1.19, 2.1.24) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-focus-guards** (1.1.4, 1.1.6) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-focus-scope** (1.1.11, 1.1.16) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-form** (0.1.16) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-hover-card** (1.1.18, 1.1.23) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-id** (1.1.2, 1.1.4) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-label** (2.1.11, 2.1.15) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-menu** (2.1.19, 2.1.24) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-menubar** (1.1.19, 1.1.24) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-navigation-menu** (1.2.22) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-one-time-password-field** (0.1.16) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-password-toggle-field** (0.1.11) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-popover** (1.1.18, 1.1.23) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-popper** (1.3.2, 1.3.7) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-portal** (1.1.13, 1.1.17) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-presence** (1.1.6, 1.1.10) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-primitive** (2.1.7, 2.1.10) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-progress** (1.1.11, 1.1.16) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-radio-group** (1.4.2, 1.4.7) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-roving-focus** (1.1.14, 1.1.19) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-scroll-area** (1.2.18) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-select** (2.3.2, 2.3.7) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-separator** (1.1.11, 1.1.15) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-slider** (1.4.7) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-slot** (1.3.0, 1.3.3) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-switch** (1.3.2, 1.3.7) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-tabs** (1.1.16, 1.1.21) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-toast** (1.2.23) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-toggle** (1.1.13, 1.1.18) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-toggle-group** (1.1.14, 1.1.19) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-toolbar** (1.1.19) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-tooltip** (1.2.11, 1.2.16) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-use-callback-ref** (1.1.2, 1.1.4) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-use-controllable-state** (1.2.3, 1.2.6) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-use-effect-event** (0.0.3, 0.0.5) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-use-escape-keydown** (1.1.5) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-use-is-hydrated** (0.1.3) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-use-layout-effect** (1.1.2, 1.1.4) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-use-previous** (1.1.2, 1.1.4) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-use-rect** (1.1.2, 1.1.4) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-use-size** (1.1.2, 1.1.4) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/react-visually-hidden** (1.2.7, 1.2.11) - [Homepage](https://radix-ui.com/primitives)
+- **@radix-ui/rect** (1.1.2, 1.1.3) - [Homepage](https://radix-ui.com/primitives)
 - **@react-native-masked-view/masked-view** (0.3.2) - [Homepage](https://github.com/react-native-masked-view/masked-view#readme)
 - **@react-native/assets-registry** (0.86.0) - [Homepage](https://github.com/facebook/react-native/tree/HEAD/packages/assets#readme)
 - **@react-native/babel-plugin-codegen** (0.86.0) - [Homepage](https://github.com/facebook/react-native/tree/HEAD/packages/babel-plugin-codegen#readme)
@@ -807,25 +799,25 @@ These packages are installed as dependencies of direct dependencies:
 - **@rn-primitives/tooltip** (1.5.2)
 - **@rn-primitives/types** (1.5.2)
 - **@rn-primitives/utils** (1.5.2)
-- **@rolldown/binding-linux-x64-gnu** (1.0.3, 1.1.4) - [Homepage](https://rolldown.rs/)
+- **@rolldown/binding-linux-x64-gnu** (1.2.7) - [Homepage](https://rolldown.rs/)
 - **@rolldown/pluginutils** (1.0.1) - [Homepage](https://github.com/rolldown/plugins/tree/main/packages/pluginutils#readme)
 - **@rtsao/scc** (1.1.0) - [Homepage](https://github.com/rtsao/scc#readme)
 - **@sec-ant/readable-stream** (0.4.1) - [Homepage](https://github.com/Sec-ant/readable-stream)
 - **@sentry/conventions** (0.16.0) - [Homepage](https://github.com/getsentry/sentry-conventions#readme)
-- **@sentry/core** (10.69.0) - [Homepage](https://github.com/getsentry/sentry-javascript/tree/master/packages/core)
-- **@sentry/node-core** (10.69.0) - [Homepage](https://github.com/getsentry/sentry-javascript/tree/master/packages/node-core)
-- **@sentry/opentelemetry** (10.69.0) - [Homepage](https://github.com/getsentry/sentry-javascript/tree/master/packages/opentelemetry)
-- **@sentry/server-utils** (10.69.0) - [Homepage](https://github.com/getsentry/sentry-javascript/tree/master/packages/server-utils)
-- **@simple-libs/child-process-utils** (1.0.2) - [Homepage](https://github.com/TrigenSoftware/simple-libs/tree/main/packages/child-process-utils#readme)
-- **@simple-libs/stream-utils** (1.2.0, 2.0.0) - [Homepage](https://github.com/TrigenSoftware/simple-libs/tree/main/packages/stream-utils#readme)
+- **@sentry/core** (10.73.0) - [Homepage](https://github.com/getsentry/sentry-javascript/tree/master/packages/core)
+- **@sentry/node-core** (10.73.0) - [Homepage](https://github.com/getsentry/sentry-javascript/tree/master/packages/node-core)
+- **@sentry/opentelemetry** (10.73.0) - [Homepage](https://github.com/getsentry/sentry-javascript/tree/master/packages/opentelemetry)
+- **@sentry/server-utils** (10.73.0) - [Homepage](https://github.com/getsentry/sentry-javascript/tree/master/packages/server-utils)
+- **@simple-libs/child-process-utils** (2.0.0) - [Homepage](https://github.com/TrigenSoftware/simple-libs/tree/main/packages/child-process-utils#readme)
+- **@simple-libs/stream-utils** (2.0.0) - [Homepage](https://github.com/TrigenSoftware/simple-libs/tree/main/packages/stream-utils#readme)
 - **@sinclair/typebox** (0.27.10) - [Homepage](https://github.com/sinclairzx81/typebox-legacy#readme)
 - **@sindresorhus/is** (4.6.0) - [Homepage](https://github.com/sindresorhus/is#readme)
 - **@sindresorhus/merge-streams** (4.0.0) - [Homepage](https://github.com/sindresorhus/merge-streams#readme)
 - **@standard-schema/spec** (1.1.0) - [Homepage](https://standardschema.dev)
 - **@standard-schema/utils** (0.3.0) - [Homepage](https://github.com/standard-schema/standard-schema#readme)
-- **@tailwindcss/node** (4.3.0) - [Homepage](https://tailwindcss.com)
-- **@tailwindcss/oxide** (4.3.0) - [Homepage](https://github.com/tailwindlabs/tailwindcss#readme)
-- **@tailwindcss/oxide-linux-x64-gnu** (4.3.0) - [Homepage](https://github.com/tailwindlabs/tailwindcss#readme)
+- **@tailwindcss/node** (4.3.0, 4.3.3) - [Homepage](https://tailwindcss.com)
+- **@tailwindcss/oxide** (4.3.0, 4.3.3) - [Homepage](https://github.com/tailwindlabs/tailwindcss#readme)
+- **@tailwindcss/oxide-linux-x64-gnu** (4.3.0, 4.3.3) - [Homepage](https://github.com/tailwindlabs/tailwindcss#readme)
 - **@tailwindcss/postcss** (4.3.0) - [Homepage](https://tailwindcss.com)
 - **@testing-library/dom** (10.4.1) - [Homepage](https://github.com/testing-library/dom-testing-library#readme)
 - **@tokenizer/inflate** (0.4.1) - [Homepage](https://github.com/Borewit/tokenizer-inflate#readme)
@@ -851,7 +843,6 @@ These packages are installed as dependencies of direct dependencies:
 - **@types/istanbul-lib-coverage** (2.0.6) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-lib-coverage)
 - **@types/istanbul-lib-report** (3.0.3) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-lib-report)
 - **@types/istanbul-reports** (3.0.4) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-reports)
-- **@types/jsesc** (2.5.1) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped#readme)
 - **@types/json-schema** (7.0.15) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/json-schema)
 - **@types/json5** (0.0.29) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped#readme)
 - **@types/jsonwebtoken** (9.0.10) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jsonwebtoken)
@@ -864,16 +855,16 @@ These packages are installed as dependencies of direct dependencies:
 - **@types/use-sync-external-store** (0.0.6) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/use-sync-external-store)
 - **@types/yargs** (17.0.35) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/yargs)
 - **@types/yargs-parser** (21.0.3) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/yargs-parser)
-- **@typescript-eslint/eslint-plugin** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/eslint-plugin)
-- **@typescript-eslint/parser** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/parser)
-- **@typescript-eslint/project-service** (8.60.1) - [Homepage](https://typescript-eslint.io)
-- **@typescript-eslint/scope-manager** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/scope-manager)
-- **@typescript-eslint/tsconfig-utils** (8.60.1) - [Homepage](https://typescript-eslint.io)
-- **@typescript-eslint/type-utils** (8.60.1) - [Homepage](https://typescript-eslint.io)
-- **@typescript-eslint/types** (8.60.1) - [Homepage](https://typescript-eslint.io)
-- **@typescript-eslint/typescript-estree** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/typescript-estree)
-- **@typescript-eslint/utils** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/utils)
-- **@typescript-eslint/visitor-keys** (8.60.1) - [Homepage](https://typescript-eslint.io)
+- **@typescript-eslint/eslint-plugin** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io/packages/eslint-plugin)
+- **@typescript-eslint/parser** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io/packages/parser)
+- **@typescript-eslint/project-service** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io)
+- **@typescript-eslint/scope-manager** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io/packages/scope-manager)
+- **@typescript-eslint/tsconfig-utils** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io)
+- **@typescript-eslint/type-utils** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io)
+- **@typescript-eslint/types** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io)
+- **@typescript-eslint/typescript-estree** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io/packages/typescript-estree)
+- **@typescript-eslint/utils** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io/packages/utils)
+- **@typescript-eslint/visitor-keys** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io)
 - **@unrs/resolver-binding-linux-x64-gnu** (1.12.2) - [Homepage](https://github.com/unrs/unrs-resolver)
 - **@vitest/expect** (4.1.8) - [Homepage](https://vitest.dev/api/expect)
 - **@vitest/mocker** (4.1.8) - [Homepage](https://github.com/vitest-dev/vitest/tree/main/packages/mocker)
@@ -897,6 +888,9 @@ These packages are installed as dependencies of direct dependencies:
 - **@webassemblyjs/wasm-parser** (1.14.1) - [Homepage](https://github.com/xtuc/webassemblyjs#readme)
 - **@webassemblyjs/wast-printer** (1.14.1) - [Homepage](https://github.com/xtuc/webassemblyjs#readme)
 - **@xmldom/xmldom** (0.8.13, 0.9.10) - [Homepage](https://github.com/xmldom/xmldom)
+- **@yuku-codegen/binding-linux-x64-gnu** (0.9.3) - [Homepage](https://github.com/yuku-toolchain/yuku#readme)
+- **@yuku-parser/binding-linux-x64-gnu** (0.9.3) - [Homepage](https://github.com/yuku-toolchain/yuku#readme)
+- **@yuku-toolchain/types** (0.9.3) - [Homepage](https://github.com/yuku-toolchain/yuku#readme)
 - **abort-controller** (3.0.0) - [Homepage](https://github.com/mysticatea/abort-controller#readme)
 - **abstract-logging** (2.0.1) - [Homepage](https://github.com/jsumners/abstract-logging#readme)
 - **accepts** (1.3.8, 2.0.0) - [Homepage](https://github.com/jshttp/accepts#readme)
@@ -915,7 +909,6 @@ These packages are installed as dependencies of direct dependencies:
 - **arg** (4.1.3, 5.0.2) - [Homepage](https://github.com/vercel/arg#readme)
 - **aria-hidden** (1.2.6) - [Homepage](https://github.com/theKashey/aria-hidden#readme)
 - **array-buffer-byte-length** (1.0.2) - [Homepage](https://github.com/inspect-js/array-buffer-byte-length#readme)
-- **array-ify** (1.0.0) - [Homepage](https://github.com/stevemao/array-ify)
 - **array-includes** (3.1.9) - [Homepage](https://github.com/es-shims/array-includes#readme)
 - **array-timsort** (1.0.3) - [Homepage](https://github.com/kaelzhang/node-array-timsort)
 - **array.prototype.findlast** (1.2.5) - [Homepage](https://github.com/es-shims/Array.prototype.findLast#readme)
@@ -926,10 +919,8 @@ These packages are installed as dependencies of direct dependencies:
 - **arraybuffer.prototype.slice** (1.0.4) - [Homepage](https://github.com/es-shims/ArrayBuffer.prototype.slice#readme)
 - **asap** (2.0.6) - [Homepage](https://github.com/kriskowal/asap#readme)
 - **assertion-error** (2.0.1) - [Homepage](https://github.com/chaijs/assertion-error#readme)
-- **ast-kit** (3.0.0) - [Homepage](https://github.com/sxzz/ast-kit#readme)
 - **ast-types** (0.13.4) - [Homepage](http://github.com/benjamn/ast-types)
 - **ast-v8-to-istanbul** (1.0.4) - [Homepage](https://github.com/AriPerkkio/ast-v8-to-istanbul)
-- **astring** (1.9.0) - [Homepage](https://github.com/davidbonnet/astring#readme)
 - **async-function** (1.0.0) - [Homepage](https://github.com/ljharb/async-function#readme)
 - **async-retry** (1.3.3) - [Homepage](https://github.com/vercel/async-retry#readme)
 - **asynckit** (0.4.0) - [Homepage](https://github.com/alexindigo/asynckit#readme)
@@ -949,12 +940,11 @@ These packages are installed as dependencies of direct dependencies:
 - **base64-js** (1.5.1) - [Homepage](https://github.com/beatgammit/base64-js)
 - **basic-ftp** (5.3.1) - [Homepage](https://github.com/patrickjuchli/basic-ftp#readme)
 - **bidi-js** (1.0.3) - [Homepage](https://github.com/lojjic/bidi-js#readme)
-- **birpc** (4.0.0) - [Homepage](https://github.com/antfu-collective/birpc#readme)
 - **body-parser** (2.3.0) - [Homepage](https://github.com/expressjs/body-parser#readme)
 - **bowser** (2.14.1) - [Homepage](https://github.com/bowser-js/bowser)
 - **bplist-creator** (0.1.0) - [Homepage](https://github.com/nearinfinity/node-bplist-creator#readme)
 - **bplist-parser** (0.3.1, 0.3.2) - [Homepage](https://github.com/nearinfinity/node-bplist-parser)
-- **brace-expansion** (1.1.15, 5.0.7, 5.0.9) - [Homepage](https://github.com/juliangruber/brace-expansion#readme)
+- **brace-expansion** (1.1.15, 5.0.9) - [Homepage](https://github.com/juliangruber/brace-expansion#readme)
 - **braces** (3.0.3) - [Homepage](https://github.com/micromatch/braces)
 - **browserslist** (4.28.4) - [Homepage](https://github.com/browserslist/browserslist#readme)
 - **buffer-from** (1.1.2) - [Homepage](https://github.com/LinusU/buffer-from#readme)
@@ -990,7 +980,6 @@ These packages are installed as dependencies of direct dependencies:
 - **combined-stream** (1.0.8) - [Homepage](https://github.com/felixge/node-combined-stream)
 - **commander** (2.20.3, 7.2.0, 12.1.0, 15.0.0) - [Homepage](https://github.com/tj/commander.js#readme)
 - **comment-json** (4.6.2, 5.0.0) - [Homepage](https://github.com/kaelzhang/node-comment-json#readme)
-- **compare-func** (2.0.0) - [Homepage](https://github.com/stevemao/compare-func)
 - **compressible** (2.0.18) - [Homepage](https://github.com/jshttp/compressible#readme)
 - **compression** (1.8.1) - [Homepage](https://github.com/expressjs/compression#readme)
 - **concat-map** (0.0.1) - [Homepage](https://github.com/substack/node-concat-map#readme)
@@ -1008,7 +997,7 @@ These packages are installed as dependencies of direct dependencies:
 - **cors** (2.8.6) - [Homepage](https://github.com/expressjs/cors#readme)
 - **cosmiconfig** (8.3.6, 9.0.2) - [Homepage](https://github.com/cosmiconfig/cosmiconfig#readme)
 - **cosmiconfig-typescript-loader** (6.3.0) - [Homepage](https://github.com/Codex-/cosmiconfig-typescript-loader#readme)
-- **cron-parser** (4.9.0) - [Homepage](https://github.com/harrisiirak/cron-parser#readme)
+- **cron-parser** (5.10.0) - [Homepage](https://github.com/harrisiirak/cron-parser#readme)
 - **cross-fetch** (3.2.0) - [Homepage](https://github.com/lquixada/cross-fetch)
 - **cross-spawn** (7.0.6) - [Homepage](https://github.com/moxystudio/node-cross-spawn)
 - **css-in-js-utils** (3.1.0) - [Homepage](https://github.com/robinweser/css-in-js-utils#readme)
@@ -1044,7 +1033,6 @@ These packages are installed as dependencies of direct dependencies:
 - **dnssd-advertise** (1.1.6) - [Homepage](https://github.com/kitten/dnssd-advertise#readme)
 - **dom-accessibility-api** (0.5.16, 0.6.3) - [Homepage](https://github.com/eps1lon/dom-accessibility-api#readme)
 - **dom-serializer** (2.0.0) - [Homepage](https://github.com/cheeriojs/dom-serializer#readme)
-- **dot-prop** (5.3.0) - [Homepage](https://github.com/sindresorhus/dot-prop#readme)
 - **dts-resolver** (3.0.0) - [Homepage](https://github.com/sxzz/dts-resolver#readme)
 - **dunder-proto** (1.0.1) - [Homepage](https://github.com/es-shims/dunder-proto#readme)
 - **ee-first** (1.1.1) - [Homepage](https://github.com/jonathanong/ee-first#readme)
@@ -1069,7 +1057,7 @@ These packages are installed as dependencies of direct dependencies:
 - **es-set-tostringtag** (2.1.0) - [Homepage](https://github.com/es-shims/es-set-tostringtag#readme)
 - **es-shim-unscopables** (1.1.0) - [Homepage](https://github.com/ljharb/es-shim-unscopables#readme)
 - **es-to-primitive** (1.3.4) - [Homepage](https://github.com/ljharb/es-to-primitive#readme)
-- **es-toolkit** (1.49.0, 1.51.0) - [Homepage](https://es-toolkit.dev)
+- **es-toolkit** (1.51.0) - [Homepage](https://es-toolkit.dev)
 - **esbuild** (0.25.12) - [Homepage](https://github.com/evanw/esbuild#readme)
 - **escalade** (3.2.0) - [Homepage](https://github.com/lukeed/escalade#readme)
 - **escape-html** (1.0.3) - [Homepage](https://github.com/component/escape-html#readme)
@@ -1171,11 +1159,10 @@ These packages are installed as dependencies of direct dependencies:
 - **get-proto** (1.0.1) - [Homepage](https://github.com/ljharb/get-proto#readme)
 - **get-stream** (9.0.1) - [Homepage](https://github.com/sindresorhus/get-stream#readme)
 - **get-symbol-description** (1.1.0) - [Homepage](https://github.com/inspect-js/get-symbol-description#readme)
-- **get-tsconfig** (4.14.0, 5.0.0-beta.5) - [Homepage](https://github.com/privatenumber/get-tsconfig#readme)
+- **get-tsconfig** (4.14.0, 5.0.0-beta.6) - [Homepage](https://github.com/privatenumber/get-tsconfig#readme)
 - **get-uri** (7.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
 - **getenv** (2.0.0) - [Homepage](https://github.com/ctavan/node-getenv)
 - **giget** (2.0.0) - [Homepage](https://github.com/unjs/giget#readme)
-- **git-raw-commits** (5.0.1) - [Homepage](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/git-raw-commits#readme)
 - **git-up** (8.1.1) - [Homepage](https://github.com/IonicaBizau/git-up)
 - **git-url-parse** (16.1.0) - [Homepage](https://github.com/IonicaBizau/git-url-parse)
 - **global-directory** (5.0.0) - [Homepage](https://github.com/sindresorhus/global-directory#readme)
@@ -1199,14 +1186,14 @@ These packages are installed as dependencies of direct dependencies:
 - **hookable** (6.1.1) - [Homepage](https://github.com/unjs/hookable#readme)
 - **html-encoding-sniffer** (6.0.0) - [Homepage](https://github.com/jsdom/html-encoding-sniffer#readme)
 - **html-escaper** (2.0.2) - [Homepage](https://github.com/WebReflection/html-escaper)
-- **html-parse-stringify** (3.0.1) - [Homepage](https://github.com/henrikjoreteg/html-parse-stringify)
+- **html-parse-stringify** (4.0.1) - [Homepage](https://github.com/i18next/html-parse-stringify)
 - **http-errors** (2.0.1) - [Homepage](https://github.com/jshttp/http-errors#readme)
 - **http-proxy-agent** (8.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
 - **https-proxy-agent** (5.0.1, 7.0.6, 8.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
 - **iconv-lite** (0.7.2) - [Homepage](https://github.com/pillarjs/iconv-lite)
 - **ignore** (5.3.2, 7.0.5) - [Homepage](https://github.com/kaelzhang/node-ignore#readme)
 - **image-size** (1.2.1) - [Homepage](https://github.com/image-size/image-size#readme)
-- **immer** (10.2.0, 11.1.9) - [Homepage](https://github.com/immerjs/immer#readme)
+- **immer** (11.1.9) - [Homepage](https://github.com/immerjs/immer#readme)
 - **import-fresh** (3.3.1) - [Homepage](https://github.com/sindresorhus/import-fresh#readme)
 - **import-without-cache** (0.4.0) - [Homepage](https://github.com/sxzz/import-without-cache#readme)
 - **imurmurhash** (0.1.4) - [Homepage](https://github.com/jensyt/imurmurhash-js)
@@ -1241,7 +1228,6 @@ These packages are installed as dependencies of direct dependencies:
 - **is-node-process** (1.2.0) - [Homepage](https://github.com/mswjs/is-node-process#readme)
 - **is-number** (7.0.0) - [Homepage](https://github.com/jonschlinkert/is-number)
 - **is-number-object** (1.1.1) - [Homepage](https://github.com/inspect-js/is-number-object#readme)
-- **is-obj** (2.0.0) - [Homepage](https://github.com/sindresorhus/is-obj#readme)
 - **is-plain-obj** (4.1.0) - [Homepage](https://github.com/sindresorhus/is-plain-obj#readme)
 - **is-potential-custom-element-name** (1.0.1) - [Homepage](https://github.com/mathiasbynens/is-potential-custom-element-name)
 - **is-promise** (4.0.0) - [Homepage](https://github.com/then/is-promise#readme)
@@ -1295,10 +1281,8 @@ These packages are installed as dependencies of direct dependencies:
 - **locate-path** (6.0.0) - [Homepage](https://github.com/sindresorhus/locate-path#readme)
 - **lodash.capitalize** (4.2.1) - [Homepage](https://lodash.com/)
 - **lodash.debounce** (4.0.8) - [Homepage](https://lodash.com/)
-- **lodash.defaults** (4.2.0) - [Homepage](https://lodash.com/)
 - **lodash.escaperegexp** (4.1.2) - [Homepage](https://lodash.com/)
 - **lodash.includes** (4.3.0) - [Homepage](https://lodash.com/)
-- **lodash.isarguments** (3.1.0) - [Homepage](https://lodash.com/)
 - **lodash.isboolean** (3.0.3) - [Homepage](https://lodash.com/)
 - **lodash.isinteger** (4.0.4) - [Homepage](https://lodash.com/)
 - **lodash.isnumber** (3.0.3) - [Homepage](https://lodash.com/)
@@ -1319,7 +1303,7 @@ These packages are installed as dependencies of direct dependencies:
 - **math-intrinsics** (1.1.0) - [Homepage](https://github.com/es-shims/math-intrinsics#readme)
 - **media-typer** (1.1.1) - [Homepage](https://github.com/jshttp/media-typer#readme)
 - **memoize-one** (5.2.1, 6.0.0) - [Homepage](https://github.com/alexreardon/memoize-one#readme)
-- **meow** (13.2.0, 14.1.0) - [Homepage](https://github.com/sindresorhus/meow#readme)
+- **meow** (14.1.0) - [Homepage](https://github.com/sindresorhus/meow#readme)
 - **merge-descriptors** (2.0.0) - [Homepage](https://github.com/sindresorhus/merge-descriptors#readme)
 - **merge-stream** (2.0.0) - [Homepage](https://github.com/grncdr/merge-stream#readme)
 - **metro** (0.84.4) - [Homepage](https://github.com/facebook/metro#readme)
@@ -1347,10 +1331,10 @@ These packages are installed as dependencies of direct dependencies:
 - **mkdirp** (1.0.4) - [Homepage](https://github.com/isaacs/node-mkdirp#readme)
 - **module-details-from-path** (1.0.4) - [Homepage](https://github.com/watson/module-details-from-path#readme)
 - **ms** (2.0.0, 2.1.3) - [Homepage](https://github.com/vercel/ms#readme)
-- **msgpackr** (2.0.2) - [Homepage](https://github.com/kriszyp/msgpackr#readme)
+- **msgpackr** (2.1.0) - [Homepage](https://github.com/kriszyp/msgpackr#readme)
 - **msgpackr-extract** (3.0.4) - [Homepage](https://github.com/kriszyp/msgpackr-extract#readme)
 - **multitars** (1.0.0) - [Homepage](https://github.com/kitten/multitars#readme)
-- **nanoid** (3.3.15) - [Homepage](https://github.com/ai/nanoid#readme)
+- **nanoid** (3.3.15, 3.3.18) - [Homepage](https://github.com/ai/nanoid#readme)
 - **napi-postinstall** (0.3.4) - [Homepage](https://github.com/un-ts/napi-postinstall#readme)
 - **nativewind** (5.0.0-preview.4) - [Homepage](https://nativewind.dev)
 - **natural-compare** (1.4.0) - [Homepage](https://github.com/litejs/natural-compare-lite#readme)
@@ -1378,7 +1362,7 @@ These packages are installed as dependencies of direct dependencies:
 - **object.fromentries** (2.0.8) - [Homepage](https://github.com/es-shims/Object.fromEntries#readme)
 - **object.groupby** (1.0.3) - [Homepage](https://github.com/es-shims/Object.groupBy#readme)
 - **object.values** (1.2.1) - [Homepage](https://github.com/es-shims/Object.values#readme)
-- **obug** (2.1.3) - [Homepage](https://github.com/sxzz/obug#readme)
+- **obug** (2.1.3, 2.1.4) - [Homepage](https://github.com/sxzz/obug#readme)
 - **ohash** (2.0.11) - [Homepage](https://github.com/unjs/ohash#readme)
 - **on-exit-leak-free** (2.1.2) - [Homepage](https://github.com/mcollina/on-exit-or-gc#readme)
 - **on-finished** (2.3.0, 2.4.1) - [Homepage](https://github.com/jshttp/on-finished#readme)
@@ -1409,7 +1393,7 @@ These packages are installed as dependencies of direct dependencies:
 - **path-type** (4.0.0) - [Homepage](https://github.com/sindresorhus/path-type#readme)
 - **pathe** (2.0.3) - [Homepage](https://github.com/unjs/pathe#readme)
 - **perfect-debounce** (2.1.0) - [Homepage](https://github.com/unjs/perfect-debounce#readme)
-- **picomatch** (2.3.2, 4.0.4, 4.0.5) - [Homepage](https://github.com/micromatch/picomatch)
+- **picomatch** (2.3.2, 4.0.4, 4.0.5, 4.0.7) - [Homepage](https://github.com/micromatch/picomatch)
 - **pino-abstract-transport** (3.0.0) - [Homepage](https://github.com/pinojs/pino-abstract-transport#readme)
 - **pino-std-serializers** (7.1.0) - [Homepage](https://github.com/pinojs/pino-std-serializers#readme)
 - **pkce-challenge** (5.0.1) - [Homepage](https://github.com/crouchcd/pkce-challenge#readme)
@@ -1418,7 +1402,7 @@ These packages are installed as dependencies of direct dependencies:
 - **pluralize** (8.0.0) - [Homepage](https://github.com/blakeembrey/pluralize#readme)
 - **pngjs** (3.4.0) - [Homepage](https://github.com/lukeapage/pngjs)
 - **possible-typed-array-names** (1.1.0) - [Homepage](https://github.com/ljharb/possible-typed-array-names#readme)
-- **postcss** (8.5.16) - [Homepage](https://postcss.org/)
+- **postcss** (8.5.16, 8.5.27) - [Homepage](https://postcss.org/)
 - **postcss-value-parser** (4.2.0) - [Homepage](https://github.com/TrySound/postcss-value-parser)
 - **powershell-utils** (0.1.0, 0.2.0) - [Homepage](https://github.com/sindresorhus/powershell-utils#readme)
 - **preact** (10.29.7) - [Homepage](https://preactjs.com)
@@ -1471,7 +1455,6 @@ These packages are installed as dependencies of direct dependencies:
 - **real-require** (0.2.0, 1.0.0) - [Homepage](https://github.com/pinojs/real-require)
 - **redent** (3.0.0) - [Homepage](https://github.com/sindresorhus/redent#readme)
 - **redis-errors** (1.2.0) - [Homepage](https://github.com/NodeRedis/redis-errors#readme)
-- **redis-parser** (3.0.0) - [Homepage](https://github.com/NodeRedis/node-redis-parser#readme)
 - **redux** (5.0.1) - [Homepage](http://redux.js.org)
 - **redux-thunk** (3.1.0) - [Homepage](https://github.com/reduxjs/redux-thunk)
 - **reflect.getprototypeof** (1.0.10) - [Homepage](https://github.com/es-shims/Reflect.getPrototypeOf)
@@ -1484,7 +1467,7 @@ These packages are installed as dependencies of direct dependencies:
 - **require-directory** (2.1.1) - [Homepage](https://github.com/troygoode/node-require-directory/)
 - **require-from-string** (2.0.2) - [Homepage](https://github.com/floatdrop/require-from-string#readme)
 - **require-in-the-middle** (8.0.1) - [Homepage](https://github.com/nodejs/require-in-the-middle#readme)
-- **reselect** (5.1.1, 5.2.0) - [Homepage](https://github.com/reduxjs/reselect#readme)
+- **reselect** (5.2.0) - [Homepage](https://github.com/reduxjs/reselect#readme)
 - **resolve** (1.22.12, 2.0.0-next.7) - [Homepage](https://github.com/browserify/resolve#readme)
 - **resolve-from** (4.0.0, 5.0.0) - [Homepage](https://github.com/sindresorhus/resolve-from#readme)
 - **resolve-pkg-maps** (1.0.0) - [Homepage](https://github.com/privatenumber/resolve-pkg-maps#readme)
@@ -1495,8 +1478,8 @@ These packages are installed as dependencies of direct dependencies:
 - **rettime** (0.11.11) - [Homepage](https://github.com/kettanaito/rettime#readme)
 - **reusify** (1.1.0) - [Homepage](https://github.com/mcollina/reusify#readme)
 - **rfdc** (1.4.1) - [Homepage](https://github.com/davidmarkclements/rfdc#readme)
-- **rolldown** (1.0.3, 1.1.4) - [Homepage](https://rolldown.rs/)
-- **rolldown-plugin-dts** (0.25.2) - [Homepage](https://github.com/sxzz/rolldown-plugin-dts#readme)
+- **rolldown** (1.2.7) - [Homepage](https://rolldown.rs/)
+- **rolldown-plugin-dts** (0.28.5) - [Homepage](https://github.com/sxzz/rolldown-plugin-dts#readme)
 - **router** (2.2.0) - [Homepage](https://github.com/pillarjs/router#readme)
 - **run-applescript** (7.1.0) - [Homepage](https://github.com/sindresorhus/run-applescript#readme)
 - **safe-array-concat** (1.1.4) - [Homepage](https://github.com/ljharb/safe-array-concat#readme)
@@ -1578,7 +1561,7 @@ These packages are installed as dependencies of direct dependencies:
 - **throat** (5.0.0) - [Homepage](https://github.com/ForbesLindesay/throat#readme)
 - **tiny-invariant** (1.3.3) - [Homepage](https://github.com/alexreardon/tiny-invariant#readme)
 - **tinybench** (2.9.0) - [Homepage](https://github.com/tinylibs/tinybench#readme)
-- **tinyexec** (1.2.4) - [Homepage](https://github.com/tinylibs/tinyexec#readme)
+- **tinyexec** (1.2.4, 1.3.1) - [Homepage](https://github.com/tinylibs/tinyexec#readme)
 - **tinyglobby** (0.2.15, 0.2.17) - [Homepage](https://superchupu.dev/tinyglobby)
 - **tinyrainbow** (3.1.0) - [Homepage](https://github.com/tinylibs/tinyrainbow#readme)
 - **tldts** (7.4.5) - [Homepage](https://github.com/remusao/tldts#readme)
@@ -1625,8 +1608,8 @@ These packages are installed as dependencies of direct dependencies:
 - **utils-merge** (1.0.1) - [Homepage](https://github.com/jaredhanson/utils-merge#readme)
 - **uuid** (7.0.3) - [Homepage](https://github.com/uuidjs/uuid#readme)
 - **vary** (1.1.2) - [Homepage](https://github.com/jshttp/vary#readme)
+- **verkit** (0.4.0) - [Homepage](https://github.com/sxzz/verkit#readme)
 - **vlq** (1.0.1) - [Homepage](https://github.com/Rich-Harris/vlq#readme)
-- **void-elements** (3.1.0) - [Homepage](https://github.com/jadejs/void-elements)
 - **w3c-xmlserializer** (5.0.0) - [Homepage](https://github.com/jsdom/w3c-xmlserializer#readme)
 - **warn-once** (0.1.1) - [Homepage](https://github.com/satya164/warn-once#readme)
 - **watchpack** (2.5.2) - [Homepage](https://github.com/webpack/watchpack)
@@ -1655,6 +1638,9 @@ These packages are installed as dependencies of direct dependencies:
 - **yargs** (17.7.3, 18.0.0) - [Homepage](https://yargs.js.org/)
 - **yocto-queue** (0.1.0) - [Homepage](https://github.com/sindresorhus/yocto-queue#readme)
 - **yoctocolors** (2.1.2) - [Homepage](https://github.com/sindresorhus/yoctocolors#readme)
+- **yuku-ast** (0.9.3) - [Homepage](https://github.com/yuku-toolchain/yuku#readme)
+- **yuku-codegen** (0.9.3) - [Homepage](https://github.com/yuku-toolchain/yuku#readme)
+- **yuku-parser** (0.9.3) - [Homepage](https://github.com/yuku-toolchain/yuku#readme)
 - **zod-validation-error** (4.0.2) - [Homepage](https://github.com/causaly/zod-validation-error#readme)
 
 ### MIT AND Apache-2.0
@@ -1682,11 +1668,6 @@ These packages are installed as dependencies of direct dependencies:
 
 - **lightningcss** (1.30.1) - [Homepage](https://github.com/parcel-bundler/lightningcss#readme)
 - **lightningcss-linux-x64-gnu** (1.30.1) - [Homepage](https://github.com/parcel-bundler/lightningcss#readme)
-
-### OFL-1.1
-
-- **@fontsource-variable/inter** (5.2.8) - [Homepage](https://fontsource.org/fonts/inter)
-- **@fontsource-variable/jetbrains-mono** (5.2.8) - [Homepage](https://fontsource.org/fonts/jetbrains-mono)
 
 ### Python-2.0
 
