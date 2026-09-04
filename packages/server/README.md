@@ -12,14 +12,14 @@ src/
 └── modules/    iam · health · logging · queues · redis · events · storage
 ```
 
-| Module | What it gives you |
-|---|---|
-| `iam` | auth providers, the global guards, the decorators below |
-| `health` | `/health` — probes Postgres and Redis, 503 when either is down |
-| `logging` | pino; `@InjectLogger()` |
-| `queues` | BullMQ — api enqueues, worker consumes |
-| `redis` | one shared client behind the `REDIS` token, `@Global` |
-| `events` | in-process emitter; use a queue if it must survive a restart |
+| Module    | What it gives you                                                                                                                                                                                                                                                                      |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `iam`     | auth providers, the global guards, the decorators below                                                                                                                                                                                                                                |
+| `health`  | `/health` — probes Postgres and Redis, 503 when either is down                                                                                                                                                                                                                         |
+| `logging` | pino; `@InjectLogger()`                                                                                                                                                                                                                                                                |
+| `queues`  | BullMQ — api enqueues, worker consumes                                                                                                                                                                                                                                                 |
+| `redis`   | one shared client behind the `REDIS` token, `@Global`                                                                                                                                                                                                                                  |
+| `events`  | in-process emitter; use a queue if it must survive a restart                                                                                                                                                                                                                           |
 | `storage` | provider-blind S3 client (`StorageService implements StorageDriver`): presigned PUT/GET, HEAD, ensure-bucket + CORS, object/prefix deletes. Configured from `STORAGE_*` env via `StorageModule.forRootAsync`; works against rustfs/MinIO/R2/S3 by config alone. See `docs/storage.md`. |
 
 Before adopting a new storage provider, run the behavioral half of the
@@ -38,14 +38,14 @@ for the storage GC; the processor itself lives in `apps/worker`.
 create(@ZodRequest(CreateUserRequestSchema) dto: CreateUserRequest, @ActiveUser() user: ActiveUserType) {}
 ```
 
-| | |
-|---|---|
-| `@PublicRoute()` | skip authentication |
-| `@Permissions('user:create')` | require a permission from `@pkg/contracts` |
-| `@Roles('OWNER')` | require an org role |
-| `@SystemRoles('ADMIN')` | require a platform role, independent of any org |
-| `@ActiveUser()` | inject the authenticated user |
-| `@ZodRequest(Schema)` | validate the body; 400 with field errors |
+|                               |                                                 |
+| ----------------------------- | ----------------------------------------------- |
+| `@PublicRoute()`              | skip authentication                             |
+| `@Permissions('user:create')` | require a permission from `@pkg/contracts`      |
+| `@Roles('OWNER')`             | require an org role                             |
+| `@SystemRoles('ADMIN')`       | require a platform role, independent of any org |
+| `@ActiveUser()`               | inject the authenticated user                   |
+| `@ZodRequest(Schema)`         | validate the body; 400 with field errors        |
 
 ## Four things to know
 
@@ -53,13 +53,21 @@ create(@ZodRequest(CreateUserRequestSchema) dto: CreateUserRequest, @ActiveUser(
 without `@PublicRoute()` requires a valid token. A route carrying none of
 `@Roles`, `@Permissions` or `@SystemRoles` is refused rather than exposed.
 
+**Global guard order is scan order, and the root module scans first.** A
+global guard declared in the app's root module runs _before_ every guard from
+an imported module, whatever the imports list says. The throttler
+(`ThrottlingModule`) depends on this: it must see `req.user`, so the app
+imports it _after_ the IAM modules rather than declaring the `APP_GUARD` in
+`AppModule` — declared there, it ran before `AuthGuard` and keyed every caller
+by IP. The in-process pipeline suite pins the order with two users on one IP.
+
 **There are two role axes, and both enums contain `ADMIN`.** `orgRole`
 (`OWNER|ADMIN|MEMBER`) is a membership and decides what you may do inside the
 active organization. `systemRole` (`USER|MODERATOR|ADMIN`) belongs to the
 account and decides nothing inside one. `@Roles` and `@Permissions` read the
 first, `@SystemRoles` the second — never each other's.
 
-A system role opens *dedicated* routes; it never widens an organization-scoped
+A system role opens _dedicated_ routes; it never widens an organization-scoped
 one. Every tenant route stays scoped to the caller's active organization
 whatever their platform standing, so there is one code path to reason about
 rather than two.
@@ -82,7 +90,7 @@ logs 5xx. Messages are **translation keys**, not sentences — see `@pkg/locales
 
 Put it here when both services need it, or a second plausibly would — guards,
 filters, decorators, transport. Feature logic stays in the app: this package
-owns *that requests are authenticated*, `apps/api/src/user/` owns users.
+owns _that requests are authenticated_, `apps/api/src/user/` owns users.
 
 ```
 modules/thing/
