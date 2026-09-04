@@ -1,4 +1,3 @@
-import { cn } from '@/shared/lib/utils';
 import { useThemeColors } from '@/shared/lib/theme-colors';
 import * as React from 'react';
 import Svg, { Polyline } from 'react-native-svg';

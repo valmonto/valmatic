@@ -1,4 +1,6 @@
-import axios, {
+import {
+  create,
+  isAxiosError,
   AxiosError,
   type AxiosInstance,
   type AxiosRequestConfig,
@@ -25,7 +27,7 @@ export function setOnAuthError(cb: (() => void) | null): void {
   onAuthError = cb;
 }
 
-export const http: AxiosInstance = axios.create({
+export const http: AxiosInstance = create({
   baseURL: API_BASE_URL,
   headers: CLIENT_HEADER,
 });
@@ -61,7 +63,7 @@ http.interceptors.request.use(async (config) => {
 
 // A bare client (no interceptors) for the refresh call itself, so a 401 from
 // /auth/refresh can't recurse back into this same logic.
-const refreshClient = axios.create({ baseURL: API_BASE_URL, headers: CLIENT_HEADER });
+const refreshClient = create({ baseURL: API_BASE_URL, headers: CLIENT_HEADER });
 
 // Single-flight: concurrent 401s share one refresh round-trip.
 let refreshPromise: Promise<AuthTokens | 'unrecoverable' | null> | null = null;
@@ -83,7 +85,7 @@ async function refreshTokens(): Promise<AuthTokens | 'unrecoverable' | null> {
     await setTokens(data.tokens);
     return data.tokens;
   } catch (err) {
-    const status = axios.isAxiosError(err) ? err.response?.status : undefined;
+    const status = isAxiosError(err) ? err.response?.status : undefined;
     if (status === 401 || status === 403) return 'unrecoverable';
     return null; // transient — keep tokens, the next request retries
   }

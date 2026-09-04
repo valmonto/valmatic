@@ -133,14 +133,14 @@ function Button({
   const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
 
   const handlePressIn = (e: GestureResponderEvent) => {
-    scale.value = withTiming(0.96, { duration: 80 });
+    scale.set(withTiming(0.96, { duration: 80 }));
     if (!isDisabled && Platform.OS !== 'web') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
     }
     onPressIn?.(e);
   };
   const handlePressOut = (e: GestureResponderEvent) => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 320, mass: 0.5 });
+    scale.set(withSpring(1, { damping: 15, stiffness: 320, mass: 0.5 }));
     onPressOut?.(e);
   };
 
