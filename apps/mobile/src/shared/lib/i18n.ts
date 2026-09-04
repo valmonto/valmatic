@@ -5,11 +5,11 @@ import {
   translations,
   type SupportedLanguage,
 } from '@pkg/locales';
-import * as SecureStore from 'expo-secure-store';
 // `use` is aliased: the rules-of-hooks lint reads a bare `use(...)` at module
 // scope as React's `use` hook.
 import i18n, { changeLanguage, use as i18nUse } from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { getItem, setItem } from './secure-storage';
 
 const LANGUAGE_KEY = 'valmatic.language';
 const isSupported = (v: string | null | undefined): v is SupportedLanguage =>
@@ -45,19 +45,16 @@ i18nUse(initReactI18next).init({
 });
 
 // Apply a persisted manual override once (async — runs right after sync init).
-// Guarded: Expo's web dev server renders routes on the server first, where the
-// secure-store native module does not exist and this module-scope call threw,
-// taking every `expo start --web` request down with it.
-if (typeof window !== 'undefined') {
-  SecureStore.getItemAsync(LANGUAGE_KEY).then((saved) => {
-    if (isSupported(saved) && saved !== i18n.language) changeLanguage(saved);
-  });
-}
+// Through the platform-aware store: a direct SecureStore call has no web
+// implementation and took every `expo start --web` page down at module load.
+getItem(LANGUAGE_KEY).then((saved) => {
+  if (isSupported(saved) && saved !== i18n.language) changeLanguage(saved);
+});
 
 /** Change the app language and persist the choice across restarts. */
 export async function setLanguage(lang: SupportedLanguage): Promise<void> {
   await changeLanguage(lang);
-  await SecureStore.setItemAsync(LANGUAGE_KEY, lang);
+  await setItem(LANGUAGE_KEY, lang);
 }
 
 export { supportedLanguages, type SupportedLanguage };

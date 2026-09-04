@@ -1,42 +1,14 @@
-import * as SecureStore from 'expo-secure-store';
-import { Platform } from 'react-native';
 import type { AuthTokens } from '@pkg/contracts';
+import { deleteItem, getItem, setItem } from '../lib/secure-storage';
 
 /**
- * Token storage. On iOS/Android tokens live in the device keychain/keystore via
- * expo-secure-store (never AsyncStorage, which is plain-text) — the mobile
- * equivalent of the web app's httpOnly cookies.
- *
- * expo-secure-store is native-only, so on the web target we fall back to
- * localStorage. That's fine for the web *preview*; a production web deployment
- * should use the httpOnly-cookie flow the real web app already implements.
+ * Token storage: the device keychain/keystore on iOS/Android, localStorage on
+ * the web preview. The platform split lives in `shared/lib/secure-storage`
+ * so the i18n language override and anything else that persists a secret
+ * share one fallback.
  */
 const ACCESS_TOKEN_KEY = 'valmatic.accessToken';
 const REFRESH_TOKEN_KEY = 'valmatic.refreshToken';
-
-const isWeb = Platform.OS === 'web';
-const hasLocalStorage = () => typeof localStorage !== 'undefined';
-
-async function getItem(key: string): Promise<string | null> {
-  if (isWeb) return hasLocalStorage() ? localStorage.getItem(key) : null;
-  return SecureStore.getItemAsync(key);
-}
-
-async function setItem(key: string, value: string): Promise<void> {
-  if (isWeb) {
-    if (hasLocalStorage()) localStorage.setItem(key, value);
-    return;
-  }
-  await SecureStore.setItemAsync(key, value);
-}
-
-async function deleteItem(key: string): Promise<void> {
-  if (isWeb) {
-    if (hasLocalStorage()) localStorage.removeItem(key);
-    return;
-  }
-  await SecureStore.deleteItemAsync(key);
-}
 
 export async function getAccessToken(): Promise<string | null> {
   return getItem(ACCESS_TOKEN_KEY);

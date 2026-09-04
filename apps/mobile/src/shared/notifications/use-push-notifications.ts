@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import * as Notifications from 'expo-notifications';
 import { useEffect, useState } from 'react';
+import { Platform } from 'react-native';
 import { registerForPushNotificationsAsync } from './push';
 
 /** Pull the deep-link path out of a notification's `data` payload. */
@@ -35,6 +36,10 @@ export function usePushNotifications({ enabled }: { enabled: boolean }) {
 
   // Deep-link routing: cold-start (opened from a notification) + warm taps.
   useEffect(() => {
+    // expo-notifications has no web implementation: the call below throws on
+    // the web preview and its error overlay blocks every page. Push is a
+    // native feature; the web target simply has no notification taps.
+    if (Platform.OS === 'web') return;
     Notifications.getLastNotificationResponseAsync().then((response) => {
       const path = routeFromResponse(response);
       if (path) router.push(path as never);
