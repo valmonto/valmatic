@@ -58,6 +58,17 @@ itself resolves. Two consequences are load-bearing:
   format**: no suffix needed, and an import of an ESM-only package (NestJS 12)
   compiles to `require(esm)`, which Node 26 supports.
 
+### Which TypeScript runs where
+
+The default catalog pins TypeScript 7 (the native compiler): packages, web and
+the root `pnpm typecheck` use it. `apps/api`, `apps/worker` and `apps/mobile`
+take `catalog:ts6` instead, because the Nest CLI (`nest build`, `nest start`)
+refuses 7.0 — it needs the programmatic compiler API that 7.0 does not ship
+and 7.1 is expected to restore — and Expo's lint stack has the same need.
+Their `tsc --noEmit` therefore runs 6; the code they compile is checked the
+same way, and type-aware lint runs on the TS 7 engine regardless
+(oxlint-tsgolint). The catalog comment says when to delete the split.
+
 Why not stay on classic (`node10`) resolution: it does not describe Node, so
 TypeScript 6 deprecates it and TypeScript 7 removes it, and type-aware tooling
 built on the TS 7 engine (oxlint's `tsgolint`) refuses a project that uses it.

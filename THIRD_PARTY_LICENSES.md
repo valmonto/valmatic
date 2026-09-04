@@ -7,9 +7,9 @@ This project uses the following third-party packages:
 
 ## Summary
 
-- **Direct dependencies:** 94 packages (from pnpm catalog)
-- **Transitive dependencies:** 1360 packages
-- **Total:** 1454 packages
+- **Direct dependencies:** 88 packages (from pnpm catalog)
+- **Transitive dependencies:** 1359 packages
+- **Total:** 1447 packages
 
 ### License Breakdown
 
@@ -29,7 +29,7 @@ This project uses the following third-party packages:
 | CC-BY-4.0 | 0 | 1 | 1 |
 | CC0-1.0 | 0 | 1 | 1 |
 | ISC | 1 | 56 | 57 |
-| MIT | 79 | 1158 | 1237 |
+| MIT | 73 | 1157 | 1230 |
 | MIT AND Apache-2.0 | 0 | 1 | 1 |
 | MIT AND ISC | 0 | 1 | 1 |
 | MIT AND OFL-1.1 | 0 | 1 | 1 |
@@ -64,7 +64,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Polyfill for Metadata Reflection API
 - **rxjs** (7.8.2) - [Homepage](https://rxjs.dev)
   - Reactive Extensions for modern JavaScript
-- **typescript** (6.0.3) - [Homepage](https://www.typescriptlang.org/)
+- **typescript** (6.0.3, 7.0.2) - [Homepage](https://www.typescriptlang.org/)
   - TypeScript is a language for application scale JavaScript development
 
 ### BSD-3-Clause
@@ -85,8 +85,6 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Lint your commit messages
 - **@commitlint/config-conventional** (21.2.2) - [Homepage](https://commitlint.js.org/)
   - Shareable commitlint config enforcing conventional commits
-- **@eslint/js** (9.39.4, 10.0.1) - [Homepage](https://eslint.org)
-  - ESLint JavaScript language implementation
 - **@fastify/cookie** (11.1.2) - [Homepage](https://github.com/fastify/fastify-cookie#readme)
   - Plugin for fastify to add support for cookies
 - **@fastify/helmet** (13.1.1) - [Homepage](https://github.com/fastify/fastify-helmet#readme)
@@ -123,7 +121,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Simple and complete React DOM testing utilities that encourage good testing practices.
 - **@testing-library/user-event** (14.6.1, 14.6.7) - [Homepage](https://github.com/testing-library/user-event#readme)
   - Fire events the same way the user does
-- **@types/node** (25.9.2, 26.1.0) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node)
+- **@types/node** (26.1.0, 26.4.1) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node)
   - TypeScript definitions for node
 - **@types/react** (19.2.18) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react)
   - TypeScript definitions for react
@@ -145,22 +143,10 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
 - **drizzle-kit** (1.0.0-rc.3) - [Homepage](https://orm.drizzle.team)
 - **embla-carousel-react** (8.6.0) - [Homepage](https://www.embla-carousel.com)
   - A lightweight carousel library with fluid motion and great swipe precision
-- **eslint** (9.39.4, 10.9.1) - [Homepage](https://eslint.org)
-  - An AST-based pattern checker for JavaScript.
-- **eslint-config-prettier** (10.1.8) - [Homepage](https://github.com/prettier/eslint-config-prettier#readme)
-  - Turns off all rules that are unnecessary or might conflict with Prettier.
-- **eslint-plugin-boundaries** (6.0.2) - [Homepage](https://github.com/javierbrea/eslint-plugin-boundaries#readme)
-  - Eslint plugin checking architecture boundaries between elements
-- **eslint-plugin-prettier** (5.5.6) - [Homepage](https://github.com/prettier/eslint-plugin-prettier#readme)
-  - Runs prettier as an eslint rule
-- **eslint-plugin-react-hooks** (7.1.1) - [Homepage](https://react.dev/)
-  - ESLint rules for React Hooks
 - **fast-check** (4.9.0) - [Homepage](https://fast-check.dev/)
   - Property based testing framework for JavaScript (like QuickCheck)
 - **fastify** (5.12.1) - [Homepage](https://fastify.dev/)
   - Fast and low overhead web framework, for Node.js
-- **globals** (14.0.0, 16.5.0, 17.12.0) - [Homepage](https://github.com/sindresorhus/globals#readme)
-  - Global identifiers from different JavaScript environments
 - **husky** (9.1.7) - [Homepage](https://github.com/typicode/husky#readme)
   - Modern native Git hooks
 - **i18next** (26.4.2) - [Homepage](https://www.i18next.com)
@@ -178,6 +164,10 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
 - **nestjs-pino** (5.1.0) - [Homepage](https://github.com/iamolegga/nestjs-pino#readme)
   - Pino logger for NestJS
 - **next-themes** (0.4.6) - [Homepage](https://github.com/pacocoursey/next-themes#readme)
+- **oxlint** (1.81.0) - [Homepage](https://oxc.rs/docs/guide/usage/linter)
+  - Linter for the JavaScript Oxidation Compiler
+- **oxlint-tsgolint** (7.0.2001) - [Homepage](https://github.com/oxc-project/tsgolint#readme)
+  - High-performance type-aware TypeScript linter powered by typescript-go, for use with oxlint.
 - **pino** (10.3.1) - [Homepage](https://getpino.io)
   - super fast, all natural json logger
 - **pino-http** (11.0.0) - [Homepage](https://github.com/pinojs/pino-http#readme)
@@ -220,8 +210,6 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - The Elegant Bundler for Libraries
 - **tw-animate-css** (1.4.0) - [Homepage](https://github.com/Wombosvideo/tw-animate-css#readme)
   - TailwindCSS v4.0 compatible replacement for `tailwindcss-animate`.
-- **typescript-eslint** (8.69.0) - [Homepage](https://typescript-eslint.io/packages/typescript-eslint)
-  - Tooling which enables you to use TypeScript with ESLint
 - **vaul** (1.1.2) - [Homepage](https://vaul.emilkowal.ski/)
   - Drawer component for React.
 - **vite** (8.2.2) - [Homepage](https://vite.dev)
@@ -295,11 +283,11 @@ These packages are installed as dependencies of direct dependencies:
 - **@aws-sdk/xml-builder** (3.972.40) - [Homepage](https://github.com/aws/aws-sdk-js-v3/tree/main/packages-internal/xml-builder)
 - **@aws/lambda-invoke-store** (0.3.0) - [Homepage](https://github.com/awslabs/aws-lambda-invoke-store)
 - **@drizzle-team/brocli** (0.11.0) - [Homepage](https://github.com/drizzle-team/brocli)
-- **@eslint/config-array** (0.21.2, 0.23.5) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/config-array#readme)
-- **@eslint/config-helpers** (0.4.2, 0.7.0) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/config-helpers#readme)
-- **@eslint/core** (0.17.0, 1.2.1) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/core#readme)
-- **@eslint/object-schema** (2.1.7, 3.0.5) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/object-schema#readme)
-- **@eslint/plugin-kit** (0.4.1, 0.7.2) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/plugin-kit#readme)
+- **@eslint/config-array** (0.21.2) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/config-array#readme)
+- **@eslint/config-helpers** (0.4.2) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/config-helpers#readme)
+- **@eslint/core** (0.17.0) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/core#readme)
+- **@eslint/object-schema** (2.1.7) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/object-schema#readme)
+- **@eslint/plugin-kit** (0.4.1) - [Homepage](https://github.com/eslint/rewrite/tree/main/packages/plugin-kit#readme)
 - **@humanfs/core** (0.19.2) - [Homepage](https://github.com/humanwhocodes/humanfs#readme)
 - **@humanfs/node** (0.16.8) - [Homepage](https://github.com/humanwhocodes/humanfs#readme)
 - **@humanfs/types** (0.15.0) - [Homepage](https://github.com/humanwhocodes/humanfs#readme)
@@ -322,6 +310,7 @@ These packages are installed as dependencies of direct dependencies:
 - **@swc/core** (1.16.1) - [Homepage](https://swc.rs)
 - **@swc/counter** (0.1.3) - [Homepage](https://swc.rs)
 - **@swc/types** (0.1.28) - [Homepage](https://swc.rs)
+- **@typescript/typescript-linux-x64** (7.0.2) - [Homepage](https://www.typescriptlang.org/)
 - **@webassemblyjs/leb128** (1.13.2) - [Homepage](https://github.com/xtuc/webassemblyjs#readme)
 - **@xtuc/long** (4.2.2) - [Homepage](https://github.com/dcodeIO/long.js#readme)
 - **aria-query** (5.3.0, 5.3.2) - [Homepage](https://github.com/A11yance/aria-query#readme)
@@ -338,7 +327,6 @@ These packages are installed as dependencies of direct dependencies:
 - **eslint-visitor-keys** (3.4.3, 4.2.1, 5.0.1) - [Homepage](https://github.com/eslint/js/blob/main/packages/eslint-visitor-keys/README.md)
 - **expect-type** (1.4.0) - [Homepage](https://github.com/mmkal/expect-type#readme)
 - **exponential-backoff** (3.1.3) - [Homepage](https://github.com/coveooss/exponential-backoff#readme)
-- **fast-diff** (1.3.0) - [Homepage](https://github.com/jhchen/fast-diff#readme)
 - **fb-watchman** (2.0.2) - [Homepage](https://facebook.github.io/watchman/)
 - **human-signals** (8.0.1) - [Homepage](https://www.github.com/ehmicky/human-signals)
 - **import-in-the-middle** (3.3.2) - [Homepage](https://github.com/nodejs/import-in-the-middle#readme)
@@ -367,8 +355,8 @@ These packages are installed as dependencies of direct dependencies:
 - **dotenv-expand** (13.0.0) - [Homepage](https://github.com/motdotla/dotenv-expand#readme)
 - **entities** (4.5.0, 8.0.0) - [Homepage](https://github.com/fb55/entities#readme)
 - **escodegen** (2.1.0) - [Homepage](http://github.com/estools/escodegen)
-- **eslint-scope** (5.1.1, 8.4.0, 9.1.2) - [Homepage](https://github.com/eslint/js/blob/main/packages/eslint-scope/README.md)
-- **espree** (10.4.0, 11.2.0) - [Homepage](https://github.com/eslint/js/blob/main/packages/espree/README.md)
+- **eslint-scope** (5.1.1, 8.4.0) - [Homepage](https://github.com/eslint/js/blob/main/packages/eslint-scope/README.md)
+- **espree** (10.4.0) - [Homepage](https://github.com/eslint/js/blob/main/packages/espree/README.md)
 - **esprima** (4.0.1) - [Homepage](http://esprima.org)
 - **esrecurse** (4.3.0) - [Homepage](https://github.com/estools/esrecurse)
 - **estraverse** (4.3.0, 5.3.0) - [Homepage](https://github.com/estools/estraverse)
@@ -568,7 +556,6 @@ These packages are installed as dependencies of direct dependencies:
 - **@base-ui/utils** (0.4.0) - [Homepage](https://github.com/mui/base-ui#readme)
 - **@bcoe/v8-coverage** (1.0.2) - [Homepage](https://github.com/bcoe/v8-coverage#readme)
 - **@borewit/text-codec** (0.2.2) - [Homepage](https://github.com/Borewit/text-codec#readme)
-- **@boundaries/elements** (2.0.1) - [Homepage](https://github.com/javierbrea/eslint-plugin-boundaries#readme)
 - **@bramus/specificity** (2.4.2) - [Homepage](https://github.com/bramus/specificity#readme)
 - **@colors/colors** (1.5.0) - [Homepage](https://github.com/DABH/colors.js)
 - **@commitlint/config-validator** (21.2.0) - [Homepage](https://commitlint.js.org/)
@@ -598,6 +585,7 @@ These packages are installed as dependencies of direct dependencies:
 - **@eslint-community/eslint-utils** (4.9.1) - [Homepage](https://github.com/eslint-community/eslint-utils#readme)
 - **@eslint-community/regexpp** (4.12.2) - [Homepage](https://github.com/eslint-community/regexpp#readme)
 - **@eslint/eslintrc** (3.3.5) - [Homepage](https://github.com/eslint/eslintrc#readme)
+- **@eslint/js** (9.39.4) - [Homepage](https://eslint.org)
 - **@exodus/bytes** (1.15.1) - [Homepage](https://github.com/ExodusOSS/bytes)
 - **@expo/cli** (57.0.4) - [Homepage](https://github.com/expo/expo/tree/main/packages/@expo/cli)
 - **@expo/code-signing-certificates** (0.0.6) - [Homepage](https://github.com/expo/code-signing-certificates/tree/main#readme)
@@ -690,9 +678,10 @@ These packages are installed as dependencies of direct dependencies:
 - **@open-draft/logger** (0.3.0) - [Homepage](https://github.com/open-draft/logger#readme)
 - **@open-draft/until** (2.1.0) - [Homepage](https://github.com/open-draft/until#readme)
 - **@oxc-project/types** (0.148.0) - [Homepage](https://oxc.rs)
+- **@oxlint-tsgolint/linux-x64** (7.0.2001) - [Homepage](https://github.com/oxc-project/tsgolint#readme)
+- **@oxlint/binding-linux-x64-gnu** (1.81.0) - [Homepage](https://oxc.rs/docs/guide/usage/linter)
 - **@phun-ky/typeof** (2.0.3) - [Homepage](https://phun-ky.net/projects/typeof)
 - **@pinojs/redact** (0.4.0) - [Homepage](https://github.com/pinojs/redact#readme)
-- **@pkgr/core** (0.3.6) - [Homepage](https://github.com/un-ts/pkgr/blob/master/packages/core)
 - **@posthog/browser-common** (0.7.2) - [Homepage](https://github.com/PostHog/posthog-js#readme)
 - **@posthog/core** (1.50.2, 1.50.4) - [Homepage](https://github.com/PostHog/posthog-js#readme)
 - **@posthog/types** (1.408.0, 1.408.1) - [Homepage](https://github.com/PostHog/posthog-js#readme)
@@ -837,7 +826,6 @@ These packages are installed as dependencies of direct dependencies:
 - **@types/deep-eql** (4.0.2) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/deep-eql)
 - **@types/eslint** (9.6.1) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/eslint)
 - **@types/eslint-scope** (3.7.7) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/eslint-scope)
-- **@types/esrecurse** (4.3.1) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/esrecurse)
 - **@types/estree** (1.0.9) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/estree)
 - **@types/hammerjs** (2.0.46) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/hammerjs)
 - **@types/istanbul-lib-coverage** (2.0.6) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-lib-coverage)
@@ -855,16 +843,16 @@ These packages are installed as dependencies of direct dependencies:
 - **@types/use-sync-external-store** (0.0.6) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/use-sync-external-store)
 - **@types/yargs** (17.0.35) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/yargs)
 - **@types/yargs-parser** (21.0.3) - [Homepage](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/yargs-parser)
-- **@typescript-eslint/eslint-plugin** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io/packages/eslint-plugin)
-- **@typescript-eslint/parser** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io/packages/parser)
-- **@typescript-eslint/project-service** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io)
-- **@typescript-eslint/scope-manager** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io/packages/scope-manager)
-- **@typescript-eslint/tsconfig-utils** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io)
-- **@typescript-eslint/type-utils** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io)
-- **@typescript-eslint/types** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io)
-- **@typescript-eslint/typescript-estree** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io/packages/typescript-estree)
-- **@typescript-eslint/utils** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io/packages/utils)
-- **@typescript-eslint/visitor-keys** (8.60.1, 8.69.0) - [Homepage](https://typescript-eslint.io)
+- **@typescript-eslint/eslint-plugin** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/eslint-plugin)
+- **@typescript-eslint/parser** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/parser)
+- **@typescript-eslint/project-service** (8.60.1) - [Homepage](https://typescript-eslint.io)
+- **@typescript-eslint/scope-manager** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/scope-manager)
+- **@typescript-eslint/tsconfig-utils** (8.60.1) - [Homepage](https://typescript-eslint.io)
+- **@typescript-eslint/type-utils** (8.60.1) - [Homepage](https://typescript-eslint.io)
+- **@typescript-eslint/types** (8.60.1) - [Homepage](https://typescript-eslint.io)
+- **@typescript-eslint/typescript-estree** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/typescript-estree)
+- **@typescript-eslint/utils** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/utils)
+- **@typescript-eslint/visitor-keys** (8.60.1) - [Homepage](https://typescript-eslint.io)
 - **@unrs/resolver-binding-linux-x64-gnu** (1.12.2) - [Homepage](https://github.com/unrs/unrs-resolver)
 - **@vitest/expect** (4.1.8) - [Homepage](https://vitest.dev/api/expect)
 - **@vitest/mocker** (4.1.8) - [Homepage](https://github.com/vitest-dev/vitest/tree/main/packages/mocker)
@@ -1062,12 +1050,14 @@ These packages are installed as dependencies of direct dependencies:
 - **escalade** (3.2.0) - [Homepage](https://github.com/lukeed/escalade#readme)
 - **escape-html** (1.0.3) - [Homepage](https://github.com/component/escape-html#readme)
 - **escape-string-regexp** (1.0.5, 4.0.0) - [Homepage](https://github.com/sindresorhus/escape-string-regexp#readme)
+- **eslint** (9.39.4) - [Homepage](https://eslint.org)
 - **eslint-config-expo** (57.0.0) - [Homepage](https://github.com/expo/expo/tree/main/packages/eslint-config-expo)
 - **eslint-import-resolver-node** (0.3.9) - [Homepage](https://github.com/import-js/eslint-plugin-import)
 - **eslint-module-utils** (2.12.1) - [Homepage](https://github.com/import-js/eslint-plugin-import#readme)
 - **eslint-plugin-expo** (1.1.0) - [Homepage](https://github.com/expo/expo#readme)
 - **eslint-plugin-import** (2.32.0) - [Homepage](https://github.com/import-js/eslint-plugin-import)
 - **eslint-plugin-react** (7.37.5) - [Homepage](https://github.com/jsx-eslint/eslint-plugin-react)
+- **eslint-plugin-react-hooks** (7.1.1) - [Homepage](https://react.dev/)
 - **estree-walker** (3.0.3) - [Homepage](https://github.com/Rich-Harris/estree-walker#readme)
 - **eta** (4.5.1) - [Homepage](https://eta.js.org)
 - **etag** (1.8.1) - [Homepage](https://github.com/jshttp/etag#readme)
@@ -1166,10 +1156,10 @@ These packages are installed as dependencies of direct dependencies:
 - **git-up** (8.1.1) - [Homepage](https://github.com/IonicaBizau/git-up)
 - **git-url-parse** (16.1.0) - [Homepage](https://github.com/IonicaBizau/git-url-parse)
 - **global-directory** (5.0.0) - [Homepage](https://github.com/sindresorhus/global-directory#readme)
+- **globals** (14.0.0, 16.5.0) - [Homepage](https://github.com/sindresorhus/globals#readme)
 - **globalthis** (1.0.4) - [Homepage](https://github.com/ljharb/System.global#readme)
 - **gopd** (1.2.0) - [Homepage](https://github.com/ljharb/gopd#readme)
 - **graphql** (16.14.2) - [Homepage](https://github.com/graphql/graphql-js)
-- **handlebars** (4.7.9) - [Homepage](https://handlebarsjs.com/)
 - **has-bigints** (1.1.0) - [Homepage](https://github.com/ljharb/has-bigints#readme)
 - **has-flag** (3.0.0, 4.0.0) - [Homepage](https://github.com/sindresorhus/has-flag#readme)
 - **has-property-descriptors** (1.0.2) - [Homepage](https://github.com/inspect-js/has-property-descriptors#readme)
@@ -1210,7 +1200,7 @@ These packages are installed as dependencies of direct dependencies:
 - **is-boolean-object** (1.2.2) - [Homepage](https://github.com/inspect-js/is-boolean-object#readme)
 - **is-bun-module** (2.0.0) - [Homepage](https://github.com/SunsetTechuila/is-bun-module)
 - **is-callable** (1.2.7) - [Homepage](https://github.com/inspect-js/is-callable#readme)
-- **is-core-module** (2.16.1, 2.16.2) - [Homepage](https://github.com/inspect-js/is-core-module)
+- **is-core-module** (2.16.2) - [Homepage](https://github.com/inspect-js/is-core-module)
 - **is-data-view** (1.0.2) - [Homepage](https://github.com/inspect-js/is-data-view#readme)
 - **is-date-object** (1.1.0) - [Homepage](https://github.com/inspect-js/is-date-object#readme)
 - **is-docker** (2.2.1, 3.0.0) - [Homepage](https://github.com/sindresorhus/is-docker#readme)
@@ -1407,7 +1397,6 @@ These packages are installed as dependencies of direct dependencies:
 - **powershell-utils** (0.1.0, 0.2.0) - [Homepage](https://github.com/sindresorhus/powershell-utils#readme)
 - **preact** (10.29.7) - [Homepage](https://preactjs.com)
 - **prelude-ls** (1.2.1) - [Homepage](http://preludels.com)
-- **prettier-linter-helpers** (1.0.1) - [Homepage](https://github.com/prettier/prettier-linter-helpers#readme)
 - **pretty-format** (27.5.1, 29.7.0) - [Homepage](https://github.com/jestjs/jest#readme)
 - **pretty-ms** (9.3.0) - [Homepage](https://github.com/sindresorhus/pretty-ms#readme)
 - **process-warning** (4.0.1, 5.0.0, 5.1.0) - [Homepage](https://github.com/fastify/fastify-warning#readme)
@@ -1551,7 +1540,6 @@ These packages are installed as dependencies of direct dependencies:
 - **supports-hyperlinks** (2.3.0) - [Homepage](https://github.com/jamestalmage/supports-hyperlinks#readme)
 - **supports-preserve-symlinks-flag** (1.0.0) - [Homepage](https://github.com/inspect-js/node-supports-preserve-symlinks-flag#readme)
 - **symbol-tree** (3.2.4) - [Homepage](https://github.com/jsdom/js-symbol-tree#symbol-tree)
-- **synckit** (0.11.13) - [Homepage](https://github.com/un-ts/synckit#readme)
 - **tagged-tag** (1.0.0) - [Homepage](https://github.com/sindresorhus/tagged-tag#readme)
 - **tailwindcss-safe-area** (1.3.0) - [Homepage](https://github.com/mvllow/tailwindcss-safe-area#readme)
 - **tapable** (2.3.3) - [Homepage](https://github.com/webpack/tapable)
@@ -1588,7 +1576,7 @@ These packages are installed as dependencies of direct dependencies:
 - **unbox-primitive** (1.1.0) - [Homepage](https://github.com/ljharb/unbox-primitive#readme)
 - **unconfig-core** (7.5.0) - [Homepage](https://github.com/antfu-collective/unconfig#readme)
 - **undici** (7.24.5, 7.28.0) - [Homepage](https://undici.nodejs.org)
-- **undici-types** (7.24.6, 8.3.0) - [Homepage](https://undici.nodejs.org)
+- **undici-types** (8.3.0) - [Homepage](https://undici.nodejs.org)
 - **unicode-canonical-property-names-ecmascript** (2.0.1) - [Homepage](https://github.com/mathiasbynens/unicode-canonical-property-names-ecmascript)
 - **unicode-emoji-modifier-base** (1.0.0) - [Homepage](https://github.com/mathiasbynens/unicode-emoji-modifier-base)
 - **unicode-match-property-ecmascript** (2.0.0) - [Homepage](https://github.com/mathiasbynens/unicode-match-property-ecmascript)
@@ -1628,7 +1616,6 @@ These packages are installed as dependencies of direct dependencies:
 - **why-is-node-running** (2.3.0) - [Homepage](https://github.com/mafintosh/why-is-node-running)
 - **windows-release** (7.1.1) - [Homepage](https://github.com/sindresorhus/windows-release#readme)
 - **word-wrap** (1.2.5) - [Homepage](https://github.com/jonschlinkert/word-wrap)
-- **wordwrap** (1.0.0) - [Homepage](https://github.com/substack/node-wordwrap#readme)
 - **wrap-ansi** (7.0.0, 9.0.2) - [Homepage](https://github.com/chalk/wrap-ansi#readme)
 - **ws** (7.5.11, 8.21.0) - [Homepage](https://github.com/websockets/ws)
 - **wsl-utils** (0.3.1) - [Homepage](https://github.com/sindresorhus/wsl-utils#readme)

@@ -44,10 +44,10 @@ catalog:
   # ═══════════════════════════════════════════════════════════════════════
   #  SHARED TOOLCHAIN  (TS / lint / test — used by every package)
   # ═══════════════════════════════════════════════════════════════════════
-  typescript: 6.0.3
+  typescript: 7.0.2
   oxlint: 1.81.0
   oxlint-tsgolint: 7.0.2001
-  '@types/node': 25.9.2
+  '@types/node': 26.4.1
   vitest: 4.1.8
   '@vitest/coverage-v8': 4.1.8
   tsdown: 0.23.0 # library bundler for packages/*
@@ -185,6 +185,16 @@ catalog:
 # Named catalogs — version groups that can't share the default catalog.
 # ---------------------------------------------------------------------------
 catalogs:
+  # TypeScript 6 for the workspaces whose tooling still needs the programmatic
+  # compiler API that TypeScript 7.0 does not ship: the Nest CLI (`nest build`,
+  # `nest start`) refuses 7.0 outright and expects the API back in 7.1;
+  # mobile's Expo lint stack (typescript-eslint) has the same dependency.
+  # Everything else is on the default catalog's TypeScript 7. Delete this
+  # catalog and move the three consumers back to `catalog:` when @nestjs/cli
+  # and eslint-config-expo accept 7.x.
+  ts6:
+    typescript: 6.0.3
+
   # apps/mobile (Expo SDK 57). Referenced as `catalog:mobile`.
   #
   # Expo-managed packages (expo, expo-*, react-native*, react) are versioned by
