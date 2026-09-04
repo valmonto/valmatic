@@ -53,7 +53,8 @@ function SwipeableRow({ children, leftActions, rightActions }: SwipeableRowProps
                     action.onPress();
                   }}
                   className={cn('items-center justify-center gap-1 px-4', tone.bg)}
-                  style={{ minWidth: 76 }}>
+                  style={{ minWidth: 76 }}
+                >
                   {action.icon ? <Icon as={action.icon} size={20} className={tone.fg} /> : null}
                   {action.label ? (
                     <Text className={cn('text-xs font-medium', tone.fg)}>{action.label}</Text>
@@ -71,7 +72,8 @@ function SwipeableRow({ children, leftActions, rightActions }: SwipeableRowProps
       friction={2}
       overshootFriction={8}
       renderLeftActions={renderActions(leftActions)}
-      renderRightActions={renderActions(rightActions)}>
+      renderRightActions={renderActions(rightActions)}
+    >
       {/* Opaque so the row cleanly covers the action panels while sliding. */}
       <View className="bg-card">{children}</View>
     </Swipeable>

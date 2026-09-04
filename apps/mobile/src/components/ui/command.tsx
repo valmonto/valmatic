@@ -69,7 +69,8 @@ function CommandPalette({
               alignItems: 'center',
               paddingTop: insets.top + 48,
               paddingHorizontal: 16,
-            }}>
+            }}
+          >
             <NativeOnlyAnimatedView
               entering={FadeIn.duration(180).reduceMotion(ReduceMotion.System)}
               exiting={FadeOut.duration(150).reduceMotion(ReduceMotion.System)}
@@ -79,7 +80,8 @@ function CommandPalette({
             <NativeOnlyAnimatedView
               entering={FadeInDown.duration(200).reduceMotion(ReduceMotion.System)}
               exiting={FadeOut.duration(140).reduceMotion(ReduceMotion.System)}
-              style={{ width: '100%', maxWidth: 560, maxHeight: height * 0.6 }}>
+              style={{ width: '100%', maxWidth: 560, maxHeight: height * 0.6 }}
+            >
               <CommandPanel
                 groups={groups}
                 placeholder={placeholder}
@@ -118,7 +120,7 @@ function CommandPanel({
         (it) =>
           !q ||
           it.label.toLowerCase().includes(q) ||
-          it.keywords?.some((k) => k.toLowerCase().includes(q))
+          it.keywords?.some((k) => k.toLowerCase().includes(q)),
       ),
     }))
     .filter((g) => g.items.length > 0);
@@ -133,7 +135,8 @@ function CommandPanel({
       // Absorb touches so taps inside the panel don't dismiss via the backdrop.
       onStartShouldSetResponder={() => true}
       style={{ backgroundColor: tint }}
-      className="border-border overflow-hidden rounded-2xl border shadow-lg shadow-black/30">
+      className="border-border overflow-hidden rounded-2xl border shadow-lg shadow-black/30"
+    >
       <LinearGradient
         pointerEvents="none"
         colors={
@@ -146,7 +149,10 @@ function CommandPanel({
       />
 
       {/* Search row */}
-      <View className="border-border flex-row items-center gap-2.5 border-b px-4" style={{ height: 52 }}>
+      <View
+        className="border-border flex-row items-center gap-2.5 border-b px-4"
+        style={{ height: 52 }}
+      >
         <Icon as={Search} size={18} className="text-muted-foreground" />
         <TextInput
           autoFocus
@@ -164,7 +170,8 @@ function CommandPanel({
       <ScrollView
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ padding: 8 }}>
+        contentContainerStyle={{ padding: 8 }}
+      >
         {filtered.length === 0 ? (
           <View className="py-10">
             <Text variant="muted" className="text-center text-sm">
@@ -183,8 +190,11 @@ function CommandPanel({
                 <Pressable
                   key={ii}
                   onPress={() => run(it)}
-                  className="active:bg-accent flex-row items-center gap-3 rounded-lg px-2.5 py-2.5">
-                  {it.icon ? <Icon as={it.icon} size={18} className="text-muted-foreground" /> : null}
+                  className="active:bg-accent flex-row items-center gap-3 rounded-lg px-2.5 py-2.5"
+                >
+                  {it.icon ? (
+                    <Icon as={it.icon} size={18} className="text-muted-foreground" />
+                  ) : null}
                   <Text className="flex-1 text-[15px] text-foreground">{it.label}</Text>
                   {it.shortcut ? (
                     <View className="border-border rounded-md border px-1.5 py-0.5">

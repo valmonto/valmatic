@@ -27,7 +27,9 @@ function BarChart({ data, height = 160, showValues, className }: BarChartProps) 
         {data.map((d, i) => (
           <View key={i} className="flex-1 items-center justify-end gap-1">
             {showValues ? (
-              <Text className="text-[11px] font-medium tabular-nums text-foreground">{d.value}</Text>
+              <Text className="text-[11px] font-medium tabular-nums text-foreground">
+                {d.value}
+              </Text>
             ) : null}
             <View
               className="bg-primary w-full rounded-t-md"

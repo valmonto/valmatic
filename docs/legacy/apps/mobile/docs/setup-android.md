@@ -17,15 +17,15 @@ and **SDK Tools**, make sure these are checked (install if not):
 
 - SDK Platform **Android 16 (API 36)**
 - **Android SDK Build-Tools**
-- **Android SDK Platform-Tools**  ← gives you `adb`
+- **Android SDK Platform-Tools** ← gives you `adb`
 - **Android Emulator** (only if you'll use an emulator)
 
 The SDK lands in a default location — note it, you'll need it below:
 
-| OS | Default SDK path |
-| --- | --- |
-| Linux | `~/Android/Sdk` |
-| macOS | `~/Library/Android/sdk` |
+| OS      | Default SDK path             |
+| ------- | ---------------------------- |
+| Linux   | `~/Android/Sdk`              |
+| macOS   | `~/Library/Android/sdk`      |
 | Windows | `%LOCALAPPDATA%\Android\Sdk` |
 
 > CLI-only alternative (no GUI): install `cmdline-tools`, then
@@ -39,11 +39,11 @@ The SDK lands in a default location — note it, you'll need it below:
 The Gradle build for React Native 0.86 needs **exactly JDK 17** — newer JDKs (21/25)
 fail. Install **Temurin 17** from [adoptium.net](https://adoptium.net/temurin/releases/?version=17).
 
-| OS | Quick install |
-| --- | --- |
-| Linux | download the `.tar.gz`, unpack to a stable path e.g. `~/jdks/jdk-17…`; or `sudo apt install temurin-17-jdk` |
-| macOS | `brew install --cask temurin@17` (or the `.pkg` installer) |
-| Windows | run the **Temurin 17 `.msi`**, tick "Set JAVA_HOME" if offered |
+| OS      | Quick install                                                                                               |
+| ------- | ----------------------------------------------------------------------------------------------------------- |
+| Linux   | download the `.tar.gz`, unpack to a stable path e.g. `~/jdks/jdk-17…`; or `sudo apt install temurin-17-jdk` |
+| macOS   | `brew install --cask temurin@17` (or the `.pkg` installer)                                                  |
+| Windows | run the **Temurin 17 `.msi`**, tick "Set JAVA_HOME" if offered                                              |
 
 Confirm the 17 install works:
 
@@ -71,7 +71,7 @@ export PATH="$JAVA_HOME/bin:$PATH"
 
 Reload: `source ~/.bashrc` (or open a new terminal).
 
-### Windows (PowerShell, one-time — sets *persistent* user env vars)
+### Windows (PowerShell, one-time — sets _persistent_ user env vars)
 
 ```powershell
 setx ANDROID_HOME "$env:LOCALAPPDATA\Android\Sdk"
@@ -170,14 +170,14 @@ emulator -avd <name> -gpu host      # -gpu host = crisp hardware rendering
 
 ## Android troubleshooting
 
-| Symptom | Fix |
-| --- | --- |
+| Symptom                                            | Fix                                                                                      |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `Unsupported class file major version` / JDK error | Wrong Java. Use **JDK 17** (`java -version`); set `JAVA_HOME` or `org.gradle.java.home`. |
-| `adb: no devices/emulators found` after sleep | Wireless adb dropped → `adb connect IP:PORT` again. USB → replug + re-accept prompt. |
-| Device shows as `unauthorized` | Accept the "Allow USB debugging" dialog on the phone (re-plug if you missed it). |
-| Windows: phone not detected over USB | Install the OEM USB driver / Google USB Driver; try a different cable/port. |
-| Gradle downloads hang / SDK component missing | Open Android Studio SDK Manager, install the missing piece, accept licenses. |
-| Metro serves stale JS after a dep change | Force-stop & relaunch the app, or `pnpm clean` then `pnpm start --clear`. |
-| Login fails / network error | It's the API URL — see [hub networking](./development.md#networking-troubleshooting). |
+| `adb: no devices/emulators found` after sleep      | Wireless adb dropped → `adb connect IP:PORT` again. USB → replug + re-accept prompt.     |
+| Device shows as `unauthorized`                     | Accept the "Allow USB debugging" dialog on the phone (re-plug if you missed it).         |
+| Windows: phone not detected over USB               | Install the OEM USB driver / Google USB Driver; try a different cable/port.              |
+| Gradle downloads hang / SDK component missing      | Open Android Studio SDK Manager, install the missing piece, accept licenses.             |
+| Metro serves stale JS after a dep change           | Force-stop & relaunch the app, or `pnpm clean` then `pnpm start --clear`.                |
+| Login fails / network error                        | It's the API URL — see [hub networking](./development.md#networking-troubleshooting).    |
 
 Back to the **[setup hub](./development.md)** · iOS? **[iOS setup](./setup-ios.md)**

@@ -103,13 +103,13 @@ Developer App → Trust**. Then reopen the app.
 
 ## iOS troubleshooting
 
-| Symptom | Fix |
-| --- | --- |
-| `pnpm ios` fails at `pod install` | `cd ios && pod install --repo-update`; on Apple Silicon try `arch -x86_64 pod install`. |
-| "No development team" / signing error | Add your Apple ID in Xcode → Accounts, enable *Automatically manage signing*, pick a Team, use a unique bundle id. |
-| App installs but won't open on device | Trust the developer: Settings → General → VPN & Device Management → Trust. Ensure Developer Mode is on. |
-| Simulator can't reach the API | Simulator can use `localhost`; if the API is remote, use the LAN IP. |
-| Build errors after switching Node/deps | `pnpm clean`, delete `ios/Pods` + `ios/Podfile.lock`, re-run `pnpm ios`. |
-| Real phone: network/login fails | API URL must be the Mac's LAN IP — see [hub networking](./development.md#networking-troubleshooting). |
+| Symptom                                | Fix                                                                                                                |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `pnpm ios` fails at `pod install`      | `cd ios && pod install --repo-update`; on Apple Silicon try `arch -x86_64 pod install`.                            |
+| "No development team" / signing error  | Add your Apple ID in Xcode → Accounts, enable _Automatically manage signing_, pick a Team, use a unique bundle id. |
+| App installs but won't open on device  | Trust the developer: Settings → General → VPN & Device Management → Trust. Ensure Developer Mode is on.            |
+| Simulator can't reach the API          | Simulator can use `localhost`; if the API is remote, use the LAN IP.                                               |
+| Build errors after switching Node/deps | `pnpm clean`, delete `ios/Pods` + `ios/Podfile.lock`, re-run `pnpm ios`.                                           |
+| Real phone: network/login fails        | API URL must be the Mac's LAN IP — see [hub networking](./development.md#networking-troubleshooting).              |
 
 Back to the **[setup hub](./development.md)** · Android? **[Android setup](./setup-android.md)**

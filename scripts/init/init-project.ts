@@ -183,7 +183,10 @@ function configureMobileApp(cfg: MobileConfig, modifiedFiles: string[]): boolean
   const expo = app.expo ?? {};
   const prevScheme: string | undefined = expo.scheme;
   const prevBundleId: string | undefined = expo.ios?.bundleIdentifier;
-  const prevDomain: string | undefined = expo.ios?.associatedDomains?.[0]?.replace(/^applinks:/, '');
+  const prevDomain: string | undefined = expo.ios?.associatedDomains?.[0]?.replace(
+    /^applinks:/,
+    '',
+  );
 
   expo.name = cfg.displayName;
   expo.slug = cfg.scheme;
@@ -218,7 +221,8 @@ function configureMobileApp(cfg: MobileConfig, modifiedFiles: string[]): boolean
   // Refresh the stale identifiers embedded in the mobile docs/source.
   const docTargets = getAllFiles(join(ROOT_DIR, 'apps/mobile/docs'));
   const tokens: [string, string][] = [];
-  if (prevScheme && prevScheme !== cfg.scheme) tokens.push([`${prevScheme}://`, `${cfg.scheme}://`]);
+  if (prevScheme && prevScheme !== cfg.scheme)
+    tokens.push([`${prevScheme}://`, `${cfg.scheme}://`]);
   if (prevBundleId && prevBundleId !== cfg.bundleId) tokens.push([prevBundleId, cfg.bundleId]);
   if (cfg.domain && prevDomain && prevDomain !== cfg.domain) tokens.push([prevDomain, cfg.domain]);
 
@@ -288,7 +292,9 @@ async function main(): Promise<void> {
     const displayName = (await prompt(`  Display name [${defName}]: `)) || defName;
     const scheme = (await prompt(`  URL scheme [${projectName}]: `)) || projectName;
     const bundleId = (await prompt(`  Bundle/package id [${defBundle}]: `)) || defBundle;
-    const domain = await prompt('  Universal-link domain (blank to disable, e.g. app.example.com): ');
+    const domain = await prompt(
+      '  Universal-link domain (blank to disable, e.g. app.example.com): ',
+    );
     mobileConfig = { displayName, scheme, bundleId, domain };
   }
 

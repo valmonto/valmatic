@@ -13,7 +13,9 @@ export function ErrorStateBlock() {
         <Icon as={WifiOff} size={38} className="text-muted-foreground" />
       </View>
       <View className="items-center gap-2">
-        <Text variant="h1" className="text-2xl">You&apos;re offline</Text>
+        <Text variant="h1" className="text-2xl">
+          You&apos;re offline
+        </Text>
         <Text variant="muted" className="max-w-xs text-center text-base leading-relaxed">
           Check your connection and try again. Any changes you made are saved and will sync.
         </Text>

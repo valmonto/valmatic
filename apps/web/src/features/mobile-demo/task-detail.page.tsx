@@ -150,7 +150,8 @@ export default function MobileTaskDetailPage() {
                 <span
                   className={cn(
                     'text-[13px] font-medium transition-colors',
-                    subtask.done && 'text-muted-foreground line-through decoration-muted-foreground/50',
+                    subtask.done &&
+                      'text-muted-foreground line-through decoration-muted-foreground/50',
                   )}
                 >
                   {subtask.title}

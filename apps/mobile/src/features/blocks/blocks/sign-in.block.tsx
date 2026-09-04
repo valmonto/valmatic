@@ -16,7 +16,10 @@ export function SignInBlock() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
         <View className="flex-1 justify-center gap-8 px-6">
           {/* Brand + heading */}
           <View className="items-center gap-4">
@@ -24,8 +27,12 @@ export function SignInBlock() {
               <Text className="text-3xl font-bold text-primary-foreground">V</Text>
             </View>
             <View className="items-center gap-1.5">
-              <Text variant="h1" className="text-3xl">Welcome back</Text>
-              <Text variant="muted" className="text-center text-base">Sign in to continue to Valmatic</Text>
+              <Text variant="h1" className="text-3xl">
+                Welcome back
+              </Text>
+              <Text variant="muted" className="text-center text-base">
+                Sign in to continue to Valmatic
+              </Text>
             </View>
           </View>
 
@@ -33,14 +40,22 @@ export function SignInBlock() {
           <View className="gap-3.5">
             <View className="gap-1.5">
               <Label>Email</Label>
-              <Input icon={Mail} placeholder="you@example.com" autoCapitalize="none" keyboardType="email-address" />
+              <Input
+                icon={Mail}
+                placeholder="you@example.com"
+                autoCapitalize="none"
+                keyboardType="email-address"
+              />
             </View>
             <View className="gap-1.5">
               <Label>Password</Label>
               <Input icon={Lock} placeholder="••••••••" secureTextEntry />
             </View>
             <View className="flex-row items-center justify-between">
-              <Pressable onPress={() => setRemember((v) => !v)} className="flex-row items-center gap-2 active:opacity-70">
+              <Pressable
+                onPress={() => setRemember((v) => !v)}
+                className="flex-row items-center gap-2 active:opacity-70"
+              >
                 <Checkbox checked={remember} onCheckedChange={setRemember} />
                 <Text className="text-sm text-foreground">Remember me</Text>
               </Pressable>
@@ -55,7 +70,9 @@ export function SignInBlock() {
           <View className="gap-3.5">
             <View className="flex-row items-center gap-3">
               <Separator className="flex-1" />
-              <Text variant="muted" className="text-xs">OR</Text>
+              <Text variant="muted" className="text-xs">
+                OR
+              </Text>
               <Separator className="flex-1" />
             </View>
             <Button variant="outline" className="h-12 rounded-2xl">

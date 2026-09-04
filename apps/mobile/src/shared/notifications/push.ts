@@ -44,7 +44,8 @@ export async function registerForPushNotificationsAsync(): Promise<string | null
 
   const projectId = getProjectId();
   if (!projectId) {
-    if (__DEV__) console.warn('[push] No EAS projectId yet — run `eas init`. Skipping token fetch.');
+    if (__DEV__)
+      console.warn('[push] No EAS projectId yet — run `eas init`. Skipping token fetch.');
     return null;
   }
 

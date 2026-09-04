@@ -275,9 +275,7 @@ function getProcessorsForWorkerType() {
       return [CourseBuilderProcessor, VideoProcessor];
     case 'all':
     default:
-      return [
-        /* all processors */
-      ];
+      return [/* all processors */];
   }
 }
 ```

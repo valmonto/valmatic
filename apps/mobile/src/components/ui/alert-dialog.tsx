@@ -23,8 +23,8 @@ function AlertDialogOverlay({
   children,
   ...props
 }: Omit<React.ComponentProps<typeof AlertDialogPrimitive.Overlay>, 'asChild'> & {
-    children?: React.ReactNode;
-  }) {
+  children?: React.ReactNode;
+}) {
   const { width, height } = useWindowDimensions();
   // The scrim is a real RN View (asChild off) so its inline style is honored —
   // NativeWind can't reach the runtime-wrapped animated Pressable, and the
@@ -32,7 +32,12 @@ function AlertDialogOverlay({
   return (
     <FullWindowOverlay>
       <AlertDialogPrimitive.Overlay
-        className={cn(Platform.select({ web: 'animate-in fade-in-0 fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6' }), className)}
+        className={cn(
+          Platform.select({
+            web: 'animate-in fade-in-0 fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6',
+          }),
+          className,
+        )}
         {...props}
         style={Platform.select({
           native: {
@@ -46,11 +51,13 @@ function AlertDialogOverlay({
             padding: 24,
             backgroundColor: 'rgba(0,0,0,0.5)',
           },
-        })}>
+        })}
+      >
         <NativeOnlyAnimatedView
           entering={FadeIn.duration(200).delay(50).reduceMotion(ReduceMotion.System)}
           exiting={FadeOut.duration(150).reduceMotion(ReduceMotion.System)}
-          as="View">
+          as="View"
+        >
           {children}
         </NativeOnlyAnimatedView>
       </AlertDialogPrimitive.Overlay>
@@ -64,8 +71,8 @@ function AlertDialogContent({
   children,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Content> & {
-    portalHost?: string;
-  }) {
+  portalHost?: string;
+}) {
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === 'dark';
   return (
@@ -78,20 +85,23 @@ function AlertDialogContent({
             Platform.select({
               web: 'animate-in fade-in-0 zoom-in-95 duration-200',
             }),
-            className
+            className,
           )}
           style={{ boxShadow: '0px 16px 48px -12px rgba(0,0,0,0.45)' }}
-          {...props}>
+          {...props}
+        >
           <BlurView
             intensity={isDark ? 40 : 60}
             tint={isDark ? 'dark' : 'light'}
-            blurMethod="dimezisBlurView">
+            blurMethod="dimezisBlurView"
+          >
             {/* Higher tint opacity than a plain Card: the panel floats over the
                 dark scrim, so it needs more opaque frost to stay a clean surface
                 (otherwise the blur samples the backdrop and reads gray). */}
             <View
               className="flex flex-col gap-5 p-6"
-              style={{ backgroundColor: isDark ? 'rgba(28,28,34,0.82)' : 'rgba(255,255,255,0.82)' }}>
+              style={{ backgroundColor: isDark ? 'rgba(28,28,34,0.82)' : 'rgba(255,255,255,0.82)' }}
+            >
               {children}
             </View>
           </BlurView>

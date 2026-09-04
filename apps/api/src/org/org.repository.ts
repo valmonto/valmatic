@@ -95,10 +95,7 @@ export class OrgRepository {
    * second query — which previously had its own failure branch throwing a 500
    * for a write that had already succeeded.
    */
-  async updateOrg(
-    orgId: string,
-    data: { name?: string },
-  ): Promise<Omit<OrgRecord, 'role'> | null> {
+  async updateOrg(orgId: string, data: { name?: string }): Promise<Omit<OrgRecord, 'role'> | null> {
     if (data.name === undefined) {
       const [row] = await this.dbClient.db
         .select({
@@ -164,9 +161,7 @@ export class OrgRepository {
     return { data, total: totalResult[0]?.count ?? 0 };
   }
 
-  async findOrgById(
-    orgId: string,
-  ): Promise<{ id: string; name: string } | null> {
+  async findOrgById(orgId: string): Promise<{ id: string; name: string } | null> {
     const [row] = await this.dbClient.db
       .select({ id: organization.id, name: organization.name })
       .from(organization)

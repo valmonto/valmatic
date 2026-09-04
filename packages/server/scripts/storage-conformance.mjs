@@ -12,7 +12,15 @@
  * GET (the read path), delete. Pass = the provider works; anything else =
  * the provider is not a drop-in and needs a look at StorageService.
  */
-import { S3Client, CreateBucketCommand, HeadBucketCommand, HeadObjectCommand, DeleteObjectCommand, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  CreateBucketCommand,
+  HeadBucketCommand,
+  HeadObjectCommand,
+  DeleteObjectCommand,
+  PutObjectCommand,
+  GetObjectCommand,
+} from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 const env = (name, fallback) => process.env[name] ?? fallback;
@@ -59,32 +67,52 @@ await step('ensure bucket', async () => {
 });
 
 await step('presigned PUT uploads (browser path)', async () => {
-  const url = await getSignedUrl(client, new PutObjectCommand({ Bucket: bucket, Key: key, ContentType: 'text/plain' }), { expiresIn: 300 });
+  const url = await getSignedUrl(
+    client,
+    new PutObjectCommand({ Bucket: bucket, Key: key, ContentType: 'text/plain' }),
+    { expiresIn: 300 },
+  );
   const res = await fetch(url, { method: 'PUT', headers: { 'Content-Type': 'text/plain' }, body });
   if (!res.ok) throw new Error(`PUT ${res.status}`);
 });
 
 await step('HEAD reports truthful size (confirm path)', async () => {
   const head = await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
-  if (head.ContentLength !== body.length) throw new Error(`size ${head.ContentLength} != ${body.length}`);
+  if (head.ContentLength !== body.length)
+    throw new Error(`size ${head.ContentLength} != ${body.length}`);
   return `${head.ContentLength} bytes`;
 });
 
 await step('presigned GET serves the bytes (read path)', async () => {
-  const url = await getSignedUrl(client, new GetObjectCommand({ Bucket: bucket, Key: key, ResponseContentDisposition: 'attachment; filename="check.txt"' }), { expiresIn: 300 });
+  const url = await getSignedUrl(
+    client,
+    new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      ResponseContentDisposition: 'attachment; filename="check.txt"',
+    }),
+    { expiresIn: 300 },
+  );
   const res = await fetch(url);
   if (!res.ok) throw new Error(`GET ${res.status}`);
   const text = await res.text();
   if (text !== body) throw new Error('body mismatch');
   const cd = res.headers.get('content-disposition') ?? '';
-  return cd.includes('check.txt') ? 'content-disposition honored' : 'WARNING: content-disposition ignored';
+  return cd.includes('check.txt')
+    ? 'content-disposition honored'
+    : 'WARNING: content-disposition ignored';
 });
 
 await step('delete removes (sweep path)', async () => {
   await client.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
-  const gone = await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key })).then(() => false, () => true);
+  const gone = await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key })).then(
+    () => false,
+    () => true,
+  );
   if (!gone) throw new Error('object still present after delete');
 });
 
-console.log(failed ? '\nRESULT: FAIL — not a drop-in provider' : '\nRESULT: PASS — provider is a drop-in');
+console.log(
+  failed ? '\nRESULT: FAIL — not a drop-in provider' : '\nRESULT: PASS — provider is a drop-in',
+);
 process.exit(failed ? 1 : 0);

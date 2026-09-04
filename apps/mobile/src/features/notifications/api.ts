@@ -19,8 +19,7 @@ export const notificationsResource = (client: Api) => ({
   list: (dto: ListNotificationsRequest): Promise<ListNotificationsResponse> =>
     client.get('/notifications', { params: dto }),
 
-  getById: (id: string): Promise<GetNotificationByIdResponse> =>
-    client.get(`/notifications/${id}`),
+  getById: (id: string): Promise<GetNotificationByIdResponse> => client.get(`/notifications/${id}`),
 
   markAsRead: (id: string): Promise<MarkNotificationReadResponse> =>
     client.patch(`/notifications/${id}/read`),
@@ -28,14 +27,12 @@ export const notificationsResource = (client: Api) => ({
   markAllAsRead: (): Promise<MarkAllNotificationsReadResponse> =>
     client.patch('/notifications/read-all'),
 
-  getUnreadCount: (): Promise<GetUnreadCountResponse> =>
-    client.get('/notifications/unread-count'),
+  getUnreadCount: (): Promise<GetUnreadCountResponse> => client.get('/notifications/unread-count'),
 
   delete: (id: string): Promise<DeleteNotificationResponse> =>
     client.delete(`/notifications/${id}`),
 
-  deleteAll: (): Promise<DeleteAllNotificationsResponse> =>
-    client.delete('/notifications'),
+  deleteAll: (): Promise<DeleteAllNotificationsResponse> => client.delete('/notifications'),
 });
 
 export const notificationsApi = notificationsResource(api);

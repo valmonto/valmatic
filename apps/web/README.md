@@ -94,8 +94,7 @@ Three layers, and each has one job.
 export const userResource = (client: HttpClient) => ({
   list: (dto: ListUsersRequest): Promise<ListUsersResponse> =>
     client.get('/api/users', { params: dto }),
-  create: (dto: CreateUserRequest): Promise<CreateUserResponse> =>
-    client.post('/api/users', dto),
+  create: (dto: CreateUserRequest): Promise<CreateUserResponse> => client.post('/api/users', dto),
 });
 ```
 
@@ -109,9 +108,9 @@ that is the part you do not want re-implemented per screen.
 
 ## Reads and writes
 
-| | Hook | Gives you |
-|---|---|---|
-| read | `useCachedRequest` | SWR-cached data, `isLoading`, `mutate` |
+|       | Hook               | Gives you                                      |
+| ----- | ------------------ | ---------------------------------------------- |
+| read  | `useCachedRequest` | SWR-cached data, `isLoading`, `mutate`         |
 | write | `useActionRequest` | `execute`, `isLoading`, `error` — never throws |
 
 `useActionRequest` wraps the call in `tryCatch`, so a failed mutation renders an
@@ -121,7 +120,7 @@ error instead of unmounting the tree. Both hold a request for a minimum duration
 **Cache keys are namespaced by organization:**
 
 ```ts
-`org:${orgId}/users`
+`org:${orgId}/users`;
 ```
 
 Switching tenants therefore cannot surface another org's cached rows, and one

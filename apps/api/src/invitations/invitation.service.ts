@@ -27,7 +27,11 @@ import {
 } from '@pkg/contracts';
 import { UserRepository } from '../user/user.repository';
 import { NotificationService } from '../notifications/notification.service';
-import { InvitationRepository, type InvitationRecord, type InvitationWithOrg } from './invitation.repository';
+import {
+  InvitationRepository,
+  type InvitationRecord,
+  type InvitationWithOrg,
+} from './invitation.repository';
 
 const { BCRYPT_ROUNDS } = SECURITY_CONFIG;
 

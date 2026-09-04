@@ -65,7 +65,10 @@ export function classifyCwd(cwd, worktreesRoot) {
   const inside = rel !== '' && !rel.startsWith('..') && !isAbsolute(rel);
   return inside
     ? { action: 'kill', reason: `cwd under worktrees root (${rel})` }
-    : { action: 'keep', reason: rel === '' ? 'cwd is the worktrees root itself' : 'cwd outside worktrees root' };
+    : {
+        action: 'keep',
+        reason: rel === '' ? 'cwd is the worktrees root itself' : 'cwd outside worktrees root',
+      };
 }
 
 /**
@@ -170,7 +173,9 @@ function main() {
   const apply = args.includes('--apply') || args.includes('--force');
   const rootFlag = args.indexOf('--worktrees-root');
   const worktreesRoot =
-    rootFlag !== -1 && args[rootFlag + 1] ? resolve(args[rootFlag + 1]) : join(repoRoot(), '.claude', 'worktrees');
+    rootFlag !== -1 && args[rootFlag + 1]
+      ? resolve(args[rootFlag + 1])
+      : join(repoRoot(), '.claude', 'worktrees');
 
   const mode = apply ? 'APPLY (destructive)' : 'DRY-RUN (print only)';
   console.log(`reap-build-leaks: ${mode}`);

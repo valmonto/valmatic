@@ -86,7 +86,8 @@ function ListItem({
       <View className="flex-1 gap-0.5">
         <Text
           numberOfLines={1}
-          className={cn('text-[15px]', destructive ? 'text-destructive' : 'text-foreground')}>
+          className={cn('text-[15px]', destructive ? 'text-destructive' : 'text-foreground')}
+        >
           {title}
         </Text>
         {description ? (
@@ -99,7 +100,9 @@ function ListItem({
         (value || caption ? (
           <View className="items-end gap-0.5">
             {value ? (
-              <Text className={cn('text-sm font-medium text-foreground', valueClassName)}>{value}</Text>
+              <Text className={cn('text-sm font-medium text-foreground', valueClassName)}>
+                {value}
+              </Text>
             ) : null}
             {caption ? (
               <Text variant="muted" className="text-xs">
@@ -108,7 +111,10 @@ function ListItem({
             ) : null}
           </View>
         ) : null)}
-      {menu ?? (showChevron ? <Icon as={ChevronRight} size={18} className="text-muted-foreground" /> : null)}
+      {menu ??
+        (showChevron ? (
+          <Icon as={ChevronRight} size={18} className="text-muted-foreground" />
+        ) : null)}
     </>
   );
 

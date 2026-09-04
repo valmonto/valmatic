@@ -20,7 +20,9 @@ class DemoBoundary extends Component<{ children: ReactNode }, { error: Error | n
       return (
         <View className="rounded-xl border border-destructive/30 bg-destructive/10 p-4">
           <Text className="text-sm font-medium text-destructive">This demo failed to render</Text>
-          <Text variant="muted" className="mt-1 text-xs">{this.state.error.message}</Text>
+          <Text variant="muted" className="mt-1 text-xs">
+            {this.state.error.message}
+          </Text>
         </View>
       );
     }
@@ -35,10 +37,17 @@ export default function ShowcaseDetailScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 48 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 48 }}
+      >
         <View className="gap-6 px-5 pt-2">
           <View className="flex-row items-center justify-between pt-1">
-            <Pressable onPress={() => router.back()} hitSlop={8} className="-ml-1 flex-row items-center gap-0.5 active:opacity-70">
+            <Pressable
+              onPress={() => router.back()}
+              hitSlop={8}
+              className="-ml-1 flex-row items-center gap-0.5 active:opacity-70"
+            >
               <Icon as={ChevronLeft} size={18} className="text-muted-foreground" />
               <Text className="text-sm font-medium text-muted-foreground">Showcase</Text>
             </Pressable>

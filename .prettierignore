@@ -3,3 +3,8 @@ dist
 build
 coverage
 pnpm-lock.yaml
+# Prettier reads only the ROOT .gitignore; nested ignores (apps/e2e) are invisible to it,
+# and Playwright writes these as root inside Docker, so a write attempt is EACCES.
+**/test-results/**
+**/playwright-report/**
+.debug/

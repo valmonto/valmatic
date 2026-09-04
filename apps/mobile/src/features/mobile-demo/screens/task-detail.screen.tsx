@@ -40,7 +40,10 @@ export default function TaskDetailScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
         <View className="gap-5 px-5 pt-2">
           {/* Header */}
           <View className="flex-row items-center justify-between pt-1">
@@ -58,14 +61,18 @@ export default function TaskDetailScreen() {
           {/* Title block */}
           <View>
             <View className="flex-row items-center gap-2">
-              <View className={cn('rounded-full px-2 py-0.5', priorityMeta[task.priority].container)}>
+              <View
+                className={cn('rounded-full px-2 py-0.5', priorityMeta[task.priority].container)}
+              >
                 <Text className={cn('text-[10px] font-semibold', priorityMeta[task.priority].text)}>
                   {priorityMeta[task.priority].label}
                 </Text>
               </View>
               <View className="flex-row items-center gap-1.5">
                 <View className={cn('h-1.5 w-1.5 rounded-full', task.projectColor)} />
-                <Text className="text-[11px] font-medium text-muted-foreground">{task.project}</Text>
+                <Text className="text-[11px] font-medium text-muted-foreground">
+                  {task.project}
+                </Text>
               </View>
               <View className="ml-auto flex-row items-center gap-1">
                 <Icon
@@ -76,7 +83,7 @@ export default function TaskDetailScreen() {
                 <Text
                   className={cn(
                     'text-[11px] font-medium',
-                    task.dueToday && !done ? 'text-orange-500' : 'text-muted-foreground'
+                    task.dueToday && !done ? 'text-orange-500' : 'text-muted-foreground',
                   )}
                 >
                   {task.due}
@@ -86,7 +93,7 @@ export default function TaskDetailScreen() {
             <Text
               className={cn(
                 'mt-2.5 text-xl font-semibold text-foreground',
-                done && 'text-muted-foreground line-through'
+                done && 'text-muted-foreground line-through',
               )}
             >
               {task.title}
@@ -106,7 +113,10 @@ export default function TaskDetailScreen() {
                 </Text>
               </View>
               <View className="overflow-hidden rounded-full bg-muted" style={{ height: 6 }}>
-                <View className="rounded-full bg-primary" style={{ height: 6, width: `${progress}%` }} />
+                <View
+                  className="rounded-full bg-primary"
+                  style={{ height: 6, width: `${progress}%` }}
+                />
               </View>
               <View className="rounded-2xl border border-border bg-card shadow-sm shadow-black/5">
                 {task.subtasks.map((subtask, index) => (
@@ -115,13 +125,13 @@ export default function TaskDetailScreen() {
                     onPress={() => toggleSubtask(task.id, subtask.id)}
                     className={cn(
                       'flex-row items-center gap-3 px-3.5 py-3 active:bg-muted/40',
-                      index > 0 && 'border-t border-border'
+                      index > 0 && 'border-t border-border',
                     )}
                   >
                     <View
                       className={cn(
                         'h-5 w-5 items-center justify-center rounded-full border-2',
-                        subtask.done ? 'border-primary bg-primary' : 'border-muted-foreground/35'
+                        subtask.done ? 'border-primary bg-primary' : 'border-muted-foreground/35',
                       )}
                     >
                       {subtask.done ? (
@@ -131,7 +141,7 @@ export default function TaskDetailScreen() {
                     <Text
                       className={cn(
                         'text-[13px] font-medium text-foreground',
-                        subtask.done && 'text-muted-foreground line-through'
+                        subtask.done && 'text-muted-foreground line-through',
                       )}
                     >
                       {subtask.title}
@@ -165,8 +175,12 @@ export default function TaskDetailScreen() {
                           {comment.initials}
                         </Text>
                       </View>
-                      <Text className="text-xs font-semibold text-foreground">{comment.author}</Text>
-                      <Text className="ml-auto text-[11px] text-muted-foreground">{comment.time}</Text>
+                      <Text className="text-xs font-semibold text-foreground">
+                        {comment.author}
+                      </Text>
+                      <Text className="ml-auto text-[11px] text-muted-foreground">
+                        {comment.time}
+                      </Text>
                     </View>
                     <Text className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
                       {comment.body}
@@ -183,7 +197,11 @@ export default function TaskDetailScreen() {
             onPress={() => toggleTaskStatus(task.id)}
             className="rounded-2xl"
           >
-            <Icon as={Check} size={16} className={done ? 'text-foreground' : 'text-primary-foreground'} />
+            <Icon
+              as={Check}
+              size={16}
+              className={done ? 'text-foreground' : 'text-primary-foreground'}
+            />
             <Text>{done ? 'Reopen task' : 'Mark as done'}</Text>
           </Button>
         </View>

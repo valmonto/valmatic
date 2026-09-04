@@ -106,35 +106,35 @@ export function UserActionsDropdown() {
             {isMobile && (
               <>
                 <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onSelect={(e) => {
-                  e.preventDefault();
-                  toggleTheme();
-                }}
-              >
-                {theme === 'light' ? (
-                  <Moon className="mr-2 h-4 w-4" />
-                ) : (
-                  <Sun className="mr-2 h-4 w-4" />
-                )}
-                <span>{t(k.common.command.toggleTheme)}</span>
-              </DropdownMenuItem>
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                  <Languages className="mr-2 h-4 w-4" />
-                  <span>{t(k.common.command.changeLanguage)}</span>
-                </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>
-                  {supportedLanguages.map((lang) => (
-                    <DropdownMenuItem key={lang} onClick={() => i18n.changeLanguage(lang)}>
-                      {currentLanguage === lang ? (
-                        <Check className="mr-2 h-4 w-4" />
-                      ) : (
-                        <span className="mr-2 h-4 w-4" />
-                      )}
-                      <span>{languageNames[lang]}</span>
-                    </DropdownMenuItem>
-                  ))}
+                <DropdownMenuItem
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    toggleTheme();
+                  }}
+                >
+                  {theme === 'light' ? (
+                    <Moon className="mr-2 h-4 w-4" />
+                  ) : (
+                    <Sun className="mr-2 h-4 w-4" />
+                  )}
+                  <span>{t(k.common.command.toggleTheme)}</span>
+                </DropdownMenuItem>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    <Languages className="mr-2 h-4 w-4" />
+                    <span>{t(k.common.command.changeLanguage)}</span>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent>
+                    {supportedLanguages.map((lang) => (
+                      <DropdownMenuItem key={lang} onClick={() => i18n.changeLanguage(lang)}>
+                        {currentLanguage === lang ? (
+                          <Check className="mr-2 h-4 w-4" />
+                        ) : (
+                          <span className="mr-2 h-4 w-4" />
+                        )}
+                        <span>{languageNames[lang]}</span>
+                      </DropdownMenuItem>
+                    ))}
                   </DropdownMenuSubContent>
                 </DropdownMenuSub>
               </>

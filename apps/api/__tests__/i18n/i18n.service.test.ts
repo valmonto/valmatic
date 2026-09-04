@@ -10,7 +10,10 @@ import { I18nService } from '@/i18n/i18n.service';
  */
 async function serviceFor(acceptLanguage?: string): Promise<I18nService> {
   const moduleRef = await Test.createTestingModule({
-    providers: [I18nService, { provide: REQUEST, useValue: { headers: { 'accept-language': acceptLanguage } } }],
+    providers: [
+      I18nService,
+      { provide: REQUEST, useValue: { headers: { 'accept-language': acceptLanguage } } },
+    ],
   }).compile();
 
   return moduleRef.resolve(I18nService);

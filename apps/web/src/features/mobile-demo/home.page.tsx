@@ -1,7 +1,14 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router';
 import { Area, AreaChart, ResponsiveContainer } from 'recharts';
-import { ArrowUpRight, Flame, GitCommitHorizontal, MessageSquare, Rocket, UserPlus } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Flame,
+  GitCommitHorizontal,
+  MessageSquare,
+  Rocket,
+  UserPlus,
+} from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { TaskCard } from './components/task-card';
 import { useMobileDemoStore } from './store';
@@ -95,9 +102,27 @@ export default function MobileHomePage() {
   const openToday = todaysTasks.filter((task) => task.status !== 'done');
 
   const stats = [
-    { label: 'Active tasks', value: String(activeCount), change: '+2', data: sparkData.active, color: 'var(--primary)' },
-    { label: 'Done this week', value: '9', change: '+38%', data: sparkData.completed, color: 'oklch(0.696 0.17 162)' },
-    { label: 'Velocity', value: '64', change: '+12%', data: sparkData.velocity, color: 'oklch(0.685 0.169 237)' },
+    {
+      label: 'Active tasks',
+      value: String(activeCount),
+      change: '+2',
+      data: sparkData.active,
+      color: 'var(--primary)',
+    },
+    {
+      label: 'Done this week',
+      value: '9',
+      change: '+38%',
+      data: sparkData.completed,
+      color: 'oklch(0.696 0.17 162)',
+    },
+    {
+      label: 'Velocity',
+      value: '64',
+      change: '+12%',
+      data: sparkData.velocity,
+      color: 'oklch(0.685 0.169 237)',
+    },
   ];
 
   return (
@@ -153,7 +178,9 @@ export default function MobileHomePage() {
           >
             <p className="text-[11px] font-medium text-muted-foreground">{stat.label}</p>
             <div className="mt-1 flex items-baseline gap-1.5">
-              <span className="text-xl font-semibold tabular-nums tracking-tight">{stat.value}</span>
+              <span className="text-xl font-semibold tabular-nums tracking-tight">
+                {stat.value}
+              </span>
               <span className="flex items-center text-[10px] font-medium text-emerald-600 dark:text-emerald-500">
                 <ArrowUpRight className="size-2.5" />
                 {stat.change}

@@ -12,12 +12,7 @@ import {
   lt,
   type AttachmentRow,
 } from '@pkg/database';
-import {
-  ATTACHMENTS_SWEEP_QUEUE,
-  InjectLogger,
-  PinoLogger,
-  StorageService,
-} from '@pkg/server';
+import { ATTACHMENTS_SWEEP_QUEUE, InjectLogger, PinoLogger, StorageService } from '@pkg/server';
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;
@@ -60,7 +55,10 @@ export class AttachmentsSweepProcessor extends WorkerHost implements OnModuleIni
       .where(
         and(
           eq(attachment.status, 'pending'),
-          lt(attachment.createdAt, new Date(now - ATTACHMENTS_SWEEP_QUEUE.pendingMaxAgeHours * HOUR_MS)),
+          lt(
+            attachment.createdAt,
+            new Date(now - ATTACHMENTS_SWEEP_QUEUE.pendingMaxAgeHours * HOUR_MS),
+          ),
           isNull(attachment.deletedAt),
         ),
       )
@@ -96,7 +94,10 @@ export class AttachmentsSweepProcessor extends WorkerHost implements OnModuleIni
       .where(
         and(
           isNotNull(attachment.deletedAt),
-          lt(attachment.deletedAt, new Date(now - ATTACHMENTS_SWEEP_QUEUE.softDeletedRetentionDays * DAY_MS)),
+          lt(
+            attachment.deletedAt,
+            new Date(now - ATTACHMENTS_SWEEP_QUEUE.softDeletedRetentionDays * DAY_MS),
+          ),
         ),
       )
       .limit(limit);
@@ -105,7 +106,11 @@ export class AttachmentsSweepProcessor extends WorkerHost implements OnModuleIni
       await this.dbClient.db.delete(attachment).where(eq(attachment.id, row.id));
     }
 
-    const result = { pending: stalePending.length, expired: expired.length, purged: purgeable.length };
+    const result = {
+      pending: stalePending.length,
+      expired: expired.length,
+      purged: purgeable.length,
+    };
     if (result.pending + result.expired + result.purged > 0) {
       this.logger.info(result, 'Attachments sweep');
     }

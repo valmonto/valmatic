@@ -107,7 +107,7 @@ function Sheet({ trigger, open, onOpenChange, title, description, footer, childr
             translateY.value = withSpring(0, SPRING);
           }
         }),
-    [winH, finishClose, translateY]
+    [winH, finishClose, translateY],
   );
 
   const panelStyle = useAnimatedStyle(() => ({ transform: [{ translateY: translateY.value }] }));
@@ -135,11 +135,13 @@ function Sheet({ trigger, open, onOpenChange, title, description, footer, childr
               />
               <View
                 pointerEvents="box-none"
-                style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
+                style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}
+              >
                 <Animated.View
                   onLayout={onPanelLayout}
                   style={[panelStyle, { maxHeight: winH * 0.9, backgroundColor: tint }]}
-                  className="border-border overflow-hidden rounded-t-3xl border-t">
+                  className="border-border overflow-hidden rounded-t-3xl border-t"
+                >
                   {/* Liquid-glass sheen (subtle in dark). */}
                   <LinearGradient
                     pointerEvents="none"
@@ -178,14 +180,16 @@ function Sheet({ trigger, open, onOpenChange, title, description, footer, childr
                       paddingHorizontal: 20,
                       paddingTop: 4,
                       paddingBottom: footer ? 8 : insets.bottom + 16,
-                    }}>
+                    }}
+                  >
                     {children}
                   </ScrollView>
 
                   {footer ? (
                     <View
                       className="border-border/60 flex-row justify-end gap-2 border-t px-5 pt-4"
-                      style={{ paddingBottom: insets.bottom + 12 }}>
+                      style={{ paddingBottom: insets.bottom + 12 }}
+                    >
                       {footer}
                     </View>
                   ) : null}

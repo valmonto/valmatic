@@ -44,7 +44,9 @@ function Tab({ tab, badge }: { tab: TabItem; badge?: number }) {
               </span>
             )}
           </span>
-          <span className={cn('text-[10px] leading-none', isActive ? 'font-semibold' : 'font-medium')}>
+          <span
+            className={cn('text-[10px] leading-none', isActive ? 'font-semibold' : 'font-medium')}
+          >
             {tab.label}
           </span>
         </>
@@ -82,7 +84,11 @@ export function TabBar() {
             </button>
           </div>
           {rightTabs.map((tab) => (
-            <Tab key={tab.to} tab={tab} badge={tab.to === '/mobile/inbox' ? unreadCount : undefined} />
+            <Tab
+              key={tab.to}
+              tab={tab}
+              badge={tab.to === '/mobile/inbox' ? unreadCount : undefined}
+            />
           ))}
         </div>
         <div className="flex justify-center pt-1 pb-2">

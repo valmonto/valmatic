@@ -2,9 +2,7 @@
   "version": "8",
   "dialect": "postgres",
   "id": "5b46c783-2def-43a3-a68b-5ce802558def",
-  "prevIds": [
-    "b3e16e49-557b-485e-b370-f375980d935e"
-  ],
+  "prevIds": ["b3e16e49-557b-485e-b370-f375980d935e"],
   "ddl": [
     {
       "isRlsEnabled": false,
@@ -555,14 +553,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "owner_id"
-      ],
+      "columns": ["owner_id"],
       "schemaTo": "public",
       "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "RESTRICT",
       "name": "organization_owner_id_user_id_fkey",
@@ -572,14 +566,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "org_id"
-      ],
+      "columns": ["org_id"],
       "schemaTo": "public",
       "tableTo": "organization",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "organization_user_org_id_organization_id_fkey",
@@ -589,14 +579,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
+      "columns": ["user_id"],
       "schemaTo": "public",
       "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "organization_user_user_id_user_id_fkey",
@@ -606,14 +592,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
+      "columns": ["user_id"],
       "schemaTo": "public",
       "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "notification_user_id_user_id_fkey",
@@ -623,14 +605,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "org_id"
-      ],
+      "columns": ["org_id"],
       "schemaTo": "public",
       "tableTo": "organization",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "notification_org_id_organization_id_fkey",
@@ -639,10 +617,7 @@
       "table": "notification"
     },
     {
-      "columns": [
-        "org_id",
-        "user_id"
-      ],
+      "columns": ["org_id", "user_id"],
       "nameExplicit": false,
       "name": "organization_user_pkey",
       "entityType": "pks",
@@ -650,9 +625,7 @@
       "table": "organization_user"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "user_pkey",
       "schema": "public",
@@ -660,9 +633,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "organization_pkey",
       "schema": "public",
@@ -670,9 +641,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "notification_pkey",
       "schema": "public",
@@ -681,9 +650,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "email"
-      ],
+      "columns": ["email"],
       "nullsNotDistinct": false,
       "name": "user_email_key",
       "schema": "public",

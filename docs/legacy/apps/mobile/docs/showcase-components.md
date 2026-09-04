@@ -11,39 +11,39 @@ Compares, for every component in the mobile **Showcase** (Profile → Developer 
 
 > ⚠️ The "RNR shows" column is my best description of the canonical demo — **verify against the live RNR showcase** and correct anything that's off. That's the point of this doc.
 
-| # | Component | RNR shows (canonical) | We show | Status | Suggested additions |
-|---|-----------|------------------------|---------|--------|---------------------|
-| 1 | **Accordion** | Single-open, collapsible, 3 FAQ items | Single-open, 2 items ("Is it accessible?", "Is it themed?") | ✅ | Add a `type="multiple"` example |
-| 2 | **Alert** | Default + destructive, each with icon/title/description | Info ("Heads up!") + destructive ("Error"), both with icons | ✅ | — |
-| 3 | **Alert Dialog** | Trigger → title/description + Cancel/Action | Trigger → "Are you absolutely sure?" + Cancel/Continue | ✅ | — |
-| 4 | **Aspect Ratio** | 16:9 image inside ratio box | 16:9 muted placeholder box | ⚠️ | Use a real `Image` to show it constrains media |
-| 5 | **Avatar** | Image with fallback | Image (pravatar) + fallback, and fallback-only | ✅ | — |
-| 6 | **Badge** | default / secondary / destructive / outline | Same 4 variants | ✅ | — |
-| 7 | **Button** | All variants + sizes, **icon buttons, disabled, loading** | Variants (6) + sizes (sm/lg) | ⚠️ | Add icon button (`size="icon"`), disabled, with-leading-icon |
-| 8 | **Card** | Header/Title/Description/Content/Footer, form inside | Header/content/footer with Cancel + Deploy | ✅ | — |
-| 9 | **Checkbox** | Checked + with-label + disabled | 2 checkboxes with labels | ⚠️ | Add a disabled example |
-| 10 | **Collapsible** | Trigger toggles hidden content | Trigger toggles 2 items | ✅ | — |
-| 11 | **Context Menu** | Long-press → items, separators, sub-menu, checkbox items | Long-press area → Back/Reload/Save | ⚠️ | Add sub-menu + checkbox/radio items |
-| 12 | **Dialog** | Trigger → form (inputs) + footer | Trigger → Edit profile (name input) + Save | ✅ | — |
-| 13 | **Dropdown Menu** | Label, items, separator, **sub-menu, checkbox/radio items, shortcuts** | Label + Profile/Billing/Settings | ⚠️ | Add sub-menu, checkbox/radio items, shortcuts |
-| 14 | **Hover Card** | Trigger → rich card (avatar + text) | Link trigger → name + description | ⚠️ | Add an avatar/row layout to match RNR |
-| 15 | **Icon** | Lucide icon rendered with size/color via className | 4 colored icons (star/heart/bell/check) | ✅ | — |
-| 16 | **Input** | Default, with label, disabled, **with icon** | Label + email input | ⚠️ | Add disabled + leading-icon variants |
-| 17 | **Label** | Label paired with a control | Label + input | ✅ | — |
-| 18 | **Menubar** | File/Edit/View menus with items/shortcuts/sub-menus | File + Edit menus (New/Open, Undo/Redo) | ⚠️ | Add shortcuts + a sub-menu |
-| 19 | **Popover** | Trigger → content (form/settings) | Trigger → "Dimensions" text | ⚠️ | Add inputs inside to match RNR's form popover |
-| 20 | **Progress** | Determinate bar (often animated) | Static 66% bar | ⚠️ | Add an animated/indeterminate example |
-| 21 | **Radio Group** | Grouped options with labels | 3 options (default/comfortable/compact) | ✅ | — |
-| 22 | **Select** | Trigger → grouped items, labels, scroll | Trigger → Apple/Banana/Orange | ⚠️ | Add `SelectGroup` + `SelectLabel` |
-| 23 | **Separator** | Horizontal + vertical | Horizontal + vertical (Blog/Docs/Source) | ✅ | — |
-| 24 | **Skeleton** | Avatar + text-line placeholders | Avatar + 2 lines | ✅ | — |
-| 25 | **Switch** | Toggle with label, disabled | Airplane mode toggle | ⚠️ | Add a disabled example |
-| 26 | **Tabs** | Tab list + content per tab (often forms) | Account / Password tabs | ✅ | — |
-| 27 | **Text** | Typographic variants (h1–h4, p, blockquote, code, lead, large, small, muted) | h3 / large / p / muted / code | ⚠️ | Add h1/h2/h4, blockquote, small, lead |
-| 28 | **Textarea** | Default, with label, disabled | Label + textarea | ✅ | — |
-| 29 | **Toggle** | Single toggle (icon), variants/sizes | Bold icon toggle | ⚠️ | Add outline variant + sizes |
-| 30 | **Toggle Group** | Single & multiple selection, icons | Multiple (Bold/Italic/Underline) | ⚠️ | Add a `type="single"` example |
-| 31 | **Tooltip** | Trigger → tooltip (press on native) | Trigger → "Add to library" | ✅ | — |
+| #   | Component         | RNR shows (canonical)                                                        | We show                                                     | Status | Suggested additions                                          |
+| --- | ----------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------- | ------ | ------------------------------------------------------------ |
+| 1   | **Accordion**     | Single-open, collapsible, 3 FAQ items                                        | Single-open, 2 items ("Is it accessible?", "Is it themed?") | ✅     | Add a `type="multiple"` example                              |
+| 2   | **Alert**         | Default + destructive, each with icon/title/description                      | Info ("Heads up!") + destructive ("Error"), both with icons | ✅     | —                                                            |
+| 3   | **Alert Dialog**  | Trigger → title/description + Cancel/Action                                  | Trigger → "Are you absolutely sure?" + Cancel/Continue      | ✅     | —                                                            |
+| 4   | **Aspect Ratio**  | 16:9 image inside ratio box                                                  | 16:9 muted placeholder box                                  | ⚠️     | Use a real `Image` to show it constrains media               |
+| 5   | **Avatar**        | Image with fallback                                                          | Image (pravatar) + fallback, and fallback-only              | ✅     | —                                                            |
+| 6   | **Badge**         | default / secondary / destructive / outline                                  | Same 4 variants                                             | ✅     | —                                                            |
+| 7   | **Button**        | All variants + sizes, **icon buttons, disabled, loading**                    | Variants (6) + sizes (sm/lg)                                | ⚠️     | Add icon button (`size="icon"`), disabled, with-leading-icon |
+| 8   | **Card**          | Header/Title/Description/Content/Footer, form inside                         | Header/content/footer with Cancel + Deploy                  | ✅     | —                                                            |
+| 9   | **Checkbox**      | Checked + with-label + disabled                                              | 2 checkboxes with labels                                    | ⚠️     | Add a disabled example                                       |
+| 10  | **Collapsible**   | Trigger toggles hidden content                                               | Trigger toggles 2 items                                     | ✅     | —                                                            |
+| 11  | **Context Menu**  | Long-press → items, separators, sub-menu, checkbox items                     | Long-press area → Back/Reload/Save                          | ⚠️     | Add sub-menu + checkbox/radio items                          |
+| 12  | **Dialog**        | Trigger → form (inputs) + footer                                             | Trigger → Edit profile (name input) + Save                  | ✅     | —                                                            |
+| 13  | **Dropdown Menu** | Label, items, separator, **sub-menu, checkbox/radio items, shortcuts**       | Label + Profile/Billing/Settings                            | ⚠️     | Add sub-menu, checkbox/radio items, shortcuts                |
+| 14  | **Hover Card**    | Trigger → rich card (avatar + text)                                          | Link trigger → name + description                           | ⚠️     | Add an avatar/row layout to match RNR                        |
+| 15  | **Icon**          | Lucide icon rendered with size/color via className                           | 4 colored icons (star/heart/bell/check)                     | ✅     | —                                                            |
+| 16  | **Input**         | Default, with label, disabled, **with icon**                                 | Label + email input                                         | ⚠️     | Add disabled + leading-icon variants                         |
+| 17  | **Label**         | Label paired with a control                                                  | Label + input                                               | ✅     | —                                                            |
+| 18  | **Menubar**       | File/Edit/View menus with items/shortcuts/sub-menus                          | File + Edit menus (New/Open, Undo/Redo)                     | ⚠️     | Add shortcuts + a sub-menu                                   |
+| 19  | **Popover**       | Trigger → content (form/settings)                                            | Trigger → "Dimensions" text                                 | ⚠️     | Add inputs inside to match RNR's form popover                |
+| 20  | **Progress**      | Determinate bar (often animated)                                             | Static 66% bar                                              | ⚠️     | Add an animated/indeterminate example                        |
+| 21  | **Radio Group**   | Grouped options with labels                                                  | 3 options (default/comfortable/compact)                     | ✅     | —                                                            |
+| 22  | **Select**        | Trigger → grouped items, labels, scroll                                      | Trigger → Apple/Banana/Orange                               | ⚠️     | Add `SelectGroup` + `SelectLabel`                            |
+| 23  | **Separator**     | Horizontal + vertical                                                        | Horizontal + vertical (Blog/Docs/Source)                    | ✅     | —                                                            |
+| 24  | **Skeleton**      | Avatar + text-line placeholders                                              | Avatar + 2 lines                                            | ✅     | —                                                            |
+| 25  | **Switch**        | Toggle with label, disabled                                                  | Airplane mode toggle                                        | ⚠️     | Add a disabled example                                       |
+| 26  | **Tabs**          | Tab list + content per tab (often forms)                                     | Account / Password tabs                                     | ✅     | —                                                            |
+| 27  | **Text**          | Typographic variants (h1–h4, p, blockquote, code, lead, large, small, muted) | h3 / large / p / muted / code                               | ⚠️     | Add h1/h2/h4, blockquote, small, lead                        |
+| 28  | **Textarea**      | Default, with label, disabled                                                | Label + textarea                                            | ✅     | —                                                            |
+| 29  | **Toggle**        | Single toggle (icon), variants/sizes                                         | Bold icon toggle                                            | ⚠️     | Add outline variant + sizes                                  |
+| 30  | **Toggle Group**  | Single & multiple selection, icons                                           | Multiple (Bold/Italic/Underline)                            | ⚠️     | Add a `type="single"` example                                |
+| 31  | **Tooltip**       | Trigger → tooltip (press on native)                                          | Trigger → "Add to library"                                  | ✅     | —                                                            |
 
 ## Net-new components (built on top of the RNR core)
 
@@ -72,10 +72,10 @@ but choose deliberately, because a native module is **compiled into every build'
 `.apk`/`.ipa` whether or not any screen imports it** (autolinking links installed
 native deps; JS tree-shaking never removes native code):
 
-| Option | Deps to add | Native rebuild? | Binary cost | When |
-|--------|-------------|-----------------|-------------|------|
-| **`react-native-gifted-charts`** | `react-native-gifted-charts` (SVG-only; rides existing `react-native-svg`) | No | ~none (no new native module) | **Preferred** — line/area/pie/etc. without native bloat. |
-| **`victory-native` (XL)** | `victory-native` (already in the `mobile` catalog) + **`@shopify/react-native-skia`** | **Yes** (`pnpm android` / `pnpm ios`) | **+~4–7 MB per ABI**, even if unused | Only when you need Skia-grade performance / interactivity / thousands of points. |
+| Option                           | Deps to add                                                                           | Native rebuild?                       | Binary cost                          | When                                                                             |
+| -------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------- | ------------------------------------ | -------------------------------------------------------------------------------- |
+| **`react-native-gifted-charts`** | `react-native-gifted-charts` (SVG-only; rides existing `react-native-svg`)            | No                                    | ~none (no new native module)         | **Preferred** — line/area/pie/etc. without native bloat.                         |
+| **`victory-native` (XL)**        | `victory-native` (already in the `mobile` catalog) + **`@shopify/react-native-skia`** | **Yes** (`pnpm android` / `pnpm ios`) | **+~4–7 MB per ABI**, even if unused | Only when you need Skia-grade performance / interactivity / thousands of points. |
 
 **To add `victory-native`** (opt-in per project):
 
@@ -96,8 +96,8 @@ first, and only escalate to **victory-native + Skia** if a screen genuinely need
 
 ## Components installed but not in the showcase
 
-| Component | Why not shown | Action |
-|-----------|---------------|--------|
+| Component                   | Why not shown                                                                          | Action                                                 |
+| --------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------ |
 | `native-only-animated-view` | Internal animation wrapper, not a user-facing UI component (RNR showcase omits it too) | Leave out (or add a tiny "fade/slide" demo if desired) |
 
 ## Notes & known caveats

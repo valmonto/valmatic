@@ -41,7 +41,8 @@ function RowMenu({ actions, icon = EllipsisVertical, className }: RowMenuProps) 
           hitSlop={10}
           accessibilityRole="button"
           accessibilityLabel="More actions"
-          className={cn('rounded-full p-1 active:opacity-60', className)}>
+          className={cn('rounded-full p-1 active:opacity-60', className)}
+        >
           <Icon as={icon} size={18} className="text-muted-foreground" />
         </Pressable>
       </DropdownMenuTrigger>
@@ -51,7 +52,8 @@ function RowMenu({ actions, icon = EllipsisVertical, className }: RowMenuProps) 
             {action.separated ? <DropdownMenuSeparator /> : null}
             <DropdownMenuItem
               onPress={action.onPress}
-              variant={action.destructive ? 'destructive' : 'default'}>
+              variant={action.destructive ? 'destructive' : 'default'}
+            >
               {action.icon ? (
                 <Icon
                   as={action.icon}

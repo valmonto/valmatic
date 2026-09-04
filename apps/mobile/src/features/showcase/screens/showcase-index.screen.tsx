@@ -22,15 +22,24 @@ export default function ShowcaseIndexScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 32 }}
+      >
         <View className="gap-4 px-5 pt-2">
           <View className="flex-row items-center justify-between">
-            <Pressable onPress={() => router.back()} hitSlop={8} className="-ml-1 flex-row items-center gap-0.5 active:opacity-70">
+            <Pressable
+              onPress={() => router.back()}
+              hitSlop={8}
+              className="-ml-1 flex-row items-center gap-0.5 active:opacity-70"
+            >
               <Icon as={ChevronLeft} size={18} className="text-muted-foreground" />
               <Text className="text-sm font-medium text-muted-foreground">Profile</Text>
             </Pressable>
             <View className="flex-row items-center gap-3">
-              <Text variant="muted" className="text-xs">{showcaseEntries.length} components</Text>
+              <Text variant="muted" className="text-xs">
+                {showcaseEntries.length} components
+              </Text>
               <ThemeToggle />
             </View>
           </View>
@@ -58,7 +67,11 @@ export default function ShowcaseIndexScreen() {
               </Fragment>
             ))}
             {visible.length === 0 ? (
-              <View className="py-10"><Text variant="muted" className="text-center text-sm">No components match.</Text></View>
+              <View className="py-10">
+                <Text variant="muted" className="text-center text-sm">
+                  No components match.
+                </Text>
+              </View>
             ) : null}
           </View>
         </View>

@@ -39,7 +39,7 @@ function Icon({ as: IconComponent, className, size = 14, ...props }: IconProps) 
   return useCssElement(
     IconComponent,
     { className: cn('text-foreground', textClass, className), size, ...props },
-    ICON_MAPPING
+    ICON_MAPPING,
   );
 }
 

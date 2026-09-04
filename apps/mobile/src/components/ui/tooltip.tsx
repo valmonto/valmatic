@@ -20,14 +20,15 @@ function TooltipContent({
   side = 'top',
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Content> & {
-    portalHost?: string;
-  }) {
+  portalHost?: string;
+}) {
   return (
     <TooltipPrimitive.Portal hostName={portalHost}>
       <FullWindowOverlay>
         <TooltipPrimitive.Overlay
           style={Platform.select({ native: StyleSheet.absoluteFill })}
-          asChild={Platform.OS !== 'web'}>
+          asChild={Platform.OS !== 'web'}
+        >
           <NativeOnlyAnimatedView
             entering={
               side === 'top'
@@ -35,11 +36,12 @@ function TooltipContent({
                     .duration(150)
                     .reduceMotion(ReduceMotion.System)
                 : FadeInUp.withInitialValues({ transform: [{ translateY: -5 }] }).reduceMotion(
-                    ReduceMotion.System
+                    ReduceMotion.System,
                   )
             }
             exiting={FadeOut.reduceMotion(ReduceMotion.System)}
-            as="Pressable">
+            as="Pressable"
+          >
             <TextClassContext.Provider value="text-xs font-medium text-background">
               <TooltipPrimitive.Content
                 sideOffset={sideOffset}
@@ -51,10 +53,10 @@ function TooltipContent({
                       side === 'bottom' && 'slide-in-from-top-2',
                       side === 'left' && 'slide-in-from-right-2',
                       side === 'right' && 'slide-in-from-left-2',
-                      side === 'top' && 'slide-in-from-bottom-2'
+                      side === 'top' && 'slide-in-from-bottom-2',
                     ),
                   }),
-                  className
+                  className,
                 )}
                 side={side}
                 {...props}

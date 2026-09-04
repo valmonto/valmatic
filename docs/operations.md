@@ -36,11 +36,11 @@ What is already scale-ready, by design:
 exist, one disk failure is total, unrecoverable loss of every customer's data.
 This is the only genuinely urgent item in this document.
 
-| Tier | What | Trigger | Cost |
-|---|---|---|---|
-| 1 | Nightly `pg_dump` → object storage (Hetzner Storage Box / Cloudflare R2 / Backblaze B2), 30-day retention, **and a tested restore** — an unrestored backup is a hope, not a backup | **before any paying customer** (~2h) | ~€1–5/mo |
-| 2 | WAL archiving (pgBackRest) → point-in-time recovery: "restore to 14:32, right before the bad migration" | first serious customers | same storage |
-| 3 | Managed Postgres (Neon, Supabase, DO) — PITR, failover, someone else's pager. Neon is a drop-in `DATABASE_URL` change | when €25–50/mo is trivial against revenue | €25–50/mo |
+| Tier | What                                                                                                                                                                               | Trigger                                   | Cost         |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------ |
+| 1    | Nightly `pg_dump` → object storage (Hetzner Storage Box / Cloudflare R2 / Backblaze B2), 30-day retention, **and a tested restore** — an unrestored backup is a hope, not a backup | **before any paying customer** (~2h)      | ~€1–5/mo     |
+| 2    | WAL archiving (pgBackRest) → point-in-time recovery: "restore to 14:32, right before the bad migration"                                                                            | first serious customers                   | same storage |
+| 3    | Managed Postgres (Neon, Supabase, DO) — PITR, failover, someone else's pager. Neon is a drop-in `DATABASE_URL` change                                                              | when €25–50/mo is trivial against revenue | €25–50/mo    |
 
 Backups live in a **different location** than the primary (e.g. primary
 Falkenstein, backups Helsinki). Same provider is fine; same building is not.
@@ -55,13 +55,13 @@ egress fees). Never the VPS disk — non-negotiable whenever the feature lands.
 
 ## Capacity and cost
 
-| Stage | Paying orgs | Total users | Concurrent | Infra | ~€/mo |
-|---|---|---|---|---|---|
-| MVPs (several products on one box) | 0–10 | <100 | <20 | one shared 4 GB VPS | 5–8 |
-| Early traction | 10–100 | 100–1k | 20–100 | one 8 GB VPS | 15 |
-| Real business | 100–1k | 1k–10k | 100–1k | 16 GB dedicated-vCPU, or app box + DB box | 30–60 |
-| Serious | 1k–10k | 10k–100k | 1k–10k | 2–3 api replicas + LB, managed Postgres, dedicated limiter Redis (the env seam exists) | 150–500 |
-| Beyond | >10k | >100k | >10k | read replicas, partitioning — a re-architecture conversation | 1k+ |
+| Stage                              | Paying orgs | Total users | Concurrent | Infra                                                                                  | ~€/mo   |
+| ---------------------------------- | ----------- | ----------- | ---------- | -------------------------------------------------------------------------------------- | ------- |
+| MVPs (several products on one box) | 0–10        | <100        | <20        | one shared 4 GB VPS                                                                    | 5–8     |
+| Early traction                     | 10–100      | 100–1k      | 20–100     | one 8 GB VPS                                                                           | 15      |
+| Real business                      | 100–1k      | 1k–10k      | 100–1k     | 16 GB dedicated-vCPU, or app box + DB box                                              | 30–60   |
+| Serious                            | 1k–10k      | 10k–100k    | 1k–10k     | 2–3 api replicas + LB, managed Postgres, dedicated limiter Redis (the env seam exists) | 150–500 |
+| Beyond                             | >10k        | >100k       | >10k       | read replicas, partitioning — a re-architecture conversation                           | 1k+     |
 
 Context for the numbers: a Fastify+Postgres app does hundreds of req/s per
 instance on modest hardware, and a B2B user generates a fraction of a req/s.
@@ -98,7 +98,7 @@ carry `expose` only (no host ports — replicas cannot share one). Then:
 services:
   api:
     deploy: { replicas: 3 }
-    expose: ['3000']          # internal network only
+    expose: ['3000'] # internal network only
 ```
 
 ```caddyfile
@@ -133,22 +133,22 @@ their own box. Workers need no LB at all.
 
 Layered, and the first two layers are already shipped:
 
-| Layer | Status |
-|---|---|
-| Static assets + TLS at the user's nearest edge | done — Cloudflare anycast |
-| API from one EU origin | ~100ms extra from the US, ~150–250ms from Asia — acceptable for a dashboard with SWR caching |
-| Regional presence | **cells**, when a region pays for it |
+| Layer                                          | Status                                                                                       |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Static assets + TLS at the user's nearest edge | done — Cloudflare anycast                                                                    |
+| API from one EU origin                         | ~100ms extra from the US, ~150–250ms from Asia — acceptable for a dashboard with SWR caching |
+| Regional presence                              | **cells**, when a region pays for it                                                         |
 
 **The cell model:** a region = a full independent stack (own Postgres, Redis,
 api, worker — the same compose file on a box in that region). Organizations
-are *homed* to one cell; there is no cross-region data sync, which is exactly
+are _homed_ to one cell; there is no cross-region data sync, which is exactly
 why it stays simple — and "EU data never leaves the EU" becomes a compliance
 feature that enterprise buyers pay for.
 
 **Routing between cells is DNS-level, not a load balancer.** A load balancer
 can only balance traffic that already reached it; a Caddy in Germany cannot
 "balance" a Sydney user to Australia without routing them through Germany
-first. Caddy balances *within* a cell; *which* cell is decided upstream:
+first. Caddy balances _within_ a cell; _which_ cell is decided upstream:
 
 - simplest: per-region subdomains (`eu.app.com`, `us.app.com`) — login
   redirects to the org's home. €0.
@@ -168,17 +168,17 @@ The cell model exists to refuse that entire problem.
 
 The rule everywhere: deploy at the region's interconnection hub.
 
-| Region | City | Why | Providers |
-|---|---|---|---|
-| EU | **Falkenstein/Nuremberg (DE)** | Frankfurt interconnect = best average EU latency; Hetzner pricing; "hosted in Germany" sells to DACH, the biggest EU B2B market | Hetzner |
-| US (first box) | **Ashburn, VA** | densest interconnection in America; ~90ms to EU; gateway to LatAm | Hetzner US, Vultr, DO |
-| US west | Hillsboro / San Jose | only when West-Coast latency complaints are real | Hetzner, Vultr |
-| Canada | Toronto (or Montreal) | ~70% of population within 20ms; "data stays in Canada" sells to public sector | OVH, Vultr, DO |
-| Mexico | serve from Dallas, TX | ~30–40ms is fine; in-country (Querétaro) only on regulatory demand | — |
-| South America | Miami first, then São Paulo | Miami covers north LatAm; São Paulo when Brazil pays (infra there costs 2–3×; LGPD ≈ GDPR, in-country sells) | Vultr, DO |
-| SE Asia | Singapore | the region's Frankfurt | Hetzner SG, Vultr, DO |
-| Australia/NZ | Sydney | covers AU+NZ; does NOT cover Asia (90ms+ to SG) | Vultr, DO, AWS |
-| Japan | Tokyo | when Japan is a real market — latency-picky, pays well | Vultr, Linode |
+| Region         | City                           | Why                                                                                                                             | Providers             |
+| -------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| EU             | **Falkenstein/Nuremberg (DE)** | Frankfurt interconnect = best average EU latency; Hetzner pricing; "hosted in Germany" sells to DACH, the biggest EU B2B market | Hetzner               |
+| US (first box) | **Ashburn, VA**                | densest interconnection in America; ~90ms to EU; gateway to LatAm                                                               | Hetzner US, Vultr, DO |
+| US west        | Hillsboro / San Jose           | only when West-Coast latency complaints are real                                                                                | Hetzner, Vultr        |
+| Canada         | Toronto (or Montreal)          | ~70% of population within 20ms; "data stays in Canada" sells to public sector                                                   | OVH, Vultr, DO        |
+| Mexico         | serve from Dallas, TX          | ~30–40ms is fine; in-country (Querétaro) only on regulatory demand                                                              | —                     |
+| South America  | Miami first, then São Paulo    | Miami covers north LatAm; São Paulo when Brazil pays (infra there costs 2–3×; LGPD ≈ GDPR, in-country sells)                    | Vultr, DO             |
+| SE Asia        | Singapore                      | the region's Frankfurt                                                                                                          | Hetzner SG, Vultr, DO |
+| Australia/NZ   | Sydney                         | covers AU+NZ; does NOT cover Asia (90ms+ to SG)                                                                                 | Vultr, DO, AWS        |
+| Japan          | Tokyo                          | when Japan is a real market — latency-picky, pays well                                                                          | Vultr, Linode         |
 
 US state choice is purely network physics — no US state requires in-state
 data; CCPA follows the user, not the server.

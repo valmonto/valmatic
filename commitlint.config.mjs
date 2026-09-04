@@ -14,7 +14,9 @@ function workspaceScopes() {
     const dir = resolve(root, group);
     if (!existsSync(dir)) return [];
     return readdirSync(dir, { withFileTypes: true })
-      .filter((entry) => entry.isDirectory() && existsSync(resolve(dir, entry.name, 'package.json')))
+      .filter(
+        (entry) => entry.isDirectory() && existsSync(resolve(dir, entry.name, 'package.json')),
+      )
       .map((entry) => entry.name);
   });
 }

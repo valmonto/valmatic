@@ -124,7 +124,7 @@ AttachmentsModule.forRoot({
   subjects: {
     task: (subjectId, orgId) => taskRepository.existsInOrg(subjectId, orgId),
   },
-})
+});
 ```
 
 Unknown `subject_type` → 400. Resolver false → 404. The module stays
@@ -144,7 +144,7 @@ Per-tenant storage accounting later = list by prefix. Costs nothing today.
 ### 6. Small but real bugs/gaps in the current code
 
 - **Memoized bucket-init caches failure**: `bucketReady ??= ensureBucket…()`
-  caches a *rejected* promise — one storage blip at boot and every upload
+  caches a _rejected_ promise — one storage blip at boot and every upload
   fails until restart. Reset the memo on rejection.
 - Signed reads don't set `ResponseContentDisposition`/`ResponseContentType` —
   downloads arrive with blob names. Accept an optional `filename` on the
@@ -171,11 +171,11 @@ Per-tenant storage accounting later = list by prefix. Costs nothing today.
 provider-blind client means each valmatic deployment points `STORAGE_*`
 wherever it wants:
 
-| Deployment shape | Storage | Config |
-| --- | --- | --- |
-| default (small app, one VPS) | local rustfs container | `STORAGE_ENDPOINT=http://rustfs:9000` |
-| heavier app / rapid growth | OVH Object Storage / R2 / S3 | managed endpoint + keys, nothing else changes |
-| big-customer isolated instance | its own rustfs on its own box | endpoint = that box |
+| Deployment shape               | Storage                       | Config                                        |
+| ------------------------------ | ----------------------------- | --------------------------------------------- |
+| default (small app, one VPS)   | local rustfs container        | `STORAGE_ENDPOINT=http://rustfs:9000`         |
+| heavier app / rapid growth     | OVH Object Storage / R2 / S3  | managed endpoint + keys, nothing else changes |
+| big-customer isolated instance | its own rustfs on its own box | endpoint = that box                           |
 
 Keep the compose rustfs service easy to omit (profile or documented
 delete-this-block) — a deployment on managed storage should not run a
@@ -203,7 +203,7 @@ requires reworking the previous:
    This is the expected "rapid growth" move; managed S3-class storage is the
    cheapest bill in cloud computing and sharding self-hosted nodes to avoid
    it is ops burden with no upside.
-3b. Self-hosted at scale: rustfs/MinIO cluster below the S3 API — the storage
+   3b. Self-hosted at scale: rustfs/MinIO cluster below the S3 API — the storage
    layer's job, app still sees one endpoint.
 4. Last resort, app-level multi-backend routing: a backend registry
    (id → endpoint/bucket/keys), `backend_id` stamped on new rows, uploads go
@@ -238,13 +238,13 @@ clean no-op instead of a boot crash.
 
 **When a check fails — severity and remedy per step:**
 
-| Failing check | Breaks | Play |
-| --- | --- | --- |
-| ensure bucket | boot init | Permissions model, not a bug: pre-create in the provider dashboard, set the manage flags false. Config, minutes. |
-| presigned PUT | every upload | Checksums (defused), path-style toggle, region/signature, clock skew. Config in nearly all cases. |
-| HEAD truthfulness | the confirm step | Serious: shim inside StorageService keyed by a provider option (e.g. ranged-GET parsing Content-Range). This is where a second driver implementation is BORN — from a real divergence, never speculatively. |
-| content-disposition | download filenames | Cosmetic: accept, or proxy only the download path for that provider. Non-blocking. |
-| delete | sweep, user deletion, privacy | Disqualifying. A store where delete does not delete cannot hold user files. Reject the provider. |
+| Failing check       | Breaks                        | Play                                                                                                                                                                                                        |
+| ------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ensure bucket       | boot init                     | Permissions model, not a bug: pre-create in the provider dashboard, set the manage flags false. Config, minutes.                                                                                            |
+| presigned PUT       | every upload                  | Checksums (defused), path-style toggle, region/signature, clock skew. Config in nearly all cases.                                                                                                           |
+| HEAD truthfulness   | the confirm step              | Serious: shim inside StorageService keyed by a provider option (e.g. ranged-GET parsing Content-Range). This is where a second driver implementation is BORN — from a real divergence, never speculatively. |
+| content-disposition | download filenames            | Cosmetic: accept, or proxy only the download path for that provider. Non-blocking.                                                                                                                          |
+| delete              | sweep, user deletion, privacy | Disqualifying. A store where delete does not delete cannot hold user files. Reject the provider.                                                                                                            |
 
 Escalation ladder: **config knob → shim in the one seam file → reject the
 provider.** Adapter classes stay deferred until rung two is reached for a

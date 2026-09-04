@@ -18,7 +18,7 @@ function useInvalidateNotifications() {
   const { mutate } = useSWRConfig();
   return useCallback(
     () => mutate((key) => typeof key === 'string' && key.startsWith(PREFIX)),
-    [mutate]
+    [mutate],
   );
 }
 

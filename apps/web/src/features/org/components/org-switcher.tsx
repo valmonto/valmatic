@@ -178,7 +178,6 @@ export function OrgSwitcher() {
           </form>
         </DialogContent>
       </Dialog>
-
     </>
   );
 }

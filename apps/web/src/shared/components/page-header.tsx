@@ -18,7 +18,13 @@ interface PageHeaderProps {
  * Settings, Notifications). Tight Linear-style title row — no boxed banners.
  * Sits on the canvas with a hairline rule below for separation.
  */
-export function PageHeader({ title, description, icon: Icon, actions, className }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  description,
+  icon: Icon,
+  actions,
+  className,
+}: PageHeaderProps) {
   return (
     <div
       className={cn(
@@ -34,9 +40,7 @@ export function PageHeader({ title, description, icon: Icon, actions, className 
         )}
         <div className="min-w-0">
           <h1 className="truncate text-xl font-semibold tracking-tight">{title}</h1>
-          {description && (
-            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-          )}
+          {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
         </div>
       </div>
       {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}

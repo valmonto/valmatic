@@ -40,7 +40,11 @@ export function InvitePeopleDialog({ open, onOpenChange }: Props) {
   const [copied, setCopied] = useState(false);
 
   const { data, isLoading } = useInvitations();
-  const { execute: createInvite, isLoading: isCreating, error: createError } = useCreateInvitation();
+  const {
+    execute: createInvite,
+    isLoading: isCreating,
+    error: createError,
+  } = useCreateInvitation();
   const { execute: revokeInvite } = useRevokeInvitation();
 
   const pending = data?.data ?? [];

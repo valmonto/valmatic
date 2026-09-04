@@ -55,7 +55,7 @@ function Field({
       <View
         className={cn(
           'h-13 flex-row items-center gap-3 rounded-2xl border border-border bg-card px-4',
-          error && 'border-destructive'
+          error && 'border-destructive',
         )}
       >
         <Icon as={icon} size={18} className="text-muted-foreground" />

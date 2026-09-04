@@ -76,9 +76,24 @@ const recentActivity = [
 ];
 
 const quickActions: QuickAction[] = [
-  { titleKey: k.users.management, descKey: k.users.manageRolesDescription, icon: Users, to: '/users' },
-  { titleKey: k.common.nav.analytics, descKey: k.common.analytics.description, icon: Activity, soon: true },
-  { titleKey: k.common.nav.settings, descKey: k.common.settings.description, icon: Settings, to: '/settings' },
+  {
+    titleKey: k.users.management,
+    descKey: k.users.manageRolesDescription,
+    icon: Users,
+    to: '/users',
+  },
+  {
+    titleKey: k.common.nav.analytics,
+    descKey: k.common.analytics.description,
+    icon: Activity,
+    soon: true,
+  },
+  {
+    titleKey: k.common.nav.settings,
+    descKey: k.common.settings.description,
+    icon: Settings,
+    to: '/settings',
+  },
 ];
 
 export default function IndexPage() {

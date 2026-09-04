@@ -8,8 +8,16 @@ import { View } from 'react-native';
 const TONE = {
   primary: { chip: 'bg-primary', icon: 'text-primary-foreground', dot: 'bg-primary' },
   muted: { chip: 'bg-muted', icon: 'text-muted-foreground', dot: 'bg-muted-foreground/40' },
-  success: { chip: 'bg-green-500/15', icon: 'text-green-600 dark:text-green-500', dot: 'bg-green-500' },
-  warning: { chip: 'bg-amber-500/15', icon: 'text-amber-600 dark:text-amber-500', dot: 'bg-amber-500' },
+  success: {
+    chip: 'bg-green-500/15',
+    icon: 'text-green-600 dark:text-green-500',
+    dot: 'bg-green-500',
+  },
+  warning: {
+    chip: 'bg-amber-500/15',
+    icon: 'text-amber-600 dark:text-amber-500',
+    dot: 'bg-amber-500',
+  },
   destructive: { chip: 'bg-destructive/10', icon: 'text-destructive', dot: 'bg-destructive' },
 } as const;
 
@@ -44,7 +52,9 @@ function Timeline({ items, className }: TimelineProps) {
             <View className="items-center">
               <View className="size-8 items-center justify-center">
                 {item.icon ? (
-                  <View className={cn('size-8 items-center justify-center rounded-full', tone.chip)}>
+                  <View
+                    className={cn('size-8 items-center justify-center rounded-full', tone.chip)}
+                  >
                     <Icon as={item.icon} size={16} className={tone.icon} />
                   </View>
                 ) : (

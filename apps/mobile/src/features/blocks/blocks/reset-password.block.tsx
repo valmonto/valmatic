@@ -11,14 +11,19 @@ import { KeyboardAvoidingView, Platform, View } from 'react-native';
 export function ResetPasswordBlock() {
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
         <View className="flex-1 justify-center gap-8 px-6">
           <View className="items-center gap-4">
             <View className="size-14 items-center justify-center rounded-2xl bg-primary/10">
               <Icon as={LockKeyhole} size={26} className="text-primary" />
             </View>
             <View className="items-center gap-1.5">
-              <Text variant="h1" className="text-2xl">Set a new password</Text>
+              <Text variant="h1" className="text-2xl">
+                Set a new password
+              </Text>
               <Text variant="muted" className="max-w-xs text-center text-base">
                 Your new password must be different from previously used ones.
               </Text>

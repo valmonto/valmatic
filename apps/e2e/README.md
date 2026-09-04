@@ -31,12 +31,12 @@ dev server. That is what CI uses.
 
 ## The specs
 
-| Spec | Covers |
-|---|---|
-| `smoke` | the app loads, no console errors, 404 works |
-| `auth` | login and register pages render and link to each other |
-| `authorization` | the API returns 401 without a token |
-| `authorization-ui` | protected routes redirect to login |
+| Spec               | Covers                                                 |
+| ------------------ | ------------------------------------------------------ |
+| `smoke`            | the app loads, no console errors, 404 works            |
+| `auth`             | login and register pages render and link to each other |
+| `authorization`    | the API returns 401 without a token                    |
+| `authorization-ui` | protected routes redirect to login                     |
 
 `authorization.spec.ts` uses Playwright's `request` fixture rather than a
 browser — checking the API directly is faster and does not need a page. Reach

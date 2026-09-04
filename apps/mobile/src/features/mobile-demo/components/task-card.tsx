@@ -17,7 +17,7 @@ export function TaskCard({ task }: { task: DemoTask }) {
     <View
       className={cn(
         'rounded-2xl border border-border bg-card p-3.5 shadow-sm shadow-black/5',
-        done && 'opacity-60'
+        done && 'opacity-60',
       )}
     >
       <View className="flex-row items-start gap-3">
@@ -26,7 +26,7 @@ export function TaskCard({ task }: { task: DemoTask }) {
           hitSlop={8}
           className={cn(
             'mt-0.5 h-6 w-6 items-center justify-center rounded-full border-2 active:opacity-70',
-            done ? 'border-primary bg-primary' : 'border-muted-foreground/40'
+            done ? 'border-primary bg-primary' : 'border-muted-foreground/40',
           )}
         >
           {done ? <Icon as={Check} size={13} className="text-primary-foreground" /> : null}
@@ -36,7 +36,9 @@ export function TaskCard({ task }: { task: DemoTask }) {
           <Pressable className="min-w-0 flex-1 active:opacity-80">
             <View className="flex-row items-center gap-2">
               <Text className="text-[11px] font-medium text-muted-foreground/70">{task.id}</Text>
-              <View className={cn('rounded-full px-1.5 py-0.5', priorityMeta[task.priority].container)}>
+              <View
+                className={cn('rounded-full px-1.5 py-0.5', priorityMeta[task.priority].container)}
+              >
                 <Text className={cn('text-[10px] font-semibold', priorityMeta[task.priority].text)}>
                   {priorityMeta[task.priority].label}
                 </Text>
@@ -47,7 +49,7 @@ export function TaskCard({ task }: { task: DemoTask }) {
               numberOfLines={1}
               className={cn(
                 'mt-1 text-sm font-medium text-foreground',
-                done && 'text-muted-foreground line-through'
+                done && 'text-muted-foreground line-through',
               )}
             >
               {task.title}
@@ -63,13 +65,13 @@ export function TaskCard({ task }: { task: DemoTask }) {
                   as={Clock}
                   size={12}
                   className={cn(
-                    task.dueToday && !done ? 'text-orange-500' : 'text-muted-foreground'
+                    task.dueToday && !done ? 'text-orange-500' : 'text-muted-foreground',
                   )}
                 />
                 <Text
                   className={cn(
                     'text-[11px]',
-                    task.dueToday && !done ? 'text-orange-500' : 'text-muted-foreground'
+                    task.dueToday && !done ? 'text-orange-500' : 'text-muted-foreground',
                   )}
                 >
                   {task.due}
@@ -87,7 +89,7 @@ export function TaskCard({ task }: { task: DemoTask }) {
                       key={a.initials}
                       className={cn(
                         'h-5 w-5 items-center justify-center rounded-full bg-muted',
-                        i > 0 && '-ml-1.5'
+                        i > 0 && '-ml-1.5',
                       )}
                       style={{ borderWidth: 2, borderColor: 'transparent' }}
                     >

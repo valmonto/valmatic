@@ -15,7 +15,9 @@ function contextFor(request: unknown): ExecutionContext {
 }
 
 function guardWith(isPublic = false): ActiveOrgGuard {
-  const reflector = { getAllAndOverride: vi.fn().mockReturnValue(isPublic) } as unknown as Reflector;
+  const reflector = {
+    getAllAndOverride: vi.fn().mockReturnValue(isPublic),
+  } as unknown as Reflector;
   return new ActiveOrgGuard(reflector);
 }
 

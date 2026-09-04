@@ -77,7 +77,7 @@ function Calendar({
   className,
 }: CalendarProps) {
   const [internalMonth, setInternalMonth] = React.useState(() =>
-    startOfMonth(defaultMonth ?? selected ?? range?.from ?? new Date())
+    startOfMonth(defaultMonth ?? selected ?? range?.from ?? new Date()),
   );
   const visibleMonth = month ? startOfMonth(month) : internalMonth;
 
@@ -105,9 +105,19 @@ function Calendar({
     <View className={cn('gap-3', className)}>
       {/* Month nav */}
       <View className="flex-row items-center justify-between">
-        <NavButton onPress={() => setMonth(subMonths(visibleMonth, 1))} icon={ChevronLeft} label="Previous month" />
-        <Text className="text-sm font-semibold text-foreground">{format(visibleMonth, 'MMMM yyyy')}</Text>
-        <NavButton onPress={() => setMonth(addMonths(visibleMonth, 1))} icon={ChevronRight} label="Next month" />
+        <NavButton
+          onPress={() => setMonth(subMonths(visibleMonth, 1))}
+          icon={ChevronLeft}
+          label="Previous month"
+        />
+        <Text className="text-sm font-semibold text-foreground">
+          {format(visibleMonth, 'MMMM yyyy')}
+        </Text>
+        <NavButton
+          onPress={() => setMonth(addMonths(visibleMonth, 1))}
+          icon={ChevronRight}
+          label="Next month"
+        />
       </View>
 
       {/* Weekday header */}
@@ -170,8 +180,7 @@ function DayCell({
   const isBetween =
     mode === 'range' && from && to ? isAfter(day, from) && isBefore(day, to) : false;
 
-  const isSelected =
-    mode === 'single' ? (selected ? isSameDay(day, selected) : false) : isEndpoint;
+  const isSelected = mode === 'single' ? (selected ? isSameDay(day, selected) : false) : isEndpoint;
 
   // Continuous range bar: full strip for middle days, half strips at the endpoints.
   const showFullStrip = isBetween;
@@ -180,9 +189,24 @@ function DayCell({
 
   return (
     <View className="flex-1 items-center">
-      {showFullStrip ? <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} className={RANGE_FILL} /> : null}
-      {showRightHalf ? <View style={{ position: 'absolute', top: 0, bottom: 0, left: '50%', right: 0 }} className={RANGE_FILL} /> : null}
-      {showLeftHalf ? <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: '50%' }} className={RANGE_FILL} /> : null}
+      {showFullStrip ? (
+        <View
+          style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}
+          className={RANGE_FILL}
+        />
+      ) : null}
+      {showRightHalf ? (
+        <View
+          style={{ position: 'absolute', top: 0, bottom: 0, left: '50%', right: 0 }}
+          className={RANGE_FILL}
+        />
+      ) : null}
+      {showLeftHalf ? (
+        <View
+          style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: '50%' }}
+          className={RANGE_FILL}
+        />
+      ) : null}
       <Pressable
         disabled={disabled}
         onPress={() => onPress(day)}
@@ -191,8 +215,9 @@ function DayCell({
           !isSelected && !isBetween && 'active:bg-muted',
           isSelected && 'bg-primary',
           !isSelected && today && 'border-primary',
-          disabled && 'opacity-30'
-        )}>
+          disabled && 'opacity-30',
+        )}
+      >
         <Text
           className={cn(
             'text-sm',
@@ -204,8 +229,9 @@ function DayCell({
                   ? 'text-muted-foreground/50'
                   : today
                     ? 'font-semibold text-primary'
-                    : 'text-foreground'
-          )}>
+                    : 'text-foreground',
+          )}
+        >
           {format(day, 'd')}
         </Text>
       </Pressable>
@@ -228,7 +254,8 @@ function NavButton({
       hitSlop={8}
       accessibilityRole="button"
       accessibilityLabel={label}
-      className="size-9 items-center justify-center rounded-full active:bg-muted">
+      className="size-9 items-center justify-center rounded-full active:bg-muted"
+    >
       <Icon as={icon} size={18} className="text-muted-foreground" />
     </Pressable>
   );

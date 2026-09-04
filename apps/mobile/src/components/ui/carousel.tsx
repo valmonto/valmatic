@@ -54,7 +54,7 @@ function Carousel<T>({
         scheduleOnRN(setIndex, Math.min(data.length - 1, Math.max(0, curr)));
       }
     },
-    [interval, data.length]
+    [interval, data.length],
   );
 
   const onLayout = (e: LayoutChangeEvent) => setContainerW(e.nativeEvent.layout.width);
@@ -70,7 +70,8 @@ function Carousel<T>({
           disableIntervalMomentum
           onScroll={onScroll}
           scrollEventThrottle={16}
-          contentContainerStyle={{ paddingHorizontal: peek }}>
+          contentContainerStyle={{ paddingHorizontal: peek }}
+        >
           {data.map((item, i) => (
             <View key={i} style={{ width: cardW, marginRight: i < data.length - 1 ? gap : 0 }}>
               {renderItem(item, i)}
@@ -88,7 +89,7 @@ function Carousel<T>({
               key={i}
               className={cn(
                 'h-2 rounded-full',
-                i === index ? 'bg-primary w-5' : 'bg-muted-foreground/30 w-2'
+                i === index ? 'bg-primary w-5' : 'bg-muted-foreground/30 w-2',
               )}
             />
           ))}

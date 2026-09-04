@@ -130,11 +130,7 @@ export class InvitationRepository {
       .update(invitation)
       .set({ status: 'revoked' })
       .where(
-        and(
-          eq(invitation.id, id),
-          eq(invitation.orgId, orgId),
-          eq(invitation.status, 'pending'),
-        ),
+        and(eq(invitation.id, id), eq(invitation.orgId, orgId), eq(invitation.status, 'pending')),
       )
       .returning();
 

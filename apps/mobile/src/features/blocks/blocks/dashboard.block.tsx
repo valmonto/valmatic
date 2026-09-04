@@ -17,7 +17,10 @@ export function DashboardBlock() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 32 }}
+      >
         <View className="gap-6 px-5 pt-2">
           {/* Header */}
           <View className="flex-row items-center justify-between">
@@ -25,7 +28,9 @@ export function DashboardBlock() {
               <Text className="text-[11px] font-medium uppercase tracking-[1.5px] text-muted-foreground">
                 Monday, Jul 8
               </Text>
-              <Text variant="h1" className="mt-0.5 text-2xl">Good morning, Alex</Text>
+              <Text variant="h1" className="mt-0.5 text-2xl">
+                Good morning, Alex
+              </Text>
             </View>
             <View className="flex-row items-center gap-3">
               <View>
@@ -34,7 +39,9 @@ export function DashboardBlock() {
               </View>
               <Avatar alt="Alex" className="size-9">
                 <AvatarImage source={{ uri: 'https://i.pravatar.cc/80?img=15' }} />
-                <AvatarFallback><Text className="text-xs font-medium">AM</Text></AvatarFallback>
+                <AvatarFallback>
+                  <Text className="text-xs font-medium">AM</Text>
+                </AvatarFallback>
               </Avatar>
             </View>
           </View>
@@ -44,7 +51,8 @@ export function DashboardBlock() {
             colors={['#4f46e5', '#7c3aed']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={{ borderRadius: 24, padding: 20 }}>
+            style={{ borderRadius: 24, padding: 20 }}
+          >
             <View className="flex-row items-center justify-between">
               <Text className="text-sm text-white/80">Total revenue</Text>
               <View className="flex-row items-center gap-0.5 rounded-full bg-white/15 px-2 py-0.5">
@@ -55,21 +63,45 @@ export function DashboardBlock() {
             <Text className="mt-1.5 text-3xl font-bold tabular-nums text-white">$48,250</Text>
             <Text className="text-xs text-white/70">vs $42,900 last month</Text>
             <View className="mt-3">
-              <Sparkline data={[6, 8, 7, 10, 9, 13, 12, 16]} color="#ffffff" fill width={heroChartWidth} height={40} />
+              <Sparkline
+                data={[6, 8, 7, 10, 9, 13, 12, 16]}
+                color="#ffffff"
+                fill
+                width={heroChartWidth}
+                height={40}
+              />
             </View>
           </LinearGradient>
 
           {/* KPIs */}
           <View className="flex-row gap-3">
-            <StatTile className="flex-1" icon={Users} label="Active users" value="2,340" delta="3.1%" deltaDirection="up" caption="vs last wk" />
-            <StatTile className="flex-1" icon={CreditCard} label="Conversion" value="4.8%" delta="0.6%" deltaDirection="up" caption="vs last wk" />
+            <StatTile
+              className="flex-1"
+              icon={Users}
+              label="Active users"
+              value="2,340"
+              delta="3.1%"
+              deltaDirection="up"
+              caption="vs last wk"
+            />
+            <StatTile
+              className="flex-1"
+              icon={CreditCard}
+              label="Conversion"
+              value="4.8%"
+              delta="0.6%"
+              deltaDirection="up"
+              caption="vs last wk"
+            />
           </View>
 
           {/* Weekly chart */}
           <View className="gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm shadow-black/5">
             <View className="flex-row items-baseline justify-between">
               <Text className="text-sm font-semibold text-foreground">This week</Text>
-              <Text variant="muted" className="text-xs">Sessions</Text>
+              <Text variant="muted" className="text-xs">
+                Sessions
+              </Text>
             </View>
             <BarChart
               height={140}
@@ -90,9 +122,26 @@ export function DashboardBlock() {
             <Text className="text-sm font-semibold text-foreground">Recent activity</Text>
             <Timeline
               items={[
-                { icon: CircleCheck, tone: 'success', title: 'Payment received', description: '$48.00 from Ada Lovelace', time: '2:14 PM' },
-                { icon: Users, tone: 'primary', title: 'New teammate joined', description: 'Grace accepted the invite', time: '11:02 AM' },
-                { icon: CreditCard, tone: 'muted', title: 'Subscription renewed', time: 'Yesterday' },
+                {
+                  icon: CircleCheck,
+                  tone: 'success',
+                  title: 'Payment received',
+                  description: '$48.00 from Ada Lovelace',
+                  time: '2:14 PM',
+                },
+                {
+                  icon: Users,
+                  tone: 'primary',
+                  title: 'New teammate joined',
+                  description: 'Grace accepted the invite',
+                  time: '11:02 AM',
+                },
+                {
+                  icon: CreditCard,
+                  tone: 'muted',
+                  title: 'Subscription renewed',
+                  time: 'Yesterday',
+                },
               ]}
             />
           </View>

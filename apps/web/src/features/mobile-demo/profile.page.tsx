@@ -48,7 +48,9 @@ function PreferenceRow({
   border?: boolean;
 }) {
   return (
-    <div className={cn('flex items-center gap-3 px-3.5 py-3', border && 'border-t border-border/40')}>
+    <div
+      className={cn('flex items-center gap-3 px-3.5 py-3', border && 'border-t border-border/40')}
+    >
       <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
         <Icon className="size-4" />
       </span>
@@ -140,7 +142,9 @@ export default function MobileProfilePage() {
             <button
               key={item.label}
               type="button"
-              onClick={() => toast('Demo only', { description: 'This screen is not part of the demo.' })}
+              onClick={() =>
+                toast('Demo only', { description: 'This screen is not part of the demo.' })
+              }
               className={cn(
                 'flex w-full items-center gap-3 px-3.5 py-3 text-left transition-colors hover:bg-muted/40',
                 index > 0 && 'border-t border-border/40',

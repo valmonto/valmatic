@@ -24,8 +24,8 @@ function PopoverContent({
   insets,
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Content> & {
-    portalHost?: string;
-  }) {
+  portalHost?: string;
+}) {
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === 'dark';
   const edgeInsets = insets ?? { top: 12, bottom: 12, left: 12, right: 12 };
@@ -34,11 +34,13 @@ function PopoverContent({
       <FullWindowOverlay>
         <PopoverPrimitive.Overlay
           style={Platform.select({ native: StyleSheet.absoluteFill })}
-          asChild={Platform.OS !== 'web'}>
+          asChild={Platform.OS !== 'web'}
+        >
           <NativeOnlyAnimatedView
             entering={FadeIn.duration(200).reduceMotion(ReduceMotion.System)}
             exiting={FadeOut.reduceMotion(ReduceMotion.System)}
-            as="Pressable">
+            as="Pressable"
+          >
             <TextClassContext.Provider value="text-popover-foreground">
               {/* Frosted glass card (matches Card / the other overlays). */}
               <PopoverPrimitive.Content
@@ -51,26 +53,31 @@ function PopoverContent({
                     web: cn(
                       'bg-popover p-4 animate-in fade-in-0 zoom-in-95 origin-(--radix-popover-content-transform-origin) cursor-auto',
                       props.side === 'bottom' && 'slide-in-from-top-2',
-                      props.side === 'top' && 'slide-in-from-bottom-2'
+                      props.side === 'top' && 'slide-in-from-bottom-2',
                     ),
                   }),
-                  className
+                  className,
                 )}
-                {...props}>
+                {...props}
+              >
                 {Platform.OS === 'web' ? (
                   children
                 ) : (
                   <BlurView
                     intensity={isDark ? 60 : 80}
                     tint={isDark ? 'dark' : 'light'}
-                    blurMethod="dimezisBlurView">
+                    blurMethod="dimezisBlurView"
+                  >
                     {/* Fairly opaque: on Android a portaled BlurView often can't
                         sample what's behind it, so without this the translucent
                         tint lets page content bleed through (distracting under a
                         dense panel like the calendar). */}
                     <View
                       className="p-4"
-                      style={{ backgroundColor: isDark ? 'rgba(24,24,30,0.94)' : 'rgba(255,255,255,0.95)' }}>
+                      style={{
+                        backgroundColor: isDark ? 'rgba(24,24,30,0.94)' : 'rgba(255,255,255,0.95)',
+                      }}
+                    >
                       {children as React.ReactNode}
                     </View>
                   </BlurView>

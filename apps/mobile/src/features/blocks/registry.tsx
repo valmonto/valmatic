@@ -1,4 +1,24 @@
-import { BellRing, CircleCheckBig, FilePlus2, FileText, FolderPlus, KeyRound, LayoutDashboard, ListChecks, Loader, LockKeyhole, LogIn, MailCheck, PanelBottom, Settings, Sparkles, UserPen, UserPlus, WifiOff, type LucideIcon } from 'lucide-react-native';
+import {
+  BellRing,
+  CircleCheckBig,
+  FilePlus2,
+  FileText,
+  FolderPlus,
+  KeyRound,
+  LayoutDashboard,
+  ListChecks,
+  Loader,
+  LockKeyhole,
+  LogIn,
+  MailCheck,
+  PanelBottom,
+  Settings,
+  Sparkles,
+  UserPen,
+  UserPlus,
+  WifiOff,
+  type LucideIcon,
+} from 'lucide-react-native';
 import { type ComponentType } from 'react';
 import { BottomNavBlock } from './blocks/bottom-nav.block';
 import { DashboardBlock } from './blocks/dashboard.block';

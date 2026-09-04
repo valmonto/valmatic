@@ -7,9 +7,30 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { AtSign, Bell, Rocket, type LucideIcon } from 'lucide-react-native';
 import { View } from 'react-native';
 
-const PREVIEWS: { icon: LucideIcon; chip: string; fg: string; title: string; body: string; time: string }[] = [
-  { icon: AtSign, chip: 'bg-sky-500/15', fg: 'text-sky-500', title: 'Grace mentioned you', body: 'in “Ship onboarding redesign”', time: 'now' },
-  { icon: Rocket, chip: 'bg-emerald-500/15', fg: 'text-emerald-500', title: 'Deploy succeeded', body: 'api@2.14.0 is live in production', time: '2m' },
+const PREVIEWS: {
+  icon: LucideIcon;
+  chip: string;
+  fg: string;
+  title: string;
+  body: string;
+  time: string;
+}[] = [
+  {
+    icon: AtSign,
+    chip: 'bg-sky-500/15',
+    fg: 'text-sky-500',
+    title: 'Grace mentioned you',
+    body: 'in “Ship onboarding redesign”',
+    time: 'now',
+  },
+  {
+    icon: Rocket,
+    chip: 'bg-emerald-500/15',
+    fg: 'text-emerald-500',
+    title: 'Deploy succeeded',
+    body: 'api@2.14.0 is live in production',
+    time: '2m',
+  },
 ];
 
 /** Notification permission priming — gradient hero, realistic previews, soft-ask CTA. */
@@ -22,7 +43,13 @@ export function NotificationPrimingBlock() {
           <View className="items-center justify-center">
             <LinearGradient
               colors={['#6366f1', 'transparent']}
-              style={{ position: 'absolute', width: 220, height: 220, borderRadius: 110, opacity: 0.28 }}
+              style={{
+                position: 'absolute',
+                width: 220,
+                height: 220,
+                borderRadius: 110,
+                opacity: 0.28,
+              }}
             />
             <LinearGradient
               colors={['#6366f1', '#8b5cf6']}
@@ -39,7 +66,8 @@ export function NotificationPrimingBlock() {
                 shadowRadius: 22,
                 shadowOffset: { width: 0, height: 12 },
                 elevation: 12,
-              }}>
+              }}
+            >
               <Icon as={Bell} size={48} className="text-white" />
             </LinearGradient>
             {/* Unread badge */}
@@ -51,9 +79,12 @@ export function NotificationPrimingBlock() {
           </View>
 
           <View className="items-center gap-2.5">
-            <Text variant="h1" className="text-center text-2xl">Never miss a beat</Text>
+            <Text variant="h1" className="text-center text-2xl">
+              Never miss a beat
+            </Text>
             <Text variant="muted" className="max-w-xs text-center text-base leading-relaxed">
-              Turn on notifications so mentions, assignments and deploys reach you the second they happen.
+              Turn on notifications so mentions, assignments and deploys reach you the second they
+              happen.
             </Text>
           </View>
         </View>
@@ -63,15 +94,22 @@ export function NotificationPrimingBlock() {
           {PREVIEWS.map((n) => (
             <View
               key={n.title}
-              className="border-border bg-card flex-row items-center gap-3 rounded-2xl border p-3 shadow-sm shadow-black/10">
+              className="border-border bg-card flex-row items-center gap-3 rounded-2xl border p-3 shadow-sm shadow-black/10"
+            >
               <View className={cn('size-9 items-center justify-center rounded-xl', n.chip)}>
                 <Icon as={n.icon} size={16} className={n.fg} />
               </View>
               <View className="flex-1">
-                <Text numberOfLines={1} className="text-[13px] font-semibold text-foreground">{n.title}</Text>
-                <Text numberOfLines={1} variant="muted" className="text-xs">{n.body}</Text>
+                <Text numberOfLines={1} className="text-[13px] font-semibold text-foreground">
+                  {n.title}
+                </Text>
+                <Text numberOfLines={1} variant="muted" className="text-xs">
+                  {n.body}
+                </Text>
               </View>
-              <Text variant="muted" className="text-[11px]">{n.time}</Text>
+              <Text variant="muted" className="text-[11px]">
+                {n.time}
+              </Text>
             </View>
           ))}
         </View>

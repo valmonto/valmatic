@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { ArrowDown, ArrowUp, ChevronRight, Mail, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import {
+  ArrowDown,
+  ArrowUp,
+  ChevronRight,
+  Mail,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -71,12 +79,14 @@ const members: {
   },
 ];
 
-const memberStatus: Record<MemberStatus, { label: string; variant: 'success' | 'info' | 'warning' }> =
-  {
-    active: { label: 'Active', variant: 'success' },
-    invited: { label: 'Invited', variant: 'info' },
-    suspended: { label: 'Suspended', variant: 'warning' },
-  };
+const memberStatus: Record<
+  MemberStatus,
+  { label: string; variant: 'success' | 'info' | 'warning' }
+> = {
+  active: { label: 'Active', variant: 'success' },
+  invited: { label: 'Invited', variant: 'info' },
+  suspended: { label: 'Suspended', variant: 'warning' },
+};
 
 const memberInitials = (name: string) =>
   name
@@ -221,7 +231,11 @@ export function InvoicesTable() {
                 className="ml-auto inline-flex items-center gap-1 transition-colors hover:text-foreground"
               >
                 Amount
-                {dir === 'asc' ? <ArrowUp className="size-3.5" /> : <ArrowDown className="size-3.5" />}
+                {dir === 'asc' ? (
+                  <ArrowUp className="size-3.5" />
+                ) : (
+                  <ArrowDown className="size-3.5" />
+                )}
               </button>
             </TableHead>
           </TableRow>
@@ -236,7 +250,9 @@ export function InvoicesTable() {
                   {i.status === 'paid' ? 'Paid' : 'Overdue'}
                 </Badge>
               </TableCell>
-              <TableCell className="text-right font-medium tabular-nums">{money(i.amount)}</TableCell>
+              <TableCell className="text-right font-medium tabular-nums">
+                {money(i.amount)}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -318,7 +334,9 @@ export function ExpandableTable() {
                 </TableCell>
                 <TableCell className="font-medium">{o.id}</TableCell>
                 <TableCell className="text-muted-foreground">{o.customer}</TableCell>
-                <TableCell className="text-right font-medium tabular-nums">{money(o.total)}</TableCell>
+                <TableCell className="text-right font-medium tabular-nums">
+                  {money(o.total)}
+                </TableCell>
               </TableRow>
               {open.has(o.id) && (
                 <TableRow className="hover:bg-transparent">

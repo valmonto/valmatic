@@ -61,7 +61,11 @@ export class AttachmentRepository {
   ): Promise<AttachmentRow | null> {
     const [row] = await this.dbClient.db
       .update(attachment)
-      .set({ status: 'uploaded', sizeBytes: patch.sizeBytes, thumbnailBlobId: patch.thumbnailBlobId })
+      .set({
+        status: 'uploaded',
+        sizeBytes: patch.sizeBytes,
+        thumbnailBlobId: patch.thumbnailBlobId,
+      })
       .where(
         and(
           eq(attachment.id, id),

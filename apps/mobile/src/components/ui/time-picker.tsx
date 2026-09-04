@@ -52,7 +52,8 @@ function SlotList({ mode, selected, range, slots, timeFormat, onPress }: SlotLis
     const target = mode === 'range' ? range?.from : selected;
     if (!target) return;
     const idx = slots.findIndex((s) => sameSlot(s, target));
-    if (idx >= 0) scrollRef.current?.scrollTo({ y: Math.max(0, (idx - 2) * ROW_HEIGHT), animated: false });
+    if (idx >= 0)
+      scrollRef.current?.scrollTo({ y: Math.max(0, (idx - 2) * ROW_HEIGHT), animated: false });
     // Scroll once when the panel mounts.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -62,7 +63,8 @@ function SlotList({ mode, selected, range, slots, timeFormat, onPress }: SlotLis
       ref={scrollRef}
       style={{ maxHeight: ROW_HEIGHT * 6 }}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ gap: mode === 'range' ? 0 : 4 }}>
+      contentContainerStyle={{ gap: mode === 'range' ? 0 : 4 }}
+    >
       {slots.map((slot) => {
         const from = range?.from;
         const to = range?.to;
@@ -87,13 +89,15 @@ function SlotList({ mode, selected, range, slots, timeFormat, onPress }: SlotLis
               isSelected && 'bg-primary',
               // Round the outer corners of the range block.
               isFrom && (to ? 'rounded-t-xl' : 'rounded-xl'),
-              isTo && 'rounded-b-xl'
-            )}>
+              isTo && 'rounded-b-xl',
+            )}
+          >
             <Text
               className={cn(
                 'text-[15px]',
-                isSelected ? 'font-semibold text-primary-foreground' : 'text-foreground'
-              )}>
+                isSelected ? 'font-semibold text-primary-foreground' : 'text-foreground',
+              )}
+            >
               {format(slot, timeFormat)}
             </Text>
           </Pressable>
@@ -145,7 +149,11 @@ function TimePicker({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <TimeField label={value ? format(value, timeFormat) : null} placeholder={placeholder} className={className} />
+        <TimeField
+          label={value ? format(value, timeFormat) : null}
+          placeholder={placeholder}
+          className={className}
+        />
       </PopoverTrigger>
       <PopoverContent align="start">
         <SingleTimePanel value={value} onChange={onChange} slots={slots} timeFormat={timeFormat} />

@@ -29,7 +29,7 @@ type DateFieldProps = React.ComponentProps<typeof Pressable> & {
 /** The Input-style trigger: calendar icon + formatted date (or muted placeholder). */
 const DateField = React.forwardRef<View, DateFieldProps>(function DateField(
   { value, placeholder = 'Pick a date', dateFormat = 'PPP', className, ...props },
-  ref
+  ref,
 ) {
   return (
     <Pressable ref={ref} className={cn(FIELD_CLASSES, 'active:opacity-90', className)} {...props}>
@@ -69,15 +69,15 @@ function DatePicker({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <DateField value={value} placeholder={placeholder} dateFormat={dateFormat} className={className} />
+        <DateField
+          value={value}
+          placeholder={placeholder}
+          dateFormat={dateFormat}
+          className={className}
+        />
       </PopoverTrigger>
       <PopoverContent align="start">
-        <CalendarPanel
-          value={value}
-          onChange={onChange}
-          minDate={minDate}
-          maxDate={maxDate}
-        />
+        <CalendarPanel value={value} onChange={onChange} minDate={minDate} maxDate={maxDate} />
       </PopoverContent>
     </Popover>
   );
@@ -114,7 +114,7 @@ type RangeFieldProps = React.ComponentProps<typeof Pressable> & {
 /** Field trigger for a range: "Jun 3 – Jun 9" (or just the start while picking). */
 const RangeField = React.forwardRef<View, RangeFieldProps>(function RangeField(
   { range, placeholder = 'Pick a range', dateFormat = 'MMM d', className, ...props },
-  ref
+  ref,
 ) {
   const label = range?.from
     ? range.to
@@ -154,7 +154,12 @@ function RangeDatePicker({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <RangeField range={value} placeholder={placeholder} dateFormat={dateFormat} className={className} />
+        <RangeField
+          range={value}
+          placeholder={placeholder}
+          dateFormat={dateFormat}
+          className={className}
+        />
       </PopoverTrigger>
       <PopoverContent align="start">
         <RangeCalendarPanel value={value} onChange={onChange} minDate={minDate} maxDate={maxDate} />
@@ -245,10 +250,12 @@ function NativeDatePicker({
               onPress={() => {
                 onChange?.(temp);
                 setVisible(false);
-              }}>
+              }}
+            >
               <Text>Done</Text>
             </Button>
-          }>
+          }
+        >
           <View className="items-center">
             <DateTimePicker
               value={temp}

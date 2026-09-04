@@ -14,14 +14,17 @@ function ForceUpdateScreen({ appStoreId }: { appStoreId?: string }) {
         <Icon as={ArrowUpCircle} size={40} className="text-primary" />
       </View>
       <View className="items-center gap-2">
-        <Text variant="h1" className="text-2xl">Update required</Text>
+        <Text variant="h1" className="text-2xl">
+          Update required
+        </Text>
         <Text variant="muted" className="max-w-xs text-center text-base leading-relaxed">
           A newer version of the app is required to continue. Please update to keep going.
         </Text>
       </View>
       <Button
         onPress={() => openStore(appStoreId)}
-        className="h-13 rounded-2xl px-8 shadow-lg shadow-primary/25">
+        className="h-13 rounded-2xl px-8 shadow-lg shadow-primary/25"
+      >
         <Text className="text-base font-semibold">Update now</Text>
       </Button>
     </SafeAreaView>

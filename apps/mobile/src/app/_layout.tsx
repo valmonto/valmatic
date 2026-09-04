@@ -92,41 +92,42 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <SWRProvider>
-        <ThemeProvider value={navTheme}>
-          {/* `auto` = dark icons on light bg, light icons on dark bg, following
+          <ThemeProvider value={navTheme}>
+            {/* `auto` = dark icons on light bg, light icons on dark bg, following
               the same colour scheme NativeWind uses. Without this the icons stay
               light (left over from the blue splash) and vanish on the white app. */}
-          <StatusBar style="auto" />
-          <ForceUpdateGate>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              // Opaque dark container so transitions don't flash white in dark mode.
-              contentStyle: { backgroundColor: navTheme.colors.background },
-              // Slide (not the Android default cross-fade, which ghosts both
-              // screens through each other) — the opaque screen slides over cleanly.
-              animation: 'slide_from_right',
-            }}>
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="login" />
-            <Stack.Screen name="task/[id]" />
-            <Stack.Screen name="new-task" options={{ presentation: 'modal' }} />
-            <Stack.Screen name="showcase/index" />
-            <Stack.Screen name="showcase/[id]" />
-            <Stack.Screen name="blocks/index" />
-            <Stack.Screen name="blocks/[id]" />
-          </Stack>
-          {/* Overlay host for RNR dialog/select/dropdown/popover/tooltip/etc. */}
-          <PortalHost />
-          <Toaster />
-          </ForceUpdateGate>
-          {!splashDone && (
-            <AnimatedSplash
-              ready={authStatus !== 'loading' && fontsLoaded}
-              onFinish={() => setSplashDone(true)}
-            />
-          )}
-        </ThemeProvider>
+            <StatusBar style="auto" />
+            <ForceUpdateGate>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  // Opaque dark container so transitions don't flash white in dark mode.
+                  contentStyle: { backgroundColor: navTheme.colors.background },
+                  // Slide (not the Android default cross-fade, which ghosts both
+                  // screens through each other) — the opaque screen slides over cleanly.
+                  animation: 'slide_from_right',
+                }}
+              >
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="login" />
+                <Stack.Screen name="task/[id]" />
+                <Stack.Screen name="new-task" options={{ presentation: 'modal' }} />
+                <Stack.Screen name="showcase/index" />
+                <Stack.Screen name="showcase/[id]" />
+                <Stack.Screen name="blocks/index" />
+                <Stack.Screen name="blocks/[id]" />
+              </Stack>
+              {/* Overlay host for RNR dialog/select/dropdown/popover/tooltip/etc. */}
+              <PortalHost />
+              <Toaster />
+            </ForceUpdateGate>
+            {!splashDone && (
+              <AnimatedSplash
+                ready={authStatus !== 'loading' && fontsLoaded}
+                onFinish={() => setSplashDone(true)}
+              />
+            )}
+          </ThemeProvider>
         </SWRProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

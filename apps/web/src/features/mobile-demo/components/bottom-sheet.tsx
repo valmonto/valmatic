@@ -66,9 +66,7 @@ export function BottomSheet({ open, onClose, title, description, children }: Bot
           <div className="flex items-start justify-between gap-3 px-5 pt-4 pb-1">
             <div>
               <h2 className="text-base font-semibold tracking-tight">{title}</h2>
-              {description && (
-                <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>
-              )}
+              {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}
             </div>
             <button
               type="button"

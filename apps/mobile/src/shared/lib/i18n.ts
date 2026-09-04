@@ -34,7 +34,7 @@ i18n.use(initReactI18next).init({
   // Built from @pkg/locales' supported list, so a new language added there flows
   // through here automatically — no hardcoding per locale.
   resources: Object.fromEntries(
-    supportedLanguages.map((lng) => [lng, { translation: translations[lng] }])
+    supportedLanguages.map((lng) => [lng, { translation: translations[lng] }]),
   ),
   lng: detectDeviceLanguage(),
   ...i18nConfig,

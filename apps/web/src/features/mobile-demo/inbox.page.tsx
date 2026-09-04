@@ -1,4 +1,12 @@
-import { AtSign, CheckCheck, Inbox, MessageSquare, Rocket, Settings2, type LucideIcon } from 'lucide-react';
+import {
+  AtSign,
+  CheckCheck,
+  Inbox,
+  MessageSquare,
+  Rocket,
+  Settings2,
+  type LucideIcon,
+} from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { useMobileDemoStore, type DemoNotification, type DemoNotificationKind } from './store';
 
@@ -24,7 +32,12 @@ function NotificationRow({ notification }: { notification: DemoNotification }) {
           : 'border-border/60 bg-card shadow-[0_1px_2px_rgba(16,18,28,0.04)]',
       )}
     >
-      <span className={cn('flex size-9 shrink-0 items-center justify-center rounded-full', meta.className)}>
+      <span
+        className={cn(
+          'flex size-9 shrink-0 items-center justify-center rounded-full',
+          meta.className,
+        )}
+      >
         <meta.icon className="size-4" />
       </span>
       <span className="min-w-0 flex-1">

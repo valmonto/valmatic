@@ -6,7 +6,14 @@ import { SafeAreaView } from '@/shared/components/safe-area-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Bell, Rocket, Star, TrendingUp, Users, Zap, type LucideIcon } from 'lucide-react-native';
 import { useRef, useState } from 'react';
-import { NativeScrollEvent, NativeSyntheticEvent, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Pressable,
+  ScrollView,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedScrollHandler,
@@ -25,9 +32,34 @@ type Slide = {
 };
 
 const SLIDES: Slide[] = [
-  { icon: Rocket, title: 'Ship faster', description: 'Plan, track and deliver work from anywhere — your whole workspace in your pocket.', orb: ['#6366f1', '#8b5cf6'], glow: '#6366f1', chipIcon: TrendingUp, chip: '2× faster' },
-  { icon: Zap, title: 'Stay in sync', description: 'Real-time updates on mentions, assignments and deploys the moment they happen.', orb: ['#0ea5e9', '#06b6d4'], glow: '#0ea5e9', chipIcon: Bell, chip: 'Real-time' },
-  { icon: Users, title: 'Built for teams', description: 'Comment, assign and collaborate with your team without ever switching context.', orb: ['#10b981', '#34d399'], glow: '#10b981', chipIcon: Users, chip: '12 online' },
+  {
+    icon: Rocket,
+    title: 'Ship faster',
+    description:
+      'Plan, track and deliver work from anywhere — your whole workspace in your pocket.',
+    orb: ['#6366f1', '#8b5cf6'],
+    glow: '#6366f1',
+    chipIcon: TrendingUp,
+    chip: '2× faster',
+  },
+  {
+    icon: Zap,
+    title: 'Stay in sync',
+    description: 'Real-time updates on mentions, assignments and deploys the moment they happen.',
+    orb: ['#0ea5e9', '#06b6d4'],
+    glow: '#0ea5e9',
+    chipIcon: Bell,
+    chip: 'Real-time',
+  },
+  {
+    icon: Users,
+    title: 'Built for teams',
+    description: 'Comment, assign and collaborate with your team without ever switching context.',
+    orb: ['#10b981', '#34d399'],
+    glow: '#10b981',
+    chipIcon: Users,
+    chip: '12 online',
+  },
 ];
 
 const AVATARS = [11, 12, 13, 14].map((n) => `https://i.pravatar.cc/64?img=${n}`);
@@ -54,8 +86,14 @@ export function OnboardingBlock() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="h-9 flex-row items-center justify-end px-5">
         {!isLast ? (
-          <Pressable onPress={() => goTo(SLIDES.length - 1)} hitSlop={8} className="active:opacity-70">
-            <Text variant="muted" className="text-sm font-medium">Skip</Text>
+          <Pressable
+            onPress={() => goTo(SLIDES.length - 1)}
+            hitSlop={8}
+            className="active:opacity-70"
+          >
+            <Text variant="muted" className="text-sm font-medium">
+              Skip
+            </Text>
           </Pressable>
         ) : null}
       </View>
@@ -67,7 +105,8 @@ export function OnboardingBlock() {
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={16}
         onScroll={onScroll}
-        onMomentumScrollEnd={onEnd}>
+        onMomentumScrollEnd={onEnd}
+      >
         {SLIDES.map((slide, i) => (
           <SlideView key={i} slide={slide} index={i} scrollX={scrollX} width={width} />
         ))}
@@ -81,10 +120,13 @@ export function OnboardingBlock() {
               <View
                 key={uri}
                 className="bg-background rounded-full p-[2px]"
-                style={{ marginLeft: i > 0 ? -10 : 0 }}>
+                style={{ marginLeft: i > 0 ? -10 : 0 }}
+              >
                 <Avatar alt="Member" className="size-7">
                   <AvatarImage source={{ uri }} />
-                  <AvatarFallback><Text className="text-[9px]">U</Text></AvatarFallback>
+                  <AvatarFallback>
+                    <Text className="text-[9px]">U</Text>
+                  </AvatarFallback>
                 </Avatar>
               </View>
             ))}
@@ -95,7 +137,9 @@ export function OnboardingBlock() {
                 <Star key={i} size={12} color="#f59e0b" fill="#f59e0b" />
               ))}
             </View>
-            <Text variant="muted" className="text-xs">Loved by 12,000+ teams</Text>
+            <Text variant="muted" className="text-xs">
+              Loved by 12,000+ teams
+            </Text>
           </View>
         </View>
 
@@ -108,12 +152,17 @@ export function OnboardingBlock() {
 
         <Button
           onPress={() => (isLast ? undefined : goTo(index + 1))}
-          className="h-13 rounded-2xl shadow-lg shadow-primary/30">
-          <Text className="text-base font-semibold">{isLast ? 'Get started — it’s free' : 'Next'}</Text>
+          className="h-13 rounded-2xl shadow-lg shadow-primary/30"
+        >
+          <Text className="text-base font-semibold">
+            {isLast ? 'Get started — it’s free' : 'Next'}
+          </Text>
         </Button>
 
         <View className="flex-row items-center justify-center gap-1">
-          <Text variant="muted" className="text-sm">Already have an account?</Text>
+          <Text variant="muted" className="text-sm">
+            Already have an account?
+          </Text>
           <Text className="text-sm font-semibold text-primary">Sign in</Text>
         </View>
       </View>
@@ -156,7 +205,13 @@ function SlideView({
         {/* Soft glow */}
         <LinearGradient
           colors={[slide.glow, 'transparent']}
-          style={{ position: 'absolute', width: 260, height: 260, borderRadius: 130, opacity: 0.28 }}
+          style={{
+            position: 'absolute',
+            width: 260,
+            height: 260,
+            borderRadius: 130,
+            opacity: 0.28,
+          }}
         />
         {/* Gradient orb */}
         <LinearGradient
@@ -174,7 +229,8 @@ function SlideView({
             shadowRadius: 24,
             shadowOffset: { width: 0, height: 14 },
             elevation: 14,
-          }}>
+          }}
+        >
           <Icon as={slide.icon} size={56} className="text-white" />
         </LinearGradient>
         {/* Floating product chip */}
@@ -185,7 +241,9 @@ function SlideView({
       </Animated.View>
 
       <Animated.View style={textStyle} className="items-center gap-2.5">
-        <Text variant="h1" className="text-center text-3xl">{slide.title}</Text>
+        <Text variant="h1" className="text-center text-3xl">
+          {slide.title}
+        </Text>
         <Text variant="muted" className="max-w-xs text-center text-base leading-relaxed">
           {slide.description}
         </Text>
@@ -194,7 +252,15 @@ function SlideView({
   );
 }
 
-function Dot({ index, scrollX, width }: { index: number; scrollX: { value: number }; width: number }) {
+function Dot({
+  index,
+  scrollX,
+  width,
+}: {
+  index: number;
+  scrollX: { value: number };
+  width: number;
+}) {
   const style = useAnimatedStyle(() => {
     const range = [(index - 1) * width, index * width, (index + 1) * width];
     return {

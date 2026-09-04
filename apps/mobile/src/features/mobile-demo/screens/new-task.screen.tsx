@@ -44,7 +44,9 @@ export default function NewTaskScreen() {
           <View className="flex-row items-center justify-between">
             <View>
               <Text className="text-xl font-semibold text-foreground">New task</Text>
-              <Text className="text-[13px] text-muted-foreground">Demo only — nothing is persisted.</Text>
+              <Text className="text-[13px] text-muted-foreground">
+                Demo only — nothing is persisted.
+              </Text>
             </View>
             <Pressable
               onPress={() => router.back()}
@@ -80,10 +82,15 @@ export default function NewTaskScreen() {
                     onPress={() => setProject(p)}
                     className={cn(
                       'rounded-full border px-3.5 py-2 active:opacity-70',
-                      active ? 'border-primary bg-primary/10' : 'border-border bg-card'
+                      active ? 'border-primary bg-primary/10' : 'border-border bg-card',
                     )}
                   >
-                    <Text className={cn('text-xs font-medium', active ? 'text-primary' : 'text-muted-foreground')}>
+                    <Text
+                      className={cn(
+                        'text-xs font-medium',
+                        active ? 'text-primary' : 'text-muted-foreground',
+                      )}
+                    >
                       {p}
                     </Text>
                   </Pressable>
@@ -104,11 +111,16 @@ export default function NewTaskScreen() {
                     onPress={() => setPriority(p.value)}
                     className={cn(
                       'flex-1 flex-row items-center justify-center gap-1.5 rounded-xl border py-2.5 active:opacity-70',
-                      active ? 'border-primary bg-primary/10' : 'border-border bg-card'
+                      active ? 'border-primary bg-primary/10' : 'border-border bg-card',
                     )}
                   >
                     <View className={cn('h-2 w-2 rounded-full', p.dot)} />
-                    <Text className={cn('text-xs font-medium', active ? 'text-primary' : 'text-muted-foreground')}>
+                    <Text
+                      className={cn(
+                        'text-xs font-medium',
+                        active ? 'text-primary' : 'text-muted-foreground',
+                      )}
+                    >
                       {p.label}
                     </Text>
                   </Pressable>
@@ -117,7 +129,11 @@ export default function NewTaskScreen() {
             </View>
           </View>
 
-          <Button onPress={handleCreate} size="lg" className="mt-2 rounded-2xl shadow-lg shadow-primary/25">
+          <Button
+            onPress={handleCreate}
+            size="lg"
+            className="mt-2 rounded-2xl shadow-lg shadow-primary/25"
+          >
             <Text className="text-base font-semibold">Create task</Text>
           </Button>
         </View>

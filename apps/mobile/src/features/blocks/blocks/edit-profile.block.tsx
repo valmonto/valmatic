@@ -21,15 +21,23 @@ export function EditProfileBlock() {
         </Pressable>
       </View>
 
-      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 32 }}
+        >
           <View className="gap-6 px-5 pt-3">
             {/* Avatar */}
             <View className="items-center gap-2">
               <View>
                 <Avatar alt="Alex Morgan" className="size-24">
                   <AvatarImage source={{ uri: 'https://i.pravatar.cc/160?img=15' }} />
-                  <AvatarFallback><Text className="text-xl font-semibold">AM</Text></AvatarFallback>
+                  <AvatarFallback>
+                    <Text className="text-xl font-semibold">AM</Text>
+                  </AvatarFallback>
                 </Avatar>
                 <View className="bg-background absolute -bottom-1 -right-1 rounded-full p-0.5">
                   <View className="bg-primary size-8 items-center justify-center rounded-full">
@@ -52,11 +60,20 @@ export function EditProfileBlock() {
               </View>
               <View className="gap-1.5">
                 <Label>Email</Label>
-                <Input icon={Mail} defaultValue="alex@acme.dev" autoCapitalize="none" keyboardType="email-address" />
+                <Input
+                  icon={Mail}
+                  defaultValue="alex@acme.dev"
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                />
               </View>
               <View className="gap-1.5">
                 <Label>Bio</Label>
-                <Textarea placeholder="Tell us about yourself…" maxLength={160} defaultValue="Product engineer building delightful mobile experiences." />
+                <Textarea
+                  placeholder="Tell us about yourself…"
+                  maxLength={160}
+                  defaultValue="Product engineer building delightful mobile experiences."
+                />
               </View>
             </View>
           </View>

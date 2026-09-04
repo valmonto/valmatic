@@ -38,10 +38,7 @@ function useInvalidateNotifications() {
   );
 }
 
-export function useNotifications(
-  params: ListNotificationsRequest,
-  opts?: { enabled?: boolean },
-) {
+export function useNotifications(params: ListNotificationsRequest, opts?: { enabled?: boolean }) {
   const { user } = useAuth();
   const enabled = opts?.enabled ?? true;
 
