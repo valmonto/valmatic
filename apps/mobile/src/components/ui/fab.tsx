@@ -28,13 +28,13 @@ function Fab({ icon, label, className, onPressIn, onPressOut, ...props }: FabPro
   const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
 
   const handlePressIn = (e: GestureResponderEvent) => {
-    scale.value = withTiming(0.92, { duration: 80 });
+    scale.set(withTiming(0.92, { duration: 80 }));
     if (Platform.OS !== 'web')
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
     onPressIn?.(e);
   };
   const handlePressOut = (e: GestureResponderEvent) => {
-    scale.value = withSpring(1, { damping: 14, stiffness: 320, mass: 0.5 });
+    scale.set(withSpring(1, { damping: 14, stiffness: 320, mass: 0.5 }));
     onPressOut?.(e);
   };
 

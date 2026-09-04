@@ -1,7 +1,6 @@
 import { Icon } from '@/components/ui/icon';
 import { NativeOnlyAnimatedView } from '@/components/ui/native-only-animated-view';
 import { Text } from '@/components/ui/text';
-import { cn } from '@/shared/lib/utils';
 import * as DialogPrimitive from '@rn-primitives/dialog';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Search, type LucideIcon } from 'lucide-react-native';

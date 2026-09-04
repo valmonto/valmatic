@@ -81,11 +81,11 @@ function Slider({
         // Move the thumb on the UI thread for immediate feedback; report the
         // (step-snapped) value back to JS. onBegin also handles tap-to-set.
         .onBegin((e) => {
-          posX.value = Math.min(usable, Math.max(0, e.x - THUMB / 2));
+          posX.set(Math.min(usable, Math.max(0, e.x - THUMB / 2)));
           scheduleOnRN(setFromX, e.x);
         })
         .onChange((e) => {
-          posX.value = Math.min(usable, Math.max(0, e.x - THUMB / 2));
+          posX.set(Math.min(usable, Math.max(0, e.x - THUMB / 2)));
           scheduleOnRN(setFromX, e.x);
         }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,4 +1,4 @@
-import { useMemo, useState, type ComponentType, type ReactNode } from 'react';
+import { useId, useState, type ComponentType, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -246,9 +246,22 @@ const AlertDialogDemo = () => (
   </AlertDialog>
 );
 
+/**
+ * A stable pseudo-random 0–999 per mounted component, derived from `useId`
+ * (unique per mount, pure) — the demos want "a different image each time"
+ * without calling `Math.random()` during render, which the React Compiler
+ * lint rejects as impure.
+ */
+function useMountSeed(): number {
+  const id = useId();
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) | 0;
+  return Math.abs(hash) % 1000;
+}
+
 const AspectRatioDemo = () => {
-  // Pick one random image per mount so it doesn't reload on every render.
-  const seed = useMemo(() => Math.floor(Math.random() * 1000), []);
+  // One image per mount, chosen without an impure call during render.
+  const seed = useMountSeed();
   return (
     <View className="w-full items-center">
       <View className="w-full max-w-sm">
@@ -317,7 +330,7 @@ const AvatarDemo = () => (
 );
 
 const BadgeDemo = () => {
-  const seed = useMemo(() => Math.floor(Math.random() * 1000), []);
+  const seed = useMountSeed();
   return (
     <View className="w-full gap-5">
       <ButtonGroup label="Variants">
@@ -989,7 +1002,7 @@ const CarouselDemo = () => (
 );
 
 const CardDemo = () => {
-  const seed = useMemo(() => Math.floor(Math.random() * 1000), []);
+  const seed = useMountSeed();
   return (
     <View className="w-full gap-5">
       {/* Default Card — glass by default (subtle frost on the plain canvas). */}

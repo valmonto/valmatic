@@ -37,7 +37,6 @@ type SwipeableRowProps = {
  */
 function SwipeableRow({ children, leftActions, rightActions }: SwipeableRowProps) {
   const ref = React.useRef<Swipeable>(null);
-  const close = () => ref.current?.close();
 
   const renderActions = (actions?: SwipeAction[]) =>
     actions && actions.length
@@ -49,7 +48,7 @@ function SwipeableRow({ children, leftActions, rightActions }: SwipeableRowProps
                 <Pressable
                   key={i}
                   onPress={() => {
-                    close();
+                    ref.current?.close();
                     action.onPress();
                   }}
                   className={cn('items-center justify-center gap-1 px-4', tone.bg)}

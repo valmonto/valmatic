@@ -1,5 +1,4 @@
 import { Text } from '@/components/ui/text';
-import { cn } from '@/shared/lib/utils';
 import { Portal } from '@rn-primitives/portal';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useColorScheme } from 'nativewind';
@@ -61,23 +60,33 @@ function Sheet({ trigger, open, onOpenChange, title, description, footer, childr
   const didEnter = React.useRef(false);
 
   const finishClose = React.useCallback(() => {
-    didEnter.current = false;
-    sheetH.current = 0;
     setRendered(false);
     if (open === undefined) setInternalOpen(false);
     onOpenChange?.(false);
   }, [open, onOpenChange]);
 
   const animateOut = React.useCallback(() => {
-    translateY.value = withTiming(winH, { duration: 220 }, (finished) => {
-      'worklet';
-      if (finished) scheduleOnRN(finishClose);
-    });
+    translateY.set(
+      withTiming(winH, { duration: 220 }, (finished) => {
+        'worklet';
+        if (finished) scheduleOnRN(finishClose);
+      }),
+    );
   }, [winH, finishClose, translateY]);
 
+  if (isOpen && !rendered) setRendered(true);
+
+  // Reset the enter-animation bookkeeping once the panel is gone. Kept out of
+  // finishClose so nothing reachable from the gesture callbacks touches a ref.
   React.useEffect(() => {
-    if (isOpen) setRendered(true);
-    else if (rendered) animateOut();
+    if (!rendered) {
+      didEnter.current = false;
+      sheetH.current = 0;
+    }
+  }, [rendered]);
+
+  React.useEffect(() => {
+    if (!isOpen && rendered) animateOut();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
@@ -86,8 +95,8 @@ function Sheet({ trigger, open, onOpenChange, title, description, footer, childr
     sheetH.current = h;
     if (!didEnter.current && h > 0) {
       didEnter.current = true;
-      translateY.value = h;
-      translateY.value = withSpring(0, SPRING);
+      translateY.set(h);
+      translateY.set(withSpring(0, SPRING));
     }
   };
 
@@ -95,16 +104,18 @@ function Sheet({ trigger, open, onOpenChange, title, description, footer, childr
     () =>
       Gesture.Pan()
         .onUpdate((e) => {
-          translateY.value = Math.max(0, e.translationY);
+          translateY.set(Math.max(0, e.translationY));
         })
         .onEnd((e) => {
           if (e.translationY > 120 || e.velocityY > 900) {
-            translateY.value = withTiming(winH, { duration: 220 }, (finished) => {
-              'worklet';
-              if (finished) scheduleOnRN(finishClose);
-            });
+            translateY.set(
+              withTiming(winH, { duration: 220 }, (finished) => {
+                'worklet';
+                if (finished) scheduleOnRN(finishClose);
+              }),
+            );
           } else {
-            translateY.value = withSpring(0, SPRING);
+            translateY.set(withSpring(0, SPRING));
           }
         }),
     [winH, finishClose, translateY],

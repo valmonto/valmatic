@@ -4,7 +4,6 @@ import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { SafeAreaView } from '@/shared/components/safe-area-view';
 import { FolderPlus, Plus } from 'lucide-react-native';
-import { View } from 'react-native';
 
 /** Empty state — nothing to show yet, with a primary call-to-action. */
 export function EmptyStateBlock() {

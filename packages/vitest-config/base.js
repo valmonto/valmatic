@@ -12,6 +12,15 @@ const pkg = (...segments) => resolve(repoRoot, 'packages', ...segments);
  * first. Keep in sync with the `@pkg/*` packages that build to `dist/`.
  */
 export const workspaceAliases = {
+  // Order matters: a bare key also matches as a PREFIX, so `@pkg/contracts`
+  // alone would turn `@pkg/contracts/schemas` into `…/src/index.ts/schemas`
+  // (unresolvable — coverage then fell back to parsing the importing .tsx as
+  // plain JS and dropped it from the report). Subpaths go first.
+  '@pkg/contracts/client': pkg('contracts/src/client/index.ts'),
+  '@pkg/contracts/types': pkg('contracts/src/types/index.ts'),
+  '@pkg/contracts/schemas': pkg('contracts/src/schemas/index.ts'),
+  '@pkg/contracts/constants': pkg('contracts/src/constants/index.ts'),
+  '@pkg/contracts/permissions': pkg('contracts/src/permissions/index.ts'),
   '@pkg/contracts': pkg('contracts/src/index.ts'),
   '@pkg/database/schema': pkg('database/src/schema/index.ts'),
   '@pkg/database': pkg('database/src/index.ts'),
