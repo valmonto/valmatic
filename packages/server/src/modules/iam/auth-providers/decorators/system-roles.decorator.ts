@@ -32,4 +32,5 @@ export const SystemRole = {
  * @SystemRoles(SystemRole.ADMIN)                      // platform admins only
  * @SystemRoles(SystemRole.ADMIN, SystemRole.MODERATOR)
  */
-export const SystemRoles = (...roles: SystemRoleType[]) => SetMetadata(SYSTEM_ROLES_KEY, roles);
+export const SystemRoles = (...roles: SystemRoleType[]): ReturnType<typeof SetMetadata> =>
+  SetMetadata(SYSTEM_ROLES_KEY, roles);

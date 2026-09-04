@@ -66,7 +66,7 @@ export class ExampleProcessor extends WorkerHost {
           await this.handleSyncData(job.data);
           break;
         default:
-          throw new Error(`Unknown action: ${job.data.action}`);
+          throw new Error(`Unknown action: ${String(job.data.action)}`);
       }
 
       const durationMs = Date.now() - startTime;

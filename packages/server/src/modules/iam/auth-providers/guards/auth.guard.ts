@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
     return guard.canActivate(ctx);
   }
 
-  private pickGuard(provider: string) {
+  private pickGuard(provider: string): LocalAuthGuard {
     switch (provider) {
       case 'local':
         return this.local;

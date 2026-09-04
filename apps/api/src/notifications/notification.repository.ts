@@ -29,7 +29,7 @@ import {
 export class NotificationRepository {
   constructor(@Inject(DATABASE_CLIENT) private readonly dbClient: DatabaseClient) {}
 
-  private visibleTo(userId: string, orgId: string) {
+  private visibleTo(userId: string, orgId: string): ReturnType<typeof and> {
     return and(
       eq(notification.userId, userId),
       or(eq(notification.orgId, orgId), isNull(notification.orgId)),

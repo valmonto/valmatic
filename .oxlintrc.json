@@ -46,16 +46,17 @@
           }
         ],
         "typescript/no-floating-promises": "error",
-        "typescript/unbound-method": "off",
-        "typescript/restrict-template-expressions": "off",
-        "typescript/no-base-to-string": "off"
+        "typescript/unbound-method": "error",
+        "typescript/restrict-template-expressions": "error",
+        "typescript/no-base-to-string": "error"
       }
     },
     {
       "files": ["**/__tests__/**/*.ts", "**/*.test.ts", "**/*.spec.ts"],
       "rules": {
         "typescript/explicit-function-return-type": "off",
-        "typescript/explicit-module-boundary-types": "off"
+        "typescript/explicit-module-boundary-types": "off",
+        "typescript/unbound-method": "off"
       }
     },
     {

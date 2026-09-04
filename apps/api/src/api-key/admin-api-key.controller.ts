@@ -25,7 +25,9 @@ export class AdminApiKeyController {
 
   @Get()
   async list(
-    @ZodRequest(ListApiKeysRequestSchema) dto: ListApiKeysRequest,
+    // Validated for its shape (the decorator rejects unknown fields); the list
+    // itself takes no arguments.
+    @ZodRequest(ListApiKeysRequestSchema) _dto: ListApiKeysRequest,
   ): Promise<ListApiKeysResponse> {
     return this.apiKeys.list();
   }

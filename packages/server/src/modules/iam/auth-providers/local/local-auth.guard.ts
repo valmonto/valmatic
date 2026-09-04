@@ -59,7 +59,7 @@ export class LocalAuthGuard {
     @Inject(AUTH_PROVIDER) private authProvider: IAuthProvider,
   ) {}
 
-  async canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublicRoute = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),

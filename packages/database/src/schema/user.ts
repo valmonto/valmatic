@@ -25,7 +25,7 @@ export const user = pgTable(
       .defaultNow()
       .$onUpdate(() => new Date()),
   },
-  (t) => [
+  () => [
     check(
       'user_system_role_check',
       sql.raw(`system_role IN (${SYSTEM_ROLES.map((v) => `'${v}'`).join(', ')})`),
