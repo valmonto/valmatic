@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-// The MCP SDK is built against zod v3; the workspace is v4. Tool input schemas
-// use the aliased v3 so they match the SDK's ZodRawShape at runtime.
-import { z, type ZodRawShape } from 'zod-v3';
+import { z, type ZodRawShape } from 'zod';
 import type { McpScope } from '@pkg/contracts';
 import { OrgService } from '../org/org.service';
 
