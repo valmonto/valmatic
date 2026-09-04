@@ -311,61 +311,19 @@ allowBuilds:
   msw: true
   unrs-resolver: true
 
-# Supply-chain cooldown: wait 2 days (2880 min) before a newly published
-# version is installable, so yanked/malicious releases are caught first.
-# Listed packages are exempt from the cooldown.
+# Supply-chain cooldown: a version published less than 2 days (2880 min) ago
+# is refused, so yanked or malicious releases are caught before they land.
+# `minimumReleaseAgeExclude` is the list of young versions deliberately let
+# through; pnpm appends to it when an install resolves one (record the
+# reason in the PR) and, with `minimumReleaseAgeExcludePrune`, deletes entries
+# once their version has aged past the window — so the list stays a short
+# record of current exceptions, not a permanent ledger. Until 2026-09-04 the
+# setting itself was missing and this list was inert.
+minimumReleaseAge: 2880
+minimumReleaseAgeExcludePrune: true
 minimumReleaseAgeExclude:
-  - '@nestjs/cli@11.0.23'
-  - prettier@3.8.4
-  - '@expo/cli@57.0.4'
-  - '@expo/config-plugins@57.0.2'
-  - '@expo/config@57.0.2'
-  - '@expo/env@2.3.1 || 2.4.1'
-  - '@expo/fingerprint@0.19.6 || 0.20.2'
-  - '@expo/image-utils@0.10.2 || 0.11.1'
-  - '@expo/local-build-cache-provider@57.0.2'
-  - '@expo/metro-config@57.0.3'
-  - '@expo/metro-runtime@57.0.3'
-  - '@expo/prebuild-config@57.0.4'
-  - '@expo/require-utils@57.0.1'
-  - '@expo/schema-utils@57.0.1'
-  - '@expo/ui@57.0.3'
-  - expo-asset@57.0.3
-  - expo-constants@57.0.3
-  - expo-modules-autolinking@57.0.4
-  - expo-modules-core@57.0.2
-  - expo-router@57.0.3
-  - expo-splash-screen@57.0.2
-  - expo@57.0.2
-  - '@rn-primitives/label@1.5.2'
-  - '@rn-primitives/slot@1.5.2'
-  - '@rn-primitives/types@1.5.2'
-  - '@rn-primitives/accordion@1.5.2'
-  - '@rn-primitives/alert-dialog@1.5.2'
-  - '@rn-primitives/aspect-ratio@1.5.2'
-  - '@rn-primitives/avatar@1.5.2'
-  - '@rn-primitives/checkbox@1.5.2'
-  - '@rn-primitives/collapsible@1.5.2'
-  - '@rn-primitives/context-menu@1.5.2'
-  - '@rn-primitives/dialog@1.5.2'
-  - '@rn-primitives/dropdown-menu@1.5.2'
-  - '@rn-primitives/hooks@1.5.2'
-  - '@rn-primitives/hover-card@1.5.2'
-  - '@rn-primitives/menubar@1.5.2'
-  - '@rn-primitives/popover@1.5.2'
-  - '@rn-primitives/portal@1.5.2'
-  - '@rn-primitives/progress@1.5.2'
-  - '@rn-primitives/radio-group@1.5.2'
-  - '@rn-primitives/select@1.5.2'
-  - '@rn-primitives/separator@1.5.2'
-  - '@rn-primitives/switch@1.5.2'
-  - '@rn-primitives/tabs@1.5.2'
-  - '@rn-primitives/toggle-group@1.5.2'
-  - '@rn-primitives/toggle@1.5.2'
-  - '@rn-primitives/tooltip@1.5.2'
-  - '@rn-primitives/utils@1.5.2'
-  - '@expo/inline-modules@0.0.13'
-  - '@fastify/rate-limit@11.2.0'
+  - 'vitest@5.0.0'
+  - 'tinyexec@1.3.1'
   - '@aws-sdk/client-s3@3.1126.0'
   - '@aws-sdk/s3-request-presigner@3.1126.0'
   - '@base-ui/react@1.8.0'
@@ -375,8 +333,28 @@ minimumReleaseAgeExclude:
   - '@posthog/types@1.408.1 || 1.409.0'
   - '@types/react-dom@19.2.7'
   - i18next@26.4.2
-  - posthog-js@1.426.4 || 1.427.0
+  - 'posthog-js@1.426.4 || 1.427.0'
   - rolldown-plugin-dts@0.28.5
   - tsdown@0.23.0
   - lucide-react@1.41.0
   - fastify@5.12.3
+  - '@inquirer/ansi@2.0.8'
+  - '@inquirer/checkbox@5.2.4'
+  - '@inquirer/confirm@6.3.1'
+  - '@inquirer/core@12.0.2'
+  - '@inquirer/editor@5.3.2'
+  - '@inquirer/expand@5.1.4'
+  - '@inquirer/external-editor@3.0.5'
+  - '@inquirer/figures@2.0.9'
+  - '@inquirer/input@5.1.5'
+  - '@inquirer/number@4.2.2'
+  - '@inquirer/password@5.2.1'
+  - '@inquirer/rawlist@5.3.4'
+  - '@inquirer/search@4.3.2'
+  - '@inquirer/select@5.2.4'
+  - '@inquirer/type@4.1.1'
+  - postcss@8.5.27
+  - rc9@3.1.0
+  - '@vitest/coverage-v8@5.0.0'
+  - '@vitest/mocker@5.0.0'
+  - '@vitest/spy@5.0.0'
