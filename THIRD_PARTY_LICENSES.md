@@ -8,8 +8,8 @@ This project uses the following third-party packages:
 ## Summary
 
 - **Direct dependencies:** 88 packages (from pnpm catalog)
-- **Transitive dependencies:** 1361 packages
-- **Total:** 1449 packages
+- **Transitive dependencies:** 1351 packages
+- **Total:** 1439 packages
 
 ### License Breakdown
 
@@ -24,12 +24,12 @@ This project uses the following third-party packages:
 | Apache-2.0                | 8      | 74         | 82    |
 | Apache-2.0 AND MIT        | 0      | 1          | 1     |
 | BSD-2-Clause              | 0      | 24         | 24    |
-| BSD-3-Clause              | 1      | 21         | 22    |
+| BSD-3-Clause              | 1      | 18         | 19    |
 | BlueOak-1.0.0             | 0      | 6          | 6     |
 | CC-BY-4.0                 | 0      | 1          | 1     |
 | CC0-1.0                   | 0      | 1          | 1     |
 | ISC                       | 1      | 56         | 57    |
-| MIT                       | 73     | 1158       | 1231  |
+| MIT                       | 73     | 1151       | 1224  |
 | MIT AND Apache-2.0        | 0      | 1          | 1     |
 | MIT AND ISC               | 0      | 1          | 1     |
 | MIT AND OFL-1.1           | 0      | 1          | 1     |
@@ -46,7 +46,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
 
 ### (Apache-2.0 AND MIT)
 
-- **posthog-js** (1.426.4) - [Homepage](https://posthog.com/docs/libraries/js)
+- **posthog-js** (1.427.0) - [Homepage](https://posthog.com/docs/libraries/js)
   - Posthog-js allows you to automatically capture usage and send events to PostHog.
 
 ### Apache-2.0
@@ -74,7 +74,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
 
 ### ISC
 
-- **lucide-react** (1.40.0) - [Homepage](https://lucide.dev)
+- **lucide-react** (1.41.0) - [Homepage](https://lucide.dev)
   - A Lucide icon library package for React applications.
 
 ### MIT
@@ -115,7 +115,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Sentry Node SDK using OpenTelemetry for performance instrumentation
 - **@tailwindcss/vite** (4.3.3) - [Homepage](https://tailwindcss.com)
   - A utility-first CSS framework for rapidly building custom user interfaces.
-- **@testing-library/jest-dom** (6.9.1) - [Homepage](https://github.com/testing-library/jest-dom#readme)
+- **@testing-library/jest-dom** (6.9.1, 7.0.1) - [Homepage](https://github.com/testing-library/jest-dom#readme)
   - Custom jest matchers to test the state of the DOM
 - **@testing-library/react** (16.3.3) - [Homepage](https://github.com/testing-library/react-testing-library#readme)
   - Simple and complete React DOM testing utilities that encourage good testing practices.
@@ -129,7 +129,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - TypeScript definitions for react-dom
 - **@vitejs/plugin-react-swc** (4.3.3) - [Homepage](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react-swc#readme)
   - Speed up your Vite dev server with SWC
-- **@vitest/coverage-v8** (4.1.8) - [Homepage](https://vitest.dev/guide/coverage)
+- **@vitest/coverage-v8** (5.0.0) - [Homepage](https://vitest.dev/guide/coverage)
   - V8 coverage provider for Vitest
 - **axios** (1.20.0) - [Homepage](https://axios-http.com)
   - Promise based HTTP client for the browser and node.js
@@ -157,7 +157,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - One-time password input component for React.
 - **ioredis** (6.0.0) - [Homepage](https://github.com/redis/ioredis#readme)
   - A robust, performance-focused and full-featured Redis client for Node.js.
-- **jsdom** (29.1.1) - [Homepage](https://github.com/jsdom/jsdom#readme)
+- **jsdom** (30.0.1) - [Homepage](https://github.com/jsdom/jsdom#readme)
   - A JavaScript implementation of many web standards
 - **msw** (2.15.0) - [Homepage](https://mswjs.io)
   - Seamless REST/GraphQL API mocking library for browser and Node.js.
@@ -214,7 +214,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Drawer component for React.
 - **vite** (8.2.2) - [Homepage](https://vite.dev)
   - Native-ESM powered web dev build tool
-- **vitest** (4.1.8) - [Homepage](https://vitest.dev)
+- **vitest** (5.0.0) - [Homepage](https://vitest.dev)
   - Next generation testing framework powered by Vite
 - **zod** (3.25.76, 4.4.3, 4.5.4) - [Homepage](https://zod.dev)
   - TypeScript-first schema declaration and validation library with static type inference
@@ -383,9 +383,6 @@ These packages are installed as dependencies of direct dependencies:
 - **hoist-non-react-statics** (3.3.2) - [Homepage](https://github.com/mridgway/hoist-non-react-statics#readme)
 - **hyphenate-style-name** (1.1.0) - [Homepage](https://github.com/rexxars/hyphenate-style-name#readme)
 - **ieee754** (1.2.1) - [Homepage](https://github.com/feross/ieee754#readme)
-- **istanbul-lib-coverage** (3.2.2) - [Homepage](https://istanbul.js.org/)
-- **istanbul-lib-report** (3.0.1) - [Homepage](https://istanbul.js.org/)
-- **istanbul-reports** (3.2.0) - [Homepage](https://istanbul.js.org/)
 - **light-my-request** (6.6.0) - [Homepage](https://github.com/fastify/light-my-request#readme)
 - **makeerror** (1.0.12) - [Homepage](https://github.com/daaku/nodejs-makeerror#readme)
 - **qs** (6.15.3) - [Homepage](https://github.com/ljharb/qs)
@@ -393,12 +390,12 @@ These packages are installed as dependencies of direct dependencies:
 - **source-map** (0.5.7, 0.6.1, 0.7.6) - [Homepage](https://github.com/mozilla/source-map)
 - **source-map-js** (1.2.1) - [Homepage](https://github.com/7rulnik/source-map-js)
 - **tmpl** (1.0.5) - [Homepage](https://github.com/daaku/nodejs-tmpl)
-- **tough-cookie** (6.0.1) - [Homepage](https://github.com/salesforce/tough-cookie)
+- **tough-cookie** (6.0.1, 6.0.2) - [Homepage](https://github.com/salesforce/tough-cookie)
 
 ### BlueOak-1.0.0
 
 - **glob** (13.0.6) - [Homepage](https://github.com/isaacs/node-glob#readme)
-- **lru-cache** (11.5.1) - [Homepage](https://github.com/isaacs/node-lru-cache#readme)
+- **lru-cache** (11.5.1, 11.5.2) - [Homepage](https://github.com/isaacs/node-lru-cache#readme)
 - **minimatch** (10.2.6) - [Homepage](https://github.com/isaacs/minimatch#readme)
 - **minipass** (7.1.3) - [Homepage](https://github.com/isaacs/minipass#readme)
 - **path-scurry** (2.0.2) - [Homepage](https://github.com/isaacs/path-scurry#readme)
@@ -478,10 +475,8 @@ These packages are installed as dependencies of direct dependencies:
 - **@angular-devkit/core** (22.1.5) - [Homepage](https://github.com/angular/angular-cli)
 - **@angular-devkit/schematics** (22.1.5) - [Homepage](https://github.com/angular/angular-cli)
 - **@angular-devkit/schematics-cli** (22.1.5) - [Homepage](https://github.com/angular/angular-cli)
-- **@asamuzakjp/css-color** (5.1.11) - [Homepage](https://github.com/asamuzaK/cssColor#readme)
-- **@asamuzakjp/dom-selector** (7.1.1) - [Homepage](https://github.com/asamuzaK/domSelector#readme)
-- **@asamuzakjp/generational-cache** (1.0.1) - [Homepage](https://github.com/asamuzaK/generationalCache)
-- **@asamuzakjp/nwsapi** (2.3.9) - [Homepage](http://javascript.nwbox.com/nwsapi/)
+- **@asamuzakjp/css-color** (6.0.7) - [Homepage](https://github.com/asamuzaK/cssColor#readme)
+- **@asamuzakjp/dom-selector** (8.3.2) - [Homepage](https://github.com/asamuzaK/domSelector#readme)
 - **@babel/code-frame** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-code-frame)
 - **@babel/compat-data** (7.29.7) - [Homepage](https://github.com/babel/babel#readme)
 - **@babel/core** (7.29.7) - [Homepage](https://babel.dev/docs/en/next/babel-core)
@@ -576,8 +571,8 @@ These packages are installed as dependencies of direct dependencies:
 - **@commitlint/types** (21.2.0) - [Homepage](https://commitlint.js.org/)
 - **@conventional-changelog/git-client** (3.1.2) - [Homepage](https://conventional-changelog.js.org/git-client/)
 - **@conventional-changelog/template** (1.2.0, 1.4.0) - [Homepage](https://conventional-changelog.js.org/template/)
-- **@csstools/css-calc** (3.2.1) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/css-calc#readme)
-- **@csstools/css-color-parser** (4.1.9) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/css-color-parser#readme)
+- **@csstools/css-calc** (3.3.0) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/css-calc#readme)
+- **@csstools/css-color-parser** (4.2.2) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/css-color-parser#readme)
 - **@csstools/css-parser-algorithms** (4.0.0) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/css-parser-algorithms#readme)
 - **@csstools/css-tokenizer** (4.0.0) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/css-tokenizer#readme)
 - **@date-fns/tz** (1.5.0) - [Homepage](https://github.com/date-fns/date-fns#readme)
@@ -685,8 +680,8 @@ These packages are installed as dependencies of direct dependencies:
 - **@phun-ky/typeof** (2.0.3) - [Homepage](https://phun-ky.net/projects/typeof)
 - **@pinojs/redact** (0.4.0) - [Homepage](https://github.com/pinojs/redact#readme)
 - **@posthog/browser-common** (0.7.2) - [Homepage](https://github.com/PostHog/posthog-js#readme)
-- **@posthog/core** (1.50.2, 1.50.4) - [Homepage](https://github.com/PostHog/posthog-js#readme)
-- **@posthog/types** (1.408.0, 1.408.1) - [Homepage](https://github.com/PostHog/posthog-js#readme)
+- **@posthog/core** (1.50.2, 1.50.4, 1.50.5) - [Homepage](https://github.com/PostHog/posthog-js#readme)
+- **@posthog/types** (1.408.0, 1.408.1, 1.409.0) - [Homepage](https://github.com/PostHog/posthog-js#readme)
 - **@quansync/fs** (1.0.0) - [Homepage](https://github.com/quansync-dev/fs#readme)
 - **@radix-ui/number** (1.1.2, 1.1.3) - [Homepage](https://radix-ui.com/primitives)
 - **@radix-ui/primitive** (1.1.4, 1.1.7) - [Homepage](https://radix-ui.com/primitives)
@@ -856,13 +851,10 @@ These packages are installed as dependencies of direct dependencies:
 - **@typescript-eslint/utils** (8.60.1) - [Homepage](https://typescript-eslint.io/packages/utils)
 - **@typescript-eslint/visitor-keys** (8.60.1) - [Homepage](https://typescript-eslint.io)
 - **@unrs/resolver-binding-linux-x64-gnu** (1.12.2) - [Homepage](https://github.com/unrs/unrs-resolver)
-- **@vitest/expect** (4.1.8) - [Homepage](https://vitest.dev/api/expect)
-- **@vitest/mocker** (4.1.8) - [Homepage](https://github.com/vitest-dev/vitest/tree/main/packages/mocker)
-- **@vitest/pretty-format** (4.1.8) - [Homepage](https://github.com/vitest-dev/vitest/tree/main/packages/pretty-format)
-- **@vitest/runner** (4.1.8) - [Homepage](https://vitest.dev/api/advanced/runner)
-- **@vitest/snapshot** (4.1.8) - [Homepage](https://vitest.dev/guide/snapshot)
-- **@vitest/spy** (4.1.8) - [Homepage](https://vitest.dev/api/mock)
-- **@vitest/utils** (4.1.8) - [Homepage](https://github.com/vitest-dev/vitest/tree/main/packages/utils)
+- **@vitest/istanbul-lib-coverage** (1.0.1) - [Homepage](https://vitest.dev/)
+- **@vitest/istanbul-lib-report** (1.0.1) - [Homepage](https://vitest.dev)
+- **@vitest/mocker** (5.0.0) - [Homepage](https://github.com/vitest-dev/vitest/tree/main/packages/mocker)
+- **@vitest/spy** (5.0.0) - [Homepage](https://vitest.dev/api/mock)
 - **@webassemblyjs/ast** (1.14.1) - [Homepage](https://github.com/xtuc/webassemblyjs#readme)
 - **@webassemblyjs/floating-point-hex-parser** (1.13.2) - [Homepage](https://github.com/xtuc/webassemblyjs#readme)
 - **@webassemblyjs/helper-api-error** (1.13.2) - [Homepage](https://github.com/xtuc/webassemblyjs#readme)
@@ -910,7 +902,7 @@ These packages are installed as dependencies of direct dependencies:
 - **asap** (2.0.6) - [Homepage](https://github.com/kriskowal/asap#readme)
 - **assertion-error** (2.0.1) - [Homepage](https://github.com/chaijs/assertion-error#readme)
 - **ast-types** (0.13.4) - [Homepage](http://github.com/benjamn/ast-types)
-- **ast-v8-to-istanbul** (1.0.4) - [Homepage](https://github.com/AriPerkkio/ast-v8-to-istanbul)
+- **ast-v8-to-istanbul** (1.0.5) - [Homepage](https://github.com/AriPerkkio/ast-v8-to-istanbul)
 - **async-function** (1.0.0) - [Homepage](https://github.com/ljharb/async-function#readme)
 - **async-retry** (1.3.3) - [Homepage](https://github.com/vercel/async-retry#readme)
 - **asynckit** (0.4.0) - [Homepage](https://github.com/alexindigo/asynckit#readme)
@@ -1041,7 +1033,7 @@ These packages are installed as dependencies of direct dependencies:
 - **es-define-property** (1.0.1) - [Homepage](https://github.com/ljharb/es-define-property#readme)
 - **es-errors** (1.3.0) - [Homepage](https://github.com/ljharb/es-errors#readme)
 - **es-iterator-helpers** (1.3.3) - [Homepage](https://github.com/es-shims/iterator-helpers#readme)
-- **es-module-lexer** (2.3.0) - [Homepage](https://github.com/guybedford/es-module-lexer#readme)
+- **es-module-lexer** (2.3.0, 2.3.2) - [Homepage](https://github.com/guybedford/es-module-lexer#readme)
 - **es-object-atoms** (1.1.2) - [Homepage](https://github.com/ljharb/es-object-atoms#readme)
 - **es-set-tostringtag** (2.1.0) - [Homepage](https://github.com/es-shims/es-set-tostringtag#readme)
 - **es-shim-unscopables** (1.1.0) - [Homepage](https://github.com/ljharb/es-shim-unscopables#readme)
@@ -1177,7 +1169,6 @@ These packages are installed as dependencies of direct dependencies:
 - **hono** (4.13.5) - [Homepage](https://hono.dev)
 - **hookable** (6.1.1) - [Homepage](https://github.com/unjs/hookable#readme)
 - **html-encoding-sniffer** (6.0.0) - [Homepage](https://github.com/jsdom/html-encoding-sniffer#readme)
-- **html-escaper** (2.0.2) - [Homepage](https://github.com/WebReflection/html-escaper)
 - **html-parse-stringify** (4.0.1) - [Homepage](https://github.com/i18next/html-parse-stringify)
 - **http-errors** (2.0.1) - [Homepage](https://github.com/jshttp/http-errors#readme)
 - **http-proxy-agent** (9.1.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
@@ -1290,9 +1281,8 @@ These packages are installed as dependencies of direct dependencies:
 - **luxon** (3.7.2) - [Homepage](https://github.com/moment/luxon#readme)
 - **lz-string** (1.5.0) - [Homepage](http://pieroxy.net/blog/pages/lz-string/index.html)
 - **macos-release** (3.5.1) - [Homepage](https://github.com/sindresorhus/macos-release#readme)
-- **magic-string** (0.30.21, 1.0.0) - [Homepage](https://github.com/Rich-Harris/magic-string#readme)
-- **magicast** (0.5.3) - [Homepage](https://github.com/unjs/magicast#readme)
-- **make-dir** (4.0.0) - [Homepage](https://github.com/sindresorhus/make-dir#readme)
+- **magic-string** (0.30.21, 1.0.0, 1.2.3) - [Homepage](https://github.com/Rich-Harris/magic-string#readme)
+- **magicast** (0.5.4) - [Homepage](https://github.com/unjs/magicast#readme)
 - **math-intrinsics** (1.1.0) - [Homepage](https://github.com/es-shims/math-intrinsics#readme)
 - **media-typer** (1.1.1) - [Homepage](https://github.com/jshttp/media-typer#readme)
 - **memoize-one** (5.2.1, 6.0.0) - [Homepage](https://github.com/alexreardon/memoize-one#readme)
@@ -1353,7 +1343,7 @@ These packages are installed as dependencies of direct dependencies:
 - **object.fromentries** (2.0.8) - [Homepage](https://github.com/es-shims/Object.fromEntries#readme)
 - **object.groupby** (1.0.3) - [Homepage](https://github.com/es-shims/Object.groupBy#readme)
 - **object.values** (1.2.1) - [Homepage](https://github.com/es-shims/Object.values#readme)
-- **obug** (2.1.3, 2.1.4) - [Homepage](https://github.com/sxzz/obug#readme)
+- **obug** (2.1.4) - [Homepage](https://github.com/sxzz/obug#readme)
 - **ohash** (2.0.11) - [Homepage](https://github.com/unjs/ohash#readme)
 - **on-exit-leak-free** (2.1.2) - [Homepage](https://github.com/mcollina/on-exit-or-gc#readme)
 - **on-finished** (2.3.0, 2.4.1) - [Homepage](https://github.com/jshttp/on-finished#readme)
@@ -1384,7 +1374,7 @@ These packages are installed as dependencies of direct dependencies:
 - **path-type** (4.0.0) - [Homepage](https://github.com/sindresorhus/path-type#readme)
 - **pathe** (2.0.3) - [Homepage](https://github.com/unjs/pathe#readme)
 - **perfect-debounce** (2.1.0) - [Homepage](https://github.com/unjs/perfect-debounce#readme)
-- **picomatch** (2.3.2, 4.0.4, 4.0.5, 4.0.7) - [Homepage](https://github.com/micromatch/picomatch)
+- **picomatch** (2.3.2, 4.0.5, 4.0.7) - [Homepage](https://github.com/micromatch/picomatch)
 - **pino-abstract-transport** (3.0.0) - [Homepage](https://github.com/pinojs/pino-abstract-transport#readme)
 - **pino-std-serializers** (7.1.0) - [Homepage](https://github.com/pinojs/pino-std-serializers#readme)
 - **pkce-challenge** (5.0.1) - [Homepage](https://github.com/crouchcd/pkce-challenge#readme)
@@ -1519,7 +1509,7 @@ These packages are installed as dependencies of direct dependencies:
 - **standard-as-callback** (2.1.0) - [Homepage](https://github.com/luin/asCallback#readme)
 - **standard-navigation** (0.0.5) - [Homepage](https://github.com/react-navigation/standard-navigation#readme)
 - **statuses** (1.5.0, 2.0.2) - [Homepage](https://github.com/jshttp/statuses#readme)
-- **std-env** (4.1.0) - [Homepage](https://github.com/unjs/std-env#readme)
+- **std-env** (4.2.0) - [Homepage](https://github.com/unjs/std-env#readme)
 - **stdin-discarder** (0.3.2) - [Homepage](https://github.com/sindresorhus/stdin-discarder#readme)
 - **stop-iteration-iterator** (1.1.0) - [Homepage](https://github.com/ljharb/stop-iteration-iterator#readme)
 - **strict-event-emitter** (0.5.1) - [Homepage](https://github.com/open-draft/strict-event-emitter#readme)
@@ -1550,10 +1540,10 @@ These packages are installed as dependencies of direct dependencies:
 - **thread-stream** (4.2.0) - [Homepage](https://github.com/mcollina/thread-stream#readme)
 - **throat** (5.0.0) - [Homepage](https://github.com/ForbesLindesay/throat#readme)
 - **tiny-invariant** (1.3.3) - [Homepage](https://github.com/alexreardon/tiny-invariant#readme)
-- **tinybench** (2.9.0) - [Homepage](https://github.com/tinylibs/tinybench#readme)
-- **tinyexec** (1.2.4, 1.3.1) - [Homepage](https://github.com/tinylibs/tinyexec#readme)
+- **tinybench** (6.1.4) - [Homepage](https://github.com/tinylibs/tinybench#readme)
+- **tinyexec** (1.2.4, 1.3.0, 1.3.1) - [Homepage](https://github.com/tinylibs/tinyexec#readme)
 - **tinyglobby** (0.2.17) - [Homepage](https://superchupu.dev/tinyglobby)
-- **tinyrainbow** (3.1.0) - [Homepage](https://github.com/tinylibs/tinyrainbow#readme)
+- **tinyrainbow** (3.1.1) - [Homepage](https://github.com/tinylibs/tinyrainbow#readme)
 - **tldts** (7.4.5) - [Homepage](https://github.com/remusao/tldts#readme)
 - **tldts-core** (7.4.5) - [Homepage](https://github.com/remusao/tldts#readme)
 - **to-regex-range** (5.0.1) - [Homepage](https://github.com/micromatch/to-regex-range)
@@ -1577,7 +1567,7 @@ These packages are installed as dependencies of direct dependencies:
 - **uint8array-extras** (1.5.0) - [Homepage](https://github.com/sindresorhus/uint8array-extras#readme)
 - **unbox-primitive** (1.1.0) - [Homepage](https://github.com/ljharb/unbox-primitive#readme)
 - **unconfig-core** (7.5.0) - [Homepage](https://github.com/antfu-collective/unconfig#readme)
-- **undici** (7.28.0, 7.29.0) - [Homepage](https://undici.nodejs.org)
+- **undici** (7.29.0, 8.10.1) - [Homepage](https://undici.nodejs.org)
 - **undici-types** (8.3.0) - [Homepage](https://undici.nodejs.org)
 - **unicode-canonical-property-names-ecmascript** (2.0.1) - [Homepage](https://github.com/mathiasbynens/unicode-canonical-property-names-ecmascript)
 - **unicode-emoji-modifier-base** (1.0.0) - [Homepage](https://github.com/mathiasbynens/unicode-emoji-modifier-base)
@@ -1609,7 +1599,7 @@ These packages are installed as dependencies of direct dependencies:
 - **webpack-sources** (3.5.0) - [Homepage](https://github.com/webpack/webpack-sources#readme)
 - **whatwg-fetch** (3.6.20) - [Homepage](https://github.com/github/fetch#readme)
 - **whatwg-mimetype** (5.0.0) - [Homepage](https://github.com/jsdom/whatwg-mimetype#readme)
-- **whatwg-url** (5.0.0, 16.0.1) - [Homepage](https://github.com/jsdom/whatwg-url#readme)
+- **whatwg-url** (5.0.0, 16.0.1, 17.1.0) - [Homepage](https://github.com/jsdom/whatwg-url#readme)
 - **whatwg-url-minimum** (0.1.2) - [Homepage](https://github.com/kitten/whatwg-url-minimum#readme)
 - **which-boxed-primitive** (1.1.1) - [Homepage](https://github.com/inspect-js/which-boxed-primitive#readme)
 - **which-builtin-type** (1.2.1) - [Homepage](https://github.com/inspect-js/which-builtin-type#readme)
@@ -1650,8 +1640,8 @@ These packages are installed as dependencies of direct dependencies:
 
 ### MIT-0
 
-- **@csstools/color-helpers** (6.1.0) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/color-helpers#readme)
-- **@csstools/css-syntax-patches-for-csstree** (1.1.6) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/css-syntax-patches-for-csstree#readme)
+- **@csstools/color-helpers** (6.1.1) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/color-helpers#readme)
+- **@csstools/css-syntax-patches-for-csstree** (1.1.12) - [Homepage](https://github.com/csstools/postcss-plugins/tree/main/packages/css-syntax-patches-for-csstree#readme)
 
 ### MPL-2.0
 

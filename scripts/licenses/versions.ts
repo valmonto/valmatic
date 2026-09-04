@@ -123,22 +123,31 @@ function getLatestVersion(packageName: string): string | null {
   }
 }
 
+/** `1.0.0-rc.3` → [1, 0, 0]; the prerelease tag is compared separately. */
+function baseParts(version: string): [number, number, number] {
+  const [major = 0, minor = 0, patch = 0] = version.split('-')[0]!.split('.').map(Number);
+  return [major, minor, patch];
+}
+
 function compareVersions(current: string, latest: string): VersionInfo['updateType'] {
   if (current === latest) return 'current';
 
-  // Check for prerelease
-  if (current.includes('-') || latest.includes('-')) {
-    return 'prerelease';
-  }
+  const cur = baseParts(current);
+  const lat = baseParts(latest);
+  const order = cur[0] - lat[0] || cur[1] - lat[1] || cur[2] - lat[2];
 
-  const currentParts = current.split('.').map(Number);
-  const latestParts = latest.split('.').map(Number);
+  // Ahead of the `latest` tag (a pinned release candidate whose base version is
+  // newer than the stable line, e.g. drizzle 1.0.0-rc.3 vs latest 0.45.x):
+  // nothing to update to. Reporting it as "prerelease available" was noise.
+  if (order > 0) return 'current';
 
-  const [curMajor = 0, curMinor = 0] = currentParts;
-  const [latMajor = 0, latMinor = 0] = latestParts;
+  // Same base, and one side carries a prerelease tag: the only move is
+  // between a prerelease and its release, or between two prereleases.
+  if (order === 0) return 'prerelease';
 
-  if (curMajor !== latMajor) return 'major';
-  if (curMinor !== latMinor) return 'minor';
+  if (latest.includes('-')) return 'prerelease';
+  if (cur[0] !== lat[0]) return 'major';
+  if (cur[1] !== lat[1]) return 'minor';
   return 'patch';
 }
 
