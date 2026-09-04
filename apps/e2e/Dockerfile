@@ -11,7 +11,7 @@ COPY packages ./packages
 COPY apps/e2e ./apps/e2e
 
 # Install pnpm
-RUN npm install -g pnpm@10
+RUN npm install -g pnpm@11.25.0
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile

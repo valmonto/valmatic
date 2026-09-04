@@ -2,10 +2,10 @@
   "name": "@pkg/root",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@11.5.2",
+  "packageManager": "pnpm@11.25.0",
   "engines": {
     "node": ">=26.0.0",
-    "pnpm": ">=10.0.0"
+    "pnpm": ">=11.0.0"
   },
   "scripts": {
     "dev": "pnpm -r --parallel --filter=./packages/* --filter=./apps/* run dev",
@@ -51,6 +51,7 @@
     "prepare": "husky || true",
     "verify": "pnpm typecheck && pnpm lint && pnpm test",
     "verify:affected": "node scripts/verify/affected.mjs",
+    "deploy:status": "node scripts/deployment-status.mjs",
     "lint:mobile": "pnpm --filter @pkg/mobile run lint"
   },
   "devDependencies": {
