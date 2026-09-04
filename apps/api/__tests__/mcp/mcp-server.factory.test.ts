@@ -1,8 +1,8 @@
 import { FakeLogger } from '@pkg/testing';
 import type { PinoLogger } from 'nestjs-pino';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { McpServerFactory } from '@/mcp/mcp-server.factory';
-import type { McpTools } from '@/mcp/mcp-tools';
+import { McpServerFactory } from '@/mcp/mcp-server.factory.js';
+import type { McpTools } from '@/mcp/mcp-tools.js';
 
 /**
  * The scoping contract: a key sees EXACTLY the tools its scopes cover, and the

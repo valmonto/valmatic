@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AdminApiKeyController } from './admin-api-key.controller';
-import { ApiKeyRepository } from './api-key.repository';
-import { ApiKeyService } from './api-key.service';
+import { AdminApiKeyController } from './admin-api-key.controller.js';
+import { ApiKeyRepository } from './api-key.repository.js';
+import { ApiKeyService } from './api-key.service.js';
 
 @Module({
   controllers: [AdminApiKeyController],

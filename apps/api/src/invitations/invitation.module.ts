@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { IamService } from '@pkg/server';
-import { UserModule } from '../user/user.module';
-import { NotificationModule } from '../notifications';
-import { InvitationController } from './invitation.controller';
-import { InvitationRepository } from './invitation.repository';
-import { InvitationService } from './invitation.service';
+import { UserModule } from '../user/user.module.js';
+import { NotificationModule } from '../notifications/index.js';
+import { InvitationController } from './invitation.controller.js';
+import { InvitationRepository } from './invitation.repository.js';
+import { InvitationService } from './invitation.service.js';
 
 @Module({
   imports: [UserModule, NotificationModule],

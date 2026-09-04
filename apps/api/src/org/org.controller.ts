@@ -1,5 +1,5 @@
 import { Controller, Get, Patch, Post, Res } from '@nestjs/common';
-import { OrgService } from './org.service';
+import { OrgService } from './org.service.js';
 import { ActiveUser, Permissions, ZodRequest, COOKIE_OPTIONS, COOKIE_TTL } from '@pkg/server';
 import {
   type CreateOrgRequest,

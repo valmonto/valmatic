@@ -54,9 +54,12 @@ itself resolves. Two consequences are load-bearing:
   directory import is written `./dir/index.js`. This is what NodeNext demands
   of ESM files, and it is what `nest new` generates for ESM projects. JSON
   imports in ESM need `with { type: 'json' }`.
-- **The Nest apps have no `"type": "module"`, so their files are CommonJS
-  format**: no suffix needed, and an import of an ESM-only package (NestJS 12)
-  compiles to `require(esm)`, which Node 26 supports.
+- **The Nest apps are ESM too** (`"type": "module"` since 2026-09-04), so the
+  same `.js` rule applies to their relative imports and to the `@/` test alias
+  (`@/user/user.service.js`). Their entry points are spelled out
+  (`node dist/main.js`); an extensionless `node dist/main` is CommonJS-era
+  resolution. Before the switch the apps consumed the ESM-only NestJS 12
+  packages through `require(esm)`; now there is no interop layer at all.
 
 ### Which TypeScript runs where
 
@@ -68,6 +71,8 @@ and 7.1 is expected to restore — and Expo's lint stack has the same need.
 Their `tsc --noEmit` therefore runs 6; the code they compile is checked the
 same way, and type-aware lint runs on the TS 7 engine regardless
 (oxlint-tsgolint). The catalog comment says when to delete the split.
+
+JSON imports in ESM need `with { type: 'json' }` (the api's seed fixture).
 
 Why not stay on classic (`node10`) resolution: it does not describe Node, so
 TypeScript 6 deprecates it and TypeScript 7 removes it, and type-aware tooling

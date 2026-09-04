@@ -5,7 +5,7 @@ import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { ConfigService } from '@nestjs/config';
 import { Logger, withFrameworkLogFilter } from '@pkg/server';
 
-import { AppModule } from './app.module';
+import { AppModule } from './app.module.js';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {

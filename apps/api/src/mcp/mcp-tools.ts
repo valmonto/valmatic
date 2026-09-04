@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { z, type ZodRawShape } from 'zod';
 import type { McpScope } from '@pkg/contracts';
-import { OrgService } from '../org/org.service';
+import { OrgService } from '../org/org.service.js';
 
 export interface McpToolDef {
   name: string;

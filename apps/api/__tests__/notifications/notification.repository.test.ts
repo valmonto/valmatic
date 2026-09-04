@@ -8,7 +8,7 @@ import {
 } from '@pkg/database';
 import { describeIntegration, truncate } from '@pkg/testing';
 import { afterAll, beforeEach, expect, it } from 'vitest';
-import { NotificationRepository } from '@/notifications/notification.repository';
+import { NotificationRepository } from '@/notifications/notification.repository.js';
 
 /**
  * The predicate under test is `userId AND (orgId = active OR orgId IS NULL)`.

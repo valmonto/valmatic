@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validateEnv } from '@/config';
+import { validateEnv } from '@/config/index.js';
 
 /**
  * WEB_APP_URL builds the copyable links the API hands back (invitation accept

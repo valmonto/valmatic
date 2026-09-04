@@ -1,5 +1,5 @@
 import { Controller, Delete, Get } from '@nestjs/common';
-import { OrgService } from './org.service';
+import { OrgService } from './org.service.js';
 import { ActiveUser, SystemRole, SystemRoles, ZodRequest } from '@pkg/server';
 import {
   type AdminDeleteOrgRequest,

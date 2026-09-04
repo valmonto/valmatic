@@ -7,7 +7,7 @@ import {
 } from '@pkg/database';
 import { describeIntegration, truncate } from '@pkg/testing';
 import { afterAll, beforeEach, expect, it } from 'vitest';
-import { UserRepository } from '@/user/user.repository';
+import { UserRepository } from '@/user/user.repository.js';
 
 /**
  * The service tests assert the repository is *called* with an organization.

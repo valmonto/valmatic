@@ -10,7 +10,7 @@ import type {
   McpScope,
 } from '@pkg/contracts';
 import type { ApiKeyRow } from '@pkg/database';
-import { ApiKeyRepository } from './api-key.repository';
+import { ApiKeyRepository } from './api-key.repository.js';
 
 const hash = (key: string): string => createHash('sha256').update(key).digest('hex');
 

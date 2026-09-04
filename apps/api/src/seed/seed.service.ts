@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectLogger, PinoLogger } from '@pkg/server';
-import type { Env } from '../config';
-import type { Seeder } from './seeder.interface';
-import { ProductionSeeder } from './seeders/production.seeder';
-import { DevelopmentSeeder } from './seeders/development.seeder';
+import type { Env } from '../config/index.js';
+import type { Seeder } from './seeder.interface.js';
+import { ProductionSeeder } from './seeders/production.seeder.js';
+import { DevelopmentSeeder } from './seeders/development.seeder.js';
 
 /**
  * Picks and runs the appropriate seeder for the current environment.

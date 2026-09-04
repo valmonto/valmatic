@@ -6,7 +6,7 @@ import {
   type ExampleTaskCompletedEvent,
   type ExampleTaskFailedEvent,
 } from '@pkg/server';
-import { NotificationRepository } from './notification.repository';
+import { NotificationRepository } from './notification.repository.js';
 import { InjectLogger, PinoLogger } from '@pkg/server';
 
 /**

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { McpScope } from '@pkg/contracts';
 import { InjectLogger, PinoLogger } from '@pkg/server';
-import { McpTools } from './mcp-tools';
+import { McpTools } from './mcp-tools.js';
 
 const text = (data: unknown): { content: { type: 'text'; text: string }[] } => ({
   content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],

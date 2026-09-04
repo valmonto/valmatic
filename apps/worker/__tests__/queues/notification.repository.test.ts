@@ -1,7 +1,7 @@
 import { createDatabaseClient, notification, user, type DatabaseClient } from '@pkg/database';
 import { describeIntegration, truncate } from '@pkg/testing';
 import { afterAll, beforeEach, expect, it } from 'vitest';
-import { NotificationRepository } from '@/queues/example/notification.repository';
+import { NotificationRepository } from '@/queues/example/notification.repository.js';
 
 /**
  * An integration test: it runs against a real Postgres when `DATABASE_URL` is

@@ -1,9 +1,9 @@
 import { Global, Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller.js';
+import { AuthService } from './auth.service.js';
 import { IamModule, IamService, ORG_ACCESS } from '@pkg/server';
-import { AuthRepository } from './auth.repository';
-import { OrgAccessProvider } from './org-access.provider';
+import { AuthRepository } from './auth.repository.js';
+import { OrgAccessProvider } from './org-access.provider.js';
 
 @Global()
 @Module({

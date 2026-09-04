@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { OrgController } from './org.controller';
-import { AdminOrgController } from './admin-org.controller';
-import { OrgService } from './org.service';
-import { OrgRepository } from './org.repository';
+import { OrgController } from './org.controller.js';
+import { AdminOrgController } from './admin-org.controller.js';
+import { OrgService } from './org.service.js';
+import { OrgRepository } from './org.repository.js';
 import { IamService } from '@pkg/server';
 
 @Module({

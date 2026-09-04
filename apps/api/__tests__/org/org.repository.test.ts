@@ -7,7 +7,7 @@ import {
 } from '@pkg/database';
 import { describeIntegration, truncate } from '@pkg/testing';
 import { afterAll, beforeEach, expect, it } from 'vitest';
-import { OrgRepository } from '@/org/org.repository';
+import { OrgRepository } from '@/org/org.repository.js';
 
 /**
  * The service tests assert the repository is *called* with the right ids; only

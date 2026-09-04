@@ -18,7 +18,7 @@ import type {
   UpdateOrgResponse,
   ActiveUser,
 } from '@pkg/contracts';
-import { OrgRepository } from './org.repository';
+import { OrgRepository } from './org.repository.js';
 
 @Injectable()
 export class OrgService {

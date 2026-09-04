@@ -1,7 +1,7 @@
 import type { ActiveUser } from '@pkg/contracts';
 import type { ExampleProducer } from '@pkg/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { JobsController } from '@/jobs/jobs.controller';
+import { JobsController } from '@/jobs/jobs.controller.js';
 
 const caller: ActiveUser = {
   userId: '11111111-1111-4111-8111-111111111111',

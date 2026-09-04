@@ -2,8 +2,8 @@ import { NotFoundException } from '@nestjs/common';
 import { FakeLogger } from '@pkg/testing';
 import type { PinoLogger } from 'nestjs-pino';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ApiKeyService } from '@/api-key/api-key.service';
-import type { ApiKeyRepository } from '@/api-key/api-key.repository';
+import { ApiKeyService } from '@/api-key/api-key.service.js';
+import type { ApiKeyRepository } from '@/api-key/api-key.repository.js';
 
 const now = new Date('2026-01-01T00:00:00.000Z');
 

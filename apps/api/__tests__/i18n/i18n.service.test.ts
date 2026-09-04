@@ -1,7 +1,7 @@
 import { REQUEST } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { describe, expect, it } from 'vitest';
-import { I18nService } from '@/i18n/i18n.service';
+import { I18nService } from '@/i18n/i18n.service.js';
 
 /**
  * Example of testing a REQUEST-scoped Nest provider: supply a stub request and

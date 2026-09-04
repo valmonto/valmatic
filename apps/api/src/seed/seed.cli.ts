@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger, withFrameworkLogFilter } from '@pkg/server';
-import { SeedCliModule } from './seed-cli.module';
-import { SeedService } from './seed.service';
+import { SeedCliModule } from './seed-cli.module.js';
+import { SeedService } from './seed.service.js';
 
 /**
  * Standalone seed entrypoint. Boots a minimal Nest application context,

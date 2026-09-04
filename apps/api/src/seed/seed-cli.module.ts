@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from '@pkg/database';
 import { LoggingModule } from '@pkg/server';
-import { validateEnv } from '../config';
-import { SeedModule } from './seed.module';
+import { validateEnv } from '../config/index.js';
+import { SeedModule } from './seed.module.js';
 
 /**
  * Self-contained module for the seed CLI. Stands up only the infrastructure

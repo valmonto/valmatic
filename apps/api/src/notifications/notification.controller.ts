@@ -24,7 +24,7 @@ import {
   MarkNotificationReadResponse,
   type ActiveUser as ActiveUserType,
 } from '@pkg/contracts';
-import { NotificationService } from './notification.service';
+import { NotificationService } from './notification.service.js';
 
 /**
  * Every route takes its input through `@ZodRequest`. The static routes

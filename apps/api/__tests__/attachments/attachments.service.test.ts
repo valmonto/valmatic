@@ -7,8 +7,8 @@ import type { ActiveUser } from '@pkg/contracts';
 import { FakeLogger } from '@pkg/testing';
 import type { PinoLogger } from 'nestjs-pino';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { AttachmentsService } from '@/attachments/attachments.service';
-import type { AttachmentRepository } from '@/attachments/attachment.repository';
+import { AttachmentsService } from '@/attachments/attachments.service.js';
+import type { AttachmentRepository } from '@/attachments/attachment.repository.js';
 import type { StorageService } from '@pkg/server';
 
 const ORG = '11111111-1111-4111-8111-111111111111';
