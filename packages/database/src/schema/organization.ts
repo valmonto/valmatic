@@ -1,6 +1,6 @@
 import { pgTable, uuid, varchar, timestamp, index } from 'drizzle-orm/pg-core';
-import { pk } from './helpers';
-import { user } from './user';
+import { pk } from './helpers.js';
+import { user } from './user.js';
 
 export const organization = pgTable(
   'organization',

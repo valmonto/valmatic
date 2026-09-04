@@ -1,5 +1,5 @@
-import type { OrganizationUserRole } from '../schemas/organization.schema';
-import type { Permission } from './list';
+import type { OrganizationUserRole } from '../schemas/organization.schema.js';
+import type { Permission } from './list.js';
 
 
 /**

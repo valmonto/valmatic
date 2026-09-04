@@ -1,4 +1,4 @@
-import { type IAuthProvider } from '../auth-provider';
+import { type IAuthProvider } from '../auth-provider.js';
 import type {
   ActiveUser,
   IamIssueTokensRequest,
@@ -10,15 +10,15 @@ import type {
   IamRefreshTokenRequest,
   IamRefreshTokenResponse,
 } from '@pkg/contracts';
-import type Redis from 'ioredis';
+import type { Redis } from 'ioredis';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { randomBytes } from 'node:crypto';
 import { k } from '@pkg/locales';
-import { IAM_REDIS } from '../../iam.redis';
-import { ORG_ACCESS, type IOrgAccessProvider } from '../org-access-provider';
-import { InjectLogger, PinoLogger } from '../../../logging';
+import { IAM_REDIS } from '../../iam.redis.js';
+import { ORG_ACCESS, type IOrgAccessProvider } from '../org-access-provider.js';
+import { InjectLogger, PinoLogger } from '../../../logging/index.js';
 
 interface SessionData extends ActiveUser {
   sessionStart: number;

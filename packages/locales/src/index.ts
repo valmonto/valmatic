@@ -1,10 +1,10 @@
-import en from './translations/en.json';
-import es from './translations/es.json';
-import lt from './translations/lt.json';
+import en from './translations/en.json' with { type: 'json' };
+import es from './translations/es.json' with { type: 'json' };
+import lt from './translations/lt.json' with { type: 'json' };
 
 // Export all keys
-export * from './keys';
-export { k } from './keys';
+export * from './keys/index.js';
+export { k } from './keys/index.js';
 
 export const supportedLanguages = ['en', 'es', 'lt'] as const;
 export type SupportedLanguage = (typeof supportedLanguages)[number];

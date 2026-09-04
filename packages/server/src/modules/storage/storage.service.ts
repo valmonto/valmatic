@@ -14,7 +14,7 @@ import {
   type CreateBucketCommandInput,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { STORAGE_OPTIONS } from './storage.tokens';
+import { STORAGE_OPTIONS } from './storage.tokens.js';
 import type {
   StorageDriver,
   CreateSignedReadUrlInput,
@@ -24,7 +24,7 @@ import type {
   SignedStorageUrl,
   StorageModuleOptions,
   StorageObjectInput,
-} from './storage.types';
+} from './storage.types.js';
 
 const DEFAULT_REGION = 'us-east-1';
 const DEFAULT_SIGNED_URL_EXPIRATION_SECONDS = 900;

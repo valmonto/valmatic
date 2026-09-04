@@ -1,4 +1,4 @@
 import { Inject } from '@nestjs/common';
-import { AUTH_PROVIDER } from '../auth-provider';
+import { AUTH_PROVIDER } from '../auth-provider.js';
 
 export const AuthProvider = () => Inject(AUTH_PROVIDER);

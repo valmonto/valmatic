@@ -4,7 +4,7 @@ import {
   Roles,
   Role,
   ROLES_KEY,
-} from '../../../../../src/modules/iam/auth-providers/decorators/roles.decorator';
+} from '../../../../../src/modules/iam/auth-providers/decorators/roles.decorator.js';
 
 describe('Roles', () => {
   const reflector = new Reflector();

@@ -1,12 +1,12 @@
 import { z } from 'zod';
-import { NOTIFICATION_CHANNELS, NOTIFICATION_TYPES } from '../constants';
-import { EmptyRequestSchema } from './common.schema';
-import { PaginatedRequestSchema, PaginatedResponseSchema } from './pagination.schema';
+import { NOTIFICATION_CHANNELS, NOTIFICATION_TYPES } from '../constants/index.js';
+import { EmptyRequestSchema } from './common.schema.js';
+import { PaginatedRequestSchema, PaginatedResponseSchema } from './pagination.schema.js';
 
 // --- Notification Enums ---
 // Derived from ../constants — the same value sets the database CHECK
 // constraints enforce, defined exactly once.
-export { NOTIFICATION_TYPES, NOTIFICATION_CHANNELS } from '../constants';
+export { NOTIFICATION_TYPES, NOTIFICATION_CHANNELS } from '../constants/index.js';
 export const NotificationTypeSchema = z.enum(NOTIFICATION_TYPES);
 export const NotificationChannelSchema = z.enum(NOTIFICATION_CHANNELS);
 

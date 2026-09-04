@@ -8,30 +8,30 @@
  * Backend:
  *   throw new UnauthorizedException(k.auth.errors.invalidCredentials)
  */
-export { admin } from './admin';
-export { attachments } from './attachments';
-export { auth } from './auth';
-export { users } from './users';
-export { orgs } from './orgs';
-export { invitations } from './invitations';
-export { jobs } from './jobs';
-export { notifications } from './notifications';
-export { mcp } from './mcp';
-export { common } from './common';
-export { validation } from './validation';
+export { admin } from './admin.js';
+export { attachments } from './attachments.js';
+export { auth } from './auth.js';
+export { users } from './users.js';
+export { orgs } from './orgs.js';
+export { invitations } from './invitations.js';
+export { jobs } from './jobs.js';
+export { notifications } from './notifications.js';
+export { mcp } from './mcp.js';
+export { common } from './common.js';
+export { validation } from './validation.js';
 
 // Combined keys object for convenience
-import { admin } from './admin';
-import { attachments } from './attachments';
-import { auth } from './auth';
-import { users } from './users';
-import { orgs } from './orgs';
-import { invitations } from './invitations';
-import { jobs } from './jobs';
-import { notifications } from './notifications';
-import { mcp } from './mcp';
-import { common } from './common';
-import { validation } from './validation';
+import { admin } from './admin.js';
+import { attachments } from './attachments.js';
+import { auth } from './auth.js';
+import { users } from './users.js';
+import { orgs } from './orgs.js';
+import { invitations } from './invitations.js';
+import { jobs } from './jobs.js';
+import { notifications } from './notifications.js';
+import { mcp } from './mcp.js';
+import { common } from './common.js';
+import { validation } from './validation.js';
 
 export const k = {
   admin,

@@ -1,7 +1,7 @@
 import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import {
   DATABASE_CLIENT,
-  DatabaseClient,
+  type DatabaseClient,
   user,
   organization,
   organizationUser,

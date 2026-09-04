@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { AppThrottlerGuard } from './throttler.guard';
+import { AppThrottlerGuard } from './throttler.guard.js';
 
 /**
  * Registers the global rate-limit guard.

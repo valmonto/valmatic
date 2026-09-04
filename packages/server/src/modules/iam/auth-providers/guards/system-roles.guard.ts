@@ -7,8 +7,8 @@ import {
 import { Reflector } from '@nestjs/core';
 import type { ActiveUser, SystemRole } from '@pkg/contracts';
 import { k } from '@pkg/locales';
-import { SYSTEM_ROLES_KEY } from '../decorators/system-roles.decorator';
-import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator';
+import { SYSTEM_ROLES_KEY } from '../decorators/system-roles.decorator.js';
+import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator.js';
 
 /**
  * Platform-role guard, the counterpart to `RolesGuard`.

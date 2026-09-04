@@ -7,10 +7,10 @@ import {
 import { Reflector } from '@nestjs/core';
 import type { ActiveUser, OrganizationUserRole, SystemRole } from '@pkg/contracts';
 import { k } from '@pkg/locales';
-import { ROLES_KEY } from '../decorators/roles.decorator';
-import { PERMISSIONS_KEY, type PermissionsMetadata } from '../decorators/permissions.decorator';
-import { SYSTEM_ROLES_KEY } from '../decorators/system-roles.decorator';
-import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator';
+import { ROLES_KEY } from '../decorators/roles.decorator.js';
+import { PERMISSIONS_KEY, type PermissionsMetadata } from '../decorators/permissions.decorator.js';
+import { SYSTEM_ROLES_KEY } from '../decorators/system-roles.decorator.js';
+import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator.js';
 
 /**
  * STRICT RBAC Guard — organization roles only. Platform roles are

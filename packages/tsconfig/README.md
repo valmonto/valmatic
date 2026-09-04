@@ -6,12 +6,12 @@ packages.
 
 ## Which one to extend
 
-| Config | For | Emits |
-|---|---|---|
-| `base.json` | the shared settings; not extended directly | no |
-| `library.json` | packages that build to `dist/` | yes → `dist/` |
-| `nestjs.json` | `apps/api`, `apps/worker` | yes → `dist/` |
-| `react.json` | `apps/web` | no — Vite compiles |
+| Config         | For                                        | Emits              |
+| -------------- | ------------------------------------------ | ------------------ |
+| `base.json`    | the shared settings; not extended directly | no                 |
+| `library.json` | packages that build to `dist/`             | yes → `dist/`      |
+| `nestjs.json`  | `apps/api`, `apps/worker`                  | yes → `dist/`      |
+| `react.json`   | `apps/web`                                 | no — Vite compiles |
 
 ```json
 {
@@ -42,9 +42,25 @@ automatically); `apps/api` and `apps/worker` do this.
 Nest's decorator metadata need TypeScript to make its own decisions about
 imports.
 
-## Notes
+## Module resolution: NodeNext everywhere
 
-`nestjs.json` stays on classic module resolution and silences the TS 6
-deprecation. Moving to `node16` would require explicit `.js` extensions
-throughout every package's source, because the packages expose raw `src/*.ts`
-as their types — a monorepo-wide migration, not a per-app change.
+Every preset resolves with `moduleResolution: NodeNext`, which models how Node
+itself resolves. Two consequences are load-bearing:
+
+- **Packages are ESM (`"type": "module"`), so their relative imports carry an
+  explicit `.js` suffix** — `import { x } from './x.js'` in a `.ts` file. The
+  suffix names the compiled neighbour; TypeScript, Vite, Vitest and tsdown all
+  map it back to the `.ts` source, and no `.js` file exists under `src/`. A
+  directory import is written `./dir/index.js`. This is what NodeNext demands
+  of ESM files, and it is what `nest new` generates for ESM projects. JSON
+  imports in ESM need `with { type: 'json' }`.
+- **The Nest apps have no `"type": "module"`, so their files are CommonJS
+  format**: no suffix needed, and an import of an ESM-only package (NestJS 12)
+  compiles to `require(esm)`, which Node 26 supports.
+
+Why not stay on classic (`node10`) resolution: it does not describe Node, so
+TypeScript 6 deprecates it and TypeScript 7 removes it, and type-aware tooling
+built on the TS 7 engine (oxlint's `tsgolint`) refuses a project that uses it.
+The migration happened in one PR (2026-09-04): 289 specifiers across the six
+packages, resolved against the filesystem by a codemod, no source semantics
+changed.

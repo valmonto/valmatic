@@ -1,6 +1,6 @@
 import { pgTable, varchar, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { pk } from './helpers';
-import { user } from './user';
+import { pk } from './helpers.js';
+import { user } from './user.js';
 
 /**
  * Machine API keys for the MCP endpoint. The plaintext is shown once at

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 import { DatabaseModule } from '@pkg/database';
 import {
   EventsModule,
@@ -52,6 +52,10 @@ import { validateEnv } from './config';
     // Redis is the IAM one unless RATE_LIMIT_REDIS_HOST points elsewhere;
     // counters are namespaced and ephemeral, so switching migrates nothing.
     ThrottlerModule.forRootAsync({
+      // Nest 12 dropped the deep `@nestjs/common/interfaces` export that
+      // throttler's emitted types import, so `imports` stops being optional
+      // (nestjs/throttler#2671). Harmless here; delete when #2672 ships.
+      imports: [],
       inject: [ConfigService, IAM_REDIS],
       useFactory: (config: ConfigService, iamRedis: Redis) => {
         const dedicatedHost = config.get<string>('RATE_LIMIT_REDIS_HOST');

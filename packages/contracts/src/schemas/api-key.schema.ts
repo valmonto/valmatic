@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { MCP_SCOPES } from '../constants';
-import { EmptyRequestSchema } from './common.schema';
+import { MCP_SCOPES } from '../constants/index.js';
+import { EmptyRequestSchema } from './common.schema.js';
 
 export const McpScopeSchema = z.enum(MCP_SCOPES);
 

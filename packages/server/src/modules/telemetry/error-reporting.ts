@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type * as SentryTypes from '@sentry/node';
 import { ConfigService } from '@nestjs/config';
-import { InjectLogger, PinoLogger } from '../logging';
+import { InjectLogger, PinoLogger } from '../logging/index.js';
 
 export interface ErrorContext {
   userId?: string;

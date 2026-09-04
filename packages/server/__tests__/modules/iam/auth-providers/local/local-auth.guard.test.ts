@@ -7,8 +7,8 @@ import {
   LocalAuthGuard,
   extractAccessToken,
   extractRefreshToken,
-} from '../../../../../src/modules/iam/auth-providers/local/local-auth.guard';
-import type { IAuthProvider } from '../../../../../src/modules/iam/auth-providers/auth-provider';
+} from '../../../../../src/modules/iam/auth-providers/local/local-auth.guard.js';
+import type { IAuthProvider } from '../../../../../src/modules/iam/auth-providers/auth-provider.js';
 
 describe('Token Extraction', () => {
   const createMockRequest = (options: {

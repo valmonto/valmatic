@@ -1,2 +1,2 @@
-export * from './events.module';
-export * from './events.types';
+export * from './events.module.js';
+export * from './events.types.js';

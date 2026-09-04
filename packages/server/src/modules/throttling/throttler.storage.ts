@@ -1,6 +1,6 @@
 import type { ThrottlerStorage } from '@nestjs/throttler';
-import type { ThrottlerStorageRecord } from '@nestjs/throttler/dist/throttler-storage-record.interface';
-import type Redis from 'ioredis';
+import type { ThrottlerStorageRecord } from '@nestjs/throttler/dist/throttler-storage-record.interface.js';
+import type { Redis } from 'ioredis';
 
 /**
  * Redis-backed counters for @nestjs/throttler — in-memory counters would

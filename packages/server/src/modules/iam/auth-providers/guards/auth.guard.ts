@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
-import { LocalAuthGuard } from '../local/local-auth.guard';
+import { LocalAuthGuard } from '../local/local-auth.guard.js';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

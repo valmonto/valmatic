@@ -5,9 +5,9 @@
  * live in a `*.schema.ts`, or importing one regex drags the whole schema graph —
  * and Zod — into the bundle. One file per domain, mirroring `schemas/`.
  */
-export * from './iam';
-export * from './analytics';
-export * from './notification';
-export * from './mcp';
-export * from './attachment';
-export * from './invitation';
+export * from './iam.js';
+export * from './analytics.js';
+export * from './notification.js';
+export * from './mcp.js';
+export * from './attachment.js';
+export * from './invitation.js';

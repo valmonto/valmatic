@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { UnauthorizedException, type ExecutionContext } from '@nestjs/common';
 import type { ConfigService } from '@nestjs/config';
 import type { Reflector } from '@nestjs/core';
-import { AuthGuard } from '../../../../../src/modules/iam/auth-providers/guards/auth.guard';
-import type { LocalAuthGuard } from '../../../../../src/modules/iam/auth-providers/local/local-auth.guard';
+import { AuthGuard } from '../../../../../src/modules/iam/auth-providers/guards/auth.guard.js';
+import type { LocalAuthGuard } from '../../../../../src/modules/iam/auth-providers/local/local-auth.guard.js';
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;

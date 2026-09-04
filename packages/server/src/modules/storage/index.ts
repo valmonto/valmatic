@@ -1,4 +1,4 @@
-export { StorageModule } from './storage.module';
-export { StorageService } from './storage.service';
-export { STORAGE_OPTIONS } from './storage.tokens';
-export type * from './storage.types';
+export { StorageModule } from './storage.module.js';
+export { StorageService } from './storage.service.js';
+export { STORAGE_OPTIONS } from './storage.tokens.js';
+export type * from './storage.types.js';

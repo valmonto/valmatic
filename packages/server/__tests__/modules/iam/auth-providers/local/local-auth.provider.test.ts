@@ -2,11 +2,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { UnauthorizedException } from '@nestjs/common';
 import type { ConfigService } from '@nestjs/config';
 import type { JwtService } from '@nestjs/jwt';
-import type Redis from 'ioredis';
+import type { Redis } from 'ioredis';
 import type { PinoLogger } from 'nestjs-pino';
 import { FakeLogger } from '@pkg/testing';
-import { LocalAuthProvider } from '../../../../../src/modules/iam/auth-providers/local/local-auth.provider';
-import type { IOrgAccessProvider } from '../../../../../src/modules/iam/auth-providers/org-access-provider';
+import { LocalAuthProvider } from '../../../../../src/modules/iam/auth-providers/local/local-auth.provider.js';
+import type { IOrgAccessProvider } from '../../../../../src/modules/iam/auth-providers/org-access-provider.js';
 
 describe('LocalAuthProvider', () => {
   let provider: LocalAuthProvider;

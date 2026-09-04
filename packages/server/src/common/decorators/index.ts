@@ -1,1 +1,1 @@
-export * from './zod-request';
+export * from './zod-request.js';

@@ -1,6 +1,6 @@
 import { Module, type DynamicModule } from '@nestjs/common';
 import { LoggerModule } from 'nestjs-pino';
-import { createLoggingParams, type LoggingOptions } from './logging.config';
+import { createLoggingParams, type LoggingOptions } from './logging.config.js';
 
 /**
  * Configures `nestjs-pino` with the project's standard logging params.

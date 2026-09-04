@@ -1,8 +1,6 @@
 {
   "extends": "@pkg/tsconfig/library.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
     "outDir": "./dist",
     "rootDir": "./src",
     "types": ["node"],

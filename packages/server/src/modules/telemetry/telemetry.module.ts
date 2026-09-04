@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
-import { Analytics } from './analytics';
-import { ErrorReporter } from './error-reporting';
-import { FeatureFlags } from './feature-flags';
+import { Analytics } from './analytics.js';
+import { ErrorReporter } from './error-reporting.js';
+import { FeatureFlags } from './feature-flags.js';
 
 /**
  * Telemetry — sleeping by default, woken by env vars:

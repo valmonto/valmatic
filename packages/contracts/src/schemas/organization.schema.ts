@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { ORGANIZATION_USER_ROLES } from '../constants';
-import { EmptyRequestSchema } from './common.schema';
-import { PaginatedRequestSchema, PaginatedResponseSchema } from './pagination.schema';
+import { ORGANIZATION_USER_ROLES } from '../constants/index.js';
+import { EmptyRequestSchema } from './common.schema.js';
+import { PaginatedRequestSchema, PaginatedResponseSchema } from './pagination.schema.js';
 
 // Single source of truth for organization user roles
-export { ORGANIZATION_USER_ROLES } from '../constants';
+export { ORGANIZATION_USER_ROLES } from '../constants/index.js';
 export const OrganizationUserRoleSchema = z.enum(ORGANIZATION_USER_ROLES);
 export type OrganizationUserRole = z.infer<typeof OrganizationUserRoleSchema>;
 

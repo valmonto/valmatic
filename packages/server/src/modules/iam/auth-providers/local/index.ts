@@ -1,2 +1,2 @@
-export * from './local-auth.guard';
-export * from './local-auth.provider';
+export * from './local-auth.guard.js';
+export * from './local-auth.provider.js';

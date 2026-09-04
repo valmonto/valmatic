@@ -4,7 +4,7 @@ import { z } from 'zod';
 import {
   mergeRequestInput,
   validateZodRequest,
-} from '../../../src/common/decorators/zod-request';
+} from '../../../src/common/decorators/zod-request.js';
 
 describe('validateZodRequest', () => {
   const testSchema = z.object({

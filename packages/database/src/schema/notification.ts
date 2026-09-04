@@ -15,9 +15,9 @@ import {
   type NotificationChannel as NotificationChannelType,
   type NotificationType as NotificationTypeType,
 } from '@pkg/contracts';
-import { pk } from './helpers';
-import { user } from './user';
-import { organization } from './organization';
+import { pk } from './helpers.js';
+import { user } from './user.js';
+import { organization } from './organization.js';
 
 export const notification = pgTable(
   'notification',

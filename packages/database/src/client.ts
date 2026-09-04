@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres, { type Sql } from 'postgres';
-import { relations } from './schema/relations';
+import { relations } from './schema/relations.js';
 
 export interface DatabaseConfig {
   url: string;

@@ -1,7 +1,7 @@
 import { Module, type DynamicModule } from '@nestjs/common';
-import { StorageService } from './storage.service';
-import { STORAGE_OPTIONS } from './storage.tokens';
-import type { StorageModuleAsyncOptions, StorageModuleOptions } from './storage.types';
+import { StorageService } from './storage.service.js';
+import { STORAGE_OPTIONS } from './storage.tokens.js';
+import type { StorageModuleAsyncOptions, StorageModuleOptions } from './storage.types.js';
 
 @Module({})
 export class StorageModule {

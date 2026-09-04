@@ -1,1 +1,1 @@
-export { tryCatch } from './try-catch';
+export { tryCatch } from './try-catch.js';

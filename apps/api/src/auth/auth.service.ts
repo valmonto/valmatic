@@ -23,7 +23,7 @@ import {
 import { InjectLogger, PinoLogger } from '@pkg/server';
 import { AuthRepository } from './auth.repository';
 import * as bcrypt from 'bcryptjs';
-import type Redis from 'ioredis';
+import type { Redis } from 'ioredis';
 
 const { BCRYPT_ROUNDS, LOGIN_MAX_ATTEMPTS, LOGIN_LOCKOUT_SECONDS } = SECURITY_CONFIG;
 

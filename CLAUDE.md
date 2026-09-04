@@ -92,6 +92,10 @@ spans the whole repo belongs here.
   `@Permissions`/`@Roles`. `systemRole` (USER|MODERATOR|ADMIN) is platform
   standing and drives `@SystemRoles` only. A system role opens dedicated
   routes (`/admin/*`); it never widens an org-scoped route.
+- **Relative imports inside `packages/*` carry a `.js` suffix** (`./x.js`,
+  `./dir/index.js`). The packages are ESM under NodeNext resolution; the
+  suffix is the compiled name and tooling maps it to the `.ts` source. The
+  apps are CommonJS-format and need none. See `packages/tsconfig/README.md`.
 - **Dependency versions live in the `pnpm-workspace.yaml` catalog.** Never
   `pnpm add` a version into a package.json directly — add an exact pin to the
   catalog section it belongs to and reference it as `catalog:`.

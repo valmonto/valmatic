@@ -2,12 +2,12 @@ import { z } from 'zod';
 // Sourced from ../constants rather than ./auth.schema: auth.schema needs
 // SystemRoleSchema from here, and importing the constants back out of it would
 // close a cycle that leaves one of the two schemas undefined at evaluation.
-import { SYSTEM_ROLES, PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE } from '../constants';
-import { PaginatedRequestSchema, PaginatedResponseSchema } from './pagination.schema';
-import { OrganizationUserRoleSchema } from './organization.schema';
+import { SYSTEM_ROLES, PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE } from '../constants/index.js';
+import { PaginatedRequestSchema, PaginatedResponseSchema } from './pagination.schema.js';
+import { OrganizationUserRoleSchema } from './organization.schema.js';
 
 // Single source of truth for system roles (platform-wide)
-export { SYSTEM_ROLES } from '../constants';
+export { SYSTEM_ROLES } from '../constants/index.js';
 export const SystemRoleSchema = z.enum(SYSTEM_ROLES);
 export type SystemRole = z.infer<typeof SystemRoleSchema>;
 

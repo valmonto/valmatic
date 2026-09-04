@@ -4,8 +4,8 @@ import {
   ORGANIZATION_USER_ROLES,
   type OrganizationUserRole as OrganizationUserRoleType,
 } from '@pkg/contracts';
-import { organization } from './organization';
-import { user } from './user';
+import { organization } from './organization.js';
+import { user } from './user.js';
 
 export const organizationUser = pgTable(
   'organization_user',

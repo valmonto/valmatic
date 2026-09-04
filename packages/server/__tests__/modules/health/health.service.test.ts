@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { HealthService } from '../../../src/modules/health/health.service';
+import { HealthService } from '../../../src/modules/health/health.service.js';
 
 type Db = { sql: ReturnType<typeof vi.fn> };
 type Cache = { ping: ReturnType<typeof vi.fn> };

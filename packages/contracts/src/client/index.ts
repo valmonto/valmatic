@@ -10,6 +10,6 @@
  * client that genuinely needs to validate imports `@pkg/contracts/schemas`
  * explicitly — visible in review, rather than by accident.
  */
-export type * from '../types';
-export * from '../constants';
-export * from '../permissions';
+export type * from '../types/index.js';
+export * from '../constants/index.js';
+export * from '../permissions/index.js';

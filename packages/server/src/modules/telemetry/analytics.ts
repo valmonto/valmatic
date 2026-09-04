@@ -2,7 +2,7 @@ import { Injectable, type OnApplicationShutdown } from '@nestjs/common';
 import type { PostHog } from 'posthog-node';
 import { ConfigService } from '@nestjs/config';
 import type { AnalyticsEvent } from '@pkg/contracts';
-import { InjectLogger, PinoLogger } from '../logging';
+import { InjectLogger, PinoLogger } from '../logging/index.js';
 
 /**
  * Server-side product analytics — the seam, not the vendor.
