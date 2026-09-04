@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "oxlint",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
     "shadcn:add": "pnpm dlx shadcn@latest add",
@@ -55,7 +54,6 @@
     "zustand": "catalog:"
   },
   "devDependencies": {
-    "@pkg/eslint-config": "workspace:*",
     "@pkg/tsconfig": "workspace:*",
     "@pkg/vitest-config": "workspace:*",
     "@testing-library/jest-dom": "catalog:",
@@ -65,9 +63,6 @@
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react-swc": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "eslint": "catalog:",
-    "eslint-plugin-boundaries": "catalog:",
-    "globals": "catalog:",
     "jsdom": "catalog:",
     "msw": "catalog:",
     "tw-animate-css": "catalog:",

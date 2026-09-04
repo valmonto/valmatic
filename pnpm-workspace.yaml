@@ -45,16 +45,8 @@ catalog:
   #  SHARED TOOLCHAIN  (TS / lint / test — used by every package)
   # ═══════════════════════════════════════════════════════════════════════
   typescript: 6.0.3
-  typescript-eslint: 8.69.0
   oxlint: 1.81.0
   oxlint-tsgolint: 7.0.2001
-  eslint: 10.9.1
-  '@eslint/js': 10.0.1
-  eslint-config-prettier: 10.1.8
-  eslint-plugin-prettier: 5.5.6
-  eslint-plugin-react-hooks: 7.1.1
-  eslint-plugin-boundaries: 6.0.2
-  globals: 17.12.0
   '@types/node': 25.9.2
   vitest: 4.1.8
   '@vitest/coverage-v8': 4.1.8
@@ -245,7 +237,7 @@ catalogs:
     react-native-css: ^3.0.7 # NW5 peer (formerly react-native-css-interop; at 3.x)
     '@tailwindcss/postcss': 4.3.0 # Tailwind v4 via PostCSS in Metro (web uses @tailwindcss/vite)
 
-    # Lint — kept out of the default catalog (which is on ESLint 10): eslint-config-expo
+    # Lint — mobile keeps Expo's ESLint (the rest of the repo lints with oxlint): eslint-config-expo
     # 57 only supports ESLint 9, so the mobile app needs its own ESLint 9 here.
     eslint: ^9.39.4
     eslint-config-expo: ~57.0.0

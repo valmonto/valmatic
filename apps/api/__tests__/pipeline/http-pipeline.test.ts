@@ -121,6 +121,9 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
   afterAll(async () => {
     await app?.close();
     restoreEnv?.();
+    // Leave the database as found: other suites truncate only their own tables
+    // and a leftover organization would block their `user` truncate (RESTRICT).
+    await resetDatabase(client);
     await client.close();
   });
 
@@ -314,6 +317,9 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=development: throttling + sta
   afterAll(async () => {
     await app?.close();
     restoreEnv?.();
+    // Leave the database as found: other suites truncate only their own tables
+    // and a leftover organization would block their `user` truncate (RESTRICT).
+    await resetDatabase(client);
     await client.close();
   });
 

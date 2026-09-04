@@ -28,8 +28,7 @@
     "db:migrate": "node ./dist/cli/migrate.mjs",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "oxlint",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
@@ -49,10 +48,8 @@
   },
   "devDependencies": {
     "@pkg/tsconfig": "workspace:*",
-    "@pkg/eslint-config": "workspace:*",
     "drizzle-kit": "catalog:",
     "typescript": "catalog:",
-    "eslint": "catalog:",
     "tsdown": "catalog:",
     "@types/node": "catalog:"
   }

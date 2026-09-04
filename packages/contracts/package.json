@@ -41,8 +41,7 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "oxlint",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
     "test": "vitest run",
@@ -53,9 +52,7 @@
   },
   "devDependencies": {
     "@pkg/tsconfig": "workspace:*",
-    "@pkg/eslint-config": "workspace:*",
     "typescript": "catalog:",
-    "eslint": "catalog:",
     "tsdown": "catalog:",
     "@pkg/vitest-config": "workspace:*",
     "vitest": "catalog:"

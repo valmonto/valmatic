@@ -11,7 +11,6 @@
     "dev": "pnpm -r --parallel --filter=./packages/* --filter=./apps/* run dev",
     "build": "pnpm -r run build",
     "lint": "pnpm -r --filter=!@pkg/mobile run lint",
-    "lint:fix": "pnpm -r run lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,yaml,yml,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,json,yaml,yml,md}\"",
     "typecheck": "pnpm -r run typecheck",

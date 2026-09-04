@@ -64,3 +64,12 @@ pnpm verify                   # typecheck + lint + test
 
 With `DATABASE_URL` set, the repository integration suites run too — the same
 gate CI applies to every PR.
+
+Lint is [oxlint](https://oxc.rs/docs/guide/usage/linter), configured once in
+the root `.oxlintrc.json`. The Nest trees (`apps/api`, `apps/worker`,
+`packages/server`) lint type-aware (`oxlint --type-aware`, powered by
+`oxlint-tsgolint`), which is what enforces `no-floating-promises`. The web
+app's feature boundaries — a feature never imports another feature, and the
+outside world imports a feature only through its barrel — are
+`no-restricted-imports` patterns in the same file. Formatting is Prettier,
+separately: `pnpm format:check`.

@@ -1,0 +1,157 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript"],
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/node_modules/**",
+    ".debug/**",
+    "apps/mobile/**",
+    "docs/legacy/**"
+  ],
+  "rules": {
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "typescript/no-explicit-any": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.js", "**/*.mjs", "**/*.cjs"],
+      "env": {
+        "node": true
+      }
+    },
+    {
+      "files": ["apps/api/**/*.ts", "apps/worker/**/*.ts", "packages/server/**/*.ts"],
+      "rules": {
+        "typescript/explicit-function-return-type": [
+          "warn",
+          {
+            "allowExpressions": true,
+            "allowTypedFunctionExpressions": true,
+            "allowHigherOrderFunctions": true,
+            "allowDirectConstAssertionInArrowFunctions": true
+          }
+        ],
+        "typescript/explicit-module-boundary-types": [
+          "warn",
+          {
+            "allowArgumentsExplicitlyTypedAsAny": true
+          }
+        ],
+        "typescript/no-floating-promises": "error",
+        "typescript/unbound-method": "off",
+        "typescript/restrict-template-expressions": "off",
+        "typescript/no-base-to-string": "off"
+      }
+    },
+    {
+      "files": ["**/__tests__/**/*.ts", "**/*.test.ts", "**/*.spec.ts"],
+      "rules": {
+        "typescript/explicit-function-return-type": "off",
+        "typescript/explicit-module-boundary-types": "off"
+      }
+    },
+    {
+      "files": ["apps/web/**/*.ts", "apps/web/**/*.tsx"],
+      "plugins": ["typescript", "react"],
+      "env": {
+        "browser": true
+      },
+      "rules": {
+        "typescript/consistent-type-imports": "error",
+        "react/rules-of-hooks": "error",
+        "react/exhaustive-deps": "warn",
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/features/*/*"],
+                "message": "Import a feature through its public API (`@/features/<name>`), not its internals."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["apps/web/src/features/**/*.ts", "apps/web/src/features/**/*.tsx"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/features/*", "@/features/*/*"],
+                "message": "A feature may not import another feature. Move shared code to shared/ instead."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["apps/web/src/features/*/*.ts", "apps/web/src/features/*/*.tsx"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/features/*", "@/features/*/*"],
+                "message": "A feature may not import another feature. Move shared code to shared/ instead."
+              },
+              {
+                "group": ["../**", "!../../**"],
+                "message": "A feature may not import a sibling feature by relative path. Move shared code to shared/ instead."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["apps/web/src/features/*/*/*.ts", "apps/web/src/features/*/*/*.tsx"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/features/*", "@/features/*/*"],
+                "message": "A feature may not import another feature. Move shared code to shared/ instead."
+              },
+              {
+                "group": ["../../**", "!../../../**"],
+                "message": "A feature may not import a sibling feature by relative path. Move shared code to shared/ instead."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["apps/web/src/shared/**/*.ts", "apps/web/src/shared/**/*.tsx"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/features/*", "@/features/*/*"],
+                "message": "Shared code may not import a feature \u2014 dependencies point from features \u2192 shared, never the reverse."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
