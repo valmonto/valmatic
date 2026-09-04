@@ -1,14 +1,12 @@
 {
   "recommendations": [
-    "esbenp.prettier-vscode",
+    "oxc.oxc-vscode",
     "dbaeumer.vscode-eslint",
     "editorconfig.editorconfig",
     "mhutchie.git-graph",
     "ms-python.python",
     "ms-python.vscode-pylance",
     "ms-python.debugpy",
-    "esbenp.prettier-vscode",
-    "dbaeumer.vscode-eslint",
     "Prisma.prisma",
     "ms-ossdata.vscode-pgsql",
     "ms-azuretools.vscode-docker",

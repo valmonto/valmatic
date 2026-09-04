@@ -11,8 +11,8 @@
     "dev": "pnpm -r --parallel --filter=./packages/* --filter=./apps/* run dev",
     "build": "pnpm -r run build",
     "lint": "pnpm -r --filter=!@pkg/mobile run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,yaml,yml,md}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,json,yaml,yml,md}\"",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "typecheck": "pnpm -r run typecheck",
     "test": "pnpm -r --workspace-concurrency=1 run test",
     "clean": "pnpm -r run clean",
@@ -60,9 +60,9 @@
     "@types/node": "catalog:",
     "git-cliff": "catalog:",
     "husky": "catalog:",
+    "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
-    "prettier": "catalog:",
     "release-it": "catalog:"
   }
 }
