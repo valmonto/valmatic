@@ -39,7 +39,7 @@ catalog:
   git-cliff: 2.13.1
   husky: 9.1.7
   prettier: 3.9.6
-  release-it: 20.2.0
+  release-it: 21.0.2
 
   # ═══════════════════════════════════════════════════════════════════════
   #  SHARED TOOLCHAIN  (TS / lint / test — used by every package)
@@ -95,7 +95,7 @@ catalog:
   bcryptjs: 3.0.3
 
   # MCP — agent access to a deployed instance, env-gated off
-  '@modelcontextprotocol/sdk': 1.20.0
+  '@modelcontextprotocol/sdk': 1.30.0
   # Telemetry (server) — error reporting + product analytics, env-gated no-ops
   '@sentry/node': 10.73.0
   posthog-node: 5.51.6

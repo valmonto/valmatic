@@ -8,37 +8,37 @@ This project uses the following third-party packages:
 ## Summary
 
 - **Direct dependencies:** 88 packages (from pnpm catalog)
-- **Transitive dependencies:** 1360 packages
-- **Total:** 1448 packages
+- **Transitive dependencies:** 1361 packages
+- **Total:** 1449 packages
 
 ### License Breakdown
 
-| License                   | Direct | Transitive | Total |
-| ------------------------- | ------ | ---------- | ----- |
-| (Apache-2.0 AND MIT)      | 1      | 0          | 1     |
-| (BSD-3-Clause OR GPL-2.0) | 0      | 1          | 1     |
-| (MIT OR Apache-2.0)       | 0      | 1          | 1     |
-| (MIT OR CC0-1.0)          | 0      | 1          | 1     |
-| (MPL-2.0 OR Apache-2.0)   | 0      | 1          | 1     |
-| 0BSD                      | 0      | 2          | 2     |
-| Apache-2.0                | 8      | 74         | 82    |
-| Apache-2.0 AND MIT        | 0      | 1          | 1     |
-| BSD-2-Clause              | 0      | 23         | 23    |
-| BSD-3-Clause              | 1      | 21         | 22    |
-| BlueOak-1.0.0             | 0      | 6          | 6     |
-| CC-BY-4.0                 | 0      | 1          | 1     |
-| CC0-1.0                   | 0      | 1          | 1     |
-| ISC                       | 1      | 56         | 57    |
-| MIT                       | 73     | 1158       | 1231  |
-| MIT AND Apache-2.0        | 0      | 1          | 1     |
-| MIT AND ISC               | 0      | 1          | 1     |
-| MIT AND OFL-1.1           | 0      | 1          | 1     |
-| MIT OR Apache-2.0         | 1      | 1          | 2     |
-| MIT-0                     | 0      | 2          | 2     |
-| MPL-2.0                   | 0      | 2          | 2     |
-| OFL-1.1                   | 2      | 0          | 2     |
-| Python-2.0                | 0      | 1          | 1     |
-| Unlicense                 | 1      | 4          | 5     |
+| License | Direct | Transitive | Total |
+|---------|--------|------------|-------|
+| (Apache-2.0 AND MIT) | 1 | 0 | 1 |
+| (BSD-3-Clause OR GPL-2.0) | 0 | 1 | 1 |
+| (MIT OR Apache-2.0) | 0 | 1 | 1 |
+| (MIT OR CC0-1.0) | 0 | 1 | 1 |
+| (MPL-2.0 OR Apache-2.0) | 0 | 1 | 1 |
+| 0BSD | 0 | 2 | 2 |
+| Apache-2.0 | 8 | 74 | 82 |
+| Apache-2.0 AND MIT | 0 | 1 | 1 |
+| BSD-2-Clause | 0 | 24 | 24 |
+| BSD-3-Clause | 1 | 21 | 22 |
+| BlueOak-1.0.0 | 0 | 6 | 6 |
+| CC-BY-4.0 | 0 | 1 | 1 |
+| CC0-1.0 | 0 | 1 | 1 |
+| ISC | 1 | 56 | 57 |
+| MIT | 73 | 1158 | 1231 |
+| MIT AND Apache-2.0 | 0 | 1 | 1 |
+| MIT AND ISC | 0 | 1 | 1 |
+| MIT AND OFL-1.1 | 0 | 1 | 1 |
+| MIT OR Apache-2.0 | 1 | 1 | 2 |
+| MIT-0 | 0 | 2 | 2 |
+| MPL-2.0 | 0 | 2 | 2 |
+| OFL-1.1 | 2 | 0 | 2 |
+| Python-2.0 | 0 | 1 | 1 |
+| Unlicense | 1 | 4 | 5 |
 
 ## Direct Dependencies
 
@@ -89,7 +89,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Plugin for fastify to add support for cookies
 - **@fastify/helmet** (13.1.1) - [Homepage](https://github.com/fastify/fastify-helmet#readme)
   - Important security headers for Fastify
-- **@modelcontextprotocol/sdk** (1.20.0) - [Homepage](https://modelcontextprotocol.io)
+- **@modelcontextprotocol/sdk** (1.30.0) - [Homepage](https://modelcontextprotocol.io)
   - Model Context Protocol implementation for TypeScript
 - **@nestjs/bullmq** (12.0.0) - [Homepage](https://github.com/nestjs/bull)
   - Nest - modern, fast, powerful node.js web framework (@bullmq)
@@ -176,7 +176,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Prettifier for Pino log lines
 - **posthog-node** (5.51.6) - [Homepage](https://github.com/PostHog/posthog-js#readme)
   - PostHog Node.js integration
-- **prettier** (3.8.4) - [Homepage](https://prettier.io)
+- **prettier** (3.9.6) - [Homepage](https://prettier.io)
   - Prettier is an opinionated code formatter
 - **radix-ui** (1.6.7) - [Homepage](https://radix-ui.com/primitives)
 - **react** (19.2.3, 19.2.8) - [Homepage](https://react.dev/)
@@ -196,7 +196,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Declarative routing for React
 - **recharts** (3.10.1) - [Homepage](https://github.com/recharts/recharts)
   - React charts
-- **release-it** (20.2.0) - [Homepage](https://github.com/release-it/release-it#readme)
+- **release-it** (21.0.2) - [Homepage](https://github.com/release-it/release-it#readme)
   - Generic CLI tool to automate versioning and package publishing-related tasks.
 - **sonner** (2.0.8) - [Homepage](https://sonner.emilkowal.ski/)
   - An opinionated toast component for React.
@@ -363,6 +363,7 @@ These packages are installed as dependencies of direct dependencies:
 - **esutils** (2.0.3) - [Homepage](https://github.com/estools/esutils)
 - **fontfaceobserver** (2.3.0) - [Homepage](https://fontfaceobserver.com/)
 - **glob-to-regexp** (0.4.1) - [Homepage](https://github.com/fitzgen/glob-to-regexp#readme)
+- **json-schema-typed** (8.0.2) - [Homepage](https://github.com/RemyRylan/json-schema-typed/tree/main/dist/node)
 - **nth-check** (2.1.1) - [Homepage](https://github.com/fb55/nth-check)
 - **regjsparser** (0.13.2) - [Homepage](https://github.com/jviereck/regjsparser)
 - **terser** (5.48.0) - [Homepage](https://terser.org)
@@ -454,7 +455,7 @@ These packages are installed as dependencies of direct dependencies:
 - **picocolors** (1.1.1) - [Homepage](https://github.com/alexeyraspopov/picocolors#readme)
 - **proc-log** (4.2.0) - [Homepage](https://github.com/npm/proc-log#readme)
 - **saxes** (6.0.0) - [Homepage](https://github.com/lddubeau/saxes#readme)
-- **semver** (6.3.1, 7.7.4, 7.8.5) - [Homepage](https://github.com/npm/node-semver#readme)
+- **semver** (6.3.1, 7.8.5) - [Homepage](https://github.com/npm/node-semver#readme)
 - **setprototypeof** (1.2.0) - [Homepage](https://github.com/wesleytodd/setprototypeof)
 - **siginfo** (2.0.0) - [Homepage](https://github.com/emilbayes/siginfo#readme)
 - **signal-exit** (3.0.7, 4.1.0) - [Homepage](https://github.com/tapjs/signal-exit#readme)
@@ -631,22 +632,23 @@ These packages are installed as dependencies of direct dependencies:
 - **@floating-ui/dom** (1.7.6, 1.8.0) - [Homepage](https://floating-ui.com)
 - **@floating-ui/react-dom** (2.1.8, 2.1.9) - [Homepage](https://floating-ui.com/docs/react-dom)
 - **@floating-ui/utils** (0.2.11, 0.2.12) - [Homepage](https://floating-ui.com)
-- **@inquirer/ansi** (2.0.7, 2.0.8) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/ansi/README.md)
-- **@inquirer/checkbox** (5.2.1, 5.2.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/checkbox/README.md)
+- **@hono/node-server** (2.1.1) - [Homepage](https://github.com/honojs/node-server)
+- **@inquirer/ansi** (2.0.8) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/ansi/README.md)
+- **@inquirer/checkbox** (5.2.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/checkbox/README.md)
 - **@inquirer/confirm** (6.3.1) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/confirm/README.md)
-- **@inquirer/core** (11.2.1, 12.0.2) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/core/README.md)
-- **@inquirer/editor** (5.2.2, 5.3.2) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/editor/README.md)
-- **@inquirer/expand** (5.1.1, 5.1.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/expand/README.md)
-- **@inquirer/external-editor** (3.0.3, 3.0.5) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/external-editor/README.md)
-- **@inquirer/figures** (2.0.7, 2.0.9) - [Homepage](https://github.com/SBoudrias/Inquirer.js#readme)
-- **@inquirer/input** (5.1.2, 5.1.5) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/README.md)
-- **@inquirer/number** (4.1.1, 4.2.2) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/number/README.md)
-- **@inquirer/password** (5.1.1, 5.2.1) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/password/README.md)
-- **@inquirer/prompts** (8.4.2, 8.5.2, 8.7.0) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/prompts/README.md)
-- **@inquirer/rawlist** (5.3.1, 5.3.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/rawlist/README.md)
-- **@inquirer/search** (4.2.1, 4.3.2) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/search/README.md)
-- **@inquirer/select** (5.2.1, 5.2.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/select/README.md)
-- **@inquirer/type** (4.0.7, 4.1.1) - [Homepage](https://github.com/SBoudrias/Inquirer.js#readme)
+- **@inquirer/core** (12.0.2) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/core/README.md)
+- **@inquirer/editor** (5.3.2) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/editor/README.md)
+- **@inquirer/expand** (5.1.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/expand/README.md)
+- **@inquirer/external-editor** (3.0.5) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/external-editor/README.md)
+- **@inquirer/figures** (2.0.9) - [Homepage](https://github.com/SBoudrias/Inquirer.js#readme)
+- **@inquirer/input** (5.1.5) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/README.md)
+- **@inquirer/number** (4.2.2) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/number/README.md)
+- **@inquirer/password** (5.2.1) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/password/README.md)
+- **@inquirer/prompts** (8.5.2, 8.7.0) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/prompts/README.md)
+- **@inquirer/rawlist** (5.3.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/rawlist/README.md)
+- **@inquirer/search** (4.3.2) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/search/README.md)
+- **@inquirer/select** (5.2.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/select/README.md)
+- **@inquirer/type** (4.1.1) - [Homepage](https://github.com/SBoudrias/Inquirer.js#readme)
 - **@ioredis/commands** (2.0.0) - [Homepage](https://github.com/ioredis/commands)
 - **@jest/schemas** (29.6.3) - [Homepage](https://github.com/jestjs/jest#readme)
 - **@jest/types** (29.6.3) - [Homepage](https://github.com/jestjs/jest#readme)
@@ -885,7 +887,7 @@ These packages are installed as dependencies of direct dependencies:
 - **acorn** (8.17.0) - [Homepage](https://github.com/acornjs/acorn)
 - **acorn-import-phases** (1.0.4) - [Homepage](https://github.com/nicolo-ribaudo/acorn-import-phases#readme)
 - **acorn-jsx** (5.3.2) - [Homepage](https://github.com/acornjs/acorn-jsx)
-- **agent-base** (6.0.2, 7.1.4, 8.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
+- **agent-base** (6.0.2, 7.1.4, 9.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
 - **agent-cli-detector** (0.1.2)
 - **ajv** (6.15.0, 8.20.0) - [Homepage](https://ajv.js.org)
 - **ajv-formats** (2.1.1, 3.0.1) - [Homepage](https://github.com/ajv-validator/ajv-formats#readme)
@@ -938,7 +940,7 @@ These packages are installed as dependencies of direct dependencies:
 - **buffer-from** (1.1.2) - [Homepage](https://github.com/LinusU/buffer-from#readme)
 - **bundle-name** (4.1.0) - [Homepage](https://github.com/sindresorhus/bundle-name#readme)
 - **bytes** (3.1.2) - [Homepage](https://github.com/visionmedia/bytes.js#readme)
-- **c12** (3.3.3) - [Homepage](https://github.com/unjs/c12#readme)
+- **c12** (3.3.4) - [Homepage](https://github.com/unjs/c12#readme)
 - **cac** (7.0.0) - [Homepage](https://github.com/cacjs/cac#readme)
 - **call-bind** (1.0.9) - [Homepage](https://github.com/ljharb/call-bind#readme)
 - **call-bind-apply-helpers** (1.0.2) - [Homepage](https://github.com/ljharb/call-bind-apply-helpers#readme)
@@ -952,7 +954,6 @@ These packages are installed as dependencies of direct dependencies:
 - **chokidar** (4.0.3, 5.0.0) - [Homepage](https://github.com/paulmillr/chokidar)
 - **chrome-trace-event** (1.0.4) - [Homepage](https://github.com/samccone/chrome-trace-event#readme)
 - **ci-info** (2.0.0, 3.9.0, 4.4.0) - [Homepage](https://github.com/watson/ci-info)
-- **citty** (0.1.6, 0.2.2) - [Homepage](https://github.com/unjs/citty#readme)
 - **cjs-module-lexer** (2.2.0) - [Homepage](https://github.com/nodejs/cjs-module-lexer#readme)
 - **cli-cursor** (2.1.0, 5.0.0) - [Homepage](https://github.com/sindresorhus/cli-cursor#readme)
 - **cli-spinners** (2.9.2, 3.4.0) - [Homepage](https://github.com/sindresorhus/cli-spinners#readme)
@@ -973,7 +974,6 @@ These packages are installed as dependencies of direct dependencies:
 - **concat-map** (0.0.1) - [Homepage](https://github.com/substack/node-concat-map#readme)
 - **confbox** (0.2.4) - [Homepage](https://github.com/unjs/confbox#readme)
 - **connect** (3.7.0) - [Homepage](https://github.com/senchalabs/connect#readme)
-- **consola** (3.4.2) - [Homepage](https://github.com/unjs/consola#readme)
 - **content-disposition** (1.1.0) - [Homepage](https://github.com/jshttp/content-disposition#readme)
 - **content-type** (1.0.5, 2.0.0) - [Homepage](https://github.com/jshttp/content-type#readme)
 - **conventional-commits-parser** (7.0.0) - [Homepage](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-commits-parser#readme)
@@ -993,7 +993,7 @@ These packages are installed as dependencies of direct dependencies:
 - **css-tree** (1.1.3, 3.2.1) - [Homepage](https://github.com/csstree/csstree#readme)
 - **css.escape** (1.5.1) - [Homepage](https://mths.be/cssescape)
 - **csstype** (3.2.3) - [Homepage](https://github.com/frenic/csstype#readme)
-- **data-uri-to-buffer** (7.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
+- **data-uri-to-buffer** (8.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
 - **data-urls** (7.0.0) - [Homepage](https://github.com/jsdom/data-urls#readme)
 - **data-view-buffer** (1.0.2) - [Homepage](https://github.com/inspect-js/data-view-buffer#readme)
 - **data-view-byte-length** (1.0.2) - [Homepage](https://github.com/inspect-js/data-view-byte-length#readme)
@@ -1012,7 +1012,7 @@ These packages are installed as dependencies of direct dependencies:
 - **define-lazy-prop** (3.0.0) - [Homepage](https://github.com/sindresorhus/define-lazy-prop#readme)
 - **define-properties** (1.2.1) - [Homepage](https://github.com/ljharb/define-properties#readme)
 - **defu** (6.1.7) - [Homepage](https://github.com/unjs/defu#readme)
-- **degenerator** (6.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
+- **degenerator** (7.0.1) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
 - **delayed-stream** (1.0.0) - [Homepage](https://github.com/felixge/node-delayed-stream)
 - **depd** (2.0.0) - [Homepage](https://github.com/dougwilson/nodejs-depd#readme)
 - **dequal** (2.0.3) - [Homepage](https://github.com/lukeed/dequal#readme)
@@ -1060,7 +1060,7 @@ These packages are installed as dependencies of direct dependencies:
 - **eslint-plugin-react** (7.37.5) - [Homepage](https://github.com/jsx-eslint/eslint-plugin-react)
 - **eslint-plugin-react-hooks** (7.1.1) - [Homepage](https://react.dev/)
 - **estree-walker** (3.0.3) - [Homepage](https://github.com/Rich-Harris/estree-walker#readme)
-- **eta** (4.5.1) - [Homepage](https://eta.js.org)
+- **eta** (4.6.0) - [Homepage](https://eta.js.org)
 - **etag** (1.8.1) - [Homepage](https://github.com/jshttp/etag#readme)
 - **event-target-shim** (5.0.1) - [Homepage](https://github.com/mysticatea/event-target-shim)
 - **eventemitter2** (6.4.9) - [Homepage](https://github.com/hij1nx/EventEmitter2#readme)
@@ -1103,7 +1103,7 @@ These packages are installed as dependencies of direct dependencies:
 - **expo-updates-interface** (57.0.0) - [Homepage](https://docs.expo.dev)
 - **expo-web-browser** (57.0.0) - [Homepage](https://docs.expo.dev/versions/latest/sdk/webbrowser/)
 - **express** (5.2.1) - [Homepage](https://expressjs.com/)
-- **express-rate-limit** (7.5.1) - [Homepage](https://github.com/express-rate-limit/express-rate-limit)
+- **express-rate-limit** (8.7.0) - [Homepage](https://github.com/express-rate-limit/express-rate-limit)
 - **exsolve** (1.1.0) - [Homepage](https://github.com/unjs/exsolve#readme)
 - **fast-copy** (4.0.3) - [Homepage](https://github.com/planttheidea/fast-copy#readme)
 - **fast-decode-uri-component** (1.0.1) - [Homepage](https://github.com/delvedor/fast-decode-uri-component#readme)
@@ -1151,9 +1151,9 @@ These packages are installed as dependencies of direct dependencies:
 - **get-stream** (9.0.1) - [Homepage](https://github.com/sindresorhus/get-stream#readme)
 - **get-symbol-description** (1.1.0) - [Homepage](https://github.com/inspect-js/get-symbol-description#readme)
 - **get-tsconfig** (4.14.0, 5.0.0-beta.6) - [Homepage](https://github.com/privatenumber/get-tsconfig#readme)
-- **get-uri** (7.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
+- **get-uri** (8.0.1) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
 - **getenv** (2.0.0) - [Homepage](https://github.com/ctavan/node-getenv)
-- **giget** (2.0.0) - [Homepage](https://github.com/unjs/giget#readme)
+- **giget** (3.3.1) - [Homepage](https://github.com/unjs/giget#readme)
 - **git-up** (8.1.1) - [Homepage](https://github.com/IonicaBizau/git-up)
 - **git-url-parse** (16.1.0) - [Homepage](https://github.com/IonicaBizau/git-url-parse)
 - **global-directory** (5.0.0) - [Homepage](https://github.com/sindresorhus/global-directory#readme)
@@ -1174,13 +1174,14 @@ These packages are installed as dependencies of direct dependencies:
 - **hermes-compiler** (250829098.0.14) - [Homepage](https://github.com/facebook/hermes#readme)
 - **hermes-estree** (0.25.1, 0.35.0, 0.36.0, 0.36.1) - [Homepage](https://github.com/facebook/hermes#readme)
 - **hermes-parser** (0.25.1, 0.35.0, 0.36.0, 0.36.1) - [Homepage](https://github.com/facebook/hermes#readme)
+- **hono** (4.13.5) - [Homepage](https://hono.dev)
 - **hookable** (6.1.1) - [Homepage](https://github.com/unjs/hookable#readme)
 - **html-encoding-sniffer** (6.0.0) - [Homepage](https://github.com/jsdom/html-encoding-sniffer#readme)
 - **html-escaper** (2.0.2) - [Homepage](https://github.com/WebReflection/html-escaper)
 - **html-parse-stringify** (4.0.1) - [Homepage](https://github.com/i18next/html-parse-stringify)
 - **http-errors** (2.0.1) - [Homepage](https://github.com/jshttp/http-errors#readme)
-- **http-proxy-agent** (8.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
-- **https-proxy-agent** (5.0.1, 7.0.6, 8.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
+- **http-proxy-agent** (9.1.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
+- **https-proxy-agent** (5.0.1, 7.0.6, 9.1.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
 - **iconv-lite** (0.7.2) - [Homepage](https://github.com/pillarjs/iconv-lite)
 - **ignore** (5.3.2, 7.0.5) - [Homepage](https://github.com/kaelzhang/node-ignore#readme)
 - **image-size** (1.2.1) - [Homepage](https://github.com/image-size/image-size#readme)
@@ -1236,7 +1237,7 @@ These packages are installed as dependencies of direct dependencies:
 - **is-weakset** (2.0.4) - [Homepage](https://github.com/inspect-js/is-weakset#readme)
 - **is-wsl** (2.2.0, 3.1.1) - [Homepage](https://github.com/sindresorhus/is-wsl#readme)
 - **isarray** (2.0.5) - [Homepage](https://github.com/juliangruber/isarray)
-- **issue-parser** (7.0.1) - [Homepage](https://github.com/semantic-release/issue-parser#readme)
+- **issue-parser** (7.0.2) - [Homepage](https://github.com/semantic-release/issue-parser#readme)
 - **iterator.prototype** (1.1.5) - [Homepage](https://github.com/ljharb/Iterator.prototype#readme)
 - **jest-get-type** (29.6.3) - [Homepage](https://github.com/jestjs/jest#readme)
 - **jest-util** (29.7.0) - [Homepage](https://github.com/jestjs/jest#readme)
@@ -1244,6 +1245,7 @@ These packages are installed as dependencies of direct dependencies:
 - **jest-worker** (27.5.1, 29.7.0) - [Homepage](https://github.com/jestjs/jest#readme)
 - **jimp-compact** (0.16.1) - [Homepage](https://github.com/nuxt-community/jimp-compact#readme)
 - **jiti** (2.6.1, 2.7.0) - [Homepage](https://github.com/unjs/jiti#readme)
+- **jose** (6.2.10) - [Homepage](https://github.com/panva/jose)
 - **joycon** (3.1.1) - [Homepage](https://github.com/egoist/joycon#readme)
 - **js-tokens** (4.0.0, 10.0.0) - [Homepage](https://github.com/lydell/js-tokens#readme)
 - **js-yaml** (4.3.0) - [Homepage](https://github.com/nodeca/js-yaml#readme)
@@ -1337,13 +1339,11 @@ These packages are installed as dependencies of direct dependencies:
 - **node-emoji** (2.2.0) - [Homepage](https://github.com/omnidan/node-emoji#readme)
 - **node-exports-info** (1.6.2) - [Homepage](https://github.com/inspect-js/node-exports-info#readme)
 - **node-fetch** (2.7.0) - [Homepage](https://github.com/bitinn/node-fetch)
-- **node-fetch-native** (1.6.7) - [Homepage](https://github.com/unjs/node-fetch-native#readme)
 - **node-gyp-build-optional-packages** (5.2.2) - [Homepage](https://github.com/prebuild/node-gyp-build)
 - **node-int64** (0.4.0) - [Homepage](https://github.com/broofa/node-int64#readme)
 - **node-releases** (2.0.50) - [Homepage](https://github.com/chicoxyzzy/node-releases#readme)
 - **npm-run-path** (6.0.0) - [Homepage](https://github.com/sindresorhus/npm-run-path#readme)
 - **nullthrows** (1.1.1) - [Homepage](https://github.com/zertosh/nullthrows#readme)
-- **nypm** (0.6.8) - [Homepage](https://github.com/unjs/nypm#readme)
 - **ob1** (0.84.4) - [Homepage](https://github.com/facebook/metro#readme)
 - **object-assign** (4.1.1) - [Homepage](https://github.com/sindresorhus/object-assign#readme)
 - **object-inspect** (1.13.4) - [Homepage](https://github.com/inspect-js/object-inspect)
@@ -1361,14 +1361,14 @@ These packages are installed as dependencies of direct dependencies:
 - **onetime** (2.0.1, 7.0.0) - [Homepage](https://github.com/sindresorhus/onetime#readme)
 - **open** (7.4.2, 11.0.0) - [Homepage](https://github.com/sindresorhus/open#readme)
 - **optionator** (0.9.4) - [Homepage](https://github.com/gkz/optionator)
-- **ora** (3.4.0, 9.3.0, 9.4.1) - [Homepage](https://github.com/sindresorhus/ora#readme)
+- **ora** (3.4.0, 9.4.1) - [Homepage](https://github.com/sindresorhus/ora#readme)
 - **os-name** (7.0.0) - [Homepage](https://github.com/sindresorhus/os-name#readme)
 - **outvariant** (1.4.3) - [Homepage](https://github.com/open-draft/outvariant#readme)
 - **own-keys** (1.0.1) - [Homepage](https://github.com/ljharb/own-keys#readme)
 - **p-limit** (3.1.0) - [Homepage](https://github.com/sindresorhus/p-limit#readme)
 - **p-locate** (5.0.0) - [Homepage](https://github.com/sindresorhus/p-locate#readme)
-- **pac-proxy-agent** (8.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
-- **pac-resolver** (8.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
+- **pac-proxy-agent** (9.1.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
+- **pac-resolver** (9.0.1) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
 - **parent-module** (1.0.1) - [Homepage](https://github.com/sindresorhus/parent-module#readme)
 - **parse-json** (5.2.0) - [Homepage](https://github.com/sindresorhus/parse-json#readme)
 - **parse-ms** (4.0.0) - [Homepage](https://github.com/sindresorhus/parse-ms#readme)
@@ -1407,8 +1407,9 @@ These packages are installed as dependencies of direct dependencies:
 - **prop-types** (15.8.1) - [Homepage](https://facebook.github.io/react/)
 - **protocols** (2.0.2) - [Homepage](https://github.com/IonicaBizau/protocols)
 - **proxy-addr** (2.0.7) - [Homepage](https://github.com/jshttp/proxy-addr#readme)
-- **proxy-agent** (7.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
-- **proxy-from-env** (1.1.0, 2.1.0) - [Homepage](https://github.com/Rob--W/proxy-from-env#readme)
+- **proxy-agent** (8.0.2) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
+- **proxy-agent-negotiate** (1.1.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
+- **proxy-from-env** (2.1.0) - [Homepage](https://github.com/Rob--W/proxy-from-env#readme)
 - **pump** (3.0.4) - [Homepage](https://github.com/mafintosh/pump#readme)
 - **punycode** (2.3.1) - [Homepage](https://mths.be/punycode)
 - **pure-rand** (8.4.2) - [Homepage](https://github.com/dubzzz/pure-rand#readme)
@@ -1417,10 +1418,10 @@ These packages are installed as dependencies of direct dependencies:
 - **query-string** (7.1.3) - [Homepage](https://github.com/sindresorhus/query-string#readme)
 - **queue** (6.0.2) - [Homepage](https://github.com/jessetane/queue#readme)
 - **quick-format-unescaped** (4.0.4) - [Homepage](https://github.com/davidmarkclements/quick-format#readme)
-- **quickjs-wasi** (0.0.1) - [Homepage](https://github.com/vercel-labs/quickjs-wasm#readme)
+- **quickjs-wasi** (2.2.0) - [Homepage](https://github.com/vercel-labs/quickjs-wasi#readme)
 - **range-parser** (1.2.1) - [Homepage](https://github.com/jshttp/range-parser#readme)
 - **raw-body** (3.0.2) - [Homepage](https://github.com/stream-utils/raw-body#readme)
-- **rc9** (2.1.2) - [Homepage](https://github.com/unjs/rc9#readme)
+- **rc9** (3.1.0) - [Homepage](https://github.com/unjs/rc9#readme)
 - **react-devtools-core** (6.1.5) - [Homepage](https://github.com/facebook/react#readme)
 - **react-fast-compare** (3.2.2) - [Homepage](https://github.com/FormidableLabs/react-fast-compare)
 - **react-freeze** (1.0.4) - [Homepage](https://github.com/software-mansion/react-freeze#readme)
@@ -1506,7 +1507,7 @@ These packages are installed as dependencies of direct dependencies:
 - **slugify** (1.6.9) - [Homepage](https://github.com/simov/slugify)
 - **smart-buffer** (4.2.0) - [Homepage](https://github.com/JoshGlazebrook/smart-buffer/)
 - **socks** (2.8.9) - [Homepage](https://github.com/JoshGlazebrook/socks/)
-- **socks-proxy-agent** (9.0.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
+- **socks-proxy-agent** (10.1.0) - [Homepage](https://github.com/TooTallNate/proxy-agents#readme)
 - **sonic-boom** (4.2.1) - [Homepage](https://github.com/pinojs/sonic-boom#readme)
 - **sonner-native** (0.26.2) - [Homepage](https://github.com/gunnartorfis/sonner-native#readme)
 - **source-map-support** (0.5.21) - [Homepage](https://github.com/evanw/node-source-map-support#readme)
@@ -1551,7 +1552,7 @@ These packages are installed as dependencies of direct dependencies:
 - **tiny-invariant** (1.3.3) - [Homepage](https://github.com/alexreardon/tiny-invariant#readme)
 - **tinybench** (2.9.0) - [Homepage](https://github.com/tinylibs/tinybench#readme)
 - **tinyexec** (1.2.4, 1.3.1) - [Homepage](https://github.com/tinylibs/tinyexec#readme)
-- **tinyglobby** (0.2.15, 0.2.17) - [Homepage](https://superchupu.dev/tinyglobby)
+- **tinyglobby** (0.2.17) - [Homepage](https://superchupu.dev/tinyglobby)
 - **tinyrainbow** (3.1.0) - [Homepage](https://github.com/tinylibs/tinyrainbow#readme)
 - **tldts** (7.4.5) - [Homepage](https://github.com/remusao/tldts#readme)
 - **tldts-core** (7.4.5) - [Homepage](https://github.com/remusao/tldts#readme)
@@ -1576,7 +1577,7 @@ These packages are installed as dependencies of direct dependencies:
 - **uint8array-extras** (1.5.0) - [Homepage](https://github.com/sindresorhus/uint8array-extras#readme)
 - **unbox-primitive** (1.1.0) - [Homepage](https://github.com/ljharb/unbox-primitive#readme)
 - **unconfig-core** (7.5.0) - [Homepage](https://github.com/antfu-collective/unconfig#readme)
-- **undici** (7.24.5, 7.28.0) - [Homepage](https://undici.nodejs.org)
+- **undici** (7.28.0, 7.29.0) - [Homepage](https://undici.nodejs.org)
 - **undici-types** (8.3.0) - [Homepage](https://undici.nodejs.org)
 - **unicode-canonical-property-names-ecmascript** (2.0.1) - [Homepage](https://github.com/mathiasbynens/unicode-canonical-property-names-ecmascript)
 - **unicode-emoji-modifier-base** (1.0.0) - [Homepage](https://github.com/mathiasbynens/unicode-emoji-modifier-base)
