@@ -1,5 +1,5 @@
 FROM node:26-alpine AS base
-RUN npm install -g pnpm@10
+RUN npm install -g pnpm@11.25.0
 
 # Build stage
 FROM base AS builder
