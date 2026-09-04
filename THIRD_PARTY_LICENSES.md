@@ -8,8 +8,8 @@ This project uses the following third-party packages:
 ## Summary
 
 - **Direct dependencies:** 88 packages (from pnpm catalog)
-- **Transitive dependencies:** 1357 packages
-- **Total:** 1445 packages
+- **Transitive dependencies:** 1361 packages
+- **Total:** 1449 packages
 
 ### License Breakdown
 
@@ -23,13 +23,13 @@ This project uses the following third-party packages:
 | 0BSD | 0 | 2 | 2 |
 | Apache-2.0 | 8 | 74 | 82 |
 | Apache-2.0 AND MIT | 0 | 1 | 1 |
-| BSD-2-Clause | 0 | 23 | 23 |
+| BSD-2-Clause | 0 | 24 | 24 |
 | BSD-3-Clause | 1 | 21 | 22 |
 | BlueOak-1.0.0 | 0 | 6 | 6 |
 | CC-BY-4.0 | 0 | 1 | 1 |
 | CC0-1.0 | 0 | 1 | 1 |
 | ISC | 1 | 56 | 57 |
-| MIT | 73 | 1155 | 1228 |
+| MIT | 73 | 1158 | 1231 |
 | MIT AND Apache-2.0 | 0 | 1 | 1 |
 | MIT AND ISC | 0 | 1 | 1 |
 | MIT AND OFL-1.1 | 0 | 1 | 1 |
@@ -89,7 +89,7 @@ These packages are explicitly declared in `pnpm-workspace.yaml` catalog:
   - Plugin for fastify to add support for cookies
 - **@fastify/helmet** (13.1.1) - [Homepage](https://github.com/fastify/fastify-helmet#readme)
   - Important security headers for Fastify
-- **@modelcontextprotocol/sdk** (1.20.0) - [Homepage](https://modelcontextprotocol.io)
+- **@modelcontextprotocol/sdk** (1.30.0) - [Homepage](https://modelcontextprotocol.io)
   - Model Context Protocol implementation for TypeScript
 - **@nestjs/bullmq** (12.0.0) - [Homepage](https://github.com/nestjs/bull)
   - Nest - modern, fast, powerful node.js web framework (@bullmq)
@@ -363,6 +363,7 @@ These packages are installed as dependencies of direct dependencies:
 - **esutils** (2.0.3) - [Homepage](https://github.com/estools/esutils)
 - **fontfaceobserver** (2.3.0) - [Homepage](https://fontfaceobserver.com/)
 - **glob-to-regexp** (0.4.1) - [Homepage](https://github.com/fitzgen/glob-to-regexp#readme)
+- **json-schema-typed** (8.0.2) - [Homepage](https://github.com/RemyRylan/json-schema-typed/tree/main/dist/node)
 - **nth-check** (2.1.1) - [Homepage](https://github.com/fb55/nth-check)
 - **regjsparser** (0.13.2) - [Homepage](https://github.com/jviereck/regjsparser)
 - **terser** (5.48.0) - [Homepage](https://terser.org)
@@ -631,6 +632,7 @@ These packages are installed as dependencies of direct dependencies:
 - **@floating-ui/dom** (1.7.6, 1.8.0) - [Homepage](https://floating-ui.com)
 - **@floating-ui/react-dom** (2.1.8, 2.1.9) - [Homepage](https://floating-ui.com/docs/react-dom)
 - **@floating-ui/utils** (0.2.11, 0.2.12) - [Homepage](https://floating-ui.com)
+- **@hono/node-server** (2.1.1) - [Homepage](https://github.com/honojs/node-server)
 - **@inquirer/ansi** (2.0.8) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/ansi/README.md)
 - **@inquirer/checkbox** (5.2.4) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/checkbox/README.md)
 - **@inquirer/confirm** (6.3.1) - [Homepage](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/confirm/README.md)
@@ -1101,7 +1103,7 @@ These packages are installed as dependencies of direct dependencies:
 - **expo-updates-interface** (57.0.0) - [Homepage](https://docs.expo.dev)
 - **expo-web-browser** (57.0.0) - [Homepage](https://docs.expo.dev/versions/latest/sdk/webbrowser/)
 - **express** (5.2.1) - [Homepage](https://expressjs.com/)
-- **express-rate-limit** (7.5.1) - [Homepage](https://github.com/express-rate-limit/express-rate-limit)
+- **express-rate-limit** (8.7.0) - [Homepage](https://github.com/express-rate-limit/express-rate-limit)
 - **exsolve** (1.1.0) - [Homepage](https://github.com/unjs/exsolve#readme)
 - **fast-copy** (4.0.3) - [Homepage](https://github.com/planttheidea/fast-copy#readme)
 - **fast-decode-uri-component** (1.0.1) - [Homepage](https://github.com/delvedor/fast-decode-uri-component#readme)
@@ -1172,6 +1174,7 @@ These packages are installed as dependencies of direct dependencies:
 - **hermes-compiler** (250829098.0.14) - [Homepage](https://github.com/facebook/hermes#readme)
 - **hermes-estree** (0.25.1, 0.35.0, 0.36.0, 0.36.1) - [Homepage](https://github.com/facebook/hermes#readme)
 - **hermes-parser** (0.25.1, 0.35.0, 0.36.0, 0.36.1) - [Homepage](https://github.com/facebook/hermes#readme)
+- **hono** (4.13.5) - [Homepage](https://hono.dev)
 - **hookable** (6.1.1) - [Homepage](https://github.com/unjs/hookable#readme)
 - **html-encoding-sniffer** (6.0.0) - [Homepage](https://github.com/jsdom/html-encoding-sniffer#readme)
 - **html-escaper** (2.0.2) - [Homepage](https://github.com/WebReflection/html-escaper)
@@ -1242,6 +1245,7 @@ These packages are installed as dependencies of direct dependencies:
 - **jest-worker** (27.5.1, 29.7.0) - [Homepage](https://github.com/jestjs/jest#readme)
 - **jimp-compact** (0.16.1) - [Homepage](https://github.com/nuxt-community/jimp-compact#readme)
 - **jiti** (2.6.1, 2.7.0) - [Homepage](https://github.com/unjs/jiti#readme)
+- **jose** (6.2.10) - [Homepage](https://github.com/panva/jose)
 - **joycon** (3.1.1) - [Homepage](https://github.com/egoist/joycon#readme)
 - **js-tokens** (4.0.0, 10.0.0) - [Homepage](https://github.com/lydell/js-tokens#readme)
 - **js-yaml** (4.3.0) - [Homepage](https://github.com/nodeca/js-yaml#readme)
