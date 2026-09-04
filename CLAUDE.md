@@ -94,10 +94,10 @@ spans the whole repo belongs here.
   `@Permissions`/`@Roles`. `systemRole` (USER|MODERATOR|ADMIN) is platform
   standing and drives `@SystemRoles` only. A system role opens dedicated
   routes (`/admin/*`); it never widens an org-scoped route.
-- **Relative imports inside `packages/*` carry a `.js` suffix** (`./x.js`,
-  `./dir/index.js`). The packages are ESM under NodeNext resolution; the
-  suffix is the compiled name and tooling maps it to the `.ts` source. The
-  apps are CommonJS-format and need none. See `packages/tsconfig/README.md`.
+- **Relative imports carry a `.js` suffix everywhere** (`./x.js`,
+  `./dir/index.js`, and `@/x.js` in app tests). Every workspace is ESM under
+  NodeNext resolution; the suffix is the compiled name and tooling maps it to
+  the `.ts` source. See `packages/tsconfig/README.md`.
 - **Dependency versions live in the `pnpm-workspace.yaml` catalog.** Never
   `pnpm add` a version into a package.json directly — add an exact pin to the
   catalog section it belongs to and reference it as `catalog:`.
@@ -130,9 +130,9 @@ Applies to any coding agent (including the specbook runner) acting on this repo.
 auto-inherit template changes, so this block is copied into each repo on purpose.
 
 - **Act on an explicit instruction — don't hand it back.** When the owner explicitly tells
-  you to do a _reversible_ action on their own repo (merge a green PR, close a PR,
+  you to do a *reversible* action on their own repo (merge a green PR, close a PR,
   re-trigger CI), do it — the repo token's `PRs` scope can merge. The "human-gated"
-  defaults are for the _unattended_ runner choosing its own work; they never override a
+  defaults are for the *unattended* runner choosing its own work; they never override a
   direct, in-conversation owner instruction. (Genuinely irreversible/destructive actions
   still get confirmed first.)
 - **The user's ground truth beats a blind API.** The installation token here lacks

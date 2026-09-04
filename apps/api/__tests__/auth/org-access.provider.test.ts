@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { OrgAccessProvider } from '@/auth/org-access.provider';
-import type { AuthRepository } from '@/auth/auth.repository';
+import { OrgAccessProvider } from '@/auth/org-access.provider.js';
+import type { AuthRepository } from '@/auth/auth.repository.js';
 
 /**
  * The app's contribution to the shared guard chain: `@pkg/server` owns the

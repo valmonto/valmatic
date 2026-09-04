@@ -4,8 +4,8 @@ import { FakeLogger } from '@pkg/testing';
 import * as bcrypt from 'bcryptjs';
 import type { PinoLogger } from 'nestjs-pino';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { UserService } from '@/user/user.service';
-import type { UserRepository } from '@/user/user.repository';
+import { UserService } from '@/user/user.service.js';
+import type { UserRepository } from '@/user/user.repository.js';
 
 const ORG = 'org-1';
 const OTHER_ORG = 'org-2';

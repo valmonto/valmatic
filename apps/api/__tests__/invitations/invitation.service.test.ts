@@ -21,10 +21,10 @@ import type { IamService } from '@pkg/server';
 import type { ConfigService } from '@nestjs/config';
 import type { PinoLogger } from 'nestjs-pino';
 import { afterAll, beforeEach, expect, it, vi } from 'vitest';
-import { InvitationRepository } from '@/invitations/invitation.repository';
-import { InvitationService } from '@/invitations/invitation.service';
-import { UserRepository } from '@/user/user.repository';
-import type { NotificationService } from '@/notifications/notification.service';
+import { InvitationRepository } from '@/invitations/invitation.repository.js';
+import { InvitationService } from '@/invitations/invitation.service.js';
+import { UserRepository } from '@/user/user.repository.js';
+import type { NotificationService } from '@/notifications/notification.service.js';
 
 /**
  * Invitations are an IAM boundary: a link bound to org A must never mint a

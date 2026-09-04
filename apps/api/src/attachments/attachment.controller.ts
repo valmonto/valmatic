@@ -18,7 +18,7 @@ import {
   type ListAttachmentsRequest,
   type ListAttachmentsResponse,
 } from '@pkg/contracts';
-import { AttachmentsService } from './attachments.service';
+import { AttachmentsService } from './attachments.service.js';
 
 @Controller('attachments')
 export class AttachmentController {

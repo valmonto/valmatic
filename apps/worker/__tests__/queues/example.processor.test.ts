@@ -4,7 +4,7 @@ import { AppEvents, type ExampleJobPayload } from '@pkg/server';
 import { FakeLogger } from '@pkg/testing';
 import type { Job } from 'bullmq';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ExampleProcessor } from '@/queues/example/example.processor';
+import { ExampleProcessor } from '@/queues/example/example.processor.js';
 
 /**
  * The pattern for testing a processor: build it with fakes, hand `process()` a

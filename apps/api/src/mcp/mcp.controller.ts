@@ -3,8 +3,8 @@ import { PublicRoute } from '@pkg/server';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { McpServerFactory } from './mcp-server.factory';
-import { McpAuthGuard, type McpAuth } from './mcp-auth.guard';
+import { McpServerFactory } from './mcp-server.factory.js';
+import { McpAuthGuard, type McpAuth } from './mcp-auth.guard.js';
 
 /**
  * MCP Streamable-HTTP endpoint. Stateless: each request builds a fresh server

@@ -21,7 +21,7 @@ import {
   type RegisterResponse,
 } from '@pkg/contracts';
 import { InjectLogger, PinoLogger } from '@pkg/server';
-import { AuthRepository } from './auth.repository';
+import { AuthRepository } from './auth.repository.js';
 import * as bcrypt from 'bcryptjs';
 import type { Redis } from 'ioredis';
 

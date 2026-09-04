@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectLogger, PinoLogger } from '@pkg/server';
 import { DATABASE_CLIENT, type DatabaseClient } from '@pkg/database';
-import type { Seeder } from '../seeder.interface';
-import { findOrCreateOrg, upsertMembership, upsertUser } from '../seed.helpers';
+import type { Seeder } from '../seeder.interface.js';
+import { findOrCreateOrg, upsertMembership, upsertUser } from '../seed.helpers.js';
 
 /** Dev-only fallbacks. In production these env vars are required (see env.schema). */
 const DEV_DEFAULT_EMAIL = 'owner@valmonto.com';

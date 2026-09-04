@@ -1,2 +1,2 @@
-export * from './jobs.module';
-export * from './jobs.controller';
+export * from './jobs.module.js';
+export * from './jobs.controller.js';

@@ -4,8 +4,8 @@ import { FakeLogger } from '@pkg/testing';
 import type { PinoLogger } from 'nestjs-pino';
 import { describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
-import { McpServerFactory } from '@/mcp/mcp-server.factory';
-import type { McpTools } from '@/mcp/mcp-tools';
+import { McpServerFactory } from '@/mcp/mcp-server.factory.js';
+import type { McpTools } from '@/mcp/mcp-tools.js';
 
 /**
  * The SDK turns each tool's zod shape into JSON Schema for `tools/list` and

@@ -1,3 +1,3 @@
-export { AttachmentsModule } from './attachments.module';
-export { AttachmentsService } from './attachments.service';
-export type { SubjectResolver, SubjectResolvers } from './attachment.tokens';
+export { AttachmentsModule } from './attachments.module.js';
+export { AttachmentsService } from './attachments.service.js';
+export type { SubjectResolver, SubjectResolvers } from './attachment.tokens.js';

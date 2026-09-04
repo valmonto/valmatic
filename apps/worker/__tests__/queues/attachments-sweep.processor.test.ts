@@ -12,7 +12,7 @@ import { FakeLogger, describeIntegration, truncate } from '@pkg/testing';
 import type { Queue, Job } from 'bullmq';
 import type { PinoLogger } from 'nestjs-pino';
 import { afterAll, beforeEach, expect, it, vi } from 'vitest';
-import { AttachmentsSweepProcessor } from '@/queues/attachments-sweep/attachments-sweep.processor';
+import { AttachmentsSweepProcessor } from '@/queues/attachments-sweep/attachments-sweep.processor.js';
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;

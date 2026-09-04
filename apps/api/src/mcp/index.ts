@@ -1,1 +1,1 @@
-export { McpModule } from './mcp.module';
+export { McpModule } from './mcp.module.js';

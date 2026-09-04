@@ -6,12 +6,12 @@ import {
   type OptionalFactoryDependency,
   type Provider,
 } from '@nestjs/common';
-import { AttachmentController } from './attachment.controller';
-import { AttachmentRepository } from './attachment.repository';
-import { AttachmentsService } from './attachments.service';
-import { ATTACHMENT_SUBJECT_RESOLVERS } from './attachment.tokens';
+import { AttachmentController } from './attachment.controller.js';
+import { AttachmentRepository } from './attachment.repository.js';
+import { AttachmentsService } from './attachments.service.js';
+import { ATTACHMENT_SUBJECT_RESOLVERS } from './attachment.tokens.js';
 
-import type { SubjectResolvers } from './attachment.tokens';
+import type { SubjectResolvers } from './attachment.tokens.js';
 
 /** DI-built resolver map for subjects whose checks live in feature modules. */
 export interface SubjectResolversFactory {

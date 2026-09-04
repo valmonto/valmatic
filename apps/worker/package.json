@@ -1,11 +1,12 @@
 {
   "name": "@pkg/worker",
+  "type": "module",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "dev": "nest start --watch",
     "build": "nest build",
-    "start": "node dist/main",
+    "start": "node dist/main.js",
     "start:prod": "node dist/main",
     "lint": "oxlint --type-aware",
     "typecheck": "tsc --noEmit",

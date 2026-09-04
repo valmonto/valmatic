@@ -11,7 +11,7 @@ import type {
 } from '@pkg/contracts';
 import type { NewNotification, NotificationType, NotificationChannel } from '@pkg/database';
 import { k } from '@pkg/locales';
-import { NotificationRepository } from './notification.repository';
+import { NotificationRepository } from './notification.repository.js';
 
 export interface CreateNotificationData {
   userId: string;

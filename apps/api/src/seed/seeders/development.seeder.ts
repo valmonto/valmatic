@@ -3,10 +3,10 @@ import { InjectLogger, PinoLogger } from '@pkg/server';
 import { z } from 'zod';
 import { DATABASE_CLIENT, eq, user, type DatabaseClient } from '@pkg/database';
 import { SystemRoleSchema, OrganizationUserRoleSchema } from '@pkg/contracts';
-import type { Seeder } from '../seeder.interface';
-import { findOrCreateOrg, upsertMembership, upsertUser } from '../seed.helpers';
-import { ProductionSeeder } from './production.seeder';
-import usersFixture from '../data/users.json';
+import type { Seeder } from '../seeder.interface.js';
+import { findOrCreateOrg, upsertMembership, upsertUser } from '../seed.helpers.js';
+import { ProductionSeeder } from './production.seeder.js';
+import usersFixture from '../data/users.json' with { type: 'json' };
 
 const FixtureUserSchema = z.object({
   email: z.string().email(),

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { QueuesModule } from '@pkg/server';
-import { JobsController } from './jobs.controller';
+import { JobsController } from './jobs.controller.js';
 
 /**
  * Jobs module for API.

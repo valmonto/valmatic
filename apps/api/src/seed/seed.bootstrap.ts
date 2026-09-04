@@ -1,8 +1,8 @@
 import { Injectable, type OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectLogger, PinoLogger } from '@pkg/server';
-import type { Env } from '../config';
-import { SeedService } from './seed.service';
+import type { Env } from '../config/index.js';
+import { SeedService } from './seed.service.js';
 
 /**
  * Opt-in auto-seeding on application startup.

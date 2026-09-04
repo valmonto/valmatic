@@ -7,8 +7,8 @@ import {
 } from '@pkg/server';
 import { FakeLogger } from '@pkg/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ExampleListener } from '@/queues/example/example.listener';
-import type { NotificationRepository } from '@/queues/example/notification.repository';
+import { ExampleListener } from '@/queues/example/example.listener.js';
+import type { NotificationRepository } from '@/queues/example/notification.repository.js';
 
 /**
  * The listener is the other half of the queue pattern: the processor emits

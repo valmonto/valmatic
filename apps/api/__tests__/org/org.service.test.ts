@@ -4,8 +4,8 @@ import type { ActiveUser } from '@pkg/contracts';
 import { FakeLogger } from '@pkg/testing';
 import type { PinoLogger } from 'nestjs-pino';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { OrgService } from '@/org/org.service';
-import type { OrgRepository } from '@/org/org.repository';
+import { OrgService } from '@/org/org.service.js';
+import type { OrgRepository } from '@/org/org.repository.js';
 
 const ORG_A = '11111111-1111-4111-8111-111111111111';
 const ORG_B = '22222222-2222-4222-8222-222222222222';

@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import type { FastifyRequest } from 'fastify';
 import { k } from '@pkg/locales';
 import type { McpScope } from '@pkg/contracts';
-import { ApiKeyService } from '../api-key/api-key.service';
+import { ApiKeyService } from '../api-key/api-key.service.js';
 
 export interface McpAuth {
   keyId: string;

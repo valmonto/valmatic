@@ -7,7 +7,7 @@ import { Logger, withFrameworkLogFilter } from '@pkg/server';
 import fastifyCookie from '@fastify/cookie';
 import fastifyHelmet from '@fastify/helmet';
 
-import { AppModule } from './app.module';
+import { AppModule } from './app.module.js';
 
 /**
  * Builds the api exactly as production runs it — adapter, security headers,

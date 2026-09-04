@@ -1,8 +1,8 @@
 import { Module, type DynamicModule } from '@nestjs/common';
-import { SeedService } from './seed.service';
-import { SeedBootstrapService } from './seed.bootstrap';
-import { ProductionSeeder } from './seeders/production.seeder';
-import { DevelopmentSeeder } from './seeders/development.seeder';
+import { SeedService } from './seed.service.js';
+import { SeedBootstrapService } from './seed.bootstrap.js';
+import { ProductionSeeder } from './seeders/production.seeder.js';
+import { DevelopmentSeeder } from './seeders/development.seeder.js';
 
 /**
  * Core seeding module. Provides the seeder services and relies on the globally

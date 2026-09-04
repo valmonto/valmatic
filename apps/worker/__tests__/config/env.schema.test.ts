@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validateEnv } from '@/config/env.schema';
+import { validateEnv } from '@/config/env.schema.js';
 
 const required = { DATABASE_URL: 'postgresql://user:pass@localhost:5432/db' };
 

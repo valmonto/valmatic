@@ -16,18 +16,18 @@ import {
   ThrottlerRedisStorage,
   ThrottlingModule,
 } from '@pkg/server';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { OrgModule } from './org/org.module';
-import { JobsModule } from './jobs';
-import { NotificationModule } from './notifications';
-import { AttachmentsModule } from './attachments';
-import { ApiKeyModule } from './api-key';
-import { InvitationModule } from './invitations';
-import { McpModule } from './mcp';
-import { I18nModule } from './i18n';
-import { SeedModule } from './seed/seed.module';
-import { validateEnv } from './config';
+import { AuthModule } from './auth/auth.module.js';
+import { UserModule } from './user/user.module.js';
+import { OrgModule } from './org/org.module.js';
+import { JobsModule } from './jobs/index.js';
+import { NotificationModule } from './notifications/index.js';
+import { AttachmentsModule } from './attachments/index.js';
+import { ApiKeyModule } from './api-key/index.js';
+import { InvitationModule } from './invitations/index.js';
+import { McpModule } from './mcp/index.js';
+import { I18nModule } from './i18n/index.js';
+import { SeedModule } from './seed/seed.module.js';
+import { validateEnv } from './config/index.js';
 
 @Module({
   imports: [

@@ -1,5 +1,5 @@
 import { Controller, Delete, Get, Patch, Post } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UserService } from './user.service.js';
 import { ActiveUser, Permissions, ZodRequest } from '@pkg/server';
 import {
   type CreateUserRequest,

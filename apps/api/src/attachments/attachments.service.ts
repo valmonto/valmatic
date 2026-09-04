@@ -23,8 +23,8 @@ import {
 } from '@pkg/contracts';
 import type { AttachmentRow } from '@pkg/database';
 import { k } from '@pkg/locales';
-import { AttachmentRepository } from './attachment.repository';
-import { ATTACHMENT_SUBJECT_RESOLVERS, type SubjectResolvers } from './attachment.tokens';
+import { AttachmentRepository } from './attachment.repository.js';
+import { ATTACHMENT_SUBJECT_RESOLVERS, type SubjectResolvers } from './attachment.tokens.js';
 
 /**
  * The three-step upload protocol (docs/storage.md): declare → client PUTs

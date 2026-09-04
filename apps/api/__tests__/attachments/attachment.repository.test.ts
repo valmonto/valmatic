@@ -11,8 +11,8 @@ import { NotFoundException, UnprocessableEntityException } from '@nestjs/common'
 import { FakeLogger, describeIntegration, truncate } from '@pkg/testing';
 import type { PinoLogger } from 'nestjs-pino';
 import { afterAll, beforeEach, expect, it, vi } from 'vitest';
-import { AttachmentRepository } from '@/attachments/attachment.repository';
-import { AttachmentsService } from '@/attachments/attachments.service';
+import { AttachmentRepository } from '@/attachments/attachment.repository.js';
+import { AttachmentsService } from '@/attachments/attachments.service.js';
 import type { StorageService } from '@pkg/server';
 
 /**

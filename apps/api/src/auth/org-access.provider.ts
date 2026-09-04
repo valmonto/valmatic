@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AuthRepository } from './auth.repository';
+import { AuthRepository } from './auth.repository.js';
 import { IOrgAccessProvider, type VerifiedAccess } from '@pkg/server';
 
 @Injectable()

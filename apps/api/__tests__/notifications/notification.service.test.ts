@@ -3,8 +3,8 @@ import type { ActiveUser } from '@pkg/contracts';
 import { FakeLogger } from '@pkg/testing';
 import type { PinoLogger } from 'nestjs-pino';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { NotificationService } from '@/notifications/notification.service';
-import type { NotificationRepository } from '@/notifications/notification.repository';
+import { NotificationService } from '@/notifications/notification.service.js';
+import type { NotificationRepository } from '@/notifications/notification.repository.js';
 
 const ORG = '11111111-1111-4111-8111-111111111111';
 const USER = '22222222-2222-4222-8222-222222222222';

@@ -18,7 +18,7 @@ import type {
   UpdateUserByIdResponse,
   ActiveUser,
 } from '@pkg/contracts';
-import { UserRepository } from './user.repository';
+import { UserRepository } from './user.repository.js';
 
 const { BCRYPT_ROUNDS } = SECURITY_CONFIG;
 

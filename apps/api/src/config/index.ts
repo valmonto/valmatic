@@ -1,2 +1,2 @@
-export { envSchema, validateEnv, type Env } from './env.schema';
-export * from './auth-throttle';
+export { envSchema, validateEnv, type Env } from './env.schema.js';
+export * from './auth-throttle.js';
