@@ -30,7 +30,9 @@
     "db:studio": "drizzle-kit studio",
     "lint": "oxlint",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@pkg/contracts": "workspace:*",
@@ -48,9 +50,11 @@
   },
   "devDependencies": {
     "@pkg/tsconfig": "workspace:*",
+    "@pkg/vitest-config": "workspace:*",
+    "@types/node": "catalog:",
     "drizzle-kit": "catalog:",
-    "typescript": "catalog:",
     "tsdown": "catalog:",
-    "@types/node": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

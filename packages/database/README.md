@@ -66,6 +66,37 @@ rather than trusting that boot succeeded.
 The pool sets `prepare: false` for PgBouncer compatibility, and the Nest module
 closes it on shutdown.
 
+## A database behind a private CA
+
+A custom certificate authority **cannot be carried in the connection URL**.
+`postgres.js` reads `sslmode` from the URL but accepts the CA only as a JS
+option, so `?sslmode=verify-full` against a private CA quietly checks the
+system trust store — which has never heard of it — and fails. Pass the PEM as
+`caCert` and the client builds the TLS options itself:
+
+```ts
+DatabaseModule.forRootAsync({
+  inject: [ConfigService],
+  useFactory: (config: ConfigService) => ({
+    url: config.getOrThrow('DATABASE_URL'),
+    caCert: config.get('DATABASE_CA_CERT'), // PEM; omit for a local database
+  }),
+});
+```
+
+`DATABASE_CA_CERT` is optional everywhere. Omit it for a local or
+container-network database, or one whose certificate a public CA signed.
+
+Two details in `tls.ts` are load-bearing rather than stylistic:
+
+- **`servername` is never set for an IP host.** Node throws on an IP there, and
+  it throws from inside the driver's socket upgrade — an uncaught exception
+  that kills the process on boot, not a rejected promise anything can catch.
+- **`checkServerIdentity` is pinned to the host from the URL.** Left alone Node
+  verifies whatever `servername` says, which over a socket the driver already
+  opened defaults to `localhost` — so the check passes judgement on a name
+  nobody dialed.
+
 ## Using it in an app
 
 ```ts

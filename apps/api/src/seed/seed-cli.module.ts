@@ -19,6 +19,7 @@ import { SeedModule } from './seed.module.js';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         url: config.getOrThrow<string>('DATABASE_URL'),
+        caCert: config.get<string>('DATABASE_CA_CERT'),
         maxConnections: config.get<number>('DATABASE_MAX_CONNECTIONS', 10),
       }),
     }),

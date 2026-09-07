@@ -15,6 +15,12 @@ export const envSchema = z
     DATABASE_URL: z
       .string()
       .regex(/^postgres(ql)?:\/\/.+/, 'DATABASE_URL must be a valid postgres:// connection URL'),
+    /**
+     * PEM of the CA that signed the database server's certificate. Required
+     * only for a database reached over TLS with a PRIVATE CA — a custom CA
+     * cannot be carried in DATABASE_URL, so it arrives separately.
+     */
+    DATABASE_CA_CERT: z.string().optional(),
     DATABASE_MAX_CONNECTIONS: z.coerce.number().int().min(1).max(100).default(10),
 
     // IAM / Auth

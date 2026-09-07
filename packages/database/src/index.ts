@@ -1,4 +1,5 @@
 // Client exports
+export { buildVerifiedTls, hostFromConnectionUrl, type VerifiedTlsOptions } from './tls.js';
 export {
   createDatabaseClient,
   createDatabaseClientFromEnv,
