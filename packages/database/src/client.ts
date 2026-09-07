@@ -1,12 +1,20 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres, { type Sql } from 'postgres';
 import { relations } from './schema/relations.js';
+import { buildVerifiedTls, hostFromConnectionUrl } from './tls.js';
 
 export interface DatabaseConfig {
   url: string;
   maxConnections?: number;
   idleTimeout?: number;
   connectionTimeout?: number;
+  /**
+   * PEM of the certificate authority that signed the server's certificate,
+   * for a database reached over TLS with a PRIVATE CA. Omit for a local or
+   * container-network database, or for one whose certificate a public CA
+   * signed. See tls.ts for why this cannot live in the URL.
+   */
+  caCert?: string;
 }
 
 export type DrizzleOrm = ReturnType<typeof drizzle<typeof relations>>;
@@ -27,11 +35,18 @@ export interface DatabaseClient {
  * For production, use sensible defaults for connection pooling.
  */
 export function createDatabaseClient(config: DatabaseConfig): DatabaseClient {
+  const host = config.caCert ? hostFromConnectionUrl(config.url) : null;
   const sql = postgres(config.url, {
     max: config.maxConnections ?? 10,
     idle_timeout: config.idleTimeout ?? 20,
     connect_timeout: config.connectionTimeout ?? 10,
     prepare: false, // Required for connection poolers like PgBouncer
+    // Only when a CA is supplied AND the URL names a host to verify against.
+    // Without both there is nothing to check, and a half-configured TLS option
+    // is worse than none: it looks verified and is not.
+    ...(config.caCert && host
+      ? { ssl: buildVerifiedTls(host, config.caCert) as never }
+      : {}),
   });
 
   const db = drizzle({ client: sql, relations });
