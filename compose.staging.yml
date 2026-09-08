@@ -54,7 +54,11 @@ services:
     # it always matches what Postgres was initialized with.
     environment:
       DATABASE_URL: postgresql://${DB_USER:-vboilerplate}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-vboilerplate}
-    entrypoint: ['node', '/app/packages/database/dist/cli/migrate.mjs']
+    # Path follows the image layout, and MUST change with it. `pnpm deploy`
+    # flattens the app to the image root, so /app/packages no longer exists —
+    # pointing here at the old path takes production down: migrate fails, api
+    # depends on migrate completing, nothing starts, 502.
+    entrypoint: ['node', '/app/node_modules/@pkg/database/dist/cli/migrate.mjs']
     networks:
       - staging_network
     depends_on:
