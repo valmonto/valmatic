@@ -87,6 +87,26 @@ DatabaseModule.forRootAsync({
 `DATABASE_CA_CERT` is optional everywhere. Omit it for a local or
 container-network database, or one whose certificate a public CA signed.
 
+**Every entry point reads it, and they must stay that way.** There are three,
+and a CA wired into only some of them is worse than none, because the same
+database then works one way and fails another:
+
+| Entry point | Reads the CA from |
+|---|---|
+| `DatabaseModule.forRootAsync` | whatever the factory passes (above) |
+| `createDatabaseClientFromEnv` | `process.env.DATABASE_CA_CERT` |
+| `runMigrations` / `db:migrate` | `process.env.DATABASE_CA_CERT` |
+
+The migration is the one that bites. It runs BEFORE the app, so a stack whose
+CA reached the app but not the migration never starts at all — and the failure
+reads `UNABLE_TO_VERIFY_LEAF_SIGNATURE`, which names the certificate rather than
+the caller that ignored it. A descendant lost an evening to exactly that.
+
+Note the deploy cannot ship this variable in a `.env` file: a PEM is multi-line
+and a `.env` value is a line, so flattening it produces a certificate OpenSSL
+cannot parse. It has to travel somewhere that carries newlines — compose YAML,
+a mounted file, or the environment directly.
+
 Two details in `tls.ts` are load-bearing rather than stylistic:
 
 - **`servername` is never set for an IP host.** Node throws on an IP there, and
