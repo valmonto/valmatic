@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { createRequire } from 'node:module';
 import type * as SentryTypes from '@sentry/node';
 import { ConfigService } from '@nestjs/config';
 import { InjectLogger, PinoLogger } from '../logging/index.js';
@@ -31,10 +32,11 @@ export class ErrorReporter {
     const dsn = this.configService.get<string>('SENTRY_DSN');
     if (!dsn) return;
 
-    // Required (not import()) keeps construction synchronous; the module is
-    // only loaded at all when a DSN is configured.
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const sentry = require('@sentry/node') as typeof SentryTypes;
+    // A synchronous require (not import()) keeps construction synchronous; the
+    // module is only loaded at all when a DSN is configured. This package is
+    // ESM, where `require` does not exist — createRequire gives us one that
+    // resolves from this file, in both the .mjs and the .cjs build.
+    const sentry = createRequire(import.meta.url)('@sentry/node') as typeof SentryTypes;
     sentry.init({
       dsn,
       environment: this.configService.get<string>('NODE_ENV', 'development'),
