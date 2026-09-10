@@ -78,5 +78,10 @@ export function createDatabaseClientFromEnv(): DatabaseClient {
     maxConnections: process.env.DATABASE_MAX_CONNECTIONS
       ? parseInt(process.env.DATABASE_MAX_CONNECTIONS, 10)
       : undefined,
+    // Read here for the same reason the Nest factory reads it: a private CA
+    // cannot ride in DATABASE_URL, so a caller that has only the environment
+    // to go on would otherwise verify `?sslmode=verify-full` against the system
+    // trust store and fail with UNABLE_TO_VERIFY_LEAF_SIGNATURE.
+    caCert: process.env.DATABASE_CA_CERT,
   });
 }
