@@ -1,4 +1,5 @@
 import { Injectable, type OnApplicationShutdown } from '@nestjs/common';
+import { createRequire } from 'node:module';
 import type { PostHog } from 'posthog-node';
 import { ConfigService } from '@nestjs/config';
 import type { AnalyticsEvent } from '@pkg/contracts';
@@ -25,9 +26,11 @@ export class Analytics implements OnApplicationShutdown {
     const key = this.configService.get<string>('POSTHOG_KEY');
     if (!key) return;
 
-    const { PostHog: PostHogClient } =
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      require('posthog-node') as { PostHog: new (key: string, opts: object) => PostHog };
+    // Synchronous load so construction stays synchronous; see error-reporting.ts
+    // for why createRequire rather than a bare `require` (this package is ESM).
+    const { PostHog: PostHogClient } = createRequire(import.meta.url)('posthog-node') as {
+      PostHog: new (key: string, opts: object) => PostHog;
+    };
     this.posthog = new PostHogClient(key, {
       host: this.configService.get<string>('POSTHOG_HOST', 'https://eu.i.posthog.com'),
     });
