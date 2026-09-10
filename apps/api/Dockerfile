@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.7
 FROM node:26-alpine AS base
 RUN npm install -g pnpm@11.25.0
 
@@ -5,16 +6,21 @@ RUN npm install -g pnpm@11.25.0
 FROM base AS builder
 WORKDIR /app
 
-# Dependencies resolve from the lockfile ALONE, before any source is copied —
-# this layer survives source edits, so a rebuild re-fetches only when the
-# lockfile (or root manifest) actually changes.
+# Source is copied before the install: the dependency LAYER no longer carries
+# the caching, the build-cache-mounted store does. That store outlives every
+# layer, so a source edit costs a re-link rather than a re-download.
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
-RUN pnpm fetch
 
 COPY packages ./packages
 COPY apps/api ./apps/api
 
-RUN pnpm install --frozen-lockfile --offline
+# `pnpm fetch` has no filter: it primes the store from the ENTIRE monorepo
+# lockfile — React Native and Expo included — to build one app that needs a
+# fraction of it. A filtered install fetches only this app's closure, and the
+# store lives in a build cache shared by every image and every build, so a
+# lockfile change re-resolves just what moved.
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm-store \
+    pnpm install --frozen-lockfile --filter @pkg/api... --store-dir /pnpm-store
 RUN pnpm --filter @pkg/api... build
 
 # `pnpm deploy` emits ONE package plus its production dependencies, flattened
@@ -27,7 +33,9 @@ RUN pnpm --filter @pkg/api... build
 # breaks watch-mode development. `deploy` needs it to resolve a workspace
 # package's own dependencies (@pkg/server declares @nestjs/jwt as both a
 # dependency and a peer; --legacy resolves neither).
-RUN pnpm --filter @pkg/api deploy --prod /prod \
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm-store \
+    pnpm --filter @pkg/api deploy --prod /prod \
+      --store-dir /pnpm-store \
       --config.inject-workspace-packages=true
 
 # Production stage
