@@ -15,7 +15,7 @@ async function main() {
   const migrationsFolder = resolve(__dirname, '../../src/migrations');
 
   try {
-    await runMigrations(url, migrationsFolder);
+    await runMigrations(url, migrationsFolder, process.env.DATABASE_CA_CERT);
     process.exit(0);
   } catch (error) {
     console.error('Migration failed:', error);
