@@ -35,8 +35,11 @@ services:
     # service instead, but this stack runs with --abort-on-container-exit,
     # which treats that service's clean exit as "abort" and stops the api ten
     # seconds after it boots. One replica here, so no migration race.
+    # The path is the one that survives the image: apps/api/Dockerfile ships
+    # `pnpm deploy` output, which flattens the app to the image root, so
+    # /app/packages does not exist there. compose.staging.yml uses the same path.
     entrypoint:
-      ['sh', '-c', 'node /app/packages/database/dist/cli/migrate.mjs && exec /docker-entrypoint.sh']
+      ['sh', '-c', 'node /app/node_modules/@pkg/database/dist/cli/migrate.mjs && exec /docker-entrypoint.sh']
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://vboilerplate:vboilerplate@postgres:5432/vboilerplate
