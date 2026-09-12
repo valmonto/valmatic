@@ -64,6 +64,61 @@ strategy: [docs/operations.md](docs/operations.md#durability).
 
 ---
 
+### No sending domain, no DMARC
+
+Nothing in the template establishes how a descendant's transactional mail
+actually reaches an inbox. The notifications module composes and enqueues; no
+warmed sending domain, SPF, DKIM or DMARC record exists behind it.
+
+This is the quietest way a consumer product dies. A password-reset mail that
+lands in spam does not error — the user simply never returns, the funnel shows
+a drop with no cause attached, and the signup looks like disinterest rather
+than a misconfigured DNS record. Everything downstream (onboarding sequences,
+receipts, invitation links) inherits the same fate.
+
+**Cost:** ~3h — a dedicated sending subdomain, SPF/DKIM/DMARC published, a
+provider wired to the notifications module, and a warm-up period before volume.
+**Value:** every account-lifecycle email the product will ever send.
+
+---
+
+### No VAT handling for consumer sales
+
+Selling digital goods to EU consumers means charging the buyer's national rate
+and filing OSS returns. The template has no position on this, so each
+descendant would invent one at the worst possible moment — the day it wants to
+take money.
+
+The decision is architectural, not clerical: a **merchant of record** (Paddle,
+Lemon Squeezy) becomes the seller and absorbs the whole obligation, whereas
+Stripe plus Stripe Tax keeps the descendant as the seller and filer. They imply
+different checkout flows, so choosing late means rebuilding checkout.
+
+**Cost:** the decision, then ~1d to wire whichever way it goes.
+**Value:** the ability to charge a consumer at all, legally.
+
+---
+
+### Consumer-law posture is documented but unenforced
+
+The template carries no guard rails for the EU consumer rules a B2C descendant
+is subject to: the 14-day right of withdrawal (digital goods need an explicit
+waiver at purchase, or refunds are owed), the Omnibus rule that a "was" price
+must be the lowest charged in the previous 30 days, VAT-inclusive display, and
+cancellation being no harder than signup.
+
+These bind the PRODUCT, so the durable place for them is each descendant's
+project context, where an agent reads them before building a pricing page.
+Recorded here because the template offers nothing today — no price component
+that knows about reference prices, no cancellation flow, no waiver checkbox.
+
+**Cost:** ~half a day for the components, plus a review of any existing pricing
+copy.
+**Value:** discount and urgency mechanics that are enforceable rather than
+merely effective.
+
+---
+
 ## 2. High — the tests that would catch real regressions
 
 ### Web and mobile feature tests
@@ -82,6 +137,51 @@ cheapest guard against silent output drift and currently guards nothing.
 ---
 
 ## 3. Medium — operability
+
+### No accessibility pass
+
+The European Accessibility Act has applied since 28 June 2025 to services sold
+to EU consumers, at EN 301 549 / WCAG 2.1 AA, with enforcement already active.
+Microenterprises — under 10 staff AND under €2M turnover — are exempt, which
+almost certainly covers every descendant today.
+
+It is listed because the exemption ends on growth, not on a date, and
+retrofitting accessibility across an app, a mobile client and a marketing site
+costs many times what building to it does. The template is the cheapest place
+to fix it once: focus states, contrast, form labels and keyboard paths in the
+UI kit propagate to every descendant.
+
+**Cost:** ~2d for an audit and the UI-kit fixes; ongoing discipline after.
+**Value:** the exemption stops being load-bearing.
+
+---
+
+### Marketing is English-only
+
+`@pkg/locales` carries en/es/lt for the app, and a test enforces that every key
+exists in all three. The marketing surface has no equivalent — a descendant
+selling into a non-English market would ship a localised product behind an
+English landing page, which is where the buying decision happens.
+
+**Cost:** ~half a day to wire Astro's i18n routing and mirror the locale set.
+**Value:** the marketing site stops undercutting a product that was already
+translated.
+
+---
+
+### Analytics cannot see a funnel
+
+The chosen analytics is cookieless by design, which is right for consent and
+wrong for diagnosis: it reports pageviews, not activation, drop-off or where a
+signup died. The gap only becomes visible when someone asks why conversion
+fell and the honest answer is that nothing recorded it.
+
+**Cost:** ~half a day for a product-analytics tool in memory-persistence mode,
+kept cookieless.
+**Value:** the difference between knowing traffic arrived and knowing what it
+did.
+
+---
 
 ### No queue observability
 
