@@ -130,14 +130,19 @@ Applies to any coding agent (including the specbook runner) acting on this repo.
 auto-inherit template changes, so this block is copied into each repo on purpose.
 
 - **Act on an explicit instruction — don't hand it back.** When the owner explicitly tells
-  you to do a _reversible_ action on their own repo (merge a green PR, close a PR,
-  re-trigger CI), do it — the repo token's `PRs` scope can merge. The "human-gated"
+  you to do a _reversible_ action on their own repo (merge a green PR, close a PR), do
+  it — the repo token's `PRs` scope can merge. Re-running a workflow is the exception:
+  the token cannot (see the next bullet), so say so rather than appearing to try. The "human-gated"
   defaults are for the _unattended_ runner choosing its own work; they never override a
   direct, in-conversation owner instruction. (Genuinely irreversible/destructive actions
   still get confirmed first.)
-- **The user's ground truth beats a blind API.** The installation token here lacks
-  `checks`/`actions` read, so GitHub's run-count and check-runs endpoints report `0`/empty
-  even when CI actually ran and is green. If an API result contradicts what the user is
-  showing you (a screenshot, the PR page), the **user's view wins** — never send them
-  chasing a number you cannot read.
+- **The user's ground truth beats a blind API.** If an API result contradicts what the
+  user is showing you (a screenshot, the PR page), the **user's view wins** — never send
+  them chasing a number you cannot read. What the installation token can actually do,
+  measured 2026-10-02: READS work, `gh pr checks` and `gh run list` / `run view
+  --log-failed` included, so CI state is readable and worth reading. Actions WRITES do
+  not — `gh run rerun` is refused with `Resource not accessible by integration`, so a
+  failed workflow has to be re-run by the human. (This bullet previously claimed reads
+  were blind too, and an agent acting on that reported a deploy as stale without
+  checking.)
 - **Do, don't narrate.** Prefer performing the next concrete step over describing status.
