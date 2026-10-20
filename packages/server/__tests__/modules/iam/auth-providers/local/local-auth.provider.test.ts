@@ -448,12 +448,15 @@ describe('refresh rotation grace window', () => {
 
   /** S13: "sign out everywhere" deletes the successor; the marker gives nothing then. */
   it('gives nothing for a just-rotated token once its session was signed out', async () => {
-    vi.mocked(redis.get).mockResolvedValue(
-      JSON.stringify({
-        rotatedTo: { accessToken: 'a', refreshToken: 'successor' },
-        rotatedAt: Date.now(),
-      }),
-    );
+    const marker = JSON.stringify({
+      rotatedTo: { accessToken: 'a', refreshToken: 'successor' },
+      rotatedAt: Date.now(),
+    });
+    // refresh reads the marker, revokeToken reads it again; the successor is gone.
+    vi.mocked(redis.get)
+      .mockResolvedValueOnce(marker)
+      .mockResolvedValueOnce(marker)
+      .mockResolvedValue(null);
     vi.mocked(redis.exists).mockResolvedValue(0);
 
     await expect(provider.refresh({ refreshToken: 'old-token' })).rejects.toThrow(

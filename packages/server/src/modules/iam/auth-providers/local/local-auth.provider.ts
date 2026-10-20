@@ -92,8 +92,10 @@ export class LocalAuthProvider implements IAuthProvider {
     return { userId: payload.sub };
   }
 
-  async revokeToken(dto: IamRevokeTokenRequest): Promise<IamRevokeTokenResponse> {
+  async revokeToken(dto: IamRevokeTokenRequest, hops = 0): Promise<IamRevokeTokenResponse> {
     const key = this.refreshTokenKey(dto.token);
+    // Each rotation adds a link; a chain longer than this is not a real one.
+    if (hops > 50) throw new UnauthorizedException(k.auth.errors.invalidRefreshToken);
     const data = await this.redis.get(key);
 
     if (!data) {
@@ -106,7 +108,7 @@ export class LocalAuthProvider implements IAuthProvider {
     // SUCCESSOR session — that is where the live session actually is.
     if (isRotatedMarker(parsed)) {
       await this.redis.del(key);
-      return this.revokeToken({ token: parsed.rotatedTo.refreshToken });
+      return this.revokeToken({ token: parsed.rotatedTo.refreshToken }, hops + 1);
     }
 
     const session: SessionData = parsed;
