@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-FROM node:26-alpine AS base
+FROM node:26.12.1-alpine AS base
 RUN npm install -g pnpm@11.25.0
 
 # Build stage
@@ -24,7 +24,7 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm-store \
 RUN pnpm --filter @pkg/web... build
 
 # Production stage - serve with a simple static server
-FROM node:26-alpine AS runner
+FROM node:26.12.1-alpine AS runner
 RUN npm install -g serve@14
 
 WORKDIR /app
