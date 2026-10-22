@@ -1,18 +1,46 @@
 # syntax=docker/dockerfile:1.7
 FROM node:26.12.1-alpine AS base
 RUN npm install -g pnpm@11.25.0
+# Before every `pnpm run`/`exec`, pnpm checks that node_modules still matches
+# the manifests by comparing file times. In this image the install runs on
+# manifests stamped 2000-01-01 (see the manifests stage) and the source lands
+# later with its real times, so the check would always see a "changed"
+# manifest, start a full `pnpm install`, and then refuse to purge the filtered
+# node_modules without a TTY (ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY).
+# The install step in the builder is the source of truth here; skip the check.
+# pnpm 11 reads pnpm_config_*, not npm_config_*.
+ENV pnpm_config_verify_deps_before_run=false
+
+# --- Dependency manifests, nothing else ---
+# What decides an install is the lockfile, the workspace config and every
+# package.json, never a line of code. This stage sees the whole context (a
+# copy and a find, seconds), but its OUTPUT is only those files, and BuildKit
+# keys a `COPY --from` on what it copies. A code change re-runs this stage and
+# still hits the cache for the install below.
+# `bin/` folders come along because pnpm links a workspace package's bin at
+# install time (packages/database's db-migrate). Timestamps are pinned because
+# the `COPY --from` key includes them and this stage re-runs on every change;
+# fresh times would defeat the point.
+FROM base AS manifests
+WORKDIR /src
+COPY . .
+RUN mkdir /out \
+ && cp package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc /out/ \
+ && find apps packages -mindepth 2 -maxdepth 2 \( -name package.json -o -name bin \) \
+    | tar -cf - -T - | tar -xf - -C /out \
+ && find /out -exec touch -h -d '2000-01-01 00:00:00' {} +
 
 # Build stage
 FROM base AS builder
 WORKDIR /app
 
-# Source is copied before the install: the dependency LAYER no longer carries
-# the caching, the build-cache-mounted store does. That store outlives every
-# layer, so a source edit costs a re-link rather than a re-download.
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
-
-COPY packages ./packages
-COPY apps/api ./apps/api
+# Dependencies first, source second: the install is keyed on the manifests
+# alone, so a code change reuses the installed layer whole. The install used
+# to run after the source was copied, on the theory that the cache-mounted
+# store made a re-install cheap. It was not: nothing was downloaded, yet
+# linking into node_modules cost a descendant 1m21s on the API and 3m45s per
+# web build, on every deploy.
+COPY --from=manifests /out ./
 
 # `pnpm fetch` has no filter: it primes the store from the ENTIRE monorepo
 # lockfile — React Native and Expo included — to build one app that needs a
@@ -21,6 +49,9 @@ COPY apps/api ./apps/api
 # lockfile change re-resolves just what moved.
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm-store \
     pnpm install --frozen-lockfile --filter @pkg/api... --store-dir /pnpm-store
+
+COPY packages ./packages
+COPY apps/api ./apps/api
 RUN pnpm --filter @pkg/api... build
 
 # `pnpm deploy` emits ONE package plus its production dependencies, flattened
@@ -57,5 +88,13 @@ COPY --from=builder /app/apps/api/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 3001
+
+# Not root. The API, and the migrate CLI compose runs from this image, only
+# read their files: logs go to stdout, attachments go to object storage, and
+# nothing is written under /app. So the files stay root-owned and read-only to
+# the process, and code that ever ran here uninvited can neither rewrite the
+# app nor act as root in the container. If something later needs a writable
+# path, give it its own directory owned by node, made above this line.
+USER node
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
