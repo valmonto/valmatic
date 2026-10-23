@@ -7,7 +7,7 @@ import {
   type InternalAxiosRequestConfig,
 } from 'axios';
 import type { AuthTokens, RefreshResponse } from '@pkg/contracts';
-import { clearTokens, getAccessToken, getRefreshToken, setTokens } from './tokens';
+import { clearTokens, cookieSession, getAccessToken, getRefreshToken, setTokens } from './tokens';
 
 /**
  * API base URL. Point EXPO_PUBLIC_API_URL at the machine running the API — on a
@@ -27,9 +27,25 @@ export function setOnAuthError(cb: (() => void) | null): void {
   onAuthError = cb;
 }
 
+/**
+ * A phone marks itself and is handed tokens. A browser does not: it leaves
+ * the mark off, so the API answers a sign-in with httpOnly cookies, and
+ * sends them back with every request (`withCredentials`). See `cookieSession`.
+ */
+const SESSION = cookieSession ? { withCredentials: true } : { headers: CLIENT_HEADER };
+
+/**
+ * Every request gives up after this long. Without it a request the server
+ * never answers — a captive portal, a stuck proxy — hung for good, and at
+ * launch that kept the splash screen up. A timeout is "no answer", which
+ * callers treat as try-again. A large download can set its own, longer one.
+ */
+export const REQUEST_TIMEOUT_MS = 15_000;
+
 export const http: AxiosInstance = create({
   baseURL: API_BASE_URL,
-  headers: CLIENT_HEADER,
+  timeout: REQUEST_TIMEOUT_MS,
+  ...SESSION,
 });
 
 /**
@@ -63,7 +79,24 @@ http.interceptors.request.use(async (config) => {
 
 // A bare client (no interceptors) for the refresh call itself, so a 401 from
 // /auth/refresh can't recurse back into this same logic.
-const refreshClient = create({ baseURL: API_BASE_URL, headers: CLIENT_HEADER });
+const refreshClient = create({ baseURL: API_BASE_URL, timeout: REQUEST_TIMEOUT_MS, ...SESSION });
+
+/** 401s that came back because the refresh could not be done just now, not because it was refused. */
+const unconfirmed = new WeakSet<object>();
+
+/**
+ * Did this failure say nothing about the session? No answer at all (no
+ * network, a timeout), the server failing or busy (5xx, 408, 429), or a 401
+ * whose refresh could not be tried just now. Only a failure that is NOT this
+ * — the server looked and refused — may end a session: a deploy's 502, or a
+ * weak signal during the refresh, must not sign anyone out.
+ */
+export function saysNothingAboutSession(error: unknown): boolean {
+  if (!isAxiosError(error)) return false;
+  if (unconfirmed.has(error)) return true;
+  const status = error.response?.status;
+  return status === undefined || status === 408 || status === 429 || status >= 500;
+}
 
 // Single-flight: concurrent 401s share one refresh round-trip.
 let refreshPromise: Promise<AuthTokens | 'unrecoverable' | null> | null = null;
@@ -104,6 +137,14 @@ http.interceptors.response.use(
     }
     original._retry = true;
 
+    // A cookie session is refreshed by the SERVER, inside the request that
+    // found the access cookie expired. A 401 that still reaches the browser
+    // means there is no session left to refresh.
+    if (cookieSession) {
+      onAuthError?.();
+      return Promise.reject(error);
+    }
+
     refreshPromise ??= refreshTokens().finally(() => {
       refreshPromise = null;
     });
@@ -115,7 +156,9 @@ http.interceptors.response.use(
       return Promise.reject(error);
     }
     if (!tokens) {
-      // Transient refresh failure: fail THIS request, keep the session.
+      // Transient refresh failure: fail THIS request, keep the session — and
+      // say so, so a caller does not read this 401 as a refusal.
+      unconfirmed.add(error);
       return Promise.reject(error);
     }
 

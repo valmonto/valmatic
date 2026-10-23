@@ -29,8 +29,18 @@ export function getConfiguredMinVersion(): string | undefined {
   return typeof v === 'string' ? v : undefined;
 }
 
+/**
+ * This app's Apple ID in App Store Connect (App Information → Apple ID), the
+ * number in its App Store address, from app config `extra.appStoreId`. Not a
+ * secret. Without it iPhone users are sent to the App Store's home page.
+ */
+export function getConfiguredAppStoreId(): string | undefined {
+  const id = Constants.expoConfig?.extra?.appStoreId;
+  return typeof id === 'string' && id.trim() ? id.trim() : undefined;
+}
+
 /** Open this app's store listing (App Store / Play Store). */
-export function openStore(appStoreId?: string): void {
+export function openStore(appStoreId: string | undefined = getConfiguredAppStoreId()): void {
   const androidPackage = Constants.expoConfig?.android?.package;
   const url = Platform.select({
     ios: appStoreId
