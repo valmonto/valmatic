@@ -18,6 +18,11 @@ export const authRoutes: RouteObject[] = [
         path: 'forgot-password',
         lazy: () => import('./forgot-password.page').then((m) => ({ Component: m.default })),
       },
+      // Opened from the confirmation email; public, the token is in the fragment.
+      {
+        path: 'verify-email',
+        lazy: () => import('./verify-email.page').then((m) => ({ Component: m.default })),
+      },
       // Opened from the email; the token is in the URL fragment.
       {
         path: 'reset-password',

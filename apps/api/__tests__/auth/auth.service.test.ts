@@ -387,6 +387,7 @@ describe('AuthService', () => {
       displayName: null,
       role: 'OWNER',
       systemRole: 'USER',
+      emailVerified: true,
       orgId: ORG_UUID,
     };
 

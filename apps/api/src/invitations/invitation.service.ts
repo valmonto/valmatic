@@ -178,6 +178,8 @@ export class InvitationService {
       passwordHash,
       orgId: invite!.orgId,
       role: invite!.role,
+      // The invitation link was mailed to this address and opened: it is theirs.
+      emailVerified: true,
     });
 
     const tokens = await this.iamService.auth.issueTokens({

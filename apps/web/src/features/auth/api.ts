@@ -1,5 +1,9 @@
 import type {
   AuthOptionsResponse,
+  ChangeUnverifiedEmailRequest,
+  ChangeUnverifiedEmailResponse,
+  EmailVerificationConfirmResponse,
+  EmailVerificationResendResponse,
   PasswordResetCheckResponse,
   PasswordResetConfirmRequest,
   PasswordResetRequest,
@@ -39,6 +43,14 @@ export const authResource = (client: HttpClient) => ({
     client.post('/api/auth/password-reset/check', { token }),
   confirmPasswordReset: (dto: PasswordResetConfirmRequest): Promise<Record<string, never>> =>
     client.post('/api/auth/password-reset/confirm', dto),
+  resendEmailConfirmation: (locale: string): Promise<EmailVerificationResendResponse> =>
+    client.post('/api/auth/email-verification/resend', { locale }),
+  confirmEmail: (token: string): Promise<EmailVerificationConfirmResponse> =>
+    client.post('/api/auth/email-verification/confirm', { token }),
+  changeUnverifiedEmail: (
+    dto: ChangeUnverifiedEmailRequest,
+  ): Promise<ChangeUnverifiedEmailResponse> =>
+    client.post('/api/auth/email-verification/change', dto),
 });
 
 /** Bound instance the feature uses internally. */

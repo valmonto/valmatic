@@ -124,6 +124,8 @@ export class UserRepository {
     phone?: string;
     orgId: string;
     role: OrganizationUserRole;
+    /** The address is already proven, e.g. the person came through an emailed invitation. */
+    emailVerified?: boolean;
   }): Promise<OrgUserRecord> {
     return this.dbClient.db.transaction(async (tx) => {
       const [newUser] = await tx
@@ -133,6 +135,7 @@ export class UserRepository {
           name: data.name,
           passwordHash: data.passwordHash,
           phone: data.phone,
+          emailVerifiedAt: data.emailVerified ? new Date() : null,
         })
         .returning();
 

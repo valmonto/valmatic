@@ -1,6 +1,13 @@
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { createHash } from 'node:crypto';
-import { createDatabaseClient, eq, passwordReset, user, type DatabaseClient } from '@pkg/database';
+import {
+  createDatabaseClient,
+  emailVerification,
+  eq,
+  passwordReset,
+  user,
+  type DatabaseClient,
+} from '@pkg/database';
 import { describeStack } from '@pkg/testing';
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
 
@@ -493,6 +500,31 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
       payload: { token, newPassword: 'AnotherPass789!' },
     });
     expect(again.statusCode).toBe(400);
+  });
+
+  it('starts a new sign-up unconfirmed, and a mailed link confirms the address', async () => {
+    const { token: session, email } = await register(app, 'confirm-me');
+    const me = () => app.inject({ method: 'GET', url: '/api/auth/me', headers: bearer(session) });
+    expect((await me()).json()).toMatchObject({ emailVerified: false });
+
+    const [row] = await client.db.select({ id: user.id }).from(user).where(eq(user.email, email));
+    const token = 'a-confirm-token-of-enough-length-1234567';
+    await client.db.insert(emailVerification).values({
+      userId: row!.id,
+      email,
+      tokenHash: createHash('sha256').update(token).digest('hex'),
+      expiresAt: new Date(Date.now() + 60_000),
+    });
+
+    // Public: the link may be opened in a browser signed in to nothing.
+    const confirmed = await app.inject({
+      method: 'POST',
+      url: '/api/auth/email-verification/confirm',
+      payload: { token },
+    });
+    expect(confirmed.statusCode, confirmed.body).toBe(200);
+    expect(confirmed.json()).toEqual({ email });
+    expect((await me()).json()).toMatchObject({ emailVerified: true });
   });
 
   it('rejects a bad password with 401 and never leaks which half was wrong', async () => {

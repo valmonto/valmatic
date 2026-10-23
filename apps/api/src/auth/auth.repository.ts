@@ -101,6 +101,7 @@ export class AuthRepository {
     role: OrganizationUserRole;
     systemRole: SystemRole;
     orgId: string;
+    emailVerified: boolean;
   } | null> {
     const result = await this.dbClient.db
       .select({
@@ -111,6 +112,7 @@ export class AuthRepository {
         role: organizationUser.role,
         systemRole: user.systemRole,
         orgId: organizationUser.orgId,
+        emailVerifiedAt: user.emailVerifiedAt,
       })
       .from(user)
       .innerJoin(
@@ -124,7 +126,10 @@ export class AuthRepository {
       .where(and(eq(user.id, userId), isNull(user.disabledAt)))
       .limit(1);
 
-    return result[0] ?? null;
+    const row = result[0];
+    if (!row) return null;
+    const { emailVerifiedAt, ...rest } = row;
+    return { ...rest, emailVerified: emailVerifiedAt !== null };
   }
 
   async findUserById(userId: string): Promise<User | null> {
