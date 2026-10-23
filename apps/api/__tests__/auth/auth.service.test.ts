@@ -242,6 +242,20 @@ describe('AuthService', () => {
       expect(unknown.message).toBe(wrong.message);
     });
 
+    // Told only to someone who has just proved the account is theirs: a wrong
+    // password on a disabled account gets the ordinary 401.
+    it('refuses a disabled account only after the password matched, and issues nothing', async () => {
+      repository.findUserByEmail!.mockResolvedValue({ ...userRow, disabledAt: new Date() });
+
+      await expect(service.login({ email: userRow.email, password: 'wrong' }, IP)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      await expect(service.login({ email: userRow.email, password: PASSWORD }, IP)).rejects.toThrow(
+        ForbiddenException,
+      );
+      expect(issueTokens).not.toHaveBeenCalled();
+    });
+
     it('refuses a user who belongs to no organization', async () => {
       repository.findUserByEmail!.mockResolvedValue(userRow);
       repository.findFirstOrgForUser!.mockResolvedValue(null);

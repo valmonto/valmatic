@@ -118,6 +118,14 @@ export class AuthService {
 
     await this.attempts.succeeded(dto.email, clientIp);
 
+    // Checked only AFTER the password matched: "this account is disabled" is
+    // for its owner, and must not tell a stranger probing addresses that the
+    // account exists.
+    if (user.disabledAt) {
+      this.logger.warn({ userId: user.id }, 'Login refused — account disabled');
+      throw new ForbiddenException(k.auth.errors.accountDisabled);
+    }
+
     const orgAccess = await this.authRepository.findFirstOrgForUser(user.id);
     if (!orgAccess) {
       throw new UnauthorizedException(k.auth.errors.noOrgAccess);

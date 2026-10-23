@@ -44,6 +44,7 @@ export class UserService {
         joinedAt: u.joinedAt.toISOString(),
         createdAt: u.createdAt.toISOString(),
         updatedAt: u.updatedAt.toISOString(),
+        disabledAt: u.disabledAt?.toISOString() ?? null,
       })),
       meta: {
         total,
@@ -65,6 +66,7 @@ export class UserService {
       joinedAt: userRecord.joinedAt.toISOString(),
       createdAt: userRecord.createdAt.toISOString(),
       updatedAt: userRecord.updatedAt.toISOString(),
+      disabledAt: userRecord.disabledAt?.toISOString() ?? null,
     };
   }
 
@@ -101,6 +103,7 @@ export class UserService {
       joinedAt: userRecord.joinedAt.toISOString(),
       createdAt: userRecord.createdAt.toISOString(),
       updatedAt: userRecord.updatedAt.toISOString(),
+      disabledAt: userRecord.disabledAt?.toISOString() ?? null,
     };
   }
 
@@ -157,6 +160,7 @@ export class UserService {
       joinedAt: updated.joinedAt.toISOString(),
       createdAt: updated.createdAt.toISOString(),
       updatedAt: updated.updatedAt.toISOString(),
+      disabledAt: updated.disabledAt?.toISOString() ?? null,
     };
   }
 

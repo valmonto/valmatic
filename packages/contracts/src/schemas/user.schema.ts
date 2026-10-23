@@ -30,6 +30,8 @@ export const OrgUserSchema = z.object({
   joinedAt: isoTimestamp,
   createdAt: isoTimestamp,
   updatedAt: isoTimestamp,
+  /** When a platform admin disabled the account; null while it is active. */
+  disabledAt: isoTimestamp.nullish(),
 });
 
 export type OrgUser = z.infer<typeof OrgUserSchema>;
@@ -88,3 +90,22 @@ export const DeleteUserByIdResponseSchema = z.object({});
 
 export type DeleteUserByIdRequest = z.infer<typeof DeleteUserByIdRequestSchema>;
 export type DeleteUserByIdResponse = z.infer<typeof DeleteUserByIdResponseSchema>;
+
+// --- Disable / enable an account (platform admins) ---
+// Platform-wide: an account can belong to several organizations, so turning
+// it off is not one organization's decision (see AdminUserController).
+export const AdminDisableUserRequestSchema = z
+  .object({
+    id: z.string().uuid(),
+    /** Why, in the admin's own words. Shown back to admins, never to the user. */
+    reason: z.string().trim().max(500).optional(),
+  })
+  .strict();
+export const AdminDisableUserResponseSchema = z.object({});
+export const AdminEnableUserRequestSchema = z.object({ id: z.string().uuid() }).strict();
+export const AdminEnableUserResponseSchema = z.object({});
+
+export type AdminDisableUserRequest = z.infer<typeof AdminDisableUserRequestSchema>;
+export type AdminDisableUserResponse = z.infer<typeof AdminDisableUserResponseSchema>;
+export type AdminEnableUserRequest = z.infer<typeof AdminEnableUserRequestSchema>;
+export type AdminEnableUserResponse = z.infer<typeof AdminEnableUserResponseSchema>;

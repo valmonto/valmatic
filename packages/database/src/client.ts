@@ -44,9 +44,7 @@ export function createDatabaseClient(config: DatabaseConfig): DatabaseClient {
     // Only when a CA is supplied AND the URL names a host to verify against.
     // Without both there is nothing to check, and a half-configured TLS option
     // is worse than none: it looks verified and is not.
-    ...(config.caCert && host
-      ? { ssl: buildVerifiedTls(host, config.caCert) as never }
-      : {}),
+    ...(config.caCert && host ? { ssl: buildVerifiedTls(host, config.caCert) as never } : {}),
   });
 
   const db = drizzle({ client: sql, relations });

@@ -58,6 +58,7 @@ export const auth = {
     invalidEmailOrPassword: 'auth.errors.invalidEmailOrPassword',
     loginFailed: 'auth.errors.loginFailed',
     tooManyAttempts: 'auth.errors.tooManyAttempts',
+    accountDisabled: 'auth.errors.accountDisabled',
     tooManyRequests: 'auth.errors.tooManyRequests',
     registrationDisabled: 'auth.errors.registrationDisabled',
     unableToCreateAccount: 'auth.errors.unableToCreateAccount',
