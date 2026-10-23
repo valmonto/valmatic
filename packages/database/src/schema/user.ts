@@ -20,6 +20,12 @@ export const user = pgTable(
       .notNull()
       .default('USER'),
     /**
+     * When the owner proved the address is theirs by opening an emailed link
+     * (or arrived through one, like an invitation). `null` until then. It
+     * blocks nothing; it is what makes password reset safe to rely on.
+     */
+    emailVerifiedAt: timestamp('email_verified_at', { withTimezone: true }),
+    /**
      * Set when a platform admin disables the account; `null` is the normal
      * state. A disabled account cannot sign in or refresh a session, and its
      * live sessions are revoked at the moment it is disabled. The row and

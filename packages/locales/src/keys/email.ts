@@ -10,4 +10,11 @@ export const email = {
     expiry: 'email.resetPassword.expiry',
     ignore: 'email.resetPassword.ignore',
   },
+  verifyEmail: {
+    subject: 'email.verifyEmail.subject',
+    intro: 'email.verifyEmail.intro',
+    button: 'email.verifyEmail.button',
+    why: 'email.verifyEmail.why',
+    ignore: 'email.verifyEmail.ignore',
+  },
 } as const;

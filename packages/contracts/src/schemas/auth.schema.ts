@@ -39,6 +39,8 @@ export const RegisterRequestSchema = z.object({
   password: z.string().regex(PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE),
   name: z.string().min(1).max(255),
   organizationName: z.string().min(1).max(255),
+  /** The language the confirmation email is written in. Unknown ones fall back. */
+  locale: z.string().min(2).max(10).optional(),
 });
 
 export const RegisterResponseSchema = z.object({
@@ -88,6 +90,8 @@ export const CurrentUserResponseSchema = z
      */
     systemRole: SystemRoleSchema,
     orgId: z.string().uuid(),
+    /** Whether the owner confirmed the address by opening an emailed link. */
+    emailVerified: z.boolean(),
     /**
      * What this user may do in this organization, resolved server-side.
      *
@@ -187,3 +191,44 @@ export type PasswordResetCheckRequest = z.infer<typeof PasswordResetCheckRequest
 export type PasswordResetCheckResponse = z.infer<typeof PasswordResetCheckResponseSchema>;
 export type PasswordResetConfirmRequest = z.infer<typeof PasswordResetConfirmRequestSchema>;
 export type PasswordResetConfirmResponse = z.infer<typeof PasswordResetConfirmResponseSchema>;
+
+// --- Confirming the email address ---
+// Someone who signed up with an address and a password is mailed a link.
+// Nothing waits for it: the account works at once. Until it is opened the app
+// shows the address, can send the link again, and lets the address be changed
+// — only then, while nobody has proven it is theirs.
+
+/** Send the link again, to the address the account has now. Signed in. */
+export const EmailVerificationResendRequestSchema = z
+  .object({ locale: z.string().min(2).max(10).optional() })
+  .strict();
+export const EmailVerificationResendResponseSchema = z.object({
+  /** False when the daily limit is reached or this deployment cannot send mail. */
+  sent: z.boolean(),
+});
+
+/** Open the link. Public: the link may be opened on another device. */
+export const EmailVerificationConfirmRequestSchema = z.object({ token: ResetTokenSchema }).strict();
+export const EmailVerificationConfirmResponseSchema = z.object({
+  /** The address that is now confirmed. */
+  email: z.string().email(),
+});
+
+/** Correct an address nobody has confirmed yet, and mail the link there. Signed in. */
+export const ChangeUnverifiedEmailRequestSchema = z
+  .object({
+    email: z.string().email().max(255),
+    locale: z.string().min(2).max(10).optional(),
+  })
+  .strict();
+export const ChangeUnverifiedEmailResponseSchema = z.object({ email: z.string().email() });
+
+export type EmailVerificationResendRequest = z.infer<typeof EmailVerificationResendRequestSchema>;
+export type EmailVerificationResendResponse = z.infer<typeof EmailVerificationResendResponseSchema>;
+export type EmailVerificationConfirmRequest = z.infer<typeof EmailVerificationConfirmRequestSchema>;
+export type EmailVerificationConfirmResponse = z.infer<
+  typeof EmailVerificationConfirmResponseSchema
+>;
+export type ChangeUnverifiedEmailRequest = z.infer<typeof ChangeUnverifiedEmailRequestSchema>;
+export type ChangeUnverifiedEmailResponse = z.infer<typeof ChangeUnverifiedEmailResponseSchema>;
+

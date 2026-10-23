@@ -21,6 +21,15 @@ export const auth = {
   passwordChanged: 'auth.passwordChanged',
   backToSignIn: 'auth.backToSignIn',
 
+  // Confirming the email address
+  confirmEmailTitle: 'auth.confirmEmailTitle',
+  confirmEmailBody: 'auth.confirmEmailBody',
+  resendConfirmation: 'auth.resendConfirmation',
+  confirmationSent: 'auth.confirmationSent',
+  confirmationNotSent: 'auth.confirmationNotSent',
+  changeEmail: 'auth.changeEmail',
+  emailConfirmed: 'auth.emailConfirmed',
+
   // Actions
   signIn: 'auth.signIn',
   signUp: 'auth.signUp',
@@ -71,6 +80,9 @@ export const auth = {
     loginFailed: 'auth.errors.loginFailed',
     tooManyAttempts: 'auth.errors.tooManyAttempts',
     resetLinkInvalid: 'auth.errors.resetLinkInvalid',
+    verifyLinkInvalid: 'auth.errors.verifyLinkInvalid',
+    emailAlreadyVerified: 'auth.errors.emailAlreadyVerified',
+    unableToChangeEmail: 'auth.errors.unableToChangeEmail',
     accountDisabled: 'auth.errors.accountDisabled',
     tooManyRequests: 'auth.errors.tooManyRequests',
     registrationDisabled: 'auth.errors.registrationDisabled',
