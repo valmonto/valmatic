@@ -8,7 +8,8 @@ import * as bcrypt from 'bcryptjs';
 import { IamService, InjectLogger, PinoLogger, StorageService } from '@pkg/server';
 import { k } from '@pkg/locales';
 import { tryCatch } from '@pkg/utils';
-import type { AccountExport } from '@pkg/contracts';
+import type { AccountExport, DeleteAccountRequest } from '@pkg/contracts';
+import { AuthProviderService } from '../auth/provider/auth-provider.service.js';
 import { AccountRepository } from './account.repository.js';
 
 const iso = (d: Date | null): string | null => d?.toISOString() ?? null;
@@ -24,6 +25,7 @@ export class AccountService {
     private readonly repository: AccountRepository,
     private readonly iamService: IamService,
     private readonly storage: StorageService,
+    private readonly providers: AuthProviderService,
     @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
@@ -36,13 +38,19 @@ export class AccountService {
    *   owner (or, with none, another member) — it must name a creator.
    * Their uploads in organizations that remain stay there, unattributed.
    */
-  async deleteOwnAccount(userId: string, password: string): Promise<void> {
-    const hash = await this.repository.findPasswordHash(userId);
-    if (!hash) throw new UnauthorizedException(k.auth.errors.userNotFound);
+  async deleteOwnAccount(userId: string, proof: DeleteAccountRequest): Promise<void> {
     // 403, not 401: the session is fine, the confirmation is not. Clients
     // read a 401 as a dead session and sign the person out.
-    if (!(await bcrypt.compare(password, hash))) {
-      throw new ForbiddenException(k.auth.errors.currentPasswordIncorrect);
+    if ('password' in proof) {
+      const hash = await this.repository.findPasswordHash(userId);
+      if (!hash) throw new UnauthorizedException(k.auth.errors.userNotFound);
+      if (!hash.startsWith('$2') || !(await bcrypt.compare(proof.password, hash))) {
+        throw new ForbiddenException(k.auth.errors.currentPasswordIncorrect);
+      }
+    } else if (!(await this.providers.provesOwner(userId, proof))) {
+      // An account made through Apple or Google has no password: a fresh
+      // sign-in with a provider linked to it is the confirmation.
+      throw new ForbiddenException(k.auth.errors.providerNotLinked);
     }
 
     const memberships = await this.repository.findMemberships(userId);
@@ -76,10 +84,11 @@ export class AccountService {
     const account = await this.repository.findAccount(userId);
     if (!account) throw new UnauthorizedException(k.auth.errors.userNotFound);
 
-    const [memberships, notifications, uploads, apiKeys] = await Promise.all([
+    const [memberships, notifications, uploads, providers, apiKeys] = await Promise.all([
       this.repository.findMemberships(userId),
       this.repository.findNotifications(userId),
       this.repository.findUploads(userId),
+      this.repository.findSignInProviders(userId),
       this.repository.findApiKeys(userId),
     ]);
 
@@ -99,6 +108,11 @@ export class AccountService {
       })),
       notifications: notifications.map((n) => ({ ...n, createdAt: n.createdAt.toISOString() })),
       attachments: uploads.map((a) => ({ ...a, createdAt: a.createdAt.toISOString() })),
+      signInProviders: providers.map((p) => ({
+        ...p,
+        createdAt: p.createdAt.toISOString(),
+        lastSeenAt: p.lastSeenAt.toISOString(),
+      })),
       apiKeys: apiKeys.map((a) => ({
         ...a,
         lastUsedAt: iso(a.lastUsedAt),

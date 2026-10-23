@@ -37,6 +37,7 @@
     "bcryptjs": "catalog:",
     "bullmq": "catalog:",
     "ioredis": "catalog:",
+    "jose": "catalog:",
     "nestjs-pino": "catalog:",
     "pino": "catalog:",
     "pino-http": "catalog:",

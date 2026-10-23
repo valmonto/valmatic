@@ -1,5 +1,10 @@
 import { create } from 'zustand';
-import type { CurrentUserResponse, LoginRequest } from '@pkg/contracts';
+import type {
+  CurrentUserResponse,
+  DeleteAccountRequest,
+  LoginRequest,
+  ProviderSignInRequest,
+} from '@pkg/contracts';
 import { authApi } from '@/features/auth/api';
 import { saysNothingAboutSession, setOnAuthError } from '@/shared/api/http';
 import { clearTokens, cookieSession, getRefreshToken, setTokens } from '@/shared/api/tokens';
@@ -15,9 +20,11 @@ interface AuthState {
   /** Restore a session on app launch from tokens in secure storage. */
   bootstrap: () => Promise<void>;
   signIn: (credentials: LoginRequest) => Promise<void>;
+  /** Sign in (or up) with an Apple or Google identity token. */
+  signInWithProvider: (dto: ProviderSignInRequest) => Promise<void>;
   signOut: () => Promise<void>;
   /** Delete the account for good; the session goes with it. Throws on refusal. */
-  deleteAccount: (password: string) => Promise<void>;
+  deleteAccount: (proof: DeleteAccountRequest) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => {
@@ -83,6 +90,15 @@ export const useAuthStore = create<AuthState>((set, get) => {
       await loadUser();
     },
 
+    async signInWithProvider(dto) {
+      const data = await authApi.providerSignIn(dto);
+      if (!cookieSession && !data.tokens) {
+        throw new Error('Provider sign-in did not return tokens — is the X-Client header set?');
+      }
+      if (data.tokens) await setTokens(data.tokens);
+      await loadUser();
+    },
+
     async signOut() {
       const refreshToken = await getRefreshToken();
       try {
@@ -94,8 +110,8 @@ export const useAuthStore = create<AuthState>((set, get) => {
       set({ status: 'unauthenticated', user: null });
     },
 
-    async deleteAccount(password) {
-      await authApi.deleteAccount({ password });
+    async deleteAccount(proof) {
+      await authApi.deleteAccount(proof);
       // The server revoked every session; only the local copy is left.
       await clearTokens();
       set({ status: 'unauthenticated', user: null });

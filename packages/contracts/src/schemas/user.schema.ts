@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ProviderProofSchema } from './provider-proof.schema.js';
 // Sourced from ../constants rather than ./auth.schema: auth.schema needs
 // SystemRoleSchema from here, and importing the constants back out of it would
 // close a cycle that leaves one of the two schemas undefined at evaluation.
@@ -113,8 +114,15 @@ export type AdminEnableUserResponse = z.infer<typeof AdminEnableUserResponseSche
 // --- One's own account: delete it, download a copy of it ---
 // The account is always the session's own; nothing in the request names it.
 
-/** The password again: a session left open on a shared computer is not consent. */
-export const DeleteAccountRequestSchema = z.object({ password: z.string().min(1) }).strict();
+/**
+ * Proof again that it is the owner: a session left open on a shared computer
+ * is not consent. The password, or — for an account made through Apple or
+ * Google, which has none — a fresh sign-in with a provider linked to it.
+ */
+export const DeleteAccountRequestSchema = z.union([
+  z.object({ password: z.string().min(1) }).strict(),
+  ProviderProofSchema,
+]);
 export const DeleteAccountResponseSchema = z.object({});
 
 export type DeleteAccountRequest = z.infer<typeof DeleteAccountRequestSchema>;
@@ -162,6 +170,14 @@ export const AccountExportSchema = z.object({
       mimeType: z.string(),
       sizeBytes: z.number(),
       createdAt: z.string(),
+    }),
+  ),
+  signInProviders: z.array(
+    z.object({
+      provider: z.string(),
+      email: z.string().nullable(),
+      createdAt: z.string(),
+      lastSeenAt: z.string(),
     }),
   ),
   apiKeys: z.array(

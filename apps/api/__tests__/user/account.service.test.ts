@@ -17,6 +17,7 @@ import type { PinoLogger } from 'nestjs-pino';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AccountRepository } from '@/user/account.repository.js';
 import { AccountService } from '@/user/account.service.js';
+import type { AuthProviderService } from '@/auth/provider/auth-provider.service.js';
 
 /**
  * Deleting one's own account and downloading one's own data, against a real
@@ -31,6 +32,7 @@ describeIntegration('AccountService', () => {
 
   let revokeAllForUser: ReturnType<typeof vi.fn>;
   let deleteDirectory: ReturnType<typeof vi.fn>;
+  let provesOwner: ReturnType<typeof vi.fn>;
   let service: AccountService;
 
   async function makeUser(email: string): Promise<string> {
@@ -77,10 +79,12 @@ describeIntegration('AccountService', () => {
     hash ??= await bcrypt.hash(PASSWORD, 4);
     revokeAllForUser = vi.fn();
     deleteDirectory = vi.fn();
+    provesOwner = vi.fn().mockResolvedValue(false);
     service = new AccountService(
       new AccountRepository(client),
       { auth: { revokeAllForUser } } as unknown as IamService,
       { deleteDirectory } as unknown as StorageService,
+      { provesOwner } as unknown as AuthProviderService,
       new FakeLogger() as unknown as PinoLogger,
     );
   });
@@ -93,11 +97,34 @@ describeIntegration('AccountService', () => {
   describe('deleteOwnAccount', () => {
     it('refuses a wrong password and changes nothing', async () => {
       const me = await makeUser('me@test');
-      await expect(service.deleteOwnAccount(me, 'wrong')).rejects.toBeInstanceOf(
+      await expect(service.deleteOwnAccount(me, { password: 'wrong' })).rejects.toBeInstanceOf(
         ForbiddenException,
       );
       expect(await exists(user, me)).toBe(true);
       expect(revokeAllForUser).not.toHaveBeenCalled();
+    });
+
+    it('takes a fresh Apple or Google sign-in instead of a password, and only a linked one', async () => {
+      const me = await makeUser('me@test');
+      const proof = { provider: 'apple' as const, identityToken: 'jwt', nonce: 'n'.repeat(16) };
+
+      await expect(service.deleteOwnAccount(me, proof)).rejects.toBeInstanceOf(ForbiddenException);
+      expect(await exists(user, me)).toBe(true);
+
+      provesOwner.mockResolvedValue(true);
+      await service.deleteOwnAccount(me, proof);
+      expect(provesOwner).toHaveBeenCalledWith(me, proof);
+      expect(await exists(user, me)).toBe(false);
+    });
+
+    it('a password never matches an account that has none', async () => {
+      const [row] = await client.db
+        .insert(user)
+        .values({ email: 'p@test', name: 'p', passwordHash: '!provider' })
+        .returning();
+      await expect(
+        service.deleteOwnAccount(row!.id, { password: '!provider' }),
+      ).rejects.toBeInstanceOf(ForbiddenException);
     });
 
     it('deletes an organization the person is alone in, with its files', async () => {
@@ -105,7 +132,7 @@ describeIntegration('AccountService', () => {
       const solo = await makeOrg('solo', me);
       await upload(solo, me);
 
-      await service.deleteOwnAccount(me, PASSWORD);
+      await service.deleteOwnAccount(me, { password: PASSWORD });
 
       expect(await exists(user, me)).toBe(false);
       expect(await exists(organization, solo)).toBe(false);
@@ -120,7 +147,7 @@ describeIntegration('AccountService', () => {
       const shared = await makeOrg('shared', me);
       await join(shared, other, 'ADMIN');
 
-      await expect(service.deleteOwnAccount(me, PASSWORD)).rejects.toBeInstanceOf(
+      await expect(service.deleteOwnAccount(me, { password: PASSWORD })).rejects.toBeInstanceOf(
         ConflictException,
       );
       expect(await exists(user, me)).toBe(true);
@@ -133,7 +160,7 @@ describeIntegration('AccountService', () => {
       await join(shared, other, 'OWNER');
       const file = await upload(shared, me);
 
-      await service.deleteOwnAccount(me, PASSWORD);
+      await service.deleteOwnAccount(me, { password: PASSWORD });
 
       const [org] = await client.db.select().from(organization).where(eq(organization.id, shared));
       expect(org!.ownerId).toBe(other);
@@ -148,7 +175,7 @@ describeIntegration('AccountService', () => {
       const org = await makeOrg('theirs', owner);
       await join(org, me, 'MEMBER');
 
-      await service.deleteOwnAccount(me, PASSWORD);
+      await service.deleteOwnAccount(me, { password: PASSWORD });
 
       expect(await exists(user, me)).toBe(false);
       expect(await exists(organization, org)).toBe(true);
@@ -179,6 +206,7 @@ describeIntegration('AccountService', () => {
       expect(data.notifications.map((n) => n.title)).toEqual(['Hello']);
       expect(data.attachments).toHaveLength(1);
       expect(data.apiKeys.map((a) => a.prefix)).toEqual(['vk_abc']);
+      expect(data.signInProviders).toEqual([]);
       const text = JSON.stringify(data);
       expect(text).not.toContain(hash);
       expect(text).not.toContain('f'.repeat(64));
