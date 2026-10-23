@@ -80,6 +80,11 @@ export const envSchema = z
     // logins from one address (the e2e runner) has a reason to raise it.
     AUTH_RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(10),
 
+    // Browser origins allowed to call the API, comma-separated
+    // (`https://app.example.com,https://admin.example.com`). Unset → local
+    // development only (localhost and the LAN). See config/cors.ts.
+    CORS_ORIGINS: z.string().optional(),
+
     // MCP endpoint (/mcp) for agent access via API keys. OFF by default like
     // every capability here; keys are minted at /admin/api-keys, and each key's
     // scopes decide which tools it can see.

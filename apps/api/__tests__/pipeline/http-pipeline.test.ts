@@ -127,6 +127,21 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
     await client.close();
   });
 
+  it('answers a browser preflight with the configured headers', async () => {
+    const res = await app.inject({
+      method: 'OPTIONS',
+      url: '/api/auth/login',
+      headers: {
+        origin: 'http://localhost:5173',
+        'access-control-request-method': 'POST',
+        'access-control-request-headers': 'content-type,x-client',
+      },
+    });
+    expect(res.statusCode).toBe(204);
+    expect(res.headers['access-control-allow-origin']).toBe('http://localhost:5173');
+    expect(String(res.headers['access-control-allow-headers'])).toContain('X-Client');
+  });
+
   // A webhook signature is computed over the bytes as sent; re-serialising
   // the parsed body would change spacing and key order and never match.
   it('keeps the exact bytes of a JSON body for signature checks', async () => {
