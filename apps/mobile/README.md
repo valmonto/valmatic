@@ -111,6 +111,14 @@ your machine's.
 
 ## Setup and release
 
+**Builds on Expo (EAS) compile the shared packages first.** The app imports
+`@pkg/contracts`, `@pkg/locales` and `@pkg/utils` through their built `dist/`
+output, which is not in git. On a developer machine it is already there; on the
+build machine it is not, and the JavaScript bundle step fails with "`@pkg/locales`
+… `main` module field could not be resolved". The `eas-build-post-install`
+script in `package.json` builds the three packages right after dependencies
+install. Add a package there when the app starts importing another one.
+
 Device setup, deep linking, push notifications and EAS deployment are covered in
 [`docs/legacy/apps/mobile/docs/`](../../docs/legacy/apps/mobile/docs):
 `setup-ios.md`, `setup-android.md`, `development.md`, `deep-linking.md`,

@@ -12,7 +12,8 @@
     "lint": "expo lint",
     "clean": "rm -rf .expo dist node_modules/.cache",
     "emu:setup": "bash scripts/emu.sh setup",
-    "emu:start": "bash scripts/emu.sh start"
+    "emu:start": "bash scripts/emu.sh start",
+    "eas-build-post-install": "pnpm --filter @pkg/contracts --filter @pkg/locales --filter @pkg/utils build"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "catalog:mobile",
