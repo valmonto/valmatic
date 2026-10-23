@@ -7,12 +7,11 @@ import {
   and,
   eq,
   isNull,
-  organization,
-  organizationUser,
   user,
   userIdentity,
 } from '@pkg/database';
 import { k } from '@pkg/locales';
+import { placeNewAccount } from '../../org/place-new-account.js';
 import type { AuthIdentityProvider } from '@pkg/contracts';
 
 /**
@@ -90,8 +89,8 @@ export class AuthProviderRepository {
   }
 
   /**
-   * A new account from a provider: the user, an organization of their own
-   * (they are its OWNER, as with `POST /auth/register`) and the link, in one
+   * A new account from a provider: the user, its place (its own organization,
+   * or the one every account joins — `placeNewAccount`) and the link, in one
    * transaction so a half-made account cannot exist.
    */
   async createAccount(input: {
@@ -100,6 +99,7 @@ export class AuthProviderRepository {
     passwordHash: string;
     emailVerified: boolean;
     organizationName: string;
+    multiOrg: boolean;
     provider: AuthIdentityProvider;
     subject: string;
     providerEmail: string | null;
@@ -116,15 +116,10 @@ export class AuthProviderRepository {
         .returning();
       if (!created) throw new InternalServerErrorException(k.common.errors.failedToCreateUser);
 
-      const [org] = await tx
-        .insert(organization)
-        .values({ name: input.organizationName, ownerId: created.id })
-        .returning();
-      if (!org) throw new InternalServerErrorException(k.common.errors.failedToCreateOrg);
-
-      await tx
-        .insert(organizationUser)
-        .values({ orgId: org.id, userId: created.id, role: 'OWNER' });
+      await placeNewAccount(tx, created.id, {
+        multiOrg: input.multiOrg,
+        organizationName: input.organizationName,
+      });
       await tx.insert(userIdentity).values({
         userId: created.id,
         provider: input.provider,

@@ -301,6 +301,19 @@ describe('AuthService', () => {
       expect(result.accessToken).toBe(TOKENS.accessToken);
     });
 
+    it('with one organization (no add-on), places the account there, named after the person', async () => {
+      repository.createUserWithOrganization!.mockResolvedValue({
+        user: { id: 'user-1', email: userRow.email, name: 'Someone' },
+        orgUser: orgAccess,
+      });
+
+      await service.register({ email: userRow.email, password: PASSWORD, name: 'Someone' });
+
+      expect(repository.createUserWithOrganization).toHaveBeenCalledWith(
+        expect.objectContaining({ multiOrg: false, organizationName: 'Someone' }),
+      );
+    });
+
     it('never stores the password in plain text', async () => {
       repository.createUserWithOrganization!.mockResolvedValue({
         user: { id: 'user-1', email: userRow.email, name: 'Someone' },

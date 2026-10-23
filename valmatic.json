@@ -1,7 +1,8 @@
 {
   "addons": {
     "demo": true,
-    "mobile": true
+    "mobile": true,
+    "organizations": true
   },
   "languages": [
     "en",

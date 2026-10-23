@@ -2,7 +2,9 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  Inject,
   Injectable,
+  Optional,
   ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -20,6 +22,7 @@ import type { User } from '@pkg/database';
 import { IamService, InjectLogger, PinoLogger } from '@pkg/server';
 import { k } from '@pkg/locales';
 import { AuthRepository } from '../auth.repository.js';
+import { MULTI_ORG } from '../../org/multi-org.js';
 import { AuthProviderRepository } from './auth-provider.repository.js';
 import { IdentityTokenVerifier, type VerifiedIdentity } from './identity-token.verifier.js';
 import { ProviderTokens } from './provider-tokens.js';
@@ -52,8 +55,8 @@ type SignInResult = {
  *     an account already holds, is linked to that account — so someone who
  *     signed up by email and later taps "Continue with Google" keeps one
  *     account. Never a platform admin's: those sign in with their password.
- *  4. **Create.** Otherwise, when sign-up is open, a new account with an
- *     organization of its own, as `POST /auth/register` makes.
+ *  4. **Create.** Otherwise, when sign-up is open, a new account placed as
+ *     `POST /auth/register` places one (`placeNewAccount`).
  *
  * Nothing the client says about itself is used for any of it. `fullName` only
  * names a new account, because Apple gives the name to the app and never to us.
@@ -68,6 +71,7 @@ export class AuthProviderService {
     private readonly iamService: IamService,
     private readonly configService: ConfigService,
     @InjectLogger() private readonly logger: PinoLogger,
+    @Optional() @Inject(MULTI_ORG) private readonly multiOrg?: boolean,
   ) {}
 
   /** The providers this deployment can verify. */
@@ -145,6 +149,7 @@ export class AuthProviderService {
       passwordHash: NO_PASSWORD,
       emailVerified: Boolean(verified.email && verified.emailVerified),
       organizationName: name,
+      multiOrg: this.multiOrg === true,
       provider: verified.provider,
       subject: verified.subject,
       providerEmail: verified.email,

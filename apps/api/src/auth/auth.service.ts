@@ -4,6 +4,8 @@ import {
   ConflictException,
   Injectable,
   UnauthorizedException,
+  Inject,
+  Optional,
 } from '@nestjs/common';
 import { FeatureFlags, IamService, SECURITY_CONFIG } from '@pkg/server';
 import { ConfigService } from '@nestjs/config';
@@ -21,6 +23,7 @@ import {
 } from '@pkg/contracts';
 import { InjectLogger, PinoLogger } from '@pkg/server';
 import { AuthRepository } from './auth.repository.js';
+import { MULTI_ORG } from '../org/multi-org.js';
 import { LoginAttempts, emailFingerprint } from './login-attempts.js';
 import * as bcrypt from 'bcryptjs';
 import { randomBytes } from 'node:crypto';
@@ -45,6 +48,7 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly attempts: LoginAttempts,
     @InjectLogger() private readonly logger: PinoLogger,
+    @Optional() @Inject(MULTI_ORG) private readonly multiOrg?: boolean,
   ) {}
 
   async register(
@@ -70,7 +74,9 @@ export class AuthService {
       email: dto.email,
       name: dto.name,
       passwordHash,
-      organizationName: dto.organizationName,
+      // With one organization, a sign-up joins it and this name is unused.
+      organizationName: dto.organizationName ?? dto.name,
+      multiOrg: this.multiOrg === true,
     });
 
     const activeUser: ActiveUser = {

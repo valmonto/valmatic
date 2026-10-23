@@ -1,10 +1,7 @@
-import { Controller, Get, Patch, Post, Res } from '@nestjs/common';
+import { Controller, Get, Patch } from '@nestjs/common';
 import { OrgService } from './org.service.js';
-import { ActiveUser, Permissions, ZodRequest, COOKIE_OPTIONS, COOKIE_TTL } from '@pkg/server';
+import { ActiveUser, Permissions, ZodRequest } from '@pkg/server';
 import {
-  type CreateOrgRequest,
-  CreateOrgRequestSchema,
-  CreateOrgResponse,
   type GetOrgByIdRequest,
   GetOrgByIdRequestSchema,
   GetOrgByIdResponse,
@@ -14,12 +11,8 @@ import {
   type UpdateOrgRequest,
   UpdateOrgRequestSchema,
   UpdateOrgResponse,
-  type SwitchOrgRequest,
-  SwitchOrgRequestSchema,
-  SwitchOrgResponse,
   type ActiveUser as ActiveUserType,
 } from '@pkg/contracts';
-import type { FastifyReply } from 'fastify';
 
 /**
  * The param name is load-bearing. `:orgId` puts a route under ActiveOrgGuard,
@@ -50,15 +43,6 @@ export class OrgController {
     return this.orgService.getOrgById(activeUser, dto.id);
   }
 
-  @Post()
-  @Permissions('org:create')
-  async create(
-    @ZodRequest(CreateOrgRequestSchema) dto: CreateOrgRequest,
-    @ActiveUser() activeUser: ActiveUserType,
-  ): Promise<CreateOrgResponse> {
-    return this.orgService.createOrg(activeUser, dto);
-  }
-
   @Patch(':orgId')
   @Permissions('org:update')
   async update(
@@ -70,27 +54,8 @@ export class OrgController {
 
   // There is deliberately no DELETE here. Organization users, including
   // OWNERs, cannot delete organizations — that is a platform operation, on
-  // /admin/orgs behind @SystemRoles(ADMIN). See AdminOrgController.
+  // /admin/orgs behind @SystemRoles(ADMIN), with the `organizations` add-on.
 
-  @Post('switch')
-  @Permissions('org:switch')
-  async switch(
-    @ZodRequest(SwitchOrgRequestSchema) dto: SwitchOrgRequest,
-    @ActiveUser() activeUser: ActiveUserType,
-    @Res({ passthrough: true }) reply: FastifyReply,
-  ): Promise<SwitchOrgResponse> {
-    const { accessToken, refreshToken } = await this.orgService.switchOrg(activeUser, dto.orgId);
-
-    reply.setCookie('accessToken', accessToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.ACCESS_TOKEN,
-    });
-
-    reply.setCookie('refreshToken', refreshToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.REFRESH_TOKEN,
-    });
-
-    return {};
-  }
+  // Creating and switching organizations come with the `organizations`
+  // add-on (docs/addons.md); without it a project has one organization.
 }

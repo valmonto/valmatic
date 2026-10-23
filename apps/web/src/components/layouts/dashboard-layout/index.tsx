@@ -15,19 +15,11 @@ import {
 import { UserActionsDropdown } from './user-actions-dropdown';
 import { useSystemRole } from '@/shared/hooks/use-permissions';
 import { Link, useLocation } from 'react-router';
-import {
-  Building2,
-  LayoutDashboard,
-  Settings,
-  ShieldCheck,
-  Users,
-  Hexagon,
-  KeyRound,
-} from 'lucide-react';
+import { LayoutDashboard, Settings, ShieldCheck, Users, Hexagon, KeyRound } from 'lucide-react';
 import { addons } from '@/addons.generated';
 
 /** Links from the add-ons this project keeps (docs/addons.md), by sidebar group. */
-function addonLinks(group: 'management' | 'developer') {
+function addonLinks(group: 'management' | 'developer' | 'platform') {
   return addons.flatMap((addon) =>
     (addon.links ?? []).filter((link) => (link.group ?? 'developer') === group),
   );
@@ -57,7 +49,7 @@ const navGroups = [
 const platformGroup = {
   labelKey: k.admin.platform,
   items: [
-    { titleKey: k.admin.organizations, url: '/admin/orgs', icon: Building2 },
+    ...addonLinks('platform'),
     { titleKey: k.admin.permissions, url: '/admin/permissions', icon: ShieldCheck },
     { titleKey: k.admin.apiKeys.title, url: '/admin/api-keys', icon: KeyRound },
   ],

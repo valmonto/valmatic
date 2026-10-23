@@ -7,10 +7,6 @@ import type { RouteObject } from 'react-router';
  */
 export const adminRoutes: RouteObject[] = [
   {
-    path: 'admin/orgs',
-    lazy: () => import('./admin-orgs.page').then((m) => ({ Component: m.default })),
-  },
-  {
     path: 'admin/permissions',
     lazy: () => import('./admin-permissions.page').then((m) => ({ Component: m.default })),
   },

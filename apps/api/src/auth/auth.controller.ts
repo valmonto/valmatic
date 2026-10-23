@@ -1,6 +1,16 @@
 import { Throttle } from '@nestjs/throttler';
 import { AUTH_THROTTLE } from '../config/index.js';
-import { Controller, Get, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Inject,
+  Optional,
+  Post,
+  Req,
+  Res,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { MULTI_ORG } from '../org/multi-org.js';
 import { InjectLogger, PinoLogger } from '@pkg/server';
 import { AuthService } from './auth.service.js';
 import { MailService } from '../mail/mail.service.js';
@@ -59,6 +69,7 @@ export class AuthController {
     private readonly providers: AuthProviderService,
     private readonly configService: ConfigService,
     @InjectLogger() private readonly logger: PinoLogger,
+    @Optional() @Inject(MULTI_ORG) private readonly multiOrg?: boolean,
   ) {}
 
   /**
@@ -73,6 +84,7 @@ export class AuthController {
       passwordResetEnabled: this.mail.isConfigured,
       registrationEnabled: this.configService.get<boolean>('AUTH_REGISTRATION_ENABLED') === true,
       providers: this.providers.available(),
+      organizations: this.multiOrg ? 'many' : 'one',
     };
   }
 
