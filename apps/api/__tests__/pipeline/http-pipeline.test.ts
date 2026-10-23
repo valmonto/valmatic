@@ -317,6 +317,30 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
     }
   });
 
+  /**
+   * What a cross-site HTML form can send — plain text, url-encoded, a
+   * multipart form — is refused on every route, so a form on another site
+   * cannot sign a visitor in (to the attacker's account).
+   */
+  it('refuses a form a page on another site could send', async () => {
+    const { email } = await register(app, 'form-post');
+    for (const type of [
+      'text/plain',
+      'text/plain; charset=utf-8',
+      'application/x-www-form-urlencoded',
+      'multipart/form-data; boundary=x',
+    ]) {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/auth/login',
+        headers: { 'content-type': type, origin: 'https://evil.example' },
+        payload: JSON.stringify({ email, password: PASSWORD }),
+      });
+      expect(res.statusCode, type).toBe(415);
+      expect(res.headers['set-cookie'], type).toBeUndefined();
+    }
+  });
+
   it('rejects a bad password with 401 and never leaks which half was wrong', async () => {
     const { email } = await register(app, 'badpw');
     const res = await login(app, email, 'WrongPassword123!');
