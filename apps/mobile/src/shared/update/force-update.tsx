@@ -4,10 +4,13 @@ import { Text } from '@/components/ui/text';
 import { SafeAreaView } from '@/shared/components/safe-area-view';
 import { ArrowUpCircle } from 'lucide-react-native';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+import { k } from '@pkg/locales';
 import { StyleSheet, View } from 'react-native';
 import { compareVersions, getConfiguredMinVersion, getCurrentVersion, openStore } from './version';
 
 function ForceUpdateScreen({ appStoreId }: { appStoreId?: string }) {
+  const { t } = useTranslation();
   return (
     <SafeAreaView className="flex-1 items-center justify-center gap-7 bg-background px-8">
       <View className="size-20 items-center justify-center rounded-full bg-primary/10">
@@ -15,17 +18,17 @@ function ForceUpdateScreen({ appStoreId }: { appStoreId?: string }) {
       </View>
       <View className="items-center gap-2">
         <Text variant="h1" className="text-2xl">
-          Update required
+          {t(k.common.update.required)}
         </Text>
         <Text variant="muted" className="max-w-xs text-center text-base leading-relaxed">
-          A newer version of the app is required to continue. Please update to keep going.
+          {t(k.common.update.requiredBody)}
         </Text>
       </View>
       <Button
         onPress={() => openStore(appStoreId)}
         className="h-13 rounded-2xl px-8 shadow-lg shadow-primary/25"
       >
-        <Text className="text-base font-semibold">Update now</Text>
+        <Text className="text-base font-semibold">{t(k.common.update.updateNow)}</Text>
       </Button>
     </SafeAreaView>
   );
@@ -35,7 +38,8 @@ type ForceUpdateGateProps = {
   /** Defaults to app config `extra.minAppVersion`; pass an API-fetched value to
    *  force updates without shipping a new build. */
   minVersion?: string;
-  /** Numeric App Store id — deep-links iOS straight to the listing. */
+  /** Numeric App Store id — deep-links iOS straight to the listing. Defaults
+   *  to app config `extra.appStoreId`. */
   appStoreId?: string;
   children: React.ReactNode;
 };
