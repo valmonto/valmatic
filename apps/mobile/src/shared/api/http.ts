@@ -7,7 +7,7 @@ import {
   type InternalAxiosRequestConfig,
 } from 'axios';
 import type { AuthTokens, RefreshResponse } from '@pkg/contracts';
-import { clearTokens, getAccessToken, getRefreshToken, setTokens } from './tokens';
+import { clearTokens, cookieSession, getAccessToken, getRefreshToken, setTokens } from './tokens';
 
 /**
  * API base URL. Point EXPO_PUBLIC_API_URL at the machine running the API — on a
@@ -27,10 +27,14 @@ export function setOnAuthError(cb: (() => void) | null): void {
   onAuthError = cb;
 }
 
-export const http: AxiosInstance = create({
-  baseURL: API_BASE_URL,
-  headers: CLIENT_HEADER,
-});
+/**
+ * A phone marks itself and is handed tokens. A browser does not: it leaves
+ * the mark off, so the API answers a sign-in with httpOnly cookies, and
+ * sends them back with every request (`withCredentials`). See `cookieSession`.
+ */
+const SESSION = cookieSession ? { withCredentials: true } : { headers: CLIENT_HEADER };
+
+export const http: AxiosInstance = create({ baseURL: API_BASE_URL, ...SESSION });
 
 /**
  * Thin `.data`-unwrapping wrapper over `http` — the mobile equivalent of the
@@ -63,7 +67,7 @@ http.interceptors.request.use(async (config) => {
 
 // A bare client (no interceptors) for the refresh call itself, so a 401 from
 // /auth/refresh can't recurse back into this same logic.
-const refreshClient = create({ baseURL: API_BASE_URL, headers: CLIENT_HEADER });
+const refreshClient = create({ baseURL: API_BASE_URL, ...SESSION });
 
 // Single-flight: concurrent 401s share one refresh round-trip.
 let refreshPromise: Promise<AuthTokens | 'unrecoverable' | null> | null = null;
@@ -103,6 +107,14 @@ http.interceptors.response.use(
       return Promise.reject(error);
     }
     original._retry = true;
+
+    // A cookie session is refreshed by the SERVER, inside the request that
+    // found the access cookie expired. A 401 that still reaches the browser
+    // means there is no session left to refresh.
+    if (cookieSession) {
+      onAuthError?.();
+      return Promise.reject(error);
+    }
 
     refreshPromise ??= refreshTokens().finally(() => {
       refreshPromise = null;
