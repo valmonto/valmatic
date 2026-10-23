@@ -40,6 +40,7 @@
   "attachments.errors.corsBlocked": "Upload was blocked before reaching storage — the storage CORS origins (STORAGE_CORS_ALLOWED_ORIGINS) likely do not allow this app's origin",
   "attachments.errors.kindNotAllowed": "This file type is not accepted here",
   "attachments.errors.notFound": "Attachment not found",
+  "attachments.errors.notYours": "You can only delete files you uploaded",
   "attachments.errors.notUploaded": "The file has not finished uploading — try again",
   "attachments.errors.sizeMismatch": "Uploaded file does not match its declaration and was rejected",
   "attachments.errors.subjectNotFound": "The object this file belongs to was not found",

@@ -71,6 +71,14 @@ per-kind limits, delete the object and reject the confirm on mismatch. Limits
 live in `@pkg/contracts` constants (e.g. image 10 MB, video 200 MB, file
 25 MB) so web and mobile validate before uploading.
 
+A subject's policy can also list the declared types it accepts
+(`mimeTypes`, checked at declare). On the way out, only types a browser shows
+without running anything (raster images, video, audio, PDF) are served
+inline; SVG, HTML, XML and the rest come back as a download
+(`attachmentInlineSafe`), so an uploaded file cannot run script on the
+storage origin. Deleting: a member may remove their own uploads; admins and
+owners remove anyone's.
+
 ### 3. No cleanup of any kind
 
 `expiresAt` has a column and an index — and no job. Soft-deleted rows keep

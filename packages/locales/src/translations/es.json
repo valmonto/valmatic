@@ -40,6 +40,7 @@
   "attachments.errors.corsBlocked": "La subida fue bloqueada antes de llegar al almacenamiento — probablemente los orígenes CORS del almacenamiento (STORAGE_CORS_ALLOWED_ORIGINS) no permiten el origen de esta aplicación",
   "attachments.errors.kindNotAllowed": "Este tipo de archivo no se acepta aquí",
   "attachments.errors.notFound": "Adjunto no encontrado",
+  "attachments.errors.notYours": "Solo puedes eliminar los archivos que subiste",
   "attachments.errors.notUploaded": "El archivo no terminó de subirse — inténtalo de nuevo",
   "attachments.errors.sizeMismatch": "El archivo subido no coincide con su declaración y fue rechazado",
   "attachments.errors.subjectNotFound": "No se encontró el objeto al que pertenece este archivo",
