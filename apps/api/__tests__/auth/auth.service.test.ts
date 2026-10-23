@@ -11,6 +11,8 @@ import { getPermissionsForRole, type ActiveUser } from '@pkg/contracts';
 import { FakeLogger } from '@pkg/testing';
 import * as bcrypt from 'bcryptjs';
 import type { Redis } from 'ioredis';
+import { MemoryRedis } from './memory-redis.js';
+import { ACCOUNT_FAILURES_MAX, LoginAttempts } from '@/auth/login-attempts.js';
 import type { PinoLogger } from 'nestjs-pino';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthService } from '@/auth/auth.service.js';
@@ -34,10 +36,13 @@ const userRow = {
 
 const orgAccess = { orgId: 'org-1', userId: 'user-1', role: 'OWNER' as const };
 
+/** A visitor's address, as the route hands it on. */
+const IP = '203.0.113.7';
+
 describe('AuthService', () => {
   let service: AuthService;
   let repository: Record<string, ReturnType<typeof vi.fn>>;
-  let redis: Record<string, ReturnType<typeof vi.fn>>;
+  let redis: MemoryRedis;
   let issueTokens: ReturnType<typeof vi.fn>;
   let revokeAllForUser: ReturnType<typeof vi.fn>;
   let resolveFeatures: ReturnType<typeof vi.fn>;
@@ -53,12 +58,7 @@ describe('AuthService', () => {
       createUserWithOrganization: vi.fn(),
       updatePassword: vi.fn().mockResolvedValue(undefined),
     };
-    redis = {
-      get: vi.fn().mockResolvedValue(null),
-      incr: vi.fn().mockResolvedValue(1),
-      expire: vi.fn().mockResolvedValue(1),
-      del: vi.fn().mockResolvedValue(1),
-    };
+    redis = new MemoryRedis();
     issueTokens = vi.fn().mockResolvedValue(TOKENS);
     revokeAllForUser = vi.fn().mockResolvedValue(undefined);
     resolveFeatures = vi.fn().mockResolvedValue([]);
@@ -73,7 +73,7 @@ describe('AuthService', () => {
         get: (key: string) =>
           key === 'AUTH_REGISTRATION_ENABLED' ? registrationEnabled : undefined,
       } as unknown as ConfigService,
-      redis as unknown as Redis,
+      new LoginAttempts(redis as unknown as Redis),
       logger.as<PinoLogger>(),
     );
   });
@@ -82,7 +82,7 @@ describe('AuthService', () => {
     it('issues tokens for correct credentials', async () => {
       repository.findUserByEmail!.mockResolvedValue(userRow);
 
-      const result = await service.login({ email: userRow.email, password: PASSWORD });
+      const result = await service.login({ email: userRow.email, password: PASSWORD }, IP);
 
       expect(result.accessToken).toBe(TOKENS.accessToken);
       expect(result.response.user.email).toBe(userRow.email);
@@ -94,71 +94,148 @@ describe('AuthService', () => {
       });
     });
 
+    const visitorKey = (email: string, ip = IP) => `iam:login-attempts:${email}:${ip}`;
+    const fail = (email = userRow.email, ip = IP) =>
+      expect(service.login({ email, password: 'wrong' }, ip)).rejects.toThrow(
+        UnauthorizedException,
+      );
+
     it('clears the failed-attempt counter on success', async () => {
       repository.findUserByEmail!.mockResolvedValue(userRow);
+      await fail();
 
-      await service.login({ email: userRow.email, password: PASSWORD });
+      await service.login({ email: userRow.email, password: PASSWORD }, IP);
 
-      expect(redis.del).toHaveBeenCalledWith(`iam:login-attempts:${userRow.email}`);
+      expect(redis.values.has(visitorKey(userRow.email))).toBe(false);
     });
 
     it('rejects a wrong password and counts the attempt', async () => {
       repository.findUserByEmail!.mockResolvedValue(userRow);
 
-      await expect(service.login({ email: userRow.email, password: 'wrong' })).rejects.toThrow(
-        UnauthorizedException,
-      );
-      expect(redis.incr).toHaveBeenCalledWith(`iam:login-attempts:${userRow.email}`);
+      await fail();
+
+      expect(redis.values.get(visitorKey(userRow.email))).toBe('1');
     });
 
-    it('sets the lockout window only on the first failure', async () => {
+    it('sets the lockout window on the first failure', async () => {
       repository.findUserByEmail!.mockResolvedValue(userRow);
+      await fail();
+      expect(redis.ttl.get(visitorKey(userRow.email))).toBe(LOGIN_LOCKOUT_SECONDS);
 
-      redis.incr!.mockResolvedValue(1);
-      await expect(service.login({ email: userRow.email, password: 'wrong' })).rejects.toThrow();
-      expect(redis.expire).toHaveBeenCalledWith(expect.any(String), LOGIN_LOCKOUT_SECONDS);
-
-      redis.expire!.mockClear();
-      redis.incr!.mockResolvedValue(2);
-      await expect(service.login({ email: userRow.email, password: 'wrong' })).rejects.toThrow();
       // A second expire would slide the window forward on every attempt,
       // letting an attacker keep it open indefinitely.
-      expect(redis.expire).not.toHaveBeenCalled();
+      redis.ttl.clear();
+      await fail();
+      expect(redis.ttl.has(visitorKey(userRow.email))).toBe(false);
     });
 
-    it('locks the account once the attempt limit is reached', async () => {
+    it('locks the visitor out once the attempt limit is reached', async () => {
       repository.findUserByEmail!.mockResolvedValue(userRow);
-      redis.get!.mockResolvedValue(String(LOGIN_MAX_ATTEMPTS));
+      redis.values.set(visitorKey(userRow.email), String(LOGIN_MAX_ATTEMPTS));
 
       await expect(
         // Correct password — lockout must win regardless.
-        service.login({ email: userRow.email, password: PASSWORD }),
+        service.login({ email: userRow.email, password: PASSWORD }, IP),
       ).rejects.toThrow(UnauthorizedException);
       expect(issueTokens).not.toHaveBeenCalled();
-      expect(logger.logged('locked', 'warn')).toBe(true);
+      expect(logger.logged('blocked', 'warn')).toBe(true);
     });
 
-    it('rejects an unknown email without touching redis', async () => {
+    /**
+     * "Too many attempts" for real accounts only would tell a stranger which
+     * addresses exist, so an unknown address is counted and locked the same.
+     */
+    it('counts and locks an unknown email exactly like a real one', async () => {
       repository.findUserByEmail!.mockResolvedValue(null);
+      await fail('nobody@example.com');
+      expect(redis.values.get(visitorKey('nobody@example.com'))).toBe('1');
+
+      redis.values.set(visitorKey('nobody@example.com'), String(LOGIN_MAX_ATTEMPTS));
+      redis.values.set(visitorKey(userRow.email), String(LOGIN_MAX_ATTEMPTS));
+      const unknown = await service
+        .login({ email: 'nobody@example.com', password: PASSWORD }, IP)
+        .catch((e) => e);
+      repository.findUserByEmail!.mockResolvedValue(userRow);
+      const real = await service
+        .login({ email: userRow.email, password: PASSWORD }, IP)
+        .catch((e) => e);
+      expect(unknown.message).toBe(real.message);
+    });
+
+    /** Ten wrong passwords from a stranger used to lock the owner out. */
+    it('locks out only the visitor who failed, not the account', async () => {
+      repository.findUserByEmail!.mockResolvedValue(userRow);
+      redis.values.set(visitorKey(userRow.email, '198.51.100.9'), String(LOGIN_MAX_ATTEMPTS));
 
       await expect(
-        service.login({ email: 'nobody@example.com', password: PASSWORD }),
+        service.login({ email: userRow.email, password: PASSWORD }, '198.51.100.9'),
       ).rejects.toThrow(UnauthorizedException);
-      // Writing attempt counters for addresses that do not exist would let an
-      // attacker fill redis with arbitrary keys.
-      expect(redis.incr).not.toHaveBeenCalled();
-      expect(redis.get).not.toHaveBeenCalled();
+      await expect(
+        service.login({ email: userRow.email, password: PASSWORD }, IP),
+      ).resolves.toMatchObject({ accessToken: expect.any(String) });
+    });
+
+    /** one machine sends from a whole IPv6 /64; it is one visitor. */
+    it('counts every address of one IPv6 /64 as the same visitor', async () => {
+      repository.findUserByEmail!.mockResolvedValue(userRow);
+      for (let n = 1; n <= LOGIN_MAX_ATTEMPTS; n++) await fail(userRow.email, `2001:db8:1:2::${n}`);
+
+      await expect(
+        service.login({ email: userRow.email, password: PASSWORD }, '2001:db8:1:2::ffff'),
+      ).rejects.toThrow(UnauthorizedException);
+    });
+
+    /**
+     * Guessing one account's password from many networks stops after
+     * ACCOUNT_FAILURES_MAX in an hour — for strangers. A network the account
+     * signed in from before goes on as usual, so this cannot lock the owner out.
+     */
+    it('turns strangers away from an account guessed at from everywhere, not its owner', async () => {
+      repository.findUserByEmail!.mockResolvedValue(userRow);
+      await service.login({ email: userRow.email, password: PASSWORD }, IP);
+      for (let n = 0; n < ACCOUNT_FAILURES_MAX; n++) await fail(userRow.email, `198.51.100.${n}`);
+
+      await expect(
+        service.login({ email: userRow.email, password: PASSWORD }, '192.0.2.200'),
+      ).rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.login({ email: userRow.email, password: PASSWORD }, IP),
+      ).resolves.toMatchObject({ accessToken: expect.any(String) });
+    });
+
+    /** no account (or one with no password) takes the time a real one does. */
+    it('does real bcrypt work for an unknown address and a password-less account', async () => {
+      repository.findUserByEmail!.mockResolvedValue(null);
+      let started = Date.now();
+      await fail('nobody@example.com');
+      expect(Date.now() - started).toBeGreaterThan(50);
+
+      repository.findUserByEmail!.mockResolvedValue({ ...userRow, passwordHash: '!provider' });
+      started = Date.now();
+      await fail();
+      expect(Date.now() - started).toBeGreaterThan(50);
+      await expect(
+        service.login({ email: userRow.email, password: '!provider' }, IP),
+      ).rejects.toThrow(UnauthorizedException);
+    });
+
+    /** what was typed as the address is not written to the log. */
+    it('logs a failed sign-in without the address typed', async () => {
+      repository.findUserByEmail!.mockResolvedValue(null);
+      await fail('someone.private@example.com');
+
+      expect(JSON.stringify(logger.entries)).not.toContain('someone.private');
     });
 
     it('gives the same error for an unknown email and a wrong password', async () => {
       repository.findUserByEmail!.mockResolvedValue(null);
       const unknown = await service
-        .login({ email: 'nobody@example.com', password: PASSWORD })
+        .login({ email: 'nobody@example.com', password: PASSWORD }, IP)
         .catch((e) => e);
 
       repository.findUserByEmail!.mockResolvedValue(userRow);
       const wrong = await service
-        .login({ email: userRow.email, password: 'wrong' })
+        .login({ email: userRow.email, password: 'wrong' }, IP)
         .catch((e) => e);
 
       // Different messages would let an attacker enumerate registered addresses.
@@ -169,7 +246,7 @@ describe('AuthService', () => {
       repository.findUserByEmail!.mockResolvedValue(userRow);
       repository.findFirstOrgForUser!.mockResolvedValue(null);
 
-      await expect(service.login({ email: userRow.email, password: PASSWORD })).rejects.toThrow(
+      await expect(service.login({ email: userRow.email, password: PASSWORD }, IP)).rejects.toThrow(
         UnauthorizedException,
       );
     });

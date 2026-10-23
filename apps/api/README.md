@@ -120,6 +120,16 @@ the login/register limit for a stack that drives many logins from one address
 (the e2e runner); production keeps the default. Volumetric
 floods are the edge's job, not Node's: see `docs/edge-protection.md`.
 
+"Per IP" means per IPv4 address, or per IPv6 **/64** (`clientNetwork`): one
+machine can send from a whole /64. Wrong passwords are counted twice
+(`auth/login-attempts.ts`): per address and visitor, ten lock that visitor out
+for 15 minutes; per account, thirty from anywhere in an hour turn away every
+network that account has not signed in from before (30 days), so guessing
+from many addresses stops and the owner is not locked out. An unknown address
+is compared against a real hash of the same cost, so the time taken does not
+tell which addresses have accounts. Failed sign-ins log a short fingerprint of
+the address, never the address typed.
+
 Service errors are Nest exceptions carrying **translation keys**, not sentences:
 
 ```ts

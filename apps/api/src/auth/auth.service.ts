@@ -2,11 +2,10 @@ import {
   ForbiddenException,
   BadRequestException,
   ConflictException,
-  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { FeatureFlags, IAM_REDIS, IamService, SECURITY_CONFIG } from '@pkg/server';
+import { FeatureFlags, IamService, SECURITY_CONFIG } from '@pkg/server';
 import { ConfigService } from '@nestjs/config';
 import { k } from '@pkg/locales';
 import {
@@ -22,10 +21,20 @@ import {
 } from '@pkg/contracts';
 import { InjectLogger, PinoLogger } from '@pkg/server';
 import { AuthRepository } from './auth.repository.js';
+import { LoginAttempts, emailFingerprint } from './login-attempts.js';
 import * as bcrypt from 'bcryptjs';
-import type { Redis } from 'ioredis';
+import { randomBytes } from 'node:crypto';
 
-const { BCRYPT_ROUNDS, LOGIN_MAX_ATTEMPTS, LOGIN_LOCKOUT_SECONDS } = SECURITY_CONFIG;
+const { BCRYPT_ROUNDS } = SECURITY_CONFIG;
+
+/**
+ * A real bcrypt hash of a random secret, made once at start, at the cost
+ * every password is hashed with. Compared against when there is no hash to
+ * compare: a placeholder that is not a valid hash makes bcrypt give up at
+ * once (about 1 ms against 260 ms), and the time would tell which addresses
+ * have accounts.
+ */
+const NO_ACCOUNT_HASH = bcrypt.hashSync(randomBytes(32).toString('hex'), BCRYPT_ROUNDS);
 
 @Injectable()
 export class AuthService {
@@ -34,7 +43,7 @@ export class AuthService {
     private readonly authRepository: AuthRepository,
     private readonly featureFlags: FeatureFlags,
     private readonly configService: ConfigService,
-    @Inject(IAM_REDIS) private readonly redis: Redis,
+    private readonly attempts: LoginAttempts,
     @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
@@ -82,48 +91,32 @@ export class AuthService {
     };
   }
 
-  private loginAttemptsKey(email: string): string {
-    return `iam:login-attempts:${email.toLowerCase()}`;
-  }
-
   async login(
     dto: LoginRequest,
+    clientIp: string,
   ): Promise<{ response: LoginResponse; accessToken: string; refreshToken: string }> {
+    // Checked and counted for every address, existing or not: "too many
+    // attempts" only for real accounts would tell a stranger which exist.
+    // See `LoginAttempts` for the two counts.
+    const who = emailFingerprint(dto.email);
+    if (await this.attempts.blocked(dto.email, clientIp)) {
+      this.logger.warn({ who }, 'Login blocked — too many attempts');
+      throw new UnauthorizedException(k.auth.errors.tooManyAttempts);
+    }
+
     const user = await this.authRepository.findUserByEmail(dto.email);
-
-    // Only check lockout for existing users — no Redis writes for non-existent emails
-    if (user) {
-      const key = this.loginAttemptsKey(dto.email);
-      const attempts = await this.redis.get(key);
-
-      if (attempts && parseInt(attempts, 10) >= LOGIN_MAX_ATTEMPTS) {
-        this.logger.warn({ email: dto.email }, 'Login blocked — account temporarily locked');
-        throw new UnauthorizedException(k.auth.errors.tooManyAttempts);
-      }
-    }
-
-    if (!user) {
-      await bcrypt.compare(
-        dto.password,
-        '$2a$12$000000000000000000000000000000000000000000000000000000',
-      );
+    // The same bcrypt work whatever the address is: an unknown one, or an
+    // account without a password hash, is compared against a real hash of
+    // the same cost, so the time taken tells nothing about which exist.
+    const hash = user && user.passwordHash.startsWith('$2') ? user.passwordHash : null;
+    const passwordMatch = await bcrypt.compare(dto.password, hash ?? NO_ACCOUNT_HASH);
+    if (!user || !hash || !passwordMatch) {
+      const attempts = await this.attempts.failed(dto.email, clientIp);
+      this.logger.warn({ who, attempts }, 'Failed login attempt');
       throw new UnauthorizedException(k.auth.errors.invalidEmailOrPassword);
     }
 
-    const passwordMatch = await bcrypt.compare(dto.password, user.passwordHash);
-    if (!passwordMatch) {
-      // Increment failed attempts for this email
-      const key = this.loginAttemptsKey(dto.email);
-      const current = await this.redis.incr(key);
-      if (current === 1) {
-        await this.redis.expire(key, LOGIN_LOCKOUT_SECONDS);
-      }
-      this.logger.warn({ email: dto.email, attempts: current }, 'Failed login attempt');
-      throw new UnauthorizedException(k.auth.errors.invalidEmailOrPassword);
-    }
-
-    // Success — clear failed attempts
-    await this.redis.del(this.loginAttemptsKey(dto.email));
+    await this.attempts.succeeded(dto.email, clientIp);
 
     const orgAccess = await this.authRepository.findFirstOrgForUser(user.id);
     if (!orgAccess) {
