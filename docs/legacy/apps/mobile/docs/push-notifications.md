@@ -10,11 +10,15 @@ you finish per project.
 
 ## What's already in the app
 
-- `shared/notifications/push.ts` — foreground behavior + `registerForPushNotificationsAsync()`
+- `shared/notifications/load.ts` — `loadNotifications()`: the module, loaded lazily
+  (it throws on import in Android Expo Go and has no web implementation), with the
+  foreground handler installed on first load. Never import `expo-notifications` statically.
+- `shared/notifications/push.ts` — `registerForPushNotificationsAsync()`
   (physical-device check, Android channel, permission, Expo push token) and a reusable
-  `requestNotificationPermission()`.
-- `shared/notifications/use-push-notifications.ts` — a hook mounted in `_layout.tsx`
-  (enabled once signed in) that registers and routes notification taps.
+  `requestNotificationPermission()`. Nothing calls them yet: call them where the user
+  turns on the feature that needs pushes, never at sign-in.
+- `shared/notifications/use-notification-taps.ts` — a hook mounted in `_layout.tsx`
+  that routes notification taps. It asks for no permission.
 - `app.json` — the `expo-notifications` plugin (accent color `#6366f1`).
 
 ## Deep-linking convention
@@ -133,7 +137,7 @@ async send(tokens: string[], n: { title: string; body?: string; path?: string })
 
 ### 5. Client hookups (the two `// TODO`s)
 
-- `use-push-notifications.ts` → after `registerForPushNotificationsAsync()`, `POST /devices`
+- Where the feature is turned on → after `registerForPushNotificationsAsync()`, `POST /devices`
   (add `features/devices/api.ts`, same pattern as `features/notifications`).
 - `auth-store.ts` `signOut()` → `DELETE /devices/:token` before clearing the session.
 
