@@ -1,0 +1,57 @@
+# The dashboard: a folder of built files, served by Caddy on port 3000.
+#
+# `/api` never arrives here — the proxy in front sends it to the API.
+#
+# One rule replaces what `serve -s` did, without its flaw: a path that names a
+# file (it has an extension) gets that file or a real 404; any other path is a
+# screen of the app and gets index.html. `serve -s` answered a missing
+# /assets/old.js with index.html and 200, so a browser holding a page from
+# before a deploy ran HTML as a script and showed a blank screen.
+
+{
+	admin off
+	auto_https off
+	persist_config off
+}
+
+:3000 {
+	root * /srv
+	encode zstd gzip
+
+	header {
+		# Scripts run only from this address, so a script slipped into a page
+		# does not run. Styles may be inline (component libraries write them).
+		# Images and connections may reach https: — uploads go straight to the
+		# storage bucket, and telemetry, when configured, to its own host.
+		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+		X-Frame-Options DENY
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		Strict-Transport-Security "max-age=31536000"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		-Server
+	}
+
+	# Vite names built files by content: a new build gets new names, so these
+	# are kept for a year. Everything else (index.html above all) is checked
+	# on every visit, so a deploy shows at once.
+	# Only a file that exists: a 404 must not be kept for a year (a rollback
+	# can bring the name back).
+	@hashed {
+		path /assets/*
+		file
+	}
+	header @hashed Cache-Control "public, max-age=31536000, immutable"
+	@unhashed not path /assets/*
+	header @unhashed Cache-Control "no-cache"
+
+	@screen not path_regexp \.[^/]+$
+	handle @screen {
+		rewrite * /index.html
+		file_server
+	}
+
+	handle {
+		file_server
+	}
+}

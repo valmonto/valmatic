@@ -7,8 +7,14 @@ import { ThemeProvider } from '@/shared/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import i18n from '@/shared/lib/i18n';
 import { initTelemetry } from '@/shared/telemetry/posthog';
+import { z } from 'zod';
 
 import './styles/index';
+
+// Zod compiles object schemas with `new Function` when it can. The page's
+// Content-Security-Policy (apps/web/Caddyfile) forbids eval, so Zod would try,
+// be refused, log a violation and fall back on every load. Skip the attempt.
+z.config({ jitless: true });
 
 // Sleeping unless VITE_PUBLIC_POSTHOG_KEY is set — see shared/telemetry.
 initTelemetry();

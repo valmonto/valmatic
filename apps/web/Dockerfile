@@ -54,18 +54,18 @@ COPY packages ./packages
 COPY apps/web ./apps/web
 RUN pnpm --filter @pkg/web... build
 
-# Production stage - serve with a simple static server
-FROM node:26.12.1-alpine AS runner
-RUN npm install -g serve@14
+# Production stage: Caddy serves the built files (apps/web/Caddyfile) —
+# real 404s for missing files, long caching for hashed ones, security headers.
+FROM caddy:2-alpine AS runner
 
-WORKDIR /app
-COPY --from=builder /app/apps/web/dist ./dist
+COPY apps/web/Caddyfile /etc/caddy/Caddyfile
+COPY --from=builder /app/apps/web/dist /srv
 
 EXPOSE 3000
 
-# Not root: `serve` only reads dist/, and 3000 is above the ports only root
-# may bind. The files stay root-owned, so the server cannot rewrite the site
-# it serves. See apps/api/Dockerfile.
-USER node
+# Not root: Caddy only reads /srv, and 3000 is above the ports only root may
+# bind. The files stay root-owned, so the server cannot rewrite the site it
+# serves. See apps/api/Dockerfile.
+USER nobody
 
-CMD ["serve", "-s", "dist", "-l", "3000"]
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
