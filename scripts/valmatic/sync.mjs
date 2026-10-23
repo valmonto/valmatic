@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 /**
- * Add-ons: optional parts of the template that a project keeps or removes.
- * See docs/addons.md.
+ * What a project keeps of the template, from valmatic.json: its add-ons
+ * (optional parts) and its languages. See docs/addons.md.
  *
- *   pnpm addons:sync                 write the generated files from valmatic.json,
- *                                    and remove the add-ons it turns off
- *   pnpm addons:check                change nothing; fail if anything is out of step
+ *   pnpm valmatic:sync    write the generated files from valmatic.json, and
+ *                         remove the add-ons and languages it does not list
+ *   pnpm valmatic:check   change nothing; fail if anything is out of step
  *
  * Flags for `sync`:
  *   --new-project  allowed to rebuild the database migrations from scratch
  *                  (only for a project whose database does not exist yet)
- *   --all-off      turn every add-on off first (CI uses it to prove the rest
- *                  works without them)
+ *   --minimal      turn every add-on off and keep only English first (CI uses
+ *                  it to prove the rest works without them)
  *   --verify       afterwards run `pnpm install` and `pnpm verify`
  *
  * An add-on called `mobile` is, by convention:
@@ -31,7 +31,14 @@ const ROOT = join(import.meta.dirname, '../..');
 const CONFIG = join(ROOT, 'valmatic.json');
 const RESERVED = new Set(['api', 'web', 'worker']);
 
-const HEADER = '// Written by `pnpm addons:sync` from valmatic.json. Do not edit.\n';
+const HEADER = '// Written by `pnpm valmatic:sync` from valmatic.json. Do not edit.\n';
+const TRANSLATIONS = 'packages/locales/src/translations';
+/** The reference language: every text exists in it first. Always kept. */
+const REFERENCE_LANGUAGE = 'en';
+
+/** Set by readConfig: the languages this project keeps, in order. */
+let LANGUAGES = [];
+let DEFAULT_LANGUAGE = REFERENCE_LANGUAGE;
 
 /** Where add-ons live in each layer, and what that layer's generated file says. */
 const LAYERS = [
@@ -82,11 +89,8 @@ function webAddons(names) {
 }
 
 /** Each add-on's keys under its own name in `k`, and its texts per language. */
-function locales(names, dir) {
-  const languages = readdirSync(join(ROOT, dir, 'translations'))
-    .filter((f) => f.endsWith('.json'))
-    .map((f) => f.replace(/\.json$/, ''))
-    .sort();
+function locales(names) {
+  const languages = LANGUAGES;
   let out = HEADER;
   for (const n of names) {
     out += `import { keys as ${ident(n)} } from './addons/${n}/keys.js';\n`;
@@ -101,6 +105,21 @@ function locales(names, dir) {
   }
   out += '} as const;\n';
   return out.replace('{  }', '{}');
+}
+
+/** The kept languages, the default, and every language's texts (core and add-ons). */
+function languagesFile() {
+  let out = HEADER;
+  for (const lang of LANGUAGES) {
+    out += `import ${lang} from './translations/${lang}.json' with { type: 'json' };\n`;
+  }
+  out += "import { addonTranslations } from './addons.generated.js';\n\n";
+  out += `export const supportedLanguages = [${LANGUAGES.map((l) => `'${l}'`).join(', ')}] as const;\n\n`;
+  out += `export const defaultLanguage = '${DEFAULT_LANGUAGE}' as const;\n\n`;
+  out += 'export const translations = {\n';
+  for (const lang of LANGUAGES) out += `  ${lang}: { ...${lang}, ...addonTranslations.${lang} },\n`;
+  out += '} as const;\n';
+  return out;
 }
 
 function ident(name) {
@@ -118,7 +137,47 @@ function readConfig() {
     if (RESERVED.has(name)) fail(`"${name}" is a core app and cannot be an add-on.`);
     if (typeof on !== 'boolean') fail(`valmatic.json: addons.${name} must be true or false.`);
   }
-  return { config, addons };
+  const available = readdirSync(join(ROOT, TRANSLATIONS))
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => f.replace(/\.json$/, ''));
+  const languages = config.languages ?? available.sort();
+  const defaultLanguage = config.defaultLanguage ?? REFERENCE_LANGUAGE;
+  if (!Array.isArray(languages) || languages.some((l) => !/^[a-z]{2,3}$/.test(l))) {
+    fail('valmatic.json: languages must be a list of language codes, e.g. ["en", "lt"].');
+  }
+  if (!languages.includes(REFERENCE_LANGUAGE)) {
+    fail(`valmatic.json: languages must include "${REFERENCE_LANGUAGE}", the reference language.`);
+  }
+  if (!languages.includes(defaultLanguage)) {
+    fail(`valmatic.json: defaultLanguage "${defaultLanguage}" is not in languages.`);
+  }
+  for (const lang of languages) {
+    if (!available.includes(lang)) {
+      fail(
+        `"${lang}" has no ${TRANSLATIONS}/${lang}.json. Copy en.json to it and translate it ` +
+          "(and each add-on's en.json), then sync again.",
+      );
+    }
+  }
+  LANGUAGES = [REFERENCE_LANGUAGE, ...languages.filter((l) => l !== REFERENCE_LANGUAGE)];
+  DEFAULT_LANGUAGE = defaultLanguage;
+  return { config, addons, available };
+}
+
+/** Translation files of languages valmatic.json does not keep. */
+function unkeptTranslations() {
+  const files = [];
+  const dirs = [
+    TRANSLATIONS,
+    ...subdirs('packages/locales/src/addons').map((n) => `packages/locales/src/addons/${n}`),
+  ];
+  for (const dir of dirs) {
+    for (const f of readdirSync(join(ROOT, dir))) {
+      const lang = f.replace(/\.json$/, '');
+      if (f.endsWith('.json') && !LANGUAGES.includes(lang)) files.push(`${dir}/${f}`);
+    }
+  }
+  return files;
 }
 
 function subdirs(dir) {
@@ -148,10 +207,13 @@ function presence(listed) {
 }
 
 function expectedFiles() {
-  return LAYERS.map((layer) => {
-    const names = subdirs(`${layer.dir}/addons`);
-    return { path: `${layer.dir}/addons.generated.ts`, text: layer.write(names, layer.dir) };
-  });
+  return [
+    ...LAYERS.map((layer) => {
+      const names = subdirs(`${layer.dir}/addons`);
+      return { path: `${layer.dir}/addons.generated.ts`, text: layer.write(names, layer.dir) };
+    }),
+    { path: 'packages/locales/src/languages.generated.ts', text: languagesFile() },
+  ];
 }
 
 /** Imports of an add-on folder from anywhere but a generated file or the add-on itself. */
@@ -225,7 +287,7 @@ function check() {
       problems.push(`"${name}" exists (${paths[0]}) but valmatic.json does not list it.`);
     else if (!addons[name])
       problems.push(
-        `"${name}" is off in valmatic.json but still here: ${paths.join(', ')}. Run pnpm addons:sync.`,
+        `"${name}" is off in valmatic.json but still here: ${paths.join(', ')}. Run pnpm valmatic:sync.`,
       );
   }
   const found = presence(addons);
@@ -237,7 +299,10 @@ function check() {
   }
   for (const { path, text } of expectedFiles()) {
     const current = existsSync(join(ROOT, path)) ? readFileSync(join(ROOT, path), 'utf8') : null;
-    if (current !== text) problems.push(`${path} is out of date. Run pnpm addons:sync.`);
+    if (current !== text) problems.push(`${path} is out of date. Run pnpm valmatic:sync.`);
+  }
+  for (const path of unkeptTranslations()) {
+    problems.push(`${path} is a language valmatic.json does not keep. Run pnpm valmatic:sync.`);
   }
   for (const path of boundaryViolations()) {
     problems.push(`${path} imports an add-on folder. Only addons.generated.ts may.`);
@@ -246,15 +311,18 @@ function check() {
     for (const p of problems) console.error(`✗ ${p}`);
     process.exit(1);
   }
-  console.log('✓ add-ons in step with valmatic.json');
+  console.log('✓ add-ons and languages in step with valmatic.json');
 }
 
 function sync(flags) {
-  const { config, addons } = readConfig();
-  if (flags.has('--all-off')) {
-    for (const name of Object.keys(addons)) addons[name] = false;
-    writeFileSync(CONFIG, JSON.stringify({ ...config, addons }, null, 2) + '\n');
+  if (flags.has('--minimal')) {
+    const config = JSON.parse(readFileSync(CONFIG, 'utf8'));
+    for (const name of Object.keys(config.addons ?? {})) config.addons[name] = false;
+    config.languages = [REFERENCE_LANGUAGE];
+    config.defaultLanguage = REFERENCE_LANGUAGE;
+    writeFileSync(CONFIG, JSON.stringify(config, null, 2) + '\n');
   }
+  const { addons } = readConfig();
 
   const found = presence(addons);
   for (const [name, paths] of found) {
@@ -284,10 +352,16 @@ function sync(flags) {
     removeScripts(name);
     databaseChanged ||= touchesDatabase;
   }
+  for (const path of unkeptTranslations()) {
+    rmSync(join(ROOT, path));
+    console.log(`− ${path}`);
+  }
   for (const { path, text } of expectedFiles()) {
     writeFileSync(join(ROOT, path), text);
   }
-  console.log(`✓ generated files written (${LAYERS.length} layers)`);
+  console.log(
+    `✓ generated files written (languages: ${LANGUAGES.join(', ')}; default ${DEFAULT_LANGUAGE})`,
+  );
 
   if (databaseChanged) {
     console.log('↻ rebuilding the database migrations from the remaining tables');

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { k, supportedLanguages, type SupportedLanguage } from '@pkg/locales';
+import { k, languageName, supportedLanguages, type SupportedLanguage } from '@pkg/locales';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -22,12 +22,6 @@ import { useAuth } from '@/shared/auth/auth-context';
 import { useTheme } from '@/shared/components/theme-provider';
 import { Check, ChevronsUpDown, Languages, LogOut, Moon, Settings, Sun, User } from 'lucide-react';
 import { useMemo } from 'react';
-
-const languageNames: Record<SupportedLanguage, string> = {
-  en: 'English',
-  es: 'Español',
-  lt: 'Lietuvių',
-};
 
 export function UserActionsDropdown() {
   const { t, i18n } = useTranslation();
@@ -130,7 +124,7 @@ export function UserActionsDropdown() {
                         ) : (
                           <span className="mr-2 h-4 w-4" />
                         )}
-                        <span>{languageNames[lang]}</span>
+                        <span>{languageName(lang)}</span>
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuSubContent>

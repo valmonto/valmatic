@@ -11,14 +11,14 @@ jobs:
   verify:
     runs-on: ubuntu-latest
 
-    # Twice: as the template ships, and with every add-on removed
-    # (docs/addons.md) — so a project that turns them off still builds and
-    # passes, and no core code has come to depend on an add-on.
+    # Twice: as the template ships, and minimal — every add-on removed and
+    # only English kept (docs/addons.md) — so a project that drops them still
+    # builds and passes, and no core code has come to depend on one.
     strategy:
       fail-fast: false
       matrix:
-        addons: [kept, removed]
-    name: verify (add-ons ${{ matrix.addons }})
+        template: [full, minimal]
+    name: verify (${{ matrix.template }})
 
     # Integration suites are written with `describeIntegration`, which skips when
     # DATABASE_URL is unset. Without a database here they would never run
@@ -74,10 +74,10 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Remove every add-on
-        if: matrix.addons == 'removed'
+      - name: Remove every add-on and language but English
+        if: matrix.template == 'minimal'
         run: |
-          node scripts/addons/sync.mjs --all-off --new-project
+          node scripts/valmatic/sync.mjs --minimal --new-project
           pnpm install --no-frozen-lockfile
 
       # db:migrate runs the compiled CLI, so the package has to be built first.
