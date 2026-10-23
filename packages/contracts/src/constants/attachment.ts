@@ -32,6 +32,9 @@ export interface AttachmentPolicy {
   /** Optional per-kind ceilings BELOW the platform caps — a policy can
    *  tighten ATTACHMENT_MAX_BYTES, never exceed it. */
   maxBytes?: Partial<Record<AttachmentKindName, number>>;
+  /** Optional allowlist of declared MIME types. Absent → any type of an
+   *  accepted kind. */
+  mimeTypes?: readonly string[];
 }
 
 /**
@@ -42,7 +45,8 @@ export interface AttachmentPolicy {
  *
  * The template ships no subjects, so this map is empty; a subject WITHOUT a
  * policy accepts every kind at the platform caps. Add an entry to tighten,
- * e.g. `task: { kinds: ['image', 'file'], maxBytes: { image: 10 * 1024 * 1024 } }`.
+ * e.g. `task: { kinds: ['image', 'file'], maxBytes: { image: 10 * 1024 * 1024 } }`,
+ * or `avatar: { kinds: ['image'], mimeTypes: ['image/png', 'image/jpeg'] }`.
  */
 export const ATTACHMENT_POLICIES: Readonly<Record<string, AttachmentPolicy>> = {};
 
@@ -56,3 +60,17 @@ export const attachmentLimitFor = (subjectType: string, kind: AttachmentKindName
 /** No policy for the subject → every kind is welcome (platform caps apply). */
 export const attachmentKindAllowed = (subjectType: string, kind: AttachmentKindName): boolean =>
   ATTACHMENT_POLICIES[subjectType]?.kinds.includes(kind) ?? true;
+
+/** No allowlist for the subject → any declared type of an accepted kind. */
+export const attachmentMimeAllowed = (subjectType: string, mimeType: string): boolean =>
+  ATTACHMENT_POLICIES[subjectType]?.mimeTypes?.includes(mimeType) ?? true;
+
+/**
+ * Types a browser shows without running anything: raster images, video,
+ * audio, PDF. Anything else (SVG, HTML, XML, scripts) can carry script that
+ * runs on the storage origin when opened, so it is sent as a download.
+ */
+export const attachmentInlineSafe = (mimeType: string): boolean =>
+  /^(image\/(png|jpeg|gif|webp|avif|heic|heif)|video\/[\w.+-]+|audio\/[\w.+-]+|application\/pdf)$/i.test(
+    mimeType.split(';')[0]!.trim(),
+  );

@@ -13,6 +13,7 @@ export const attachments = {
     unknownSubject: 'attachments.errors.unknownSubject',
     subjectNotFound: 'attachments.errors.subjectNotFound',
     notFound: 'attachments.errors.notFound',
+    notYours: 'attachments.errors.notYours',
     tooLarge: 'attachments.errors.tooLarge',
     kindNotAllowed: 'attachments.errors.kindNotAllowed',
     notUploaded: 'attachments.errors.notUploaded',

@@ -1,9 +1,10 @@
 import {
   BadRequestException,
+  ForbiddenException,
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import type { ActiveUser } from '@pkg/contracts';
+import { ATTACHMENT_POLICIES, type ActiveUser } from '@pkg/contracts';
 import { FakeLogger } from '@pkg/testing';
 import type { PinoLogger } from 'nestjs-pino';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -18,6 +19,8 @@ const ATT = '44444444-4444-4444-8444-444444444444';
 const now = new Date('2026-01-01T00:00:00.000Z');
 
 const human: ActiveUser = { userId: USER, orgId: ORG, orgRole: 'OWNER', systemRole: 'USER' };
+const OTHER = '66666666-6666-4666-8666-666666666666';
+const member: ActiveUser = { userId: OTHER, orgId: ORG, orgRole: 'MEMBER', systemRole: 'USER' };
 
 const pendingRow = {
   id: ATT,
@@ -211,7 +214,50 @@ describe('AttachmentsService — the three-step protocol', () => {
     );
   });
 
+  it('refuses a declared type outside the subject policy allowlist', async () => {
+    const policies = ATTACHMENT_POLICIES as Record<string, unknown>;
+    policies.task = { kinds: ['image'], mimeTypes: ['image/png', 'image/jpeg'] };
+    try {
+      await expect(
+        service.createUpload(human, {
+          subjectType: 'task',
+          subjectId: SUBJECT,
+          kind: 'image',
+          mimeType: 'image/svg+xml',
+          sizeBytes: 1000,
+          withThumbnail: false,
+        }),
+      ).rejects.toThrow(UnprocessableEntityException);
+      expect(repo.insert).not.toHaveBeenCalled();
+    } finally {
+      delete policies.task;
+    }
+  });
+
   // --- Reads ---
+
+  it('sends a raster image inline, with its own type', async () => {
+    repo.findById!.mockResolvedValue(row({ status: 'uploaded' }));
+    await service.readUrl(human, { id: ATT });
+    expect(storage.createSignedReadUrl).toHaveBeenCalledWith(
+      expect.objectContaining({ filename: 'proof.png', responseContentType: 'image/png' }),
+    );
+  });
+
+  // An uploaded SVG or HTML file opened from its signed URL would run its
+  // script on the storage origin.
+  it('sends a type that can run script as a download, never inline', async () => {
+    repo.findById!.mockResolvedValue(
+      row({ status: 'uploaded', mimeType: 'image/svg+xml', fileName: null }),
+    );
+    await service.readUrl(human, { id: ATT });
+    expect(storage.createSignedReadUrl).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filename: 'download',
+        responseContentType: 'application/octet-stream',
+      }),
+    );
+  });
 
   it('read-url refuses pending attachments — readers only ever see uploaded', async () => {
     await expect(service.readUrl(human, { id: ATT })).rejects.toThrow(NotFoundException);
@@ -220,6 +266,28 @@ describe('AttachmentsService — the three-step protocol', () => {
   it('an attachment outside the org is indistinguishable from a missing one', async () => {
     repo.findById!.mockResolvedValue(null);
     await expect(service.readUrl(human, { id: ATT })).rejects.toThrow(NotFoundException);
+  });
+
+  // --- Delete ---
+
+  it('lets a member delete their own upload', async () => {
+    repo.findById!.mockResolvedValue(row({ status: 'uploaded', uploadedBy: OTHER }));
+    await service.delete(member, { id: ATT });
+    expect(repo.softDelete).toHaveBeenCalledWith(ATT, ORG);
+  });
+
+  it("refuses a member deleting someone else's upload, and deletes nothing", async () => {
+    repo.findById!.mockResolvedValue(row({ status: 'uploaded' }));
+    await expect(service.delete(member, { id: ATT })).rejects.toThrow(ForbiddenException);
+    expect(storage.deleteFile).not.toHaveBeenCalled();
+    expect(repo.softDelete).not.toHaveBeenCalled();
+  });
+
+  it("lets an admin or owner delete anyone's upload", async () => {
+    repo.findById!.mockResolvedValue(row({ status: 'uploaded', uploadedBy: OTHER }));
+    await service.delete({ ...human, orgRole: 'ADMIN' }, { id: ATT });
+    await service.delete(human, { id: ATT });
+    expect(repo.softDelete).toHaveBeenCalledTimes(2);
   });
 
   // --- Subject cleanup ---

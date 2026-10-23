@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Inject,
   Injectable,
   NotFoundException,
@@ -8,8 +9,10 @@ import {
 import { randomUUID } from 'node:crypto';
 import { InjectLogger, PinoLogger, StorageService } from '@pkg/server';
 import {
+  attachmentInlineSafe,
   attachmentKindAllowed,
   attachmentLimitFor,
+  attachmentMimeAllowed,
   type ActiveUser,
   type Attachment,
   type AttachmentWithUrls,
@@ -50,8 +53,12 @@ export class AttachmentsService {
   ): Promise<CreateAttachmentUploadResponse> {
     await this.requireSubject(dto.subjectType, dto.subjectId, activeUser.orgId);
 
-    // Subject policy: which kinds this subject accepts at all.
-    if (!attachmentKindAllowed(dto.subjectType, dto.kind)) {
+    // Subject policy: which kinds (and, if listed, which declared types) this
+    // subject accepts at all.
+    if (
+      !attachmentKindAllowed(dto.subjectType, dto.kind) ||
+      !attachmentMimeAllowed(dto.subjectType, dto.mimeType)
+    ) {
       throw new UnprocessableEntityException(k.attachments.errors.kindNotAllowed);
     }
 
@@ -183,6 +190,12 @@ export class AttachmentsService {
   async delete(activeUser: ActiveUser, dto: DeleteAttachmentRequest): Promise<void> {
     const row = await this.repository.findById(dto.id, activeUser.orgId);
     if (!row) throw new NotFoundException(k.attachments.errors.notFound);
+    // `attachment:delete` lets a member remove their own uploads; only
+    // admins and owners remove anyone's. Without this, any member of an org
+    // could delete every file in it.
+    if (activeUser.orgRole === 'MEMBER' && row.uploadedBy !== activeUser.userId) {
+      throw new ForbiddenException(k.attachments.errors.notYours);
+    }
 
     // Best-effort object deletes; the soft-deleted row is the sweep's
     // safety net if storage is unreachable right now.
@@ -212,12 +225,16 @@ export class AttachmentsService {
   }
 
   private async withReadUrls(row: AttachmentRow): Promise<AttachmentWithUrls> {
+    // The declared type is the uploader's claim. A type that can run script
+    // in a browser (SVG, HTML, XML) is sent as a download, never shown
+    // inline on the storage origin.
+    const inline = attachmentInlineSafe(row.mimeType);
     const [signed, thumbnailSigned] = await Promise.all([
       this.storage.createSignedReadUrl({
         bucket: row.bucket,
         key: this.keyOf(row),
-        filename: row.fileName ?? undefined,
-        responseContentType: row.mimeType,
+        filename: row.fileName ?? (inline ? undefined : 'download'),
+        responseContentType: inline ? row.mimeType : 'application/octet-stream',
       }),
       row.thumbnailBlobId
         ? this.storage.createSignedReadUrl({
