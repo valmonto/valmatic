@@ -392,6 +392,7 @@ describe('refresh rotation grace window', () => {
       get: vi.fn(),
       set: vi.fn(),
       del: vi.fn(),
+      exists: vi.fn().mockResolvedValue(1),
       smembers: vi.fn(),
       multi: vi.fn().mockReturnValue(lastMulti),
     } as unknown as Redis;
@@ -439,9 +440,57 @@ describe('refresh rotation grace window', () => {
     expect(markerCall).toBeDefined();
     expect(JSON.parse(markerCall![1] as string)).toEqual({
       rotatedTo: { accessToken: 'new-access', refreshToken: result.refreshToken },
+      rotatedAt: expect.any(Number),
     });
     // …and never deleted.
     expect(lastMulti.del).not.toHaveBeenCalled();
+  });
+
+  /** S13: "sign out everywhere" deletes the successor; the marker gives nothing then. */
+  it('gives nothing for a just-rotated token once its session was signed out', async () => {
+    const marker = JSON.stringify({
+      rotatedTo: { accessToken: 'a', refreshToken: 'successor' },
+      rotatedAt: Date.now(),
+    });
+    // refresh reads the marker, revokeToken reads it again; the successor is gone.
+    vi.mocked(redis.get)
+      .mockResolvedValueOnce(marker)
+      .mockResolvedValueOnce(marker)
+      .mockResolvedValue(null);
+    vi.mocked(redis.exists).mockResolvedValue(0);
+
+    await expect(provider.refresh({ refreshToken: 'old-token' })).rejects.toThrow(
+      UnauthorizedException,
+    );
+  });
+
+  /** S13: an old token used again after the window means two holders: the session ends. */
+  it('ends the session when a replaced token is used again after the window', async () => {
+    vi.mocked(redis.get)
+      .mockResolvedValueOnce(
+        JSON.stringify({
+          rotatedTo: { accessToken: 'a', refreshToken: 'successor' },
+          rotatedAt: Date.now() - 61_000,
+        }),
+      )
+      // revokeToken: the marker again, then the live successor session.
+      .mockResolvedValueOnce(
+        JSON.stringify({ rotatedTo: { accessToken: 'a', refreshToken: 'successor' } }),
+      )
+      .mockResolvedValueOnce(
+        JSON.stringify({
+          userId: 'user-123',
+          orgId: 'org-456',
+          orgRole: 'ADMIN',
+          systemRole: 'USER',
+          sessionStart: 1,
+        }),
+      );
+
+    await expect(provider.refresh({ refreshToken: 'old-token' })).rejects.toThrow(
+      UnauthorizedException,
+    );
+    expect(lastMulti.del).toHaveBeenCalledWith('iam:refresh:successor');
   });
 
   // Revoking a token that sits in its grace window must kill the LIVE session
