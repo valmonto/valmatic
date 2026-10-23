@@ -76,6 +76,13 @@ export const common = {
   somethingWentWrong: 'common.somethingWentWrong',
   unexpectedError: 'common.unexpectedError',
 
+  // Shown by the mobile app when the installed version is below the minimum
+  update: {
+    required: 'common.update.required',
+    requiredBody: 'common.update.requiredBody',
+    updateNow: 'common.update.updateNow',
+  },
+
   // Error test page
   errorTest: {
     title: 'common.errorTest.title',

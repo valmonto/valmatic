@@ -27,9 +27,11 @@ routing state is preserved underneath.
 
 Left unset by default, so the gate is inactive until you opt in.
 
-**Store deep-link** — Android uses the `android.package` automatically; for iOS, pass
-your numeric **App Store id** (`appStoreId`, assigned after the first App Store submission)
-so it opens the listing directly.
+**Store deep-link** — Android uses the `android.package` automatically. For iOS, set
+your numeric **App Store id** (App Store Connect → App Information → Apple ID, assigned
+when the app is created) as `expo.extra.appStoreId` in `app.json`, so "Update now" opens
+the listing directly; without it iPhone users land on the App Store's home page. The
+`appStoreId` prop overrides it.
 
 ## In-app review
 
