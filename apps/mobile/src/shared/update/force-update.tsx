@@ -18,17 +18,17 @@ function ForceUpdateScreen({ appStoreId }: { appStoreId?: string }) {
       </View>
       <View className="items-center gap-2">
         <Text variant="h1" className="text-2xl">
-          {t(k.common.update.required)}
+          {t(k.mobile.update.required)}
         </Text>
         <Text variant="muted" className="max-w-xs text-center text-base leading-relaxed">
-          {t(k.common.update.requiredBody)}
+          {t(k.mobile.update.requiredBody)}
         </Text>
       </View>
       <Button
         onPress={() => openStore(appStoreId)}
         className="h-13 rounded-2xl px-8 shadow-lg shadow-primary/25"
       >
-        <Text className="text-base font-semibold">{t(k.common.update.updateNow)}</Text>
+        <Text className="text-base font-semibold">{t(k.mobile.update.updateNow)}</Text>
       </Button>
     </SafeAreaView>
   );

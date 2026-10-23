@@ -48,8 +48,10 @@
     "release": "release-it",
     "release:dry": "release-it --dry-run",
     "prepare": "husky || true",
-    "verify": "pnpm typecheck && pnpm lint && pnpm test",
+    "verify": "pnpm addons:check && pnpm typecheck && pnpm lint && pnpm test",
     "verify:affected": "node scripts/verify/affected.mjs",
+    "addons:sync": "node scripts/addons/sync.mjs",
+    "addons:check": "node scripts/addons/sync.mjs --check",
     "deploy:status": "node scripts/deployment-status.mjs",
     "lint:mobile": "pnpm --filter @pkg/mobile run lint"
   },

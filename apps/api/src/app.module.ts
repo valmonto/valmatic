@@ -29,6 +29,7 @@ import { I18nModule } from './i18n/index.js';
 import { SeedModule } from './seed/seed.module.js';
 import { MailModule } from './mail/mail.module.js';
 import { validateEnv } from './config/index.js';
+import { addonModules } from './addons.generated.js';
 
 @Module({
   imports: [
@@ -129,6 +130,8 @@ import { validateEnv } from './config/index.js';
     InvitationModule,
     McpModule,
     SeedModule.forApp(),
+    // Optional parts this project keeps (valmatic.json, docs/addons.md).
+    ...addonModules,
     // LAST on purpose: global guards run in scan order and the root module's
     // own providers scan before any import's, so the throttler must live in
     // an imported module placed after the IAM modules to see req.user. See

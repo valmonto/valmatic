@@ -13,6 +13,7 @@ import {
 } from '@pkg/server';
 import { WorkerQueuesModule } from './queues/index.js';
 import { validateEnv } from './config/index.js';
+import { addonModules } from './addons.generated.js';
 
 @Module({
   imports: [
@@ -53,6 +54,8 @@ import { validateEnv } from './config/index.js';
     // processing nothing.
     RedisModule,
     WorkerQueuesModule,
+    // Optional parts this project keeps (valmatic.json, docs/addons.md).
+    ...addonModules,
     HealthModule,
   ],
   controllers: [],

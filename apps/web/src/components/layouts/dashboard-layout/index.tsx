@@ -25,9 +25,9 @@ import {
   Hexagon,
   ListTodo,
   Blocks,
-  Smartphone,
   KeyRound,
 } from 'lucide-react';
+import { addons } from '@/addons.generated';
 
 const navGroups = [
   {
@@ -49,7 +49,8 @@ const navGroups = [
     labelKey: k.common.nav.developer,
     items: [
       { titleKey: k.common.nav.components, url: '/components', icon: Blocks },
-      { titleKey: k.common.nav.mobile, url: '/mobile', icon: Smartphone },
+      // Links from the add-ons this project keeps (docs/addons.md).
+      ...addons.flatMap((addon) => addon.links ?? []),
     ],
   },
 ];

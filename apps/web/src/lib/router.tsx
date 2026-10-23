@@ -7,7 +7,7 @@ import { jobsRoutes } from '@/features/jobs';
 import { notificationsRoutes } from '@/features/notifications';
 import { authRoutes } from '@/features/auth';
 import { adminRoutes } from '@/features/admin';
-import { mobileDemoRoutes } from '@/features/mobile-demo';
+import { addons } from '@/addons.generated';
 import { invitationRoutes } from '@/features/invitations';
 
 const router = createBrowserRouter([
@@ -15,8 +15,8 @@ const router = createBrowserRouter([
   ...authRoutes,
   // Invitation accept - public, no app shell (a new invitee has no account yet)
   ...invitationRoutes,
-  // Mobile demo - full-viewport phone layout, no app shell
-  ...mobileDemoRoutes,
+  // Add-ons' full-viewport pages, no app shell (valmatic.json, docs/addons.md)
+  ...addons.flatMap((addon) => addon.rootRoutes ?? []),
   // App routes - with main layout
   {
     path: '/',
@@ -30,6 +30,7 @@ const router = createBrowserRouter([
       ...jobsRoutes,
       ...adminRoutes,
       ...notificationsRoutes,
+      ...addons.flatMap((addon) => addon.routes ?? []),
       {
         path: 'settings',
         lazy: () => import('@/pages/settings.page').then((m) => ({ Component: m.default })),

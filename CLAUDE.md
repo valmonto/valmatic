@@ -101,6 +101,12 @@ spans the whole repo belongs here.
 - **Dependency versions live in the `pnpm-workspace.yaml` catalog.** Never
   `pnpm add` a version into a package.json directly — add an exact pin to the
   catalog section it belongs to and reference it as `catalog:`.
+- **Optional parts are add-ons, and core never imports them.** Anything a
+  project may not want (the mobile app now, billing later) lives in
+  `addons/<name>/` folders listed in `valmatic.json`; core reads them only
+  through each layer's generated `addons.generated.ts`. Mobile-only code goes
+  in the `mobile` add-on, not in core. See `docs/addons.md`;
+  `pnpm addons:check` enforces it.
 - **Every tenant query is org-scoped, and the boundary gets a test.** New
   repository methods take `orgId` and join on it; add a two-tenant
   integration test that proves reads and writes stay inside. Two real
@@ -113,6 +119,7 @@ pnpm dev                     # everything
 pnpm --filter @pkg/api dev   # one workspace (names are @pkg/*, incl. apps)
 pnpm db:migrate              # after building @pkg/database
 pnpm db:seed                 # NODE_ENV picks the strategy
+pnpm addons:sync             # after changing valmatic.json (docs/addons.md)
 ```
 
 Local integration testing: Postgres on 127.0.0.1:5432, then
