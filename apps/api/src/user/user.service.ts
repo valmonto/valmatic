@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectLogger, PinoLogger } from '@pkg/server';
+import { IamService, InjectLogger, PinoLogger } from '@pkg/server';
 import * as bcrypt from 'bcryptjs';
 import { k } from '@pkg/locales';
 import { SECURITY_CONFIG } from '@pkg/server';
@@ -26,6 +26,7 @@ const { BCRYPT_ROUNDS } = SECURITY_CONFIG;
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly iamService: IamService,
     @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
@@ -142,6 +143,13 @@ export class UserService {
       throw new NotFoundException(k.users.errors.notFound);
     }
 
+    // A role is carried in every access token for its 15 minutes: a demoted
+    // admin kept admin rights until it expired. Their sessions end, and
+    // the next sign-in carries the new role.
+    if (dto.role && dto.role !== existing.role) {
+      await this.iamService.auth.revokeAllForUser(dto.id);
+    }
+
     this.logger.info({ userId: dto.id, orgId: activeUser.orgId }, 'User updated');
 
     return {
@@ -171,6 +179,8 @@ export class UserService {
 
     // Remove from organization
     await this.userRepository.removeUserFromOrg(userId, activeUser.orgId);
+    // Their sessions end now, not when the access token runs out.
+    await this.iamService.auth.revokeAllForUser(userId);
 
     // Check if user is in any other orgs, if not delete the user entirely
     const orgCount = await this.userRepository.countUserOrgs(userId);
