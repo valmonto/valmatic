@@ -86,6 +86,11 @@ export const auth = {
     accountDisabled: 'auth.errors.accountDisabled',
     tooManyRequests: 'auth.errors.tooManyRequests',
     registrationDisabled: 'auth.errors.registrationDisabled',
+    providerUnavailable: 'auth.errors.providerUnavailable',
+    providerTokenInvalid: 'auth.errors.providerTokenInvalid',
+    providerNotForPlatformAdmins: 'auth.errors.providerNotForPlatformAdmins',
+    providerNotLinked: 'auth.errors.providerNotLinked',
+    providerSignInFailed: 'auth.errors.providerSignInFailed',
     unableToCreateAccount: 'auth.errors.unableToCreateAccount',
     userNotFound: 'auth.errors.userNotFound',
     noOrgAccess: 'auth.errors.noOrgAccess',
@@ -112,6 +117,9 @@ export const auth = {
   },
 
   // Settings page
+  continueWithApple: 'auth.continueWithApple',
+  continueWithGoogle: 'auth.continueWithGoogle',
+  or: 'auth.or',
   settings: {
     title: 'auth.settings.title',
     description: 'auth.settings.description',
@@ -127,5 +135,8 @@ export const auth = {
     deleteAccountWarning: 'auth.settings.deleteAccountWarning',
     deleteAccountPassword: 'auth.settings.deleteAccountPassword',
     deletingAccount: 'auth.settings.deletingAccount',
+    deleteAccountWithProvider: 'auth.settings.deleteAccountWithProvider',
+    confirmWithApple: 'auth.settings.confirmWithApple',
+    confirmWithGoogle: 'auth.settings.confirmWithGoogle',
   },
 } as const;

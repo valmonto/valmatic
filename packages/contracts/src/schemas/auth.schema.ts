@@ -1,7 +1,11 @@
 import { z } from 'zod';
 import { EmptyRequestSchema } from './common.schema.js';
 import { PermissionSchema } from './permission.schema.js';
-import { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '../constants/index.js';
+import {
+  AUTH_IDENTITY_PROVIDERS,
+  PASSWORD_ERROR_MESSAGE,
+  PASSWORD_REGEX,
+} from '../constants/index.js';
 import { OrganizationUserRoleSchema } from './organization.schema.js';
 import { SystemRoleSchema } from './user.schema.js';
 import { FEATURE_FLAGS } from '../constants/index.js';
@@ -93,6 +97,14 @@ export const CurrentUserResponseSchema = z
     /** Whether the owner confirmed the address by opening an emailed link. */
     emailVerified: z.boolean(),
     /**
+     * Whether the account has a password. One made through Apple or Google
+     * has none until a reset sets one; it confirms risky acts with the
+     * provider instead.
+     */
+    hasPassword: z.boolean(),
+    /** The Apple and Google accounts linked to this one. */
+    providers: z.array(z.enum(AUTH_IDENTITY_PROVIDERS)),
+    /**
      * What this user may do in this organization, resolved server-side.
      *
      * Sent rather than derived so a client never holds its own copy of the
@@ -154,6 +166,10 @@ export type ChangePasswordResponse = z.infer<typeof ChangePasswordResponseSchema
 export const AuthOptionsResponseSchema = z.object({
   /** Whether this deployment can send the "forgot my password" email. */
   passwordResetEnabled: z.boolean(),
+  /** Whether anyone may create an account (`AUTH_REGISTRATION_ENABLED`). */
+  registrationEnabled: z.boolean(),
+  /** The sign-in providers this deployment can verify. No ids, no secrets. */
+  providers: z.array(z.enum(AUTH_IDENTITY_PROVIDERS)),
 });
 
 export type AuthOptionsResponse = z.infer<typeof AuthOptionsResponseSchema>;

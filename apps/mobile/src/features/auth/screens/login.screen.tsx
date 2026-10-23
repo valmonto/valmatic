@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from '@/shared/components/safe-area-view';
 import { AxiosError } from 'axios';
 import { Lock, Mail, type LucideIcon } from 'lucide-react-native';
-import type { LoginRequest } from '@pkg/contracts';
+import type { AuthIdentityProvider, LoginRequest } from '@pkg/contracts';
 // Client-side validation for instant field errors; the server validates too.
 import { LoginRequestSchema } from '@pkg/contracts/schemas';
 
@@ -18,6 +18,8 @@ import { Input } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
 import { cn } from '@/shared/lib/utils';
 import { useAuthStore } from '@/shared/auth/auth-store';
+import { OrDivider, ProviderButtons } from '../components/provider-buttons';
+import { askProvider, usableProviders } from '../lib/providers';
 
 // Dep-free react-hook-form resolver backed by the shared Zod contract.
 const resolver: Resolver<LoginRequest> = (values) => {
@@ -34,6 +36,12 @@ const resolver: Resolver<LoginRequest> = (values) => {
   }
   return { values: {}, errors: errors as never };
 };
+
+/** The translation key the server answered with, if it answered with one. */
+function serverMessageKey(error: unknown): string | undefined {
+  const message = error instanceof AxiosError ? error.response?.data?.message : undefined;
+  return typeof message === 'string' ? message : undefined;
+}
 
 function messageForError(error: unknown): string {
   if (error instanceof AxiosError) {
@@ -70,18 +78,38 @@ function Field({
 }
 
 export default function LoginScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
-  // "Forgot password?" only where the server can actually send the email.
+  // "Forgot password?" only where the server can actually send the email,
+  // and a provider button only where the server and this build can use it.
   const [canResetPassword, setCanResetPassword] = useState(false);
+  const [providers, setProviders] = useState<AuthIdentityProvider[]>([]);
   useEffect(() => {
     authApi
       .options()
-      .then((o) => setCanResetPassword(o.passwordResetEnabled))
+      .then((o) => {
+        setCanResetPassword(o.passwordResetEnabled);
+        setProviders(usableProviders(o.providers));
+      })
       .catch(() => setCanResetPassword(false));
   }, []);
   const signIn = useAuthStore((s) => s.signIn);
+  const signInWithProvider = useAuthStore((s) => s.signInWithProvider);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [providerBusy, setProviderBusy] = useState(false);
+
+  async function onProvider(provider: AuthIdentityProvider) {
+    setServerError(null);
+    setProviderBusy(true);
+    try {
+      const proof = await askProvider(provider);
+      if (proof) await signInWithProvider({ ...proof, locale: i18n.language });
+    } catch (error) {
+      setServerError(t(serverMessageKey(error) ?? k.auth.errors.providerSignInFailed));
+    } finally {
+      setProviderBusy(false);
+    }
+  }
 
   const {
     control,
@@ -125,6 +153,17 @@ export default function LoginScreen() {
               </Text>
             </View>
           </View>
+
+          {providers.length > 0 ? (
+            <View className="gap-5">
+              <ProviderButtons
+                providers={providers}
+                onPress={(p) => void onProvider(p)}
+                disabled={providerBusy || isSubmitting}
+              />
+              <OrDivider />
+            </View>
+          ) : null}
 
           {/* Form */}
           <View className="gap-3.5">

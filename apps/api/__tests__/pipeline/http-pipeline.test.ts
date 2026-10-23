@@ -447,8 +447,12 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
   it('says whether a password reset can be emailed, and answers a request the same either way', async () => {
     const options = await app.inject({ method: 'GET', url: '/api/auth/options' });
     expect(options.statusCode).toBe(200);
-    // No mail service in the test stack.
-    expect(options.json()).toEqual({ passwordResetEnabled: false });
+    // No mail service and no sign-in provider in the test stack.
+    expect(options.json()).toEqual({
+      passwordResetEnabled: false,
+      registrationEnabled: true,
+      providers: [],
+    });
 
     for (const email of ['nobody-here@pipeline.test', 'someone@pipeline.test']) {
       const res = await app.inject({
@@ -558,6 +562,19 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
     const me = await app.inject({ method: 'GET', url: '/api/auth/me', headers: bearer(session) });
     expect(me.statusCode).toBe(401);
     expect((await login(app, email)).statusCode).toBe(401);
+  });
+
+  it('hands out a sign-in nonce, and refuses a provider it has no client id for', async () => {
+    const nonce = await app.inject({ method: 'POST', url: '/api/auth/provider/nonce' });
+    expect(nonce.statusCode, nonce.body).toBe(201);
+    expect(nonce.json<{ nonce: string }>().nonce).toMatch(/^[\w-]{40,}$/);
+
+    const signIn = await app.inject({
+      method: 'POST',
+      url: '/api/auth/provider',
+      payload: { provider: 'google', identityToken: 'not-a-real-token' },
+    });
+    expect(signIn.statusCode).toBe(503);
   });
 
   it('rejects a bad password with 401 and never leaks which half was wrong', async () => {

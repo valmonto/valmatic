@@ -54,6 +54,7 @@ describe('AuthService', () => {
       findUserByEmail: vi.fn().mockResolvedValue(null),
       findUserById: vi.fn().mockResolvedValue(null),
       findUserWithOrg: vi.fn().mockResolvedValue(null),
+      findProvidersForUser: vi.fn().mockResolvedValue([]),
       findFirstOrgForUser: vi.fn().mockResolvedValue(orgAccess),
       createUserWithOrganization: vi.fn(),
       updatePassword: vi.fn().mockResolvedValue(undefined),
@@ -388,6 +389,7 @@ describe('AuthService', () => {
       role: 'OWNER',
       systemRole: 'USER',
       emailVerified: true,
+      hasPassword: true,
       orgId: ORG_UUID,
     };
 

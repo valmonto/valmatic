@@ -11,6 +11,7 @@ export * from './notification.js';
 export * from './api-key.js';
 export * from './attachment.js';
 export * from './invitation.js';
+export * from './user-identity.js';
 
 // Relations
 export * from './relations.js';

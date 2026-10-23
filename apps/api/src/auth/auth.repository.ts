@@ -13,8 +13,10 @@ import {
   OrganizationUser,
   OrganizationUserRole,
   SystemRole,
+  userIdentity,
 } from '@pkg/database';
 import { k } from '@pkg/locales';
+import type { AuthIdentityProvider } from '@pkg/contracts';
 
 @Injectable()
 export class AuthRepository {
@@ -102,6 +104,7 @@ export class AuthRepository {
     systemRole: SystemRole;
     orgId: string;
     emailVerified: boolean;
+    hasPassword: boolean;
   } | null> {
     const result = await this.dbClient.db
       .select({
@@ -113,6 +116,7 @@ export class AuthRepository {
         systemRole: user.systemRole,
         orgId: organizationUser.orgId,
         emailVerifiedAt: user.emailVerifiedAt,
+        passwordHash: user.passwordHash,
       })
       .from(user)
       .innerJoin(
@@ -128,8 +132,23 @@ export class AuthRepository {
 
     const row = result[0];
     if (!row) return null;
-    const { emailVerifiedAt, ...rest } = row;
-    return { ...rest, emailVerified: emailVerifiedAt !== null };
+    const { emailVerifiedAt, passwordHash, ...rest } = row;
+    return {
+      ...rest,
+      emailVerified: emailVerifiedAt !== null,
+      // Only a bcrypt hash is a password; an account made through Apple or
+      // Google holds a marker no password matches.
+      hasPassword: passwordHash.startsWith('$2'),
+    };
+  }
+
+  /** The Apple and Google accounts linked to this one. */
+  async findProvidersForUser(userId: string): Promise<AuthIdentityProvider[]> {
+    const rows = await this.dbClient.db
+      .select({ provider: userIdentity.provider })
+      .from(userIdentity)
+      .where(eq(userIdentity.userId, userId));
+    return [...new Set(rows.map((row) => row.provider))];
   }
 
   async findUserById(userId: string): Promise<User | null> {

@@ -41,7 +41,7 @@ export class AccountController {
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<DeleteAccountResponse> {
-    await this.accountService.deleteOwnAccount(activeUser.userId, dto.password);
+    await this.accountService.deleteOwnAccount(activeUser.userId, dto);
 
     // Refresh tokens are revoked by the service; the access token that made
     // this call must not outlive the account either.

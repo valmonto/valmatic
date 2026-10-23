@@ -14,7 +14,8 @@
       "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.anonymous.valmatic",
       "supportsTablet": true,
-      "associatedDomains": ["applinks:app.valmonto.com"]
+      "associatedDomains": ["applinks:app.valmonto.com"],
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
@@ -40,6 +41,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-apple-authentication",
       [
         "expo-splash-screen",
         {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -7,6 +7,10 @@ import { Lock } from 'lucide-react-native';
 import { k } from '@pkg/locales';
 import { SafeAreaView } from '@/shared/components/safe-area-view';
 import { useAuthStore } from '@/shared/auth/auth-store';
+import type { AuthIdentityProvider } from '@pkg/contracts';
+import { authApi } from '../api';
+import { ProviderButton } from '../components/provider-buttons';
+import { askProvider, usableProviders } from '../lib/providers';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { Input } from '@/components/ui/input';
@@ -27,6 +31,37 @@ export default function DeleteAccountScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const deleteAccount = useAuthStore((s) => s.deleteAccount);
+  const user = useAuthStore((s) => s.user);
+  // An account made through Apple or Google has no password to type: it
+  // confirms with a fresh sign-in through a provider linked to it.
+  const hasPassword = user?.hasPassword ?? true;
+  const [providers, setProviders] = useState<AuthIdentityProvider[]>([]);
+  useEffect(() => {
+    if (hasPassword) return;
+    authApi
+      .options()
+      .then((o) =>
+        setProviders(usableProviders(o.providers).filter((p) => user?.providers.includes(p))),
+      )
+      .catch(() => setProviders([]));
+  }, [hasPassword, user?.providers]);
+
+  async function onProvider(provider: AuthIdentityProvider) {
+    setDeleting(true);
+    setError(null);
+    try {
+      const proof = await askProvider(provider);
+      if (!proof) {
+        setDeleting(false);
+        return;
+      }
+      const { fullName: _unused, ...rest } = proof;
+      await deleteAccount(rest);
+    } catch (e) {
+      setError(messageKeyOf(e));
+      setDeleting(false);
+    }
+  }
   const [password, setPassword] = useState('');
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +71,7 @@ export default function DeleteAccountScreen() {
     setDeleting(true);
     setError(null);
     try {
-      await deleteAccount(password);
+      await deleteAccount({ password });
     } catch (e) {
       setError(messageKeyOf(e));
       setDeleting(false);
@@ -58,41 +93,68 @@ export default function DeleteAccountScreen() {
               {t(k.auth.settings.deleteAccountDescription)}
             </Text>
             <Text variant="muted" className="text-center text-base">
-              {t(k.auth.settings.deleteAccountWarning)}
+              {t(
+                hasPassword
+                  ? k.auth.settings.deleteAccountWarning
+                  : k.auth.settings.deleteAccountWithProvider,
+              )}
             </Text>
           </View>
 
-          <View className="gap-3.5">
-            <View className="h-13 flex-row items-center gap-3 rounded-2xl border border-border bg-card px-4">
-              <Icon as={Lock} size={18} className="text-muted-foreground" />
-              <Input
-                className="h-full flex-1 border-0 bg-transparent px-0 shadow-none"
-                placeholder={t(k.auth.settings.deleteAccountPassword)}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                autoCapitalize="none"
-                autoComplete="current-password"
-                editable={!deleting}
-                onSubmitEditing={onSubmit}
-              />
+          {!hasPassword ? (
+            <View className="gap-3">
+              {providers.map((provider) => (
+                <ProviderButton
+                  key={provider}
+                  provider={provider}
+                  label={t(
+                    provider === 'apple'
+                      ? k.auth.settings.confirmWithApple
+                      : k.auth.settings.confirmWithGoogle,
+                  )}
+                  onPress={() => void onProvider(provider)}
+                  disabled={deleting}
+                />
+              ))}
+              {error ? (
+                <View className="rounded-xl bg-destructive/10 px-4 py-3">
+                  <Text className="text-sm font-medium text-destructive">{t(error)}</Text>
+                </View>
+              ) : null}
             </View>
-            {error ? (
-              <View className="rounded-xl bg-destructive/10 px-4 py-3">
-                <Text className="text-sm font-medium text-destructive">{t(error)}</Text>
+          ) : (
+            <View className="gap-3.5">
+              <View className="h-13 flex-row items-center gap-3 rounded-2xl border border-border bg-card px-4">
+                <Icon as={Lock} size={18} className="text-muted-foreground" />
+                <Input
+                  className="h-full flex-1 border-0 bg-transparent px-0 shadow-none"
+                  placeholder={t(k.auth.settings.deleteAccountPassword)}
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                  autoCapitalize="none"
+                  autoComplete="current-password"
+                  editable={!deleting}
+                  onSubmitEditing={onSubmit}
+                />
               </View>
-            ) : null}
-            <Button
-              variant="destructive"
-              onPress={onSubmit}
-              disabled={deleting || !password}
-              className="mt-2 h-13 rounded-2xl"
-            >
-              <Text className="text-base font-semibold">
-                {deleting ? t(k.auth.settings.deletingAccount) : t(k.auth.settings.deleteAccount)}
-              </Text>
-            </Button>
-          </View>
+              {error ? (
+                <View className="rounded-xl bg-destructive/10 px-4 py-3">
+                  <Text className="text-sm font-medium text-destructive">{t(error)}</Text>
+                </View>
+              ) : null}
+              <Button
+                variant="destructive"
+                onPress={onSubmit}
+                disabled={deleting || !password}
+                className="mt-2 h-13 rounded-2xl"
+              >
+                <Text className="text-base font-semibold">
+                  {deleting ? t(k.auth.settings.deletingAccount) : t(k.auth.settings.deleteAccount)}
+                </Text>
+              </Button>
+            </View>
+          )}
 
           <Button variant="ghost" onPress={() => router.back()} disabled={deleting}>
             <Text className="font-semibold text-primary">{t(k.common.actions.cancel)}</Text>

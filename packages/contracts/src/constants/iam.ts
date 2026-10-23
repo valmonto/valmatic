@@ -20,3 +20,12 @@ export const PASSWORD_ERROR_MESSAGE =
 export const ORGANIZATION_USER_ROLES = ['OWNER', 'ADMIN', 'MEMBER'] as const;
 
 export const SYSTEM_ROLES = ['USER', 'MODERATOR', 'ADMIN'] as const;
+
+/**
+ * Sign-in providers. Each is off until the API has its client id
+ * (`AUTH_APPLE_CLIENT_ID`, `AUTH_GOOGLE_CLIENT_ID`); `GET /auth/options` says
+ * which are on, and the apps draw only those buttons.
+ */
+export const AUTH_IDENTITY_PROVIDERS = ['apple', 'google'] as const;
+
+export type AuthIdentityProvider = (typeof AUTH_IDENTITY_PROVIDERS)[number];
