@@ -34,6 +34,7 @@ import { mcp } from './mcp.js';
 import { common } from './common.js';
 import { email } from './email.js';
 import { validation } from './validation.js';
+import { addonKeys } from '../addons.generated.js';
 
 export const k = {
   admin,
@@ -48,4 +49,6 @@ export const k = {
   common,
   email,
   validation,
+  // Each add-on's keys under its own name, e.g. `k.mobile` (docs/addons.md).
+  ...addonKeys,
 } as const;

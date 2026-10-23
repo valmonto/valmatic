@@ -2,17 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { k } from '@pkg/locales';
-import {
-  Bell,
-  LayoutDashboard,
-  ListTodo,
-  LogOut,
-  Moon,
-  Settings,
-  Smartphone,
-  Sun,
-  Users,
-} from 'lucide-react';
+import { Bell, LayoutDashboard, ListTodo, LogOut, Moon, Settings, Sun, Users } from 'lucide-react';
 import {
   CommandDialog,
   CommandEmpty,
@@ -24,6 +14,7 @@ import {
 } from '@/components/ui/command';
 import { useTheme } from '@/shared/components/theme-provider';
 import { useAuth } from '@/shared/auth/auth-context';
+import { addons } from '@/addons.generated';
 
 const OPEN_EVENT = 'command-menu:open';
 
@@ -72,7 +63,13 @@ export function CommandMenu() {
     { label: t(k.jobs.jobs), icon: ListTodo, to: '/jobs' },
     { label: t(k.notifications.notifications), icon: Bell, to: '/notifications' },
     { label: t(k.common.nav.settings), icon: Settings, to: '/settings' },
-    { label: t(k.common.nav.mobile), icon: Smartphone, to: '/mobile' },
+    ...addons.flatMap((addon) =>
+      (addon.links ?? []).map((link) => ({
+        label: t(link.titleKey),
+        icon: link.icon,
+        to: link.url,
+      })),
+    ),
   ];
 
   return (

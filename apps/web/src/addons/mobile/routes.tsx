@@ -1,7 +1,7 @@
 import type { RouteObject } from 'react-router';
 
 /**
- * Route subtree owned by the mobile-demo feature. Mounted at the router root
+ * Route subtree owned by the mobile add-on. Mounted at the router root
  * (outside the dashboard shell) so the phone layout owns the whole viewport.
  */
 export const mobileDemoRoutes: RouteObject[] = [

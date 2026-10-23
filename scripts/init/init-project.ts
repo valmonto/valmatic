@@ -282,9 +282,15 @@ async function main(): Promise<void> {
   const licenseChoice = await prompt('\nSelect (1-2): ');
   const usesMIT = licenseChoice !== '2';
 
+  // Optional parts (valmatic.json, docs/addons.md). Off unless asked for:
+  // most products start web-only, and an add-on can be copied in later.
+  const wantsMobile = /^y(es)?$/i.test(
+    await prompt('\n📱 Include the mobile app (apps/mobile, Expo)? [y/N]: '),
+  );
+
   // Mobile app identity (skippable — Enter accepts the shown default).
   let mobileConfig: MobileConfig | null = null;
-  const hasMobile = existsSync(join(ROOT_DIR, 'apps/mobile/app.json'));
+  const hasMobile = wantsMobile && existsSync(join(ROOT_DIR, 'apps/mobile/app.json'));
   if (hasMobile) {
     console.log('\n📱 Mobile app (apps/mobile) — press Enter to accept defaults:');
     const defName = toDisplayName(projectName);
@@ -378,9 +384,21 @@ See LICENSES/boilerplate-MIT.txt for details.
     }
   }
 
+  // Keep or remove the add-ons. A new project has no database yet, so the
+  // migrations may be rebuilt without the removed add-ons' tables.
+  const { execSync } = await import('node:child_process');
+  const configPath = join(ROOT_DIR, 'valmatic.json');
+  const valmatic = JSON.parse(readFileSync(configPath, 'utf-8')) as {
+    addons: Record<string, boolean>;
+  };
+  valmatic.addons.mobile = wantsMobile;
+  writeFileSync(configPath, JSON.stringify(valmatic, null, 2) + '\n', 'utf-8');
+  console.log(`\n🧩 Add-ons: ${JSON.stringify(valmatic.addons)}`);
+  execSync('node scripts/addons/sync.mjs --new-project', { cwd: ROOT_DIR, stdio: 'inherit' });
+  execSync('pnpm install', { cwd: ROOT_DIR, stdio: 'inherit' });
+
   // Regenerate third-party licenses
   console.log('\n📦 Regenerating third-party licenses...');
-  const { execSync } = await import('node:child_process');
   try {
     execSync('pnpm licenses:generate', { cwd: ROOT_DIR, stdio: 'inherit' });
   } catch {

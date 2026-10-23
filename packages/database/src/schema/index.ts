@@ -13,5 +13,8 @@ export * from './attachment.js';
 export * from './invitation.js';
 export * from './user-identity.js';
 
+// Optional parts this project keeps (valmatic.json, docs/addons.md).
+export * from './addons.generated.js';
+
 // Relations
 export * from './relations.js';
