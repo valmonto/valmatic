@@ -40,8 +40,10 @@ deploy builds them on the serving box and their speed is deploy time:
 - **pnpm's pre-run deps check is off** (`pnpm_config_verify_deps_before_run=false`)
   inside the builds: the pinned manifest times would otherwise make every
   `pnpm run` attempt a fresh install and fail without a TTY.
-- **The api, worker and web containers run as `node`, not root.** None of
-  them writes to disk (logs go to stdout, attachments to object storage), so
+- **The api and worker containers run as `node`, the web container as
+  `nobody`, not root.** The web container is Caddy serving the built files
+  (`apps/web/Caddyfile`): real 404s for missing files, a year of caching for
+  hashed ones, security headers. None of them writes to disk (logs go to stdout, attachments to object storage), so
   their files stay root-owned and read-only to the process. The `migrate`
   service runs from the api image and is `node` too. A future feature that
   needs a writable path gets a `node`-owned directory in the Dockerfile, or a

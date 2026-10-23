@@ -8,6 +8,7 @@ import fastifyCookie from '@fastify/cookie';
 import fastifyHelmet from '@fastify/helmet';
 
 import { AppModule } from './app.module.js';
+import { CORS_ALLOWED_HEADERS, corsOrigins } from './config/cors.js';
 
 /** What an HTML form can send. No route takes any of them (see below). */
 const FORM_TYPES = new Set([
@@ -37,6 +38,10 @@ export async function createApp(): Promise<NestFastifyApplication> {
     new FastifyAdapter({ trustProxy: process.env.TRUST_PROXY === 'true' }),
     {
       bufferLogs: true,
+      // Keeps each JSON request's bytes as they arrived (`request.rawBody`).
+      // A webhook (payment provider, app store) signs those exact bytes; the
+      // parsed object written out again would not be the same string.
+      rawBody: true,
     },
   );
 
@@ -94,22 +99,13 @@ export async function createApp(): Promise<NestFastifyApplication> {
     parseOptions: {},
   });
 
-  // CORS — browsers (e.g. the Expo web build at localhost:8081, or any SPA on a
-  // different origin) send a preflight that must be allowed. Native apps don't
-  // enforce CORS, so this only matters for web clients. Set CORS_ORIGINS to a
-  // comma-separated allowlist in production; in dev we reflect localhost/LAN.
-  const corsOrigins = config.get<string>('CORS_ORIGINS');
+  // CORS — browsers send a preflight that must be allowed. Origins and the
+  // allowed request headers are set in config/cors.ts.
   app.enableCors({
-    origin: corsOrigins
-      ? corsOrigins.split(',').map((o) => o.trim())
-      : [
-          /^http:\/\/localhost:\d+$/,
-          /^http:\/\/127\.0\.0\.1:\d+$/,
-          /^http:\/\/192\.168\.\d+\.\d+:\d+$/,
-        ],
+    origin: corsOrigins(config.get<string>('CORS_ORIGINS')),
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Client'],
+    allowedHeaders: [...CORS_ALLOWED_HEADERS],
   });
 
   app.setGlobalPrefix('api', { exclude: ['health'] });
