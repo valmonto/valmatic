@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { PASSWORD_REGEX } from '@pkg/contracts';
 import { AuthShell } from './auth-shell';
-import { useRegister } from '../hooks/use-auth-actions';
+import { useAuthOptions, useRegister } from '../hooks/use-auth-actions';
 
 // --- Password validation helper ---
 const validatePassword = (password: string) => {
@@ -50,6 +50,10 @@ export const RegisterView = () => {
   const [password, setPassword] = useState('');
   const [organizationName, setOrganizationName] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  // A new organization's name only where each sign-up founds one; with one
+  // organization the account joins it.
+  const { data: options } = useAuthOptions();
+  const asksOrganization = options?.organizations === 'many';
   const [showPassword, setShowPassword] = useState(false);
   const [capsLockOn, setCapsLockOn] = useState(false);
 
@@ -76,7 +80,12 @@ export const RegisterView = () => {
     setPasswordError(null);
 
     // On success the hook revalidates `me`; the <Navigate> below handles redirect.
-    await register({ name, email, password, organizationName });
+    await register({
+      name,
+      email,
+      password,
+      organizationName: asksOrganization ? organizationName : undefined,
+    });
   };
 
   if (isLoading) {
@@ -113,17 +122,19 @@ export const RegisterView = () => {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="organizationName">{t(k.orgs.organization)}</Label>
-            <Input
-              id="organizationName"
-              type="text"
-              placeholder="Acme Inc."
-              required
-              value={organizationName}
-              onChange={(e) => setOrganizationName(e.target.value)}
-            />
-          </div>
+          {asksOrganization ? (
+            <div className="space-y-2">
+              <Label htmlFor="organizationName">{t(k.orgs.organization)}</Label>
+              <Input
+                id="organizationName"
+                type="text"
+                placeholder="Acme Inc."
+                required
+                value={organizationName}
+                onChange={(e) => setOrganizationName(e.target.value)}
+              />
+            </div>
+          ) : null}
         </div>
 
         <div className="space-y-2">

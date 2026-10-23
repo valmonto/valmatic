@@ -23,8 +23,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/shared/auth/auth-context';
-import { AdminGate } from './components/admin-gate';
-import { useAdminDeleteOrg, useAdminOrgs } from './hooks/use-admin-orgs';
+import { AdminGate } from '@/features/admin';
+import { useAdminDeleteOrg, useAdminOrgs } from './use-admin-orgs';
 
 function AdminOrgsView() {
   const { t } = useTranslation();

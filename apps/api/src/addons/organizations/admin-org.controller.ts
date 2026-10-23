@@ -1,5 +1,6 @@
 import { Controller, Delete, Get } from '@nestjs/common';
-import { OrgService } from './org.service.js';
+import { OrgService } from '../../org/org.service.js';
+import { OrganizationsService } from './organizations.service.js';
 import { ActiveUser, SystemRole, SystemRoles, ZodRequest } from '@pkg/server';
 import {
   type AdminDeleteOrgRequest,
@@ -22,7 +23,10 @@ import {
 @Controller('admin/orgs')
 @SystemRoles(SystemRole.ADMIN)
 export class AdminOrgController {
-  constructor(private readonly orgService: OrgService) {}
+  constructor(
+    private readonly orgService: OrgService,
+    private readonly organizations: OrganizationsService,
+  ) {}
 
   @Get()
   async list(
@@ -36,7 +40,7 @@ export class AdminOrgController {
     @ZodRequest(AdminDeleteOrgRequestSchema) dto: AdminDeleteOrgRequest,
     @ActiveUser() activeUser: ActiveUserType,
   ): Promise<AdminDeleteOrgResponse> {
-    await this.orgService.adminDeleteOrg(activeUser, dto.id);
+    await this.organizations.adminDeleteOrg(activeUser, dto.id);
     return {};
   }
 }

@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import type { RouteObject } from 'react-router';
 
@@ -6,8 +7,8 @@ export interface AddonLink {
   titleKey: string;
   url: string;
   icon: LucideIcon;
-  /** The sidebar group it goes in. Default: Developer. */
-  group?: 'management' | 'developer';
+  /** The sidebar group it goes in. Default: Developer. Platform: admins only. */
+  group?: 'management' | 'developer' | 'platform';
 }
 
 /**
@@ -21,4 +22,6 @@ export interface Addon {
   /** Routes inside the dashboard shell. */
   routes?: RouteObject[];
   links?: AddonLink[];
+  /** Controls in the top bar, beside search (e.g. an organization switcher). */
+  headerItems?: ComponentType[];
 }

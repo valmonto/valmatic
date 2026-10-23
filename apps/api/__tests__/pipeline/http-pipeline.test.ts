@@ -4,10 +4,13 @@ import {
   createDatabaseClient,
   emailVerification,
   eq,
+  organization,
+  organizationUser,
   passwordReset,
   user,
   type DatabaseClient,
 } from '@pkg/database';
+import bcrypt from 'bcryptjs';
 import { describeStack } from '@pkg/testing';
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
 
@@ -115,6 +118,33 @@ async function login(app: NestFastifyApplication, email: string, password = PASS
 }
 
 const bearer = (token: string): Record<string, string> => ({ authorization: `Bearer ${token}` });
+
+/**
+ * The OWNER of an organization of their own, signed in. Made in the database,
+ * not through sign-up: with one organization (no `organizations` add-on) a
+ * sign-up joins the existing one, and tenancy tests need two that are apart.
+ */
+async function ownerOfNewOrg(
+  app: NestFastifyApplication,
+  client: DatabaseClient,
+  who: string,
+): Promise<{ token: string; email: string }> {
+  const email = `${who}-${RUN}@pipeline.test`;
+  const [row] = await client.db
+    .insert(user)
+    .values({ email, name: who, passwordHash: bcrypt.hashSync(PASSWORD, 4) })
+    .returning();
+  const [org] = await client.db
+    .insert(organization)
+    .values({ name: `${who} org`, ownerId: row!.id })
+    .returning();
+  await client.db
+    .insert(organizationUser)
+    .values({ orgId: org!.id, userId: row!.id, role: 'OWNER' });
+  const res = await login(app, email);
+  expect(res.statusCode, res.body).toBe(201);
+  return { token: res.json<{ tokens: { accessToken: string } }>().tokens.accessToken, email };
+}
 
 describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
   const client = createDatabaseClient({ url: process.env.DATABASE_URL! });
@@ -260,9 +290,46 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
     expect(me.json()).toMatchObject({ email });
   });
 
+  // CI runs this file as the template ships (the organizations add-on kept)
+  // and minimal (removed), so both ways are proven.
+  it('places a sign-up as the project says: its own organization, or the one', async () => {
+    const { organizations } = (await app.inject({ method: 'GET', url: '/api/auth/options' })).json<{
+      organizations: 'one' | 'many';
+    }>();
+    const me = async (token: string) =>
+      (await app.inject({ method: 'GET', url: '/api/auth/me', headers: bearer(token) })).json<{
+        orgId: string;
+        orgRole: string;
+      }>();
+
+    const first = await me((await register(app, 'place-first')).token);
+    const second = await me((await register(app, 'place-second')).token);
+    const create = await app.inject({
+      method: 'POST',
+      url: '/api/orgs',
+      headers: bearer(
+        (await login(app, `place-first-${RUN}@pipeline.test`)).json<{
+          tokens: { accessToken: string };
+        }>().tokens.accessToken,
+      ),
+      payload: { name: 'Another' },
+    });
+
+    if (organizations === 'many') {
+      expect(second.orgId).not.toBe(first.orgId);
+      expect(second.orgRole).toBe('OWNER');
+      expect(create.statusCode).toBe(201);
+    } else {
+      expect(second.orgId).toBe(first.orgId);
+      expect(second.orgRole).toBe('MEMBER');
+      // No route makes a second organization.
+      expect(create.statusCode).toBe(404);
+    }
+  });
+
   it('keeps an org-scoped read inside the tenant: another org gets 404, never the row', async () => {
-    const a = await register(app, 'tenant-a');
-    const b = await register(app, 'tenant-b');
+    const a = await ownerOfNewOrg(app, client, 'tenant-a');
+    const b = await ownerOfNewOrg(app, client, 'tenant-b');
 
     const created = await app.inject({
       method: 'POST',
@@ -305,7 +372,7 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
   });
 
   it('lets the permissions guard deny a MEMBER with the translated 403 body', async () => {
-    const owner = await register(app, 'perm-owner');
+    const owner = await ownerOfNewOrg(app, client, 'perm-owner');
     const memberEmail = `perm-member-${RUN}@pipeline.test`;
     const created = await app.inject({
       method: 'POST',
@@ -448,11 +515,10 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
     const options = await app.inject({ method: 'GET', url: '/api/auth/options' });
     expect(options.statusCode).toBe(200);
     // No mail service and no sign-in provider in the test stack.
-    expect(options.json()).toEqual({
-      passwordResetEnabled: false,
-      registrationEnabled: true,
-      providers: [],
-    });
+    const { organizations, ...rest } = options.json<{ organizations: string }>();
+    expect(rest).toEqual({ passwordResetEnabled: false, registrationEnabled: true, providers: [] });
+    // Which, depends on the add-ons this copy keeps (valmatic.json).
+    expect(['one', 'many']).toContain(organizations);
 
     for (const email of ['nobody-here@pipeline.test', 'someone@pipeline.test']) {
       const res = await app.inject({
@@ -532,7 +598,7 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
   });
 
   it('hands a person their own data as a download, without the password hash', async () => {
-    const { token: session, email } = await register(app, 'export-me');
+    const { token: session, email } = await ownerOfNewOrg(app, client, 'export-me');
     const res = await app.inject({
       method: 'GET',
       url: '/api/account/export',

@@ -188,6 +188,7 @@ describe('AuthProviderService', () => {
       passwordHash: NO_PASSWORD,
       emailVerified: true,
       organizationName: 'Person',
+      multiOrg: false,
       provider: 'google',
       subject: 'sub-123',
       providerEmail: 'person@example.com',

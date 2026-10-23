@@ -16,7 +16,6 @@ import {
 import { useTheme } from '@/shared/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, Moon, RefreshCw, Search, Sun } from 'lucide-react';
-import { OrgSwitcher } from '@/features/org';
 import { OrgInviteButton } from '@/features/invitations';
 import { NotificationBell } from '@/features/notifications';
 import { LanguageSwitcher } from '@/shared/components/language-switcher';
@@ -45,7 +44,6 @@ const pageTitles: Record<string, string> = {
   '/users': 'Users',
   '/notifications': 'Notifications',
   '/settings': 'Settings',
-  '/admin/orgs': 'Organizations',
   '/admin/permissions': 'Permissions',
   '/admin/api-keys': 'API keys',
 };
@@ -110,7 +108,11 @@ export default function AppLayout() {
                 ⌘K
               </kbd>
             </button>
-            <OrgSwitcher />
+            {addons
+              .flatMap((addon) => addon.headerItems ?? [])
+              .map((HeaderItem, i) => (
+                <HeaderItem key={i} />
+              ))}
             <OrgInviteButton />
             <Separator orientation="vertical" className="mx-0.5 hidden h-5 md:block" />
             <div className="flex items-center gap-0.5">
