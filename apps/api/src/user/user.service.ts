@@ -120,6 +120,12 @@ export class UserService {
       }
     }
 
+    // Only an OWNER may change an OWNER: an ADMIN demoting the owner (or
+    // renaming them) would take the organization from the person it belongs to.
+    if (existing.role === 'OWNER' && activeUser.orgRole !== 'OWNER') {
+      throw new ForbiddenException(k.users.errors.onlyOwnersCanChangeOwners);
+    }
+
     // Only OWNER can promote to OWNER
     if (dto.role === 'OWNER' && activeUser.orgRole !== 'OWNER') {
       throw new ForbiddenException(k.users.errors.onlyOwnersCanPromote);

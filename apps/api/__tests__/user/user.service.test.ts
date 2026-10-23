@@ -175,6 +175,23 @@ describe('UserService', () => {
       ).resolves.toBeDefined();
     });
 
+    it('refuses an ADMIN demoting the OWNER, and writes nothing', async () => {
+      repository.findUserInOrg!.mockResolvedValue(ownerRecord);
+
+      await expect(service.updateUser(admin, { id: 'owner-2', role: 'MEMBER' })).rejects.toThrow(
+        ForbiddenException,
+      );
+      expect(repository.updateUser).not.toHaveBeenCalled();
+    });
+
+    it('refuses an ADMIN renaming the OWNER', async () => {
+      repository.findUserInOrg!.mockResolvedValue(ownerRecord);
+
+      await expect(service.updateUser(admin, { id: 'owner-2', name: 'Not me' })).rejects.toThrow(
+        ForbiddenException,
+      );
+    });
+
     it('refuses an ADMIN promoting someone to OWNER', async () => {
       repository.findUserInOrg!.mockResolvedValue(member);
 

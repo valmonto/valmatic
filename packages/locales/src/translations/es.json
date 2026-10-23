@@ -260,6 +260,7 @@
   "users.errors.notFoundInOrg": "Usuario no encontrado en la organización",
   "users.errors.onlyOwnersCanCreateOwners": "Solo los propietarios pueden crear otros propietarios",
   "users.errors.onlyOwnersCanPromote": "Solo los propietarios pueden promover usuarios a propietario",
+  "users.errors.onlyOwnersCanChangeOwners": "Solo los propietarios pueden cambiar a un propietario",
   "users.errors.onlyOwnersCanRemoveOwners": "Solo los propietarios pueden eliminar a otros propietarios",
   "users.errors.ownersCannotChangeOwnRole": "Los propietarios no pueden cambiar su propio rol",
   "users.fullName": "Nombre completo",
