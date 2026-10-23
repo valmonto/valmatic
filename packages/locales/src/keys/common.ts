@@ -31,7 +31,6 @@ export const common = {
     management: 'common.nav.management',
     workspace: 'common.nav.workspace',
     components: 'common.nav.components',
-    mobile: 'common.nav.mobile',
     developer: 'common.nav.developer',
     errorTest: 'common.nav.errorTest',
   },
@@ -76,12 +75,6 @@ export const common = {
   somethingWentWrong: 'common.somethingWentWrong',
   unexpectedError: 'common.unexpectedError',
 
-  // Shown by the mobile app when the installed version is below the minimum
-  update: {
-    required: 'common.update.required',
-    requiredBody: 'common.update.requiredBody',
-    updateNow: 'common.update.updateNow',
-  },
 
   // Error test page
   errorTest: {

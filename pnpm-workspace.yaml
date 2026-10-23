@@ -180,6 +180,7 @@ catalog:
   '@testing-library/react': 16.3.3
   '@testing-library/jest-dom': 7.0.1
   '@testing-library/user-event': 14.6.7
+  # addon:mobile begin
   # ═══════════════════════════════════════════════════════════════════════
   #  MOBILE  (apps/mobile) — Expo + React Native
   #  All mobile pins live in the named `mobile` catalog below (see `catalogs:`),
@@ -188,6 +189,8 @@ catalog:
   #  react-hook-form, date-fns, i18next, react-i18next, tailwindcss) are reused
   #  from this default catalog via `catalog:`.
   # ═══════════════════════════════════════════════════════════════════════
+
+  # addon:mobile end
 
   # ═══════════════════════════════════════════════════════════════════════
   #  E2E  (apps/e2e)
@@ -207,6 +210,7 @@ catalogs:
   ts6:
     typescript: 6.0.3
 
+  # addon:mobile begin
   # apps/mobile (Expo SDK 57). Referenced as `catalog:mobile`.
   #
   # Expo-managed packages (expo, expo-*, react-native*, react) are versioned by
@@ -298,7 +302,7 @@ catalogs:
     '@rn-primitives/toggle': 1.5.2
     '@rn-primitives/toggle-group': 1.5.2
     '@rn-primitives/tooltip': 1.5.2
-
+  # addon:mobile end
 # ---------------------------------------------------------------------------
 # Install / build policy
 # ---------------------------------------------------------------------------

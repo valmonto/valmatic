@@ -1,6 +1,7 @@
 import en from './translations/en.json' with { type: 'json' };
 import es from './translations/es.json' with { type: 'json' };
 import lt from './translations/lt.json' with { type: 'json' };
+import { addonTranslations } from './addons.generated.js';
 
 // Export all keys
 export * from './keys/index.js';
@@ -11,11 +12,12 @@ export type SupportedLanguage = (typeof supportedLanguages)[number];
 
 export const defaultLanguage: SupportedLanguage = 'en';
 
-// Translation resources - single source of truth for all apps
+// Translation resources - single source of truth for all apps. Each add-on
+// this project keeps brings its own texts (valmatic.json, docs/addons.md).
 export const translations = {
-  en,
-  es,
-  lt,
+  en: { ...en, ...addonTranslations.en },
+  es: { ...es, ...addonTranslations.es },
+  lt: { ...lt, ...addonTranslations.lt },
 } as const;
 
 // Shared i18next configuration
