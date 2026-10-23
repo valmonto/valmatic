@@ -106,7 +106,7 @@ spans the whole repo belongs here.
   `addons/<name>/` folders listed in `valmatic.json`; core reads them only
   through each layer's generated `addons.generated.ts`. Mobile-only code goes
   in the `mobile` add-on, not in core. See `docs/addons.md`;
-  `pnpm addons:check` enforces it.
+  `pnpm valmatic:check` enforces it.
 - **Every tenant query is org-scoped, and the boundary gets a test.** New
   repository methods take `orgId` and join on it; add a two-tenant
   integration test that proves reads and writes stay inside. Two real
@@ -119,7 +119,7 @@ pnpm dev                     # everything
 pnpm --filter @pkg/api dev   # one workspace (names are @pkg/*, incl. apps)
 pnpm db:migrate              # after building @pkg/database
 pnpm db:seed                 # NODE_ENV picks the strategy
-pnpm addons:sync             # after changing valmatic.json (docs/addons.md)
+pnpm valmatic:sync             # after changing valmatic.json (docs/addons.md)
 ```
 
 Local integration testing: Postgres on 127.0.0.1:5432, then

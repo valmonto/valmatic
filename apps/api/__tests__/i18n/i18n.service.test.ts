@@ -1,5 +1,6 @@
 import { REQUEST } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
+import { defaultLanguage, supportedLanguages } from '@pkg/locales';
 import { describe, expect, it } from 'vitest';
 import { I18nService } from '@/i18n/i18n.service.js';
 
@@ -23,7 +24,7 @@ describe('I18nService', () => {
   it('falls back to the default language when no header is sent', async () => {
     const service = await serviceFor(undefined);
 
-    expect(service.getCurrentLanguage()).toBe('en');
+    expect(service.getCurrentLanguage()).toBe(defaultLanguage);
   });
 
   it('returns the key unchanged for the default language', async () => {
@@ -32,10 +33,14 @@ describe('I18nService', () => {
     expect(service.t('Hello')).toBe('Hello');
   });
 
-  it('picks the language from the Accept-Language header', async () => {
-    const service = await serviceFor('es-ES,es;q=0.9,en;q=0.8');
+  // Any language the project keeps other than the default (valmatic.json);
+  // a project that keeps only one has nothing to pick between.
+  const other = supportedLanguages.find((l) => l !== defaultLanguage);
 
-    expect(service.getCurrentLanguage()).toBe('es');
+  it.skipIf(!other)('picks the language from the Accept-Language header', async () => {
+    const service = await serviceFor(`${other}-XX,${other};q=0.9,${defaultLanguage};q=0.8`);
+
+    expect(service.getCurrentLanguage()).toBe(other);
   });
 
   it('interpolates arguments into the message', async () => {
@@ -45,7 +50,7 @@ describe('I18nService', () => {
   });
 
   it('returns the key when a translation is missing', async () => {
-    const service = await serviceFor('es');
+    const service = await serviceFor(other ?? defaultLanguage);
 
     expect(service.t('__no_such_translation_key__')).toBe('__no_such_translation_key__');
   });
