@@ -39,13 +39,27 @@ export function validateZodRequest<T extends z.ZodType>(schema: T, raw: unknown)
  * describe the request as one shape — `{ id, name }` — regardless of which part
  * of the request each field arrived on.
  */
+/**
+ * A body counts as input only when it is a JSON object. Anything else — a
+ * string, an array, a Buffer — contributes nothing, and the schema then
+ * reports the missing fields. Spreading one of those would copy it a field per
+ * character or byte: a 1 MB text body becomes a million keys, seconds of work
+ * on the one thread every request shares, before validation even starts.
+ */
+const fieldsOf = (body: unknown): object =>
+  body !== null &&
+  typeof body === 'object' &&
+  (Object.getPrototypeOf(body) === Object.prototype || Object.getPrototypeOf(body) === null)
+    ? body
+    : {};
+
 export function mergeRequestInput(req: {
   body?: unknown;
   query?: unknown;
   params?: unknown;
 }): Record<string, unknown> {
   return {
-    ...(req.body as object),
+    ...fieldsOf(req.body),
     ...(req.query as object),
     ...(req.params as object),
   };
