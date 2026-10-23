@@ -1,5 +1,6 @@
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
-import { createDatabaseClient, eq, user, type DatabaseClient } from '@pkg/database';
+import { createHash } from 'node:crypto';
+import { createDatabaseClient, eq, passwordReset, user, type DatabaseClient } from '@pkg/database';
 import { describeStack } from '@pkg/testing';
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
 
@@ -434,6 +435,64 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
     });
     expect(enabled.statusCode, enabled.body).toBe(200);
     expect((await login(app, target.email)).statusCode).toBe(201);
+  });
+
+  it('says whether a password reset can be emailed, and answers a request the same either way', async () => {
+    const options = await app.inject({ method: 'GET', url: '/api/auth/options' });
+    expect(options.statusCode).toBe(200);
+    // No mail service in the test stack.
+    expect(options.json()).toEqual({ passwordResetEnabled: false });
+
+    for (const email of ['nobody-here@pipeline.test', 'someone@pipeline.test']) {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/auth/password-reset/request',
+        payload: { email },
+      });
+      expect(res.statusCode).toBe(200);
+      expect(res.json()).toEqual({});
+    }
+  });
+
+  it('sets a new password with a reset link once, and ends the old sessions', async () => {
+    const { token: oldSession, email } = await register(app, 'reset-me');
+    const [row] = await client.db.select({ id: user.id }).from(user).where(eq(user.email, email));
+    const token = 'a-reset-token-of-enough-length-1234567890';
+    await client.db.insert(passwordReset).values({
+      userId: row!.id,
+      tokenHash: createHash('sha256').update(token).digest('hex'),
+      expiresAt: new Date(Date.now() + 60_000),
+    });
+
+    const check = await app.inject({
+      method: 'POST',
+      url: '/api/auth/password-reset/check',
+      payload: { token },
+    });
+    expect(check.json()).toEqual({ valid: true });
+
+    const NEW_PASSWORD = 'BrandNewPass456!';
+    const confirmed = await app.inject({
+      method: 'POST',
+      url: '/api/auth/password-reset/confirm',
+      payload: { token, newPassword: NEW_PASSWORD },
+    });
+    expect(confirmed.statusCode, confirmed.body).toBe(200);
+
+    const me = await app.inject({
+      method: 'GET',
+      url: '/api/auth/me',
+      headers: bearer(oldSession),
+    });
+    expect(me.statusCode).toBe(401);
+    expect((await login(app, email, NEW_PASSWORD)).statusCode).toBe(201);
+
+    const again = await app.inject({
+      method: 'POST',
+      url: '/api/auth/password-reset/confirm',
+      payload: { token, newPassword: 'AnotherPass789!' },
+    });
+    expect(again.statusCode).toBe(400);
   });
 
   it('rejects a bad password with 401 and never leaks which half was wrong', async () => {

@@ -1,6 +1,12 @@
 import { useCallback } from 'react';
 import { useSWRConfig } from 'swr';
-import type { LoginRequest, RegisterRequest } from '@pkg/contracts';
+import type {
+  LoginRequest,
+  PasswordResetConfirmRequest,
+  PasswordResetRequest,
+  RegisterRequest,
+} from '@pkg/contracts';
+import { useCachedRequest } from '@/shared/hooks/use-cached-request';
 import { useActionRequest } from '@/shared/hooks/use-action-request';
 import { AUTH_ME_KEY } from '@/shared/auth/auth-context';
 import { authApi } from '../api';
@@ -36,4 +42,21 @@ export function useRegister() {
     return res;
   };
   return { ...req, execute };
+}
+
+/** What this deployment can do: "forgot password?" is offered only when mail is set up. */
+export function useAuthOptions() {
+  return useCachedRequest({
+    key: 'auth-options',
+    fetcher: () => authApi.options(),
+    minDuration: 0,
+  });
+}
+
+export function useRequestPasswordReset() {
+  return useActionRequest((dto: PasswordResetRequest) => authApi.requestPasswordReset(dto));
+}
+
+export function useConfirmPasswordReset() {
+  return useActionRequest((dto: PasswordResetConfirmRequest) => authApi.confirmPasswordReset(dto));
 }

@@ -14,6 +14,15 @@ export const authRoutes: RouteObject[] = [
         path: 'login',
         lazy: () => import('./login.page').then((m) => ({ Component: m.default })),
       },
+      {
+        path: 'forgot-password',
+        lazy: () => import('./forgot-password.page').then((m) => ({ Component: m.default })),
+      },
+      // Opened from the email; the token is in the URL fragment.
+      {
+        path: 'reset-password',
+        lazy: () => import('./reset-password.page').then((m) => ({ Component: m.default })),
+      },
       // Rendered only when this deployment offers open signup; the API
       // enforces its own flag either way.
       ...(REGISTRATION_ENABLED

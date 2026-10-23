@@ -1,4 +1,8 @@
 import type {
+  AuthOptionsResponse,
+  PasswordResetCheckResponse,
+  PasswordResetConfirmRequest,
+  PasswordResetRequest,
   ChangePasswordRequest,
   ChangePasswordResponse,
   CurrentUserRequest,
@@ -28,6 +32,13 @@ export const authResource = (client: HttpClient) => ({
     client.post('/api/auth/logout-all', dto),
   changePassword: (dto: ChangePasswordRequest): Promise<ChangePasswordResponse> =>
     client.post('/api/auth/change-password', dto),
+  options: (): Promise<AuthOptionsResponse> => client.get('/api/auth/options'),
+  requestPasswordReset: (dto: PasswordResetRequest): Promise<Record<string, never>> =>
+    client.post('/api/auth/password-reset/request', dto),
+  checkPasswordReset: (token: string): Promise<PasswordResetCheckResponse> =>
+    client.post('/api/auth/password-reset/check', { token }),
+  confirmPasswordReset: (dto: PasswordResetConfirmRequest): Promise<Record<string, never>> =>
+    client.post('/api/auth/password-reset/confirm', dto),
 });
 
 /** Bound instance the feature uses internally. */

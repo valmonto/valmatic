@@ -143,3 +143,47 @@ export const ChangePasswordResponseSchema = z.object({});
 
 export type ChangePasswordRequest = z.infer<typeof ChangePasswordRequestSchema>;
 export type ChangePasswordResponse = z.infer<typeof ChangePasswordResponseSchema>;
+
+// --- What this deployment can do (public) ---
+// Clients ask before offering a link they could not follow through: without
+// a mail service there is no "forgot password" email to send.
+export const AuthOptionsResponseSchema = z.object({
+  /** Whether this deployment can send the "forgot my password" email. */
+  passwordResetEnabled: z.boolean(),
+});
+
+export type AuthOptionsResponse = z.infer<typeof AuthOptionsResponseSchema>;
+
+// --- "I forgot my password" ---
+// Ask for a link by email; the link opens a page that checks it and sets a
+// new password. The request answers the same whether or not the address has
+// an account.
+export const PasswordResetRequestSchema = z
+  .object({
+    email: z.string().email().max(255),
+    /** The language the email is written in. Unknown ones fall back. */
+    locale: z.string().min(2).max(10).optional(),
+  })
+  .strict();
+export const PasswordResetRequestResponseSchema = z.object({});
+
+/** The token is 32 random bytes in base64url: 43 characters. */
+const ResetTokenSchema = z.string().min(20).max(200);
+
+export const PasswordResetCheckRequestSchema = z.object({ token: ResetTokenSchema }).strict();
+export const PasswordResetCheckResponseSchema = z.object({ valid: z.boolean() });
+
+export const PasswordResetConfirmRequestSchema = z
+  .object({
+    token: ResetTokenSchema,
+    newPassword: z.string().regex(PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE),
+  })
+  .strict();
+export const PasswordResetConfirmResponseSchema = z.object({});
+
+export type PasswordResetRequest = z.infer<typeof PasswordResetRequestSchema>;
+export type PasswordResetRequestResponse = z.infer<typeof PasswordResetRequestResponseSchema>;
+export type PasswordResetCheckRequest = z.infer<typeof PasswordResetCheckRequestSchema>;
+export type PasswordResetCheckResponse = z.infer<typeof PasswordResetCheckResponseSchema>;
+export type PasswordResetConfirmRequest = z.infer<typeof PasswordResetConfirmRequestSchema>;
+export type PasswordResetConfirmResponse = z.infer<typeof PasswordResetConfirmResponseSchema>;

@@ -9,6 +9,18 @@ export const auth = {
   newPassword: 'auth.newPassword',
   confirmPassword: 'auth.confirmPassword',
 
+  // Forgotten password
+  forgotPassword: 'auth.forgotPassword',
+  forgotPasswordTitle: 'auth.forgotPasswordTitle',
+  forgotPasswordDescription: 'auth.forgotPasswordDescription',
+  sendResetLink: 'auth.sendResetLink',
+  sendingResetLink: 'auth.sendingResetLink',
+  resetLinkSent: 'auth.resetLinkSent',
+  chooseNewPassword: 'auth.chooseNewPassword',
+  settingNewPassword: 'auth.settingNewPassword',
+  passwordChanged: 'auth.passwordChanged',
+  backToSignIn: 'auth.backToSignIn',
+
   // Actions
   signIn: 'auth.signIn',
   signUp: 'auth.signUp',
@@ -58,6 +70,7 @@ export const auth = {
     invalidEmailOrPassword: 'auth.errors.invalidEmailOrPassword',
     loginFailed: 'auth.errors.loginFailed',
     tooManyAttempts: 'auth.errors.tooManyAttempts',
+    resetLinkInvalid: 'auth.errors.resetLinkInvalid',
     accountDisabled: 'auth.errors.accountDisabled',
     tooManyRequests: 'auth.errors.tooManyRequests',
     registrationDisabled: 'auth.errors.registrationDisabled',
