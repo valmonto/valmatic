@@ -288,6 +288,27 @@ async function main(): Promise<void> {
     await prompt('\n📱 Include the mobile app (apps/mobile, Expo)? [y/N]: '),
   );
 
+  // Languages: English always stays (every text is written in it first);
+  // the others the template ships can be kept or dropped.
+  const shipped = readdirSync(join(ROOT_DIR, 'packages/locales/src/translations'))
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => f.replace(/\.json$/, ''))
+    .sort();
+  const languageAnswer = await prompt(
+    `\n🌐 Languages, comma-separated (English always included) [${shipped.join(',')}]: `,
+  );
+  const languages = [
+    ...new Set([
+      'en',
+      ...(languageAnswer || shipped.join(','))
+        .split(',')
+        .map((l) => l.trim().toLowerCase())
+        .filter((l) => shipped.includes(l)),
+    ]),
+  ];
+  const defaultAnswer = (await prompt(`🌐 Default language [en]: `)).trim().toLowerCase();
+  const defaultLanguage = languages.includes(defaultAnswer) ? defaultAnswer : 'en';
+
   // Mobile app identity (skippable — Enter accepts the shown default).
   let mobileConfig: MobileConfig | null = null;
   const hasMobile = wantsMobile && existsSync(join(ROOT_DIR, 'apps/mobile/app.json'));
@@ -384,17 +405,22 @@ See LICENSES/boilerplate-MIT.txt for details.
     }
   }
 
-  // Keep or remove the add-ons. A new project has no database yet, so the
+  // Keep or remove the add-ons and languages. A new project has no database yet, so the
   // migrations may be rebuilt without the removed add-ons' tables.
   const { execSync } = await import('node:child_process');
   const configPath = join(ROOT_DIR, 'valmatic.json');
   const valmatic = JSON.parse(readFileSync(configPath, 'utf-8')) as {
     addons: Record<string, boolean>;
+    languages: string[];
+    defaultLanguage: string;
   };
   valmatic.addons.mobile = wantsMobile;
+  valmatic.languages = languages;
+  valmatic.defaultLanguage = defaultLanguage;
   writeFileSync(configPath, JSON.stringify(valmatic, null, 2) + '\n', 'utf-8');
   console.log(`\n🧩 Add-ons: ${JSON.stringify(valmatic.addons)}`);
-  execSync('node scripts/addons/sync.mjs --new-project', { cwd: ROOT_DIR, stdio: 'inherit' });
+  console.log(`🌐 Languages: ${languages.join(', ')} (default ${defaultLanguage})`);
+  execSync('node scripts/valmatic/sync.mjs --new-project', { cwd: ROOT_DIR, stdio: 'inherit' });
   execSync('pnpm install', { cwd: ROOT_DIR, stdio: 'inherit' });
 
   // Regenerate third-party licenses

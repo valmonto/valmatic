@@ -1,24 +1,15 @@
-import en from './translations/en.json' with { type: 'json' };
-import es from './translations/es.json' with { type: 'json' };
-import lt from './translations/lt.json' with { type: 'json' };
-import { addonTranslations } from './addons.generated.js';
-
 // Export all keys
 export * from './keys/index.js';
 export { k } from './keys/index.js';
+export { LANGUAGE_NAMES, languageName, languageFlag } from './languages.js';
 
-export const supportedLanguages = ['en', 'es', 'lt'] as const;
+// The languages this project keeps and its default (valmatic.json), and the
+// texts per language — core and every kept add-on's. Written by
+// `pnpm valmatic:sync`.
+import { defaultLanguage as chosenDefault, supportedLanguages } from './languages.generated.js';
+export { supportedLanguages, translations } from './languages.generated.js';
 export type SupportedLanguage = (typeof supportedLanguages)[number];
-
-export const defaultLanguage: SupportedLanguage = 'en';
-
-// Translation resources - single source of truth for all apps. Each add-on
-// this project keeps brings its own texts (valmatic.json, docs/addons.md).
-export const translations = {
-  en: { ...en, ...addonTranslations.en },
-  es: { ...es, ...addonTranslations.es },
-  lt: { ...lt, ...addonTranslations.lt },
-} as const;
+export const defaultLanguage: SupportedLanguage = chosenDefault;
 
 // Shared i18next configuration
 export const i18nConfig = {

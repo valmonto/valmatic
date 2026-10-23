@@ -1,5 +1,11 @@
 {
   "addons": {
     "mobile": true
-  }
+  },
+  "languages": [
+    "en",
+    "es",
+    "lt"
+  ],
+  "defaultLanguage": "en"
 }

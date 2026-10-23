@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { useColorScheme } from 'nativewind';
 import { toast } from 'sonner-native';
 import { useTranslation } from 'react-i18next';
-import { k } from '@pkg/locales';
+import { k, languageFlag, languageName } from '@pkg/locales';
 import {
   Bell,
   Blocks,
@@ -33,12 +33,6 @@ import { Text } from '@/components/ui/text';
 import { setLanguage, supportedLanguages } from '@/shared/lib/i18n';
 import { cn } from '@/shared/lib/utils';
 import { useAuthStore } from '@/shared/auth/auth-store';
-
-const LANGUAGE_META: Record<string, { flag: string; native: string }> = {
-  en: { flag: '🇬🇧', native: 'English' },
-  es: { flag: '🇪🇸', native: 'Español' },
-  lt: { flag: '🇱🇹', native: 'Lietuvių' },
-};
 
 const menuItems: { label: string; icon: LucideIcon }[] = [
   { label: 'Security & sessions', icon: ShieldCheck },
@@ -187,8 +181,7 @@ export default function ProfileScreen() {
                 <View className="min-w-0 flex-1">
                   <Text className="text-[13px] font-medium text-foreground">Language</Text>
                   <Text className="text-[11px] text-muted-foreground">
-                    {LANGUAGE_META[i18n.language]?.flag}{' '}
-                    {LANGUAGE_META[i18n.language]?.native ?? i18n.language}
+                    {languageFlag(i18n.language)} {languageName(i18n.language)}
                   </Text>
                 </View>
                 <Icon as={ChevronRight} size={16} className="text-muted-foreground/50" />
@@ -204,7 +197,6 @@ export default function ProfileScreen() {
           >
             <View className="gap-1">
               {supportedLanguages.map((lang) => {
-                const meta = LANGUAGE_META[lang];
                 const active = i18n.language === lang;
                 return (
                   <Pressable
@@ -218,10 +210,8 @@ export default function ProfileScreen() {
                       active && 'bg-muted',
                     )}
                   >
-                    <Text className="text-2xl">{meta?.flag}</Text>
-                    <Text className="flex-1 text-[15px] text-foreground">
-                      {meta?.native ?? lang}
-                    </Text>
+                    <Text className="text-2xl">{languageFlag(lang)}</Text>
+                    <Text className="flex-1 text-[15px] text-foreground">{languageName(lang)}</Text>
                     {active ? <Icon as={Check} size={18} className="text-primary" /> : null}
                   </Pressable>
                 );
