@@ -127,6 +127,36 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
     await client.close();
   });
 
+  // A webhook signature is computed over the bytes as sent; re-serialising
+  // the parsed body would change spacing and key order and never match.
+  it('keeps the exact bytes of a JSON body for signature checks', async () => {
+    const restore = withEnv({});
+    try {
+      vi.resetModules();
+      const { createApp } = await import('@/app.factory.js');
+      const raw = await createApp();
+      raw
+        .getHttpAdapter()
+        .getInstance()
+        .post('/raw-body-check', (request, reply) => {
+          void reply.send({ raw: (request as { rawBody?: Buffer }).rawBody?.toString('utf8') });
+        });
+      await raw.init();
+      await raw.getHttpAdapter().getInstance().ready();
+      const body = '{ "b": 1,   "a": [2, 3] }';
+      const res = await raw.inject({
+        method: 'POST',
+        url: '/raw-body-check',
+        headers: { 'content-type': 'application/json' },
+        payload: body,
+      });
+      expect(res.json()).toEqual({ raw: body });
+      await raw.close();
+    } finally {
+      restore();
+    }
+  });
+
   it('serves /health outside the global prefix, unauthenticated', async () => {
     const res = await app.inject({ method: 'GET', url: '/health' });
 

@@ -37,6 +37,10 @@ export async function createApp(): Promise<NestFastifyApplication> {
     new FastifyAdapter({ trustProxy: process.env.TRUST_PROXY === 'true' }),
     {
       bufferLogs: true,
+      // Keeps each JSON request's bytes as they arrived (`request.rawBody`).
+      // A webhook (payment provider, app store) signs those exact bytes; the
+      // parsed object written out again would not be the same string.
+      rawBody: true,
     },
   );
 
