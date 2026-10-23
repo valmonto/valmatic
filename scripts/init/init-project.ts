@@ -288,6 +288,14 @@ async function main(): Promise<void> {
     await prompt('\n📱 Include the mobile app (apps/mobile, Expo)? [y/N]: '),
   );
 
+  // One organization (a product for one business or its customers) or many
+  // (each sign-up founds its own, like a SaaS with teams).
+  const wantsManyOrgs = /^y(es)?$/i.test(
+    await prompt(
+      '\n🏢 Can accounts belong to several organizations, each sign-up founding its own? [y/N]: ',
+    ),
+  );
+
   // Languages: English always stays (every text is written in it first);
   // the others the template ships can be kept or dropped.
   const shipped = readdirSync(join(ROOT_DIR, 'packages/locales/src/translations'))
@@ -415,6 +423,7 @@ See LICENSES/boilerplate-MIT.txt for details.
     defaultLanguage: string;
   };
   valmatic.addons.mobile = wantsMobile;
+  valmatic.addons.organizations = wantsManyOrgs;
   // The demo shows what the template can do; no product keeps it.
   valmatic.addons.demo = false;
   valmatic.languages = languages;

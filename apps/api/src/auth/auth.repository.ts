@@ -16,63 +16,37 @@ import {
   userIdentity,
 } from '@pkg/database';
 import { k } from '@pkg/locales';
+import { placeNewAccount } from '../org/place-new-account.js';
 import type { AuthIdentityProvider } from '@pkg/contracts';
 
 @Injectable()
 export class AuthRepository {
   constructor(@Inject(DATABASE_CLIENT) private readonly dbClient: DatabaseClient) {}
 
+  /**
+   * A new account and its place: its own organization, or the one
+   * organization every account joins (see `placeNewAccount`).
+   */
   async createUserWithOrganization({
     email,
     name,
     passwordHash,
     organizationName,
+    multiOrg,
   }: {
     email: string;
     name: string;
     passwordHash: string;
     organizationName: string;
-  }): Promise<{ user: User; org: Organization; orgUser: OrganizationUser }> {
+    multiOrg: boolean;
+  }): Promise<{ user: User; orgUser: OrganizationUser }> {
     return this.dbClient.db.transaction(async (tx) => {
-      const [newUser] = await tx
-        .insert(user)
-        .values({
-          email,
-          name,
-          passwordHash,
-        })
-        .returning();
-
+      const [newUser] = await tx.insert(user).values({ email, name, passwordHash }).returning();
       if (!newUser) {
         throw new InternalServerErrorException(k.common.errors.failedToCreateUser);
       }
-
-      const [newOrg] = await tx
-        .insert(organization)
-        .values({
-          name: organizationName,
-          ownerId: newUser.id,
-        })
-        .returning();
-
-      if (!newOrg) {
-        throw new InternalServerErrorException(k.common.errors.failedToCreateOrg);
-      }
-
-      const [orgUser] = await tx
-        .insert(organizationUser)
-        .values({
-          orgId: newOrg.id,
-          userId: newUser.id,
-          role: 'OWNER',
-        })
-        .returning();
-
-      if (!orgUser) {
-        throw new InternalServerErrorException(k.common.errors.failedToCreateOrgMembership);
-      }
-
-      return { user: newUser, org: newOrg, orgUser };
+      const orgUser = await placeNewAccount(tx, newUser.id, { multiOrg, organizationName });
+      return { user: newUser, orgUser };
     });
   }
 

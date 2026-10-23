@@ -76,6 +76,7 @@ describeIntegration('AuthProviderRepository', () => {
       passwordHash: NO_PASSWORD,
       emailVerified: true,
       organizationName: 'New',
+      multiOrg: true,
       provider: 'google',
       subject: 'g-2',
       providerEmail: 'new@test',
@@ -91,6 +92,27 @@ describeIntegration('AuthProviderRepository', () => {
       .where(eq(organization.id, membership!.orgId));
     expect(org!.ownerId).toBe(created.id);
     expect((await repository.findIdentity('google', 'g-2'))?.user.id).toBe(created.id);
+  });
+
+  it('with one organization, a new account joins it as a MEMBER', async () => {
+    const make = (subject: string, email: string) =>
+      repository.createAccount({
+        email,
+        name: email,
+        passwordHash: NO_PASSWORD,
+        emailVerified: true,
+        organizationName: email,
+        multiOrg: false,
+        provider: 'google',
+        subject,
+        providerEmail: email,
+      });
+    const first = await make('g-first', 'first@test');
+    const second = await make('g-second', 'second@test');
+    const roles = await client.db.select().from(organizationUser);
+    expect(roles.find((r) => r.userId === first.id)?.role).toBe('OWNER');
+    expect(roles.find((r) => r.userId === second.id)?.role).toBe('MEMBER');
+    expect(new Set(roles.map((r) => r.orgId)).size).toBe(1);
   });
 
   it('lets one Apple account belong to one user only', async () => {

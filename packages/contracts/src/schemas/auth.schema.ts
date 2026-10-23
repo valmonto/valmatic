@@ -42,7 +42,12 @@ export const RegisterRequestSchema = z.object({
   email: z.string().email(),
   password: z.string().regex(PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE),
   name: z.string().min(1).max(255),
-  organizationName: z.string().min(1).max(255),
+  /**
+   * The new organization's name, when the project has many (`GET
+   * /auth/options` says `organizations: "many"`). Defaults to the person's
+   * name. With one organization a sign-up joins it and this is ignored.
+   */
+  organizationName: z.string().min(1).max(255).optional(),
   /** The language the confirmation email is written in. Unknown ones fall back. */
   locale: z.string().min(2).max(10).optional(),
 });
@@ -168,6 +173,12 @@ export const AuthOptionsResponseSchema = z.object({
   passwordResetEnabled: z.boolean(),
   /** Whether anyone may create an account (`AUTH_REGISTRATION_ENABLED`). */
   registrationEnabled: z.boolean(),
+  /**
+   * `many`: an account may belong to several organizations and each sign-up
+   * founds its own (the `organizations` add-on). `one`: every account joins
+   * the project's one organization.
+   */
+  organizations: z.enum(['one', 'many']),
   /** The sign-in providers this deployment can verify. No ids, no secrets. */
   providers: z.array(z.enum(AUTH_IDENTITY_PROVIDERS)),
 });
