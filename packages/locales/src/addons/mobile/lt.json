@@ -2,5 +2,14 @@
   "mobile.update.required": "Reikia atnaujinti",
   "mobile.update.requiredBody": "Norint tęsti, reikia naujesnės programėlės versijos. Atnaujinkite ją.",
   "mobile.update.updateNow": "Atnaujinti dabar",
-  "mobile.nav": "Mobilioji"
+  "mobile.tabs.home": "Pradžia",
+  "mobile.tabs.profile": "Profilis",
+  "mobile.home.greeting": "Labas, {{name}}",
+  "mobile.home.body": "Jūsų programėlė prasideda čia.",
+  "mobile.home.explore": "Naršyti",
+  "mobile.profile.preferences": "Nustatymai",
+  "mobile.profile.darkMode": "Tamsus režimas",
+  "mobile.profile.darkModeDescription": "Pakeisti programėlės temą",
+  "mobile.profile.language": "Kalba",
+  "mobile.profile.chooseLanguage": "Pasirinkite kalbą"
 }

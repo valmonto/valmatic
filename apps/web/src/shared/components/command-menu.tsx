@@ -60,7 +60,6 @@ export function CommandMenu() {
   const navItems = [
     { label: t(k.common.nav.dashboard), icon: LayoutDashboard, to: '/' },
     { label: t(k.users.users), icon: Users, to: '/users' },
-    { label: t(k.jobs.jobs), icon: ListTodo, to: '/jobs' },
     { label: t(k.notifications.notifications), icon: Bell, to: '/notifications' },
     { label: t(k.common.nav.settings), icon: Settings, to: '/settings' },
     ...addons.flatMap((addon) =>

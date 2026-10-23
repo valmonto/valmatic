@@ -18,7 +18,8 @@
  *   - an `addons/mobile/` folder in any layer below (its tests inside it);
  *   - the app `apps/mobile`, if there is one (other apps are core);
  *   - `# addon:mobile begin/end` regions in pnpm-workspace.yaml, and root
- *     scripts ending in `:mobile`.
+ *     scripts ending in `:mobile`;
+ *   - route files (expo-router) whose first line is `// addon:mobile`.
  * Each layer has ONE generated file, `addons.generated.ts`, that imports the
  * add-ons present. Hand-written code imports only that file, never an add-on
  * folder — `--check` fails on any other import of `addons/`.
@@ -48,7 +49,16 @@ const LAYERS = [
   { dir: 'apps/api/src', write: nestModules },
   { dir: 'apps/worker/src', write: nestModules },
   { dir: 'apps/web/src', write: webAddons },
+  // Only while the mobile add-on is kept: it owns apps/mobile itself.
+  { dir: 'apps/mobile/src', write: mobileAddons },
 ];
+
+/**
+ * Apps whose routes are files (expo-router): an add-on's route file has
+ * `// addon:<name>` as its first line, and goes with the add-on.
+ */
+const ROUTE_DIRS = ['apps/mobile/src/app'];
+const ROUTE_MARKER = /^\/\/ addon:([a-z][a-z0-9-]*)/;
 
 // --- generated files ---------------------------------------------------------
 
@@ -85,6 +95,20 @@ function webAddons(names) {
     imports +
     '\n' +
     `export const addons: Addon[] = [${names.map(ident).join(', ')}];\n`
+  );
+}
+
+/** `addon` from each add-on's index: tabs, screens, links for the app. */
+function mobileAddons(names) {
+  const imports = names
+    .map((n) => `import { addon as ${ident(n)} } from './addons/${n}';\n`)
+    .join('');
+  return (
+    HEADER +
+    "import type { MobileAddon } from '@/shared/addon';\n" +
+    imports +
+    '\n' +
+    `export const addons: MobileAddon[] = [${names.map(ident).join(', ')}];\n`
   );
 }
 
@@ -180,6 +204,25 @@ function unkeptTranslations() {
   return files;
 }
 
+/** Every file under `dir`, as repo-relative paths. */
+function filesUnder(dir) {
+  const abs = join(ROOT, dir);
+  if (!existsSync(abs)) return [];
+  const out = [];
+  for (const entry of readdirSync(abs)) {
+    const path = `${dir}/${entry}`;
+    if (statSync(join(ROOT, path)).isDirectory()) out.push(...filesUnder(path));
+    else out.push(path);
+  }
+  return out;
+}
+
+/** The add-on a route file belongs to, by its first line, or null for core. */
+function routeOwner(path) {
+  const first = readFileSync(join(ROOT, path), 'utf8').split('\n', 1)[0];
+  return ROUTE_MARKER.exec(first)?.[1] ?? null;
+}
+
 function subdirs(dir) {
   const abs = join(ROOT, dir);
   if (!existsSync(abs)) return [];
@@ -203,12 +246,18 @@ function presence(listed) {
       add(name, `apps/${name}`);
     }
   }
+  for (const dir of ROUTE_DIRS) {
+    for (const path of filesUnder(dir)) {
+      const owner = routeOwner(path);
+      if (owner) add(owner, path);
+    }
+  }
   return found;
 }
 
 function expectedFiles() {
   return [
-    ...LAYERS.map((layer) => {
+    ...LAYERS.filter((layer) => existsSync(join(ROOT, layer.dir))).map((layer) => {
       const names = subdirs(`${layer.dir}/addons`);
       return { path: `${layer.dir}/addons.generated.ts`, text: layer.write(names, layer.dir) };
     }),
@@ -227,6 +276,8 @@ function boundaryViolations() {
       if (statSync(join(ROOT, path)).isDirectory()) walk(path);
       else if (/\.tsx?$/.test(entry) && !entry.endsWith('addons.generated.ts')) {
         const text = readFileSync(join(ROOT, path), 'utf8');
+        // An add-on's own route file may import its add-on.
+        if (ROUTE_MARKER.test(text)) continue;
         if (/from\s+['"][^'"]*\/addons\/|import\(\s*['"][^'"]*\/addons\//.test(text))
           bad.push(path);
       }
@@ -253,6 +304,15 @@ function removeRegions(name, file) {
     else if (!skipping) out.push(line);
   }
   writeFileSync(path, out.join('\n').replace(/\n{3,}/g, '\n\n'));
+}
+
+function removeEmptyDirs(dir) {
+  const abs = join(ROOT, dir);
+  if (!existsSync(abs)) return;
+  for (const entry of readdirSync(abs)) {
+    if (statSync(join(abs, entry)).isDirectory()) removeEmptyDirs(`${dir}/${entry}`);
+  }
+  if (readdirSync(abs).length === 0) rmSync(abs, { recursive: true });
 }
 
 function removeScripts(name) {
@@ -348,6 +408,8 @@ function sync(flags) {
       rmSync(join(ROOT, path), { recursive: true, force: true });
       console.log(`− ${path}`);
     }
+    for (const dir of [...ROUTE_DIRS, ...LAYERS.map((l) => `${l.dir}/addons`)])
+      removeEmptyDirs(dir);
     removeRegions(name, 'pnpm-workspace.yaml');
     removeScripts(name);
     databaseChanged ||= touchesDatabase;

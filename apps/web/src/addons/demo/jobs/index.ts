@@ -1,7 +1,4 @@
-/**
- * Public surface of the jobs feature. Other layers import from here
- * (`@/features/jobs`) and never reach into internal files directly.
- */
+/** The demo add-on's example-jobs page: enqueue example jobs from a form. */
 export { jobsRoutes } from './routes';
 export { jobsResource } from './api';
 export { useCreateExampleJob, useCreateExampleJobsBulk } from './hooks/use-jobs';

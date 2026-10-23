@@ -3,7 +3,6 @@ import { mutate } from 'swr';
 import { http } from '@/shared/api/http';
 import { AUTH_ME_KEY } from '@/shared/auth/auth-context';
 import { userRoutes } from '@/features/users';
-import { jobsRoutes } from '@/features/jobs';
 import { notificationsRoutes } from '@/features/notifications';
 import { authRoutes } from '@/features/auth';
 import { adminRoutes } from '@/features/admin';
@@ -27,17 +26,12 @@ const router = createBrowserRouter([
         lazy: () => import('@/pages/index.page').then((m) => ({ Component: m.default })),
       },
       ...userRoutes,
-      ...jobsRoutes,
       ...adminRoutes,
       ...notificationsRoutes,
       ...addons.flatMap((addon) => addon.routes ?? []),
       {
         path: 'settings',
         lazy: () => import('@/pages/settings.page').then((m) => ({ Component: m.default })),
-      },
-      {
-        path: 'components',
-        lazy: () => import('@/pages/components.page').then((m) => ({ Component: m.default })),
       },
       {
         path: '*',

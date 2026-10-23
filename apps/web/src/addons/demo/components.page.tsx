@@ -24,7 +24,7 @@ import {
 
 import { cn } from '@/shared/lib/utils';
 import { PageHeader } from '@/shared/components/page-header';
-import { AttachmentsShowcaseSection } from '@/features/showcase';
+import { AttachmentsShowcaseSection } from './showcase';
 import { CompactModal, WideModal } from '@/components/overlays';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

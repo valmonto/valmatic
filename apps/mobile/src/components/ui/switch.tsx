@@ -1,6 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import * as SwitchPrimitives from '@rn-primitives/switch';
-import { Platform, type ViewStyle } from 'react-native';
+import { Platform, Switch as WebSwitch, type ViewStyle } from 'react-native';
 
 function Switch({
   className,
@@ -8,6 +8,20 @@ function Switch({
   ...props
 }: React.ComponentProps<typeof SwitchPrimitives.Root>) {
   const checked = props.checked;
+  // On web the primitive is Radix's switch, which merges `style` as one
+  // object — NativeWind hands it a list and the page throws. React Native's
+  // own switch has a web version and takes plain colours.
+  if (Platform.OS === 'web') {
+    return (
+      <WebSwitch
+        value={checked}
+        onValueChange={props.onCheckedChange}
+        disabled={props.disabled ?? undefined}
+        trackColor={{ true: 'var(--primary)', false: 'var(--input)' }}
+        thumbColor="#ffffff"
+      />
+    );
+  }
   return (
     <SwitchPrimitives.Root
       className={cn(

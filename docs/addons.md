@@ -19,9 +19,10 @@ as shipped and minimal (no add-ons, English only).
 Optional parts of the template. A project keeps the ones it needs and drops
 the rest; nothing is left behind.
 
-| Add-on   | What it is                                                                                                           |
-| -------- | -------------------------------------------------------------------------------------------------------------------- |
-| `mobile` | The Expo app (`apps/mobile`), its texts, the dashboard's phone-layout demo at `/mobile`, and the mobile pnpm catalog |
+| Add-on   | What it is                                                                                                                                                                                                                  |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mobile` | The Expo app (`apps/mobile`) with its core Home and Profile, its texts and the mobile pnpm catalog                                                                                                                          |
+| `demo`   | What shows the template off: the dashboard's components page, example-jobs page and `/mobile` phone demo; the API's and worker's example job; the app's task tracker, showcase and blocks. `init:project` always removes it |
 
 Billing comes later, with its payment providers chosen inside it.
 
@@ -40,9 +41,12 @@ An add-on called `mobile` is, by convention:
   | API          | `apps/api/src/addons/mobile/`                 | `addonModule` (a Nest module)    |
   | Worker       | `apps/worker/src/addons/mobile/`              | `addonModule` (a Nest module)    |
   | Dashboard    | `apps/web/src/addons/mobile/`                 | `addon` (routes, links)          |
+  | Mobile app   | `apps/mobile/src/addons/mobile/`              | `addon` (tabs, screens, links)   |
 
 - the app `apps/mobile`, if there is one (apps not named after an add-on are
   core);
+- in apps whose routes are files (the Expo app's `src/app`), route files whose
+  first line is `// addon:mobile`;
 - lines between `# addon:mobile begin` and `# addon:mobile end` in
   `pnpm-workspace.yaml`, and root scripts ending in `:mobile`.
 

@@ -10,27 +10,31 @@ export default function JobsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader icon={ListTodo} title={t(k.jobs.jobs)} description={t(k.jobs.description)} />
+      <PageHeader
+        icon={ListTodo}
+        title={t(k.demo.jobs.jobs)}
+        description={t(k.demo.jobs.description)}
+      />
       <div className="grid gap-6 lg:grid-cols-2">
         <CreateJobForm />
         <Card>
           <CardHeader>
-            <CardTitle>{t(k.jobs.aboutJobs)}</CardTitle>
+            <CardTitle>{t(k.demo.jobs.aboutJobs)}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">{t(k.jobs.aboutJobsDescription)}</p>
+            <p className="text-sm text-muted-foreground">{t(k.demo.jobs.aboutJobsDescription)}</p>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
               <li>
                 <strong className="font-medium text-foreground/80">send-email:</strong>{' '}
-                {t(k.jobs.sendEmailDesc)}
+                {t(k.demo.jobs.sendEmailDesc)}
               </li>
               <li>
                 <strong className="font-medium text-foreground/80">generate-report:</strong>{' '}
-                {t(k.jobs.generateReportDesc)}
+                {t(k.demo.jobs.generateReportDesc)}
               </li>
               <li>
                 <strong className="font-medium text-foreground/80">sync-data:</strong>{' '}
-                {t(k.jobs.syncDataDesc)}
+                {t(k.demo.jobs.syncDataDesc)}
               </li>
             </ul>
           </CardContent>

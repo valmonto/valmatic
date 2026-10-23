@@ -1,1 +1,2 @@
-export { default } from '@/features/showcase/screens/showcase-detail.screen';
+// addon:demo — removed with the demo add-on (docs/addons.md).
+export { default } from '@/addons/demo/showcase/screens/showcase-detail.screen';
