@@ -105,7 +105,7 @@ export class AuthController {
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<LoginResponse> {
-    const { response, accessToken, refreshToken } = await this.authService.login(dto);
+    const { response, accessToken, refreshToken } = await this.authService.login(dto, req.ip);
     return this.deliverTokens(req, reply, { accessToken, refreshToken }, response);
   }
 
