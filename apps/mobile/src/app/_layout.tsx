@@ -25,6 +25,7 @@ import { ForceUpdateGate } from '@/shared/update/force-update';
 import { useNotificationTaps } from '@/shared/notifications/use-notification-taps';
 import { useAuthStore } from '@/shared/auth/auth-store';
 import { AnimatedSplash } from '@/shared/components/animated-splash';
+import { addons } from '@/addons.generated';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -112,12 +113,18 @@ export default function RootLayout() {
               >
                 <Stack.Screen name="(tabs)" />
                 <Stack.Screen name="login" />
-                <Stack.Screen name="task/[id]" />
-                <Stack.Screen name="new-task" options={{ presentation: 'modal' }} />
-                <Stack.Screen name="showcase/index" />
-                <Stack.Screen name="showcase/[id]" />
-                <Stack.Screen name="blocks/index" />
-                <Stack.Screen name="blocks/[id]" />
+                <Stack.Screen name="forgot-password" />
+                <Stack.Screen name="delete-account" />
+                {/* Add-ons' own screens (docs/addons.md). */}
+                {addons.flatMap((addon) =>
+                  (addon.screens ?? []).map((screen) => (
+                    <Stack.Screen
+                      key={screen.name}
+                      name={screen.name}
+                      options={screen.modal ? { presentation: 'modal' } : undefined}
+                    />
+                  )),
+                )}
               </Stack>
               {/* Overlay host for RNR dialog/select/dropdown/popover/tooltip/etc. */}
               <PortalHost />

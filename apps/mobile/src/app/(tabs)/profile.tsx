@@ -1,1 +1,1 @@
-export { default } from '@/features/mobile-demo/screens/profile.screen';
+export { default } from '@/features/account/profile.screen';

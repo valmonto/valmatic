@@ -28,7 +28,7 @@ export function CreateJobForm({ onCreated }: Props) {
     setResult(null);
 
     if (!user) {
-      setErrors({ form: t(k.jobs.errors.mustBeLoggedIn) });
+      setErrors({ form: t(k.demo.jobs.errors.mustBeLoggedIn) });
       return;
     }
 
@@ -75,8 +75,8 @@ export function CreateJobForm({ onCreated }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t(k.jobs.createJob)}</CardTitle>
-        <CardDescription>{t(k.jobs.queueDescription)}</CardDescription>
+        <CardTitle>{t(k.demo.jobs.createJob)}</CardTitle>
+        <CardDescription>{t(k.demo.jobs.queueDescription)}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -87,16 +87,16 @@ export function CreateJobForm({ onCreated }: Props) {
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="action">{t(k.common.status.action)}</Label>
             <NativeSelect id="action" name="action" defaultValue="send-email" className="w-full">
-              <NativeSelectOption value="send-email">{t(k.jobs.sendEmail)}</NativeSelectOption>
+              <NativeSelectOption value="send-email">{t(k.demo.jobs.sendEmail)}</NativeSelectOption>
               <NativeSelectOption value="generate-report">
-                {t(k.jobs.generateReport)}
+                {t(k.demo.jobs.generateReport)}
               </NativeSelectOption>
-              <NativeSelectOption value="sync-data">{t(k.jobs.syncData)}</NativeSelectOption>
+              <NativeSelectOption value="sync-data">{t(k.demo.jobs.syncData)}</NativeSelectOption>
             </NativeSelect>
             {errors.action && <p className="text-xs text-destructive">{t(errors.action)}</p>}
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="data">{t(k.jobs.dataJson)}</Label>
+            <Label htmlFor="data">{t(k.demo.jobs.dataJson)}</Label>
             <Input
               id="data"
               name="data"
@@ -104,28 +104,28 @@ export function CreateJobForm({ onCreated }: Props) {
               defaultValue="{}"
             />
             {errors.data && <p className="text-xs text-destructive">{t(errors.data)}</p>}
-            <p className="text-xs text-muted-foreground">{t(k.jobs.dataJsonDesc)}</p>
+            <p className="text-xs text-muted-foreground">{t(k.demo.jobs.dataJsonDesc)}</p>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="priority">{t(k.jobs.priority)}</Label>
+              <Label htmlFor="priority">{t(k.demo.jobs.priority)}</Label>
               <Input id="priority" name="priority" type="number" min={1} max={10} placeholder="5" />
               {errors.priority && <p className="text-xs text-destructive">{t(errors.priority)}</p>}
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="delay">{t(k.jobs.delay)}</Label>
+              <Label htmlFor="delay">{t(k.demo.jobs.delay)}</Label>
               <Input id="delay" name="delay" type="number" min={0} placeholder="0" />
               {errors.delay && <p className="text-xs text-destructive">{t(errors.delay)}</p>}
             </div>
           </div>
           <Button type="submit" className="mt-2" disabled={isLoading || !user}>
-            {isLoading ? t(k.jobs.queueing) : t(k.jobs.queueJob)}
+            {isLoading ? t(k.demo.jobs.queueing) : t(k.demo.jobs.queueJob)}
           </Button>
           {errors.form && <p className="text-xs text-destructive">{t(errors.form)}</p>}
         </form>
         {result && (
           <div className="mt-4 rounded-xl bg-muted p-4">
-            <p className="text-sm font-medium text-green-600">{t(k.jobs.queuedSuccess)}</p>
+            <p className="text-sm font-medium text-green-600">{t(k.demo.jobs.queuedSuccess)}</p>
             <pre className="mt-2 overflow-x-auto text-xs font-mono">
               {JSON.stringify(result, null, 2)}
             </pre>
