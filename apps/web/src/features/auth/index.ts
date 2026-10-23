@@ -10,3 +10,4 @@
 export { authRoutes } from './routes';
 export { authResource } from './api';
 export { useLogin, useRegister } from './hooks/use-auth-actions';
+export { EmailConfirmBanner } from './components/email-confirm-banner';

@@ -61,7 +61,9 @@ function useAuthGate() {
     // seamlessly and reveals the app once auth has routed to the right screen.
 
     const onLoginScreen = segments[0] === 'login';
-    if (status === 'unauthenticated' && !onLoginScreen) {
+    // Screens a signed-out user may open besides the login screen.
+    const publicScreen = onLoginScreen || segments[0] === 'forgot-password';
+    if (status === 'unauthenticated' && !publicScreen) {
       router.replace('/login');
     } else if (status === 'authenticated' && onLoginScreen) {
       router.replace('/');

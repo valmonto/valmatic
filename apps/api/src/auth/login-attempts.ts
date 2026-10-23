@@ -75,6 +75,23 @@ export class LoginAttempts {
       .set(this.knownKey(email, ip), '1', 'EX', KNOWN_SECONDS)
       .exec();
   }
+
+  /**
+   * Every count for this address, from every visitor: after a password reset,
+   * wrong guesses made before it must not lock the owner out of the password
+   * they have just set.
+   */
+  async clear(email: string): Promise<void> {
+    const pattern = `iam:login-attempts:${email.toLowerCase()}:*`;
+    const keys: string[] = [this.accountKey(email)];
+    let cursor = '0';
+    do {
+      const [next, found] = await this.redis.scan(cursor, 'MATCH', pattern, 'COUNT', 500);
+      keys.push(...found);
+      cursor = next;
+    } while (cursor !== '0');
+    await this.redis.del(...keys);
+  }
 }
 
 /**

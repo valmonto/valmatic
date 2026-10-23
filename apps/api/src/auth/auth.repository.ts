@@ -7,6 +7,7 @@ import {
   organizationUser,
   eq,
   and,
+  isNull,
   User,
   Organization,
   OrganizationUser,
@@ -100,6 +101,7 @@ export class AuthRepository {
     role: OrganizationUserRole;
     systemRole: SystemRole;
     orgId: string;
+    emailVerified: boolean;
   } | null> {
     const result = await this.dbClient.db
       .select({
@@ -110,16 +112,24 @@ export class AuthRepository {
         role: organizationUser.role,
         systemRole: user.systemRole,
         orgId: organizationUser.orgId,
+        emailVerifiedAt: user.emailVerifiedAt,
       })
       .from(user)
       .innerJoin(
         organizationUser,
         and(eq(organizationUser.userId, user.id), eq(organizationUser.orgId, orgId)),
       )
-      .where(eq(user.id, userId))
+      // A disabled account has no access at all. This read is what the auth
+      // guard's refresh re-verifies against (`OrgAccessProvider`) and what
+      // `/auth/me` returns, so excluding it here ends a disabled account's
+      // session at the next refresh even if a revoke was somehow missed.
+      .where(and(eq(user.id, userId), isNull(user.disabledAt)))
       .limit(1);
 
-    return result[0] ?? null;
+    const row = result[0];
+    if (!row) return null;
+    const { emailVerifiedAt, ...rest } = row;
+    return { ...rest, emailVerified: emailVerifiedAt !== null };
   }
 
   async findUserById(userId: string): Promise<User | null> {

@@ -1,5 +1,13 @@
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
-import { createDatabaseClient, type DatabaseClient } from '@pkg/database';
+import { createHash } from 'node:crypto';
+import {
+  createDatabaseClient,
+  emailVerification,
+  eq,
+  passwordReset,
+  user,
+  type DatabaseClient,
+} from '@pkg/database';
 import { describeStack } from '@pkg/testing';
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
 
@@ -384,6 +392,172 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
       expect(res.statusCode, type).toBe(415);
       expect(res.headers['set-cookie'], type).toBeUndefined();
     }
+  });
+
+  it('lets a platform admin disable an account: its session ends and it cannot sign in', async () => {
+    const adminAccount = await register(app, 'platform-admin');
+    await client.db
+      .update(user)
+      .set({ systemRole: 'ADMIN' })
+      .where(eq(user.email, adminAccount.email));
+    const adminToken = (await login(app, adminAccount.email)).json<{
+      tokens: { accessToken: string };
+    }>().tokens.accessToken;
+    const target = await register(app, 'to-disable');
+    const [targetRow] = await client.db
+      .select({ id: user.id })
+      .from(user)
+      .where(eq(user.email, target.email));
+
+    // An organization owner without platform standing is refused.
+    const asOwner = await app.inject({
+      method: 'POST',
+      url: `/api/admin/users/${targetRow!.id}/disable`,
+      headers: bearer(target.token),
+      payload: {},
+    });
+    expect(asOwner.statusCode).toBe(403);
+
+    const disabled = await app.inject({
+      method: 'POST',
+      url: `/api/admin/users/${targetRow!.id}/disable`,
+      headers: bearer(adminToken),
+      payload: { reason: 'Test' },
+    });
+    expect(disabled.statusCode, disabled.body).toBe(200);
+
+    const me = await app.inject({
+      method: 'GET',
+      url: '/api/auth/me',
+      headers: bearer(target.token),
+    });
+    expect(me.statusCode).toBe(401);
+    expect((await login(app, target.email)).statusCode).toBe(403);
+
+    const enabled = await app.inject({
+      method: 'POST',
+      url: `/api/admin/users/${targetRow!.id}/enable`,
+      headers: bearer(adminToken),
+      payload: {},
+    });
+    expect(enabled.statusCode, enabled.body).toBe(200);
+    expect((await login(app, target.email)).statusCode).toBe(201);
+  });
+
+  it('says whether a password reset can be emailed, and answers a request the same either way', async () => {
+    const options = await app.inject({ method: 'GET', url: '/api/auth/options' });
+    expect(options.statusCode).toBe(200);
+    // No mail service in the test stack.
+    expect(options.json()).toEqual({ passwordResetEnabled: false });
+
+    for (const email of ['nobody-here@pipeline.test', 'someone@pipeline.test']) {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/auth/password-reset/request',
+        payload: { email },
+      });
+      expect(res.statusCode).toBe(200);
+      expect(res.json()).toEqual({});
+    }
+  });
+
+  it('sets a new password with a reset link once, and ends the old sessions', async () => {
+    const { token: oldSession, email } = await register(app, 'reset-me');
+    const [row] = await client.db.select({ id: user.id }).from(user).where(eq(user.email, email));
+    const token = 'a-reset-token-of-enough-length-1234567890';
+    await client.db.insert(passwordReset).values({
+      userId: row!.id,
+      tokenHash: createHash('sha256').update(token).digest('hex'),
+      expiresAt: new Date(Date.now() + 60_000),
+    });
+
+    const check = await app.inject({
+      method: 'POST',
+      url: '/api/auth/password-reset/check',
+      payload: { token },
+    });
+    expect(check.json()).toEqual({ valid: true });
+
+    const NEW_PASSWORD = 'BrandNewPass456!';
+    const confirmed = await app.inject({
+      method: 'POST',
+      url: '/api/auth/password-reset/confirm',
+      payload: { token, newPassword: NEW_PASSWORD },
+    });
+    expect(confirmed.statusCode, confirmed.body).toBe(200);
+
+    const me = await app.inject({
+      method: 'GET',
+      url: '/api/auth/me',
+      headers: bearer(oldSession),
+    });
+    expect(me.statusCode).toBe(401);
+    expect((await login(app, email, NEW_PASSWORD)).statusCode).toBe(201);
+
+    const again = await app.inject({
+      method: 'POST',
+      url: '/api/auth/password-reset/confirm',
+      payload: { token, newPassword: 'AnotherPass789!' },
+    });
+    expect(again.statusCode).toBe(400);
+  });
+
+  it('starts a new sign-up unconfirmed, and a mailed link confirms the address', async () => {
+    const { token: session, email } = await register(app, 'confirm-me');
+    const me = () => app.inject({ method: 'GET', url: '/api/auth/me', headers: bearer(session) });
+    expect((await me()).json()).toMatchObject({ emailVerified: false });
+
+    const [row] = await client.db.select({ id: user.id }).from(user).where(eq(user.email, email));
+    const token = 'a-confirm-token-of-enough-length-1234567';
+    await client.db.insert(emailVerification).values({
+      userId: row!.id,
+      email,
+      tokenHash: createHash('sha256').update(token).digest('hex'),
+      expiresAt: new Date(Date.now() + 60_000),
+    });
+
+    // Public: the link may be opened in a browser signed in to nothing.
+    const confirmed = await app.inject({
+      method: 'POST',
+      url: '/api/auth/email-verification/confirm',
+      payload: { token },
+    });
+    expect(confirmed.statusCode, confirmed.body).toBe(200);
+    expect(confirmed.json()).toEqual({ email });
+    expect((await me()).json()).toMatchObject({ emailVerified: true });
+  });
+
+  it('hands a person their own data as a download, without the password hash', async () => {
+    const { token: session, email } = await register(app, 'export-me');
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/account/export',
+      headers: bearer(session),
+    });
+    expect(res.statusCode, res.body).toBe(200);
+    expect(res.headers['content-disposition']).toMatch(/^attachment; filename="account-data-/);
+    expect(res.json()).toMatchObject({ account: { email }, organizations: [{ role: 'OWNER' }] });
+    expect(res.body).not.toContain('$2');
+  });
+
+  it('deletes the account on the right password, and the session dies with it', async () => {
+    const { token: session, email } = await register(app, 'delete-me');
+    const remove = (password: string) =>
+      app.inject({
+        method: 'DELETE',
+        url: '/api/account',
+        headers: bearer(session),
+        payload: { password },
+      });
+
+    // 403: a 401 would tell the client its session had died.
+    expect((await remove('WrongPassword123!')).statusCode).toBe(403);
+    const res = await remove(PASSWORD);
+    expect(res.statusCode, res.body).toBe(200);
+
+    const me = await app.inject({ method: 'GET', url: '/api/auth/me', headers: bearer(session) });
+    expect(me.statusCode).toBe(401);
+    expect((await login(app, email)).statusCode).toBe(401);
   });
 
   it('rejects a bad password with 401 and never leaks which half was wrong', async () => {

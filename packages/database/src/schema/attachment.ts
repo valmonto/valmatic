@@ -49,9 +49,9 @@ export const attachment = pgTable(
     // Voice-message amplitude envelope (0–100 ints), captured client-side —
     // players render it without decoding audio.
     waveform: jsonb('waveform').$type<number[]>(),
-    uploadedBy: uuid('uploaded_by')
-      .notNull()
-      .references(() => user.id, { onDelete: 'restrict' }),
+    // The file belongs to the organization, not to the person who uploaded
+    // it: when that person deletes their account the file stays, unattributed.
+    uploadedBy: uuid('uploaded_by').references(() => user.id, { onDelete: 'set null' }),
     expiresAt: timestamp('expires_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),

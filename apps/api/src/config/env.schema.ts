@@ -80,6 +80,17 @@ export const envSchema = z
     // logins from one address (the e2e runner) has a reason to raise it.
     AUTH_RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(10),
 
+    // Email (password reset and email confirmation). RESEND_API_KEY IS a
+    // secret; MAIL_FROM is the sender people see, e.g. `Valmatic
+    // <no-reply@mail.example.com>`, on a domain verified with the mail
+    // service. Mail is ON only when BOTH are set. Half a setup never stops the
+    // API from starting: it leaves mail off, and `GET /auth/options` says so,
+    // which hides the "forgot password" link.
+    RESEND_API_KEY: z.string().min(1).optional(),
+    MAIL_FROM: z.string().min(3).optional(),
+    // Where the mail service is. Only a test stack has a reason to change it.
+    RESEND_API_URL: z.string().url().default('https://api.resend.com'),
+
     // Browser origins allowed to call the API, comma-separated
     // (`https://app.example.com,https://admin.example.com`). Unset → local
     // development only (localhost and the LAN). See config/cors.ts.

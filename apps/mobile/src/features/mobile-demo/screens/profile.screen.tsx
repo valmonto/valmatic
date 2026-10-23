@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router';
 import { useColorScheme } from 'nativewind';
 import { toast } from 'sonner-native';
 import { useTranslation } from 'react-i18next';
+import { k } from '@pkg/locales';
 import {
   Bell,
   Blocks,
@@ -20,6 +21,7 @@ import {
   ShieldCheck,
   Smartphone,
   Sun,
+  Trash2,
   Vibrate,
   type LucideIcon,
 } from 'lucide-react-native';
@@ -78,7 +80,7 @@ function PreferenceRow({
 
 export default function ProfileScreen() {
   const { colorScheme, toggleColorScheme } = useColorScheme();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
@@ -305,6 +307,17 @@ export default function ProfileScreen() {
           >
             <Icon as={LogOut} size={16} className="text-destructive" />
             <Text className="text-[13px] font-medium text-destructive">Sign out</Text>
+          </Pressable>
+
+          {/* Delete account — the App Store requires it inside the app. */}
+          <Pressable
+            onPress={() => router.push('/delete-account')}
+            className="flex-row items-center justify-center gap-2 py-2 active:opacity-60"
+          >
+            <Icon as={Trash2} size={14} className="text-muted-foreground" />
+            <Text className="text-[12px] text-muted-foreground">
+              {t(k.auth.settings.deleteAccount)}
+            </Text>
           </Pressable>
 
           <Text className="pb-2 text-center text-[11px] text-muted-foreground/60">

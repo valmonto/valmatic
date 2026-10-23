@@ -9,6 +9,10 @@ import type {
   DeleteUserByIdResponse,
   GetUserByIdRequest,
   DeleteUserByIdRequest,
+  AdminDisableUserRequest,
+  AdminDisableUserResponse,
+  AdminEnableUserRequest,
+  AdminEnableUserResponse,
 } from '@pkg/contracts';
 import { http, type HttpClient } from '@/shared/api/http';
 
@@ -30,6 +34,13 @@ export const userResource = (client: HttpClient) => ({
 
   remove: (dto: DeleteUserByIdRequest): Promise<DeleteUserByIdResponse> =>
     client.delete(`/api/users/${dto.id}`),
+
+  // Platform admins only (the API checks): turn an account off everywhere.
+  disable: (dto: AdminDisableUserRequest): Promise<AdminDisableUserResponse> =>
+    client.post(`/api/admin/users/${dto.id}/disable`, { reason: dto.reason }),
+
+  enable: (dto: AdminEnableUserRequest): Promise<AdminEnableUserResponse> =>
+    client.post(`/api/admin/users/${dto.id}/enable`, {}),
 });
 
 /** Bound instance the feature uses internally. */

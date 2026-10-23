@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
 import { AuthShell } from './auth-shell';
-import { useLogin } from '../hooks/use-auth-actions';
+import { useAuthOptions, useLogin } from '../hooks/use-auth-actions';
 
 // --- Password validation helper ---
 const validatePassword = (password: string) => {
@@ -34,6 +34,7 @@ export const AuthView = () => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
   const { execute: login, isLoading: isApiLoading, error } = useLogin();
+  const { data: options } = useAuthOptions();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +86,17 @@ export const AuthView = () => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">{t(k.auth.password)}</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">{t(k.auth.password)}</Label>
+            {options?.passwordResetEnabled && (
+              <Link
+                to="/auth/forgot-password"
+                className="text-sm text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+              >
+                {t(k.auth.forgotPassword)}
+              </Link>
+            )}
+          </div>
           <Input
             id="password"
             type="password"

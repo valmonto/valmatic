@@ -27,6 +27,7 @@ import { InvitationModule } from './invitations/index.js';
 import { McpModule } from './mcp/index.js';
 import { I18nModule } from './i18n/index.js';
 import { SeedModule } from './seed/seed.module.js';
+import { MailModule } from './mail/mail.module.js';
 import { validateEnv } from './config/index.js';
 
 @Module({
@@ -85,6 +86,7 @@ import { validateEnv } from './config/index.js';
     EventsModule,
     I18nModule,
     HealthModule,
+    MailModule,
     AuthModule,
     UserModule,
     OrgModule,

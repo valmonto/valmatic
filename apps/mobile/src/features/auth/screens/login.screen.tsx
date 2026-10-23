@@ -1,7 +1,10 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+import { KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { k } from '@pkg/locales';
+import { authApi } from '../api';
 import { Controller, useForm, type Resolver } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { SafeAreaView } from '@/shared/components/safe-area-view';
 import { AxiosError } from 'axios';
 import { Lock, Mail, type LucideIcon } from 'lucide-react-native';
@@ -68,6 +71,15 @@ function Field({
 
 export default function LoginScreen() {
   const { t } = useTranslation();
+  const router = useRouter();
+  // "Forgot password?" only where the server can actually send the email.
+  const [canResetPassword, setCanResetPassword] = useState(false);
+  useEffect(() => {
+    authApi
+      .options()
+      .then((o) => setCanResetPassword(o.passwordResetEnabled))
+      .catch(() => setCanResetPassword(false));
+  }, []);
   const signIn = useAuthStore((s) => s.signIn);
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -155,6 +167,16 @@ export default function LoginScreen() {
                 )}
               />
             </Field>
+
+            {canResetPassword ? (
+              <Pressable
+                onPress={() => router.push('/forgot-password')}
+                className="self-end px-1"
+                accessibilityRole="link"
+              >
+                <Text className="text-sm font-medium text-primary">{t(k.auth.forgotPassword)}</Text>
+              </Pressable>
+            ) : null}
 
             {serverError ? (
               <View className="rounded-xl bg-destructive/10 px-4 py-3">

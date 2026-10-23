@@ -1,0 +1,2 @@
+ALTER TABLE "attachment" ALTER COLUMN "uploaded_by" DROP NOT NULL;--> statement-breakpoint
+ALTER TABLE "attachment" DROP CONSTRAINT "attachment_uploaded_by_user_id_fkey", ADD CONSTRAINT "attachment_uploaded_by_user_id_fkey" FOREIGN KEY ("uploaded_by") REFERENCES "user"("id") ON DELETE SET NULL;

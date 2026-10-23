@@ -33,7 +33,8 @@ export const AttachmentSchema = z.object({
   sizeBytes: z.number().int(),
   waveform: z.array(z.number()).nullable(),
   hasThumbnail: z.boolean(),
-  uploadedBy: z.string().uuid(),
+  /** `null` once the uploader has deleted their account. */
+  uploadedBy: z.string().uuid().nullable(),
   expiresAt: z.string().nullable(),
   createdAt: z.string(),
 });

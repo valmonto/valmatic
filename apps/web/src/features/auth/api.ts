@@ -1,4 +1,14 @@
 import type {
+  AccountExport,
+  AuthOptionsResponse,
+  DeleteAccountRequest,
+  ChangeUnverifiedEmailRequest,
+  ChangeUnverifiedEmailResponse,
+  EmailVerificationConfirmResponse,
+  EmailVerificationResendResponse,
+  PasswordResetCheckResponse,
+  PasswordResetConfirmRequest,
+  PasswordResetRequest,
   ChangePasswordRequest,
   ChangePasswordResponse,
   CurrentUserRequest,
@@ -28,6 +38,24 @@ export const authResource = (client: HttpClient) => ({
     client.post('/api/auth/logout-all', dto),
   changePassword: (dto: ChangePasswordRequest): Promise<ChangePasswordResponse> =>
     client.post('/api/auth/change-password', dto),
+  options: (): Promise<AuthOptionsResponse> => client.get('/api/auth/options'),
+  requestPasswordReset: (dto: PasswordResetRequest): Promise<Record<string, never>> =>
+    client.post('/api/auth/password-reset/request', dto),
+  checkPasswordReset: (token: string): Promise<PasswordResetCheckResponse> =>
+    client.post('/api/auth/password-reset/check', { token }),
+  confirmPasswordReset: (dto: PasswordResetConfirmRequest): Promise<Record<string, never>> =>
+    client.post('/api/auth/password-reset/confirm', dto),
+  resendEmailConfirmation: (locale: string): Promise<EmailVerificationResendResponse> =>
+    client.post('/api/auth/email-verification/resend', { locale }),
+  confirmEmail: (token: string): Promise<EmailVerificationConfirmResponse> =>
+    client.post('/api/auth/email-verification/confirm', { token }),
+  changeUnverifiedEmail: (
+    dto: ChangeUnverifiedEmailRequest,
+  ): Promise<ChangeUnverifiedEmailResponse> =>
+    client.post('/api/auth/email-verification/change', dto),
+  exportAccount: (): Promise<AccountExport> => client.get('/api/account/export'),
+  deleteAccount: (dto: DeleteAccountRequest): Promise<Record<string, never>> =>
+    client.delete('/api/account', { data: dto }),
 });
 
 /** Bound instance the feature uses internally. */

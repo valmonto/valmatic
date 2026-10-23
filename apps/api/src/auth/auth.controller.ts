@@ -3,6 +3,8 @@ import { AUTH_THROTTLE } from '../config/index.js';
 import { Controller, Get, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
 import { InjectLogger, PinoLogger } from '@pkg/server';
 import { AuthService } from './auth.service.js';
+import { MailService } from '../mail/mail.service.js';
+import { EmailVerificationService } from './email-verification/email-verification.service.js';
 import {
   PublicRoute,
   ActiveUser,
@@ -15,6 +17,7 @@ import {
 } from '@pkg/server';
 import { k } from '@pkg/locales';
 import { tryCatch } from '@pkg/utils';
+import type { AuthOptionsResponse } from '@pkg/contracts';
 import {
   type AuthTokens,
   type ChangePasswordRequest,
@@ -49,8 +52,20 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly iamService: IamService,
+    private readonly mail: MailService,
+    private readonly verifications: EmailVerificationService,
     @InjectLogger() private readonly logger: PinoLogger,
   ) {}
+
+  /**
+   * What this deployment can do, for the sign-in screens: a client offers
+   * "forgot password?" only when an email can actually be sent.
+   */
+  @PublicRoute()
+  @Get('options')
+  options(): AuthOptionsResponse {
+    return { passwordResetEnabled: this.mail.isConfigured };
+  }
 
   /**
    * Non-browser clients (the mobile app) send `X-Client: mobile` and receive
@@ -118,6 +133,11 @@ export class AuthController {
     @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<RegisterResponse> {
     const { response, accessToken, refreshToken } = await this.authService.register(dto);
+    // The address is mailed a link to confirm it. Not awaited: the account
+    // works at once, and a slow mail service must not slow the sign-up.
+    void this.verifications.send(response.user.id, dto.locale).catch((error: unknown) => {
+      this.logger.error({ err: error }, 'Verification email failed');
+    });
     return this.deliverTokens(req, reply, { accessToken, refreshToken }, response);
   }
 

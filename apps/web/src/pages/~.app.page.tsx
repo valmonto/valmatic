@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { k } from '@pkg/locales';
 import { useAuth } from '@/shared/auth/auth-context';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { EmailConfirmBanner } from '@/features/auth';
 import { AppSidebar } from '@/components/layouts/dashboard-layout';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -131,6 +132,7 @@ export default function AppLayout() {
           </div>
         </header>
         <main className="min-w-0 flex-1 overflow-x-hidden p-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <EmailConfirmBanner />
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Outlet />
           </ErrorBoundary>

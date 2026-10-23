@@ -42,6 +42,8 @@ export async function upsertUser(db: Db, spec: SeedUserSpec): Promise<User | und
       name: spec.name,
       passwordHash,
       systemRole: spec.systemRole ?? 'USER',
+      // Seeded accounts are the operator's own; nobody is asked to confirm them.
+      emailVerifiedAt: new Date(),
     })
     .onConflictDoUpdate({
       target: user.email,

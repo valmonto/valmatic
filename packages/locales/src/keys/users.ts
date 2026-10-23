@@ -26,6 +26,9 @@ export const users = {
   editUser: 'users.editUser',
   deleteUser: 'users.deleteUser',
   deleting: 'users.deleting',
+  disableUser: 'users.disableUser',
+  enableUser: 'users.enableUser',
+  disabled: 'users.disabled',
   save: 'users.save',
   saving: 'users.saving',
 
@@ -48,5 +51,7 @@ export const users = {
     onlyOwnersCanChangeOwners: 'users.errors.onlyOwnersCanChangeOwners',
     cannotRemoveSelf: 'users.errors.cannotRemoveSelf',
     onlyOwnersCanRemoveOwners: 'users.errors.onlyOwnersCanRemoveOwners',
+    cannotDisableSelf: 'users.errors.cannotDisableSelf',
+    lastOwnerOfSharedOrg: 'users.errors.lastOwnerOfSharedOrg',
   },
 } as const;

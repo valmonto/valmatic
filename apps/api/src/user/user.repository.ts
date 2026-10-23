@@ -23,6 +23,7 @@ export interface OrgUserRecord {
   joinedAt: Date;
   createdAt: Date;
   updatedAt: Date;
+  disabledAt: Date | null;
 }
 
 @Injectable()
@@ -60,6 +61,7 @@ export class UserRepository {
           joinedAt: organizationUser.joinedAt,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
+          disabledAt: user.disabledAt,
         })
         .from(user)
         .innerJoin(organizationUser, eq(organizationUser.userId, user.id))
@@ -92,6 +94,7 @@ export class UserRepository {
         joinedAt: organizationUser.joinedAt,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        disabledAt: user.disabledAt,
       })
       .from(user)
       .innerJoin(
@@ -121,6 +124,8 @@ export class UserRepository {
     phone?: string;
     orgId: string;
     role: OrganizationUserRole;
+    /** The address is already proven, e.g. the person came through an emailed invitation. */
+    emailVerified?: boolean;
   }): Promise<OrgUserRecord> {
     return this.dbClient.db.transaction(async (tx) => {
       const [newUser] = await tx
@@ -130,6 +135,7 @@ export class UserRepository {
           name: data.name,
           passwordHash: data.passwordHash,
           phone: data.phone,
+          emailVerifiedAt: data.emailVerified ? new Date() : null,
         })
         .returning();
 
@@ -160,6 +166,7 @@ export class UserRepository {
         joinedAt: membership.joinedAt,
         createdAt: newUser.createdAt,
         updatedAt: newUser.updatedAt,
+        disabledAt: newUser.disabledAt,
       };
     });
   }
@@ -268,6 +275,7 @@ export class UserRepository {
           joinedAt: organizationUser.joinedAt,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
+          disabledAt: user.disabledAt,
         })
         .from(user)
         .innerJoin(
@@ -297,6 +305,26 @@ export class UserRepository {
       .where(eq(organizationUser.userId, userId));
 
     return result[0]?.count ?? 0;
+  }
+
+  /**
+   * Turn an account off (`to` set) or back on (`to` null). Answers whether
+   * the account exists. Platform-wide: not scoped to an organization.
+   */
+  async setDisabled(
+    userId: string,
+    to: { at: Date; by: string; reason: string | null } | null,
+  ): Promise<boolean> {
+    const result = await this.dbClient.db
+      .update(user)
+      .set({
+        disabledAt: to?.at ?? null,
+        disabledBy: to?.by ?? null,
+        disabledReason: to?.reason ?? null,
+      })
+      .where(eq(user.id, userId))
+      .returning({ id: user.id });
+    return result.length > 0;
   }
 
   async deleteUser(userId: string): Promise<void> {

@@ -34,4 +34,5 @@ export {
   count,
   desc,
   asc,
+  inArray,
 } from 'drizzle-orm';
