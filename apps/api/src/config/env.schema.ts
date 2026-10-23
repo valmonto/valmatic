@@ -140,6 +140,26 @@ export const envSchema = z
   .superRefine((env, ctx) => {
     if (env.NODE_ENV !== 'production') return;
 
+    // Example signing secrets (any value with "change-me" in it) are public: a server
+    // started with them would accept a session anybody can forge. Refused,
+    // as is one secret used for both, so one leak is not two.
+    for (const key of ['IAM_JWT_SECRET', 'IAM_COOKIE_SECRET'] as const) {
+      if (/change-?me/i.test(env[key])) {
+        ctx.addIssue({
+          code: 'custom',
+          path: [key],
+          message: `${key} is the example value; set a random secret in production`,
+        });
+      }
+    }
+    if (env.IAM_JWT_SECRET === env.IAM_COOKIE_SECRET) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['IAM_COOKIE_SECRET'],
+        message: 'IAM_COOKIE_SECRET must differ from IAM_JWT_SECRET in production',
+      });
+    }
+
     for (const key of ['SEED_INITIAL_EMAIL', 'SEED_INITIAL_PASSWORD', 'WEB_APP_URL'] as const) {
       if (!env[key]) {
         ctx.addIssue({

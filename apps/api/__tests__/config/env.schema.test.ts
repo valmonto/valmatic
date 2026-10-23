@@ -67,3 +67,32 @@ describe('AUTH_RATE_LIMIT_MAX', () => {
     expect(() => validateEnv({ ...base(), AUTH_RATE_LIMIT_MAX: '0' })).toThrow();
   });
 });
+
+describe('production secrets', () => {
+  /** Example values are public, so anybody could forge a session. */
+  it.each([
+    ['IAM_JWT_SECRET', 'dev-jwt-secret-change-me-at-least-32-characters'],
+    ['IAM_COOKIE_SECRET', 'dev-cookie-secret-change-me-at-least-32-characters'],
+  ] as const)('refuses %s left at the example value', (key, value) => {
+    expect(() => validateEnv({ ...prodBase, [key]: value })).toThrow(
+      new RegExp(`${key} is the example value`),
+    );
+  });
+
+  it('refuses one secret used for both signing jobs', () => {
+    expect(() => validateEnv({ ...prodBase, IAM_COOKIE_SECRET: prodBase.IAM_JWT_SECRET })).toThrow(
+      /must differ/,
+    );
+  });
+
+  it('lets development run on the example values', () => {
+    expect(() =>
+      validateEnv({
+        ...prodBase,
+        NODE_ENV: 'development',
+        IAM_JWT_SECRET: 'dev-jwt-secret-change-me-at-least-32-characters',
+        IAM_COOKIE_SECRET: 'dev-jwt-secret-change-me-at-least-32-characters',
+      }),
+    ).not.toThrow();
+  });
+});

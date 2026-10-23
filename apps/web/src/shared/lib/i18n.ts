@@ -7,10 +7,12 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    resources: {
-      en: { translation: translations.en },
-      es: { translation: translations.es },
-    },
+    // Every language the app is offered in. (Only English and Spanish used
+    // to be loaded here, so choosing Lithuanian in the switcher
+    // silently showed English.)
+    resources: Object.fromEntries(
+      supportedLanguages.map((language) => [language, { translation: translations[language] }]),
+    ),
     fallbackLng: defaultLanguage,
     supportedLngs: [...supportedLanguages],
     interpolation: {

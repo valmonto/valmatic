@@ -260,6 +260,7 @@
   "users.errors.notFoundInOrg": "Vartotojas organizacijoje nerastas",
   "users.errors.onlyOwnersCanCreateOwners": "Tik savininkai gali kurti kitus savininkus",
   "users.errors.onlyOwnersCanPromote": "Tik savininkai gali paaukštinti vartotojus iki savininko",
+  "users.errors.onlyOwnersCanChangeOwners": "Tik savininkai gali keisti savininką",
   "users.errors.onlyOwnersCanRemoveOwners": "Tik savininkai gali pašalinti kitus savininkus",
   "users.errors.ownersCannotChangeOwnRole": "Savininkai negali keisti savo vaidmens",
   "users.fullName": "Vardas ir pavardė",

@@ -174,6 +174,17 @@ describe('mergeRequestInput', () => {
     expect(merged.page).toBe('9');
   });
 
+  // Spreading a non-object body copies it a key per byte: a large one froze
+  // the API. Only a JSON object is input; anything else adds nothing.
+  it('takes nothing from a body that is not a JSON object', () => {
+    for (const body of [Buffer.alloc(1024 * 1024, 1), 'x'.repeat(1024 * 1024), [1, 2, 3], 42]) {
+      expect(mergeRequestInput({ body, params: { id: 'AAA' } })).toEqual({ id: 'AAA' });
+    }
+    expect(mergeRequestInput({ body: Object.assign(Object.create(null), { a: 1 }) })).toEqual({
+      a: 1,
+    });
+  });
+
   it('copes with any part being absent', () => {
     expect(mergeRequestInput({})).toEqual({});
     expect(mergeRequestInput({ params: { id: 'AAA' } })).toEqual({ id: 'AAA' });

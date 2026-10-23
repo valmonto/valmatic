@@ -260,6 +260,7 @@
   "users.errors.notFoundInOrg": "User not found in organization",
   "users.errors.onlyOwnersCanCreateOwners": "Only owners can create other owners",
   "users.errors.onlyOwnersCanPromote": "Only owners can promote users to owner",
+  "users.errors.onlyOwnersCanChangeOwners": "Only owners can change an owner",
   "users.errors.onlyOwnersCanRemoveOwners": "Only owners can remove other owners",
   "users.errors.ownersCannotChangeOwnRole": "Owners cannot change their own role",
   "users.fullName": "Full name",

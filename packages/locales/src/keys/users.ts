@@ -45,6 +45,7 @@ export const users = {
     onlyOwnersCanCreateOwners: 'users.errors.onlyOwnersCanCreateOwners',
     ownersCannotChangeOwnRole: 'users.errors.ownersCannotChangeOwnRole',
     onlyOwnersCanPromote: 'users.errors.onlyOwnersCanPromote',
+    onlyOwnersCanChangeOwners: 'users.errors.onlyOwnersCanChangeOwners',
     cannotRemoveSelf: 'users.errors.cannotRemoveSelf',
     onlyOwnersCanRemoveOwners: 'users.errors.onlyOwnersCanRemoveOwners',
   },
