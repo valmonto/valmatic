@@ -9,13 +9,18 @@ packages:
 # found ()"). Pin until NativeWind v5 catches up to newer lightningcss.
 overrides:
   lightningcss: 1.30.1
-  # @nestjs/platform-fastify pins fastify EXACTLY (5.12.1 at v12.0.1), so a
+  # @nestjs/platform-fastify pins fastify EXACTLY (5.12.4 at v12.0.2), so a
   # catalog bump alone would leave the adapter's instance unpatched next to a
   # second copy of ours. Forcing one version here keeps a single Fastify and
   # lets security patches (5.12.2 fixed four advisories) reach the running
   # server. Keep this equal to the catalog pin below; drop it if platform-fastify
   # ever moves to a range.
-  fastify: 5.12.3
+  fastify: 5.12.4
+  # fast-uri (through ajv and fastify) had host-confusion and normalization
+  # advisories fixed in 3.1.7 / 4.1.5. Nothing here validates a URI for a
+  # security decision today; the pins keep it that way should one be added.
+  'fast-uri@3': 3.1.8
+  'fast-uri@4': 4.1.5
 
 # @nestjs/throttler 6.5.0 declares peers up to ^11 while its runtime is what
 # upstream ships as v12-compatible (see the catalog comment). Acknowledge the
@@ -75,7 +80,7 @@ catalog:
   '@nestjs/config': 12.0.0
   '@nestjs/event-emitter': 12.0.0
   '@nestjs/jwt': 12.0.1
-  '@nestjs/platform-fastify': 12.0.1
+  '@nestjs/platform-fastify': 12.0.2
   '@nestjs/testing': 12.0.1
   '@fastify/cookie': 11.1.2
   '@fastify/helmet': 13.1.1
@@ -84,7 +89,7 @@ catalog:
   # is not yet published. peerDependencyRules below acknowledges that; delete
   # the rule and bump here when 6.5.1+ ships with ^12 in its peers.
   '@nestjs/throttler': 6.5.0
-  fastify: 5.12.3
+  fastify: 5.12.4
   reflect-metadata: 0.2.2
   rxjs: 7.8.2
 
@@ -337,7 +342,6 @@ minimumReleaseAgeExclude:
   - rolldown-plugin-dts@0.28.5
   - tsdown@0.23.0
   - lucide-react@1.41.0
-  - fastify@5.12.3
   - '@inquirer/ansi@2.0.8'
   - '@inquirer/checkbox@5.2.4'
   - '@inquirer/confirm@6.3.1'
