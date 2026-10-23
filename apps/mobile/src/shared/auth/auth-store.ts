@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import type { CurrentUserResponse, LoginRequest } from '@pkg/contracts';
 import { authApi } from '@/features/auth/api';
 import { setOnAuthError } from '@/shared/api/http';
-import { clearTokens, getRefreshToken, setTokens } from '@/shared/api/tokens';
+import { clearTokens, cookieSession, getRefreshToken, setTokens } from '@/shared/api/tokens';
 
 type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
 
@@ -29,6 +29,17 @@ export const useAuthStore = create<AuthState>((set) => {
     user: null,
 
     async bootstrap() {
+      if (cookieSession) {
+        // A browser holds no token: the server says whether its cookies are a
+        // session. Tokens an older web build left in localStorage are removed.
+        await clearTokens();
+        try {
+          await loadUser();
+        } catch {
+          set({ status: 'unauthenticated', user: null });
+        }
+        return;
+      }
       const refreshToken = await getRefreshToken();
       if (!refreshToken) {
         set({ status: 'unauthenticated', user: null });
@@ -46,10 +57,11 @@ export const useAuthStore = create<AuthState>((set) => {
 
     async signIn(credentials) {
       const data = await authApi.login(credentials);
-      if (!data.tokens) {
+      // A browser was handed httpOnly cookies, not tokens (see `cookieSession`).
+      if (!cookieSession && !data.tokens) {
         throw new Error('Login did not return tokens — is the X-Client header set?');
       }
-      await setTokens(data.tokens);
+      if (data.tokens) await setTokens(data.tokens);
       await loadUser();
     },
 
