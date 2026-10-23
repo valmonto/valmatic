@@ -50,7 +50,8 @@ always-human override list.
 
 ```bash
 pnpm install
-docker compose up -d          # postgres + redis
+cp .env.example .env && source .env
+docker compose -f compose.dev.yml up -d   # postgres + redis + rustfs
 pnpm --filter @pkg/database build && pnpm db:migrate
 pnpm db:seed
 pnpm dev
