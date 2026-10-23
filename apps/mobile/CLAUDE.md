@@ -21,6 +21,12 @@ Read ./README.md before changing this workspace.
 - expo-secure-store and expo-notifications have NO web implementation: a direct
   call at module scope or in an unguarded effect throws on the web preview and
   Expo's error overlay blocks every page. Persist through
-  `shared/lib/secure-storage` (keychain on device, localStorage on web) and
-  guard notification calls with `Platform.OS === 'web'`. Both happened once
-  and took the whole `expo start --web` path down.
+  `shared/lib/secure-storage` (keychain on device, localStorage on web). Both
+  happened once and took the whole `expo start --web` path down.
+- Never import `expo-notifications` statically — go through
+  `shared/notifications/load` (`loadNotifications()`, `null` where it cannot
+  run). Since SDK 53 the module throws while it is imported on Android Expo Go,
+  which blanks the whole app; it has no web implementation either. Type-only
+  imports are fine.
+- Never ask for notification permission at sign-in. Ask on the screen where
+  the user turns on the feature that needs it.

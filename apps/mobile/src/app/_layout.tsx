@@ -22,7 +22,7 @@ import {
 
 import { SWRProvider } from '@/shared/api/swr-provider';
 import { ForceUpdateGate } from '@/shared/update/force-update';
-import { usePushNotifications } from '@/shared/notifications/use-push-notifications';
+import { useNotificationTaps } from '@/shared/notifications/use-notification-taps';
 import { useAuthStore } from '@/shared/auth/auth-store';
 import { AnimatedSplash } from '@/shared/components/animated-splash';
 
@@ -81,9 +81,9 @@ export default function RootLayout() {
     Inter_800ExtraBold,
   });
   useAuthGate();
-  // Register for push + wire notification-tap → deep link (only once signed in,
-  // so the OS permission prompt isn't shown on the login screen).
-  usePushNotifications({ enabled: authStatus === 'authenticated' });
+  // A tap on a notification opens the screen it points to. Nothing here asks
+  // for permission: the feature that needs pushes asks when it is turned on.
+  useNotificationTaps();
 
   const isDark = colorScheme === 'dark';
   const navTheme = isDark ? NAV_DARK : NAV_LIGHT;
