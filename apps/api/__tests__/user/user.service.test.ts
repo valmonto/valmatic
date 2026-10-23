@@ -6,6 +6,7 @@ import type { PinoLogger } from 'nestjs-pino';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UserService } from '@/user/user.service.js';
 import type { UserRepository } from '@/user/user.repository.js';
+import type { IamService } from '@pkg/server';
 
 const ORG = 'org-1';
 const OTHER_ORG = 'org-2';
@@ -29,6 +30,7 @@ const member = {
 const ownerRecord = { ...member, id: 'owner-2', role: 'OWNER' as const };
 
 describe('UserService', () => {
+  let iam: { auth: { revokeAllForUser: ReturnType<typeof vi.fn> } };
   let service: UserService;
   let repository: Record<string, ReturnType<typeof vi.fn>>;
   let logger: FakeLogger;
@@ -45,7 +47,12 @@ describe('UserService', () => {
       deleteUser: vi.fn().mockResolvedValue(undefined),
     };
     logger = new FakeLogger();
-    service = new UserService(repository as unknown as UserRepository, logger.as<PinoLogger>());
+    iam = { auth: { revokeAllForUser: vi.fn().mockResolvedValue(undefined) } };
+    service = new UserService(
+      repository as unknown as UserRepository,
+      iam as unknown as IamService,
+      logger.as<PinoLogger>(),
+    );
   });
 
   describe('listUsers', () => {
@@ -158,6 +165,19 @@ describe('UserService', () => {
       expect(repository.updateUser).toHaveBeenCalledWith('member-1', ORG, expect.anything());
     });
 
+    // The role rides in the access token; a demoted admin kept it for
+    // up to 15 minutes. A change of role ends the person's sessions.
+    it('ends the sessions of someone whose role changed, and only then', async () => {
+      repository.findUserInOrg!.mockResolvedValue({ ...member, role: 'ADMIN' });
+
+      await service.updateUser(owner, { id: 'member-1', name: 'X' });
+      await service.updateUser(owner, { id: 'member-1', role: 'ADMIN' });
+      expect(iam.auth.revokeAllForUser).not.toHaveBeenCalled();
+
+      await service.updateUser(owner, { id: 'member-1', role: 'MEMBER' });
+      expect(iam.auth.revokeAllForUser).toHaveBeenCalledWith('member-1');
+    });
+
     // An OWNER demoting themselves could leave an organization with none.
     it('refuses an OWNER changing their own role', async () => {
       repository.findUserInOrg!.mockResolvedValue({ ...ownerRecord, id: owner.userId });
@@ -231,6 +251,8 @@ describe('UserService', () => {
       await service.removeUser(owner, 'member-1');
 
       expect(repository.removeUserFromOrg).toHaveBeenCalledWith('member-1', ORG);
+      // Removed now, not when their access token runs out.
+      expect(iam.auth.revokeAllForUser).toHaveBeenCalledWith('member-1');
     });
 
     // The account is shared across organizations, so it may only be deleted once
