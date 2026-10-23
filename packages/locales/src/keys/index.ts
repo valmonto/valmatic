@@ -18,6 +18,7 @@ export { jobs } from './jobs.js';
 export { notifications } from './notifications.js';
 export { mcp } from './mcp.js';
 export { common } from './common.js';
+export { email } from './email.js';
 export { validation } from './validation.js';
 
 // Combined keys object for convenience
@@ -31,6 +32,7 @@ import { jobs } from './jobs.js';
 import { notifications } from './notifications.js';
 import { mcp } from './mcp.js';
 import { common } from './common.js';
+import { email } from './email.js';
 import { validation } from './validation.js';
 
 export const k = {
@@ -44,5 +46,6 @@ export const k = {
   notifications,
   mcp,
   common,
+  email,
   validation,
 } as const;

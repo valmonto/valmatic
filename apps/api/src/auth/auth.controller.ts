@@ -3,6 +3,7 @@ import { AUTH_THROTTLE } from '../config/index.js';
 import { Controller, Get, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
 import { InjectLogger, PinoLogger } from '@pkg/server';
 import { AuthService } from './auth.service.js';
+import { MailService } from '../mail/mail.service.js';
 import {
   PublicRoute,
   ActiveUser,
@@ -15,6 +16,7 @@ import {
 } from '@pkg/server';
 import { k } from '@pkg/locales';
 import { tryCatch } from '@pkg/utils';
+import type { AuthOptionsResponse } from '@pkg/contracts';
 import {
   type AuthTokens,
   type ChangePasswordRequest,
@@ -49,8 +51,19 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly iamService: IamService,
+    private readonly mail: MailService,
     @InjectLogger() private readonly logger: PinoLogger,
   ) {}
+
+  /**
+   * What this deployment can do, for the sign-in screens: a client offers
+   * "forgot password?" only when an email can actually be sent.
+   */
+  @PublicRoute()
+  @Get('options')
+  options(): AuthOptionsResponse {
+    return { passwordResetEnabled: this.mail.isConfigured };
+  }
 
   /**
    * Non-browser clients (the mobile app) send `X-Client: mobile` and receive

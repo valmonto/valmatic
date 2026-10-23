@@ -1,4 +1,6 @@
 import type {
+  AuthOptionsResponse,
+  PasswordResetRequest,
   ChangePasswordRequest,
   ChangePasswordResponse,
   CurrentUserResponse,
@@ -26,6 +28,9 @@ export const authResource = (client: Api) => ({
   logoutAll: (): Promise<LogoutAllResponse> => client.post('/auth/logout-all'),
   changePassword: (dto: ChangePasswordRequest): Promise<ChangePasswordResponse> =>
     client.post('/auth/change-password', dto),
+  options: (): Promise<AuthOptionsResponse> => client.get('/auth/options'),
+  requestPasswordReset: (dto: PasswordResetRequest): Promise<Record<string, never>> =>
+    client.post('/auth/password-reset/request', dto),
 });
 
 export const authApi = authResource(api);

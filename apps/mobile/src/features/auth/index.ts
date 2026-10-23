@@ -4,3 +4,4 @@
  * same convention the web app enforces with ESLint boundaries.
  */
 export { default as LoginScreen } from './screens/login.screen';
+export { default as ForgotPasswordScreen } from './screens/forgot-password.screen';
