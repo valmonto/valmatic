@@ -19,7 +19,6 @@ import {
 import { AuthModule } from './auth/auth.module.js';
 import { UserModule } from './user/user.module.js';
 import { OrgModule } from './org/org.module.js';
-import { JobsModule } from './jobs/index.js';
 import { NotificationModule } from './notifications/index.js';
 import { AttachmentsModule } from './attachments/index.js';
 import { ApiKeyModule } from './api-key/index.js';
@@ -91,7 +90,6 @@ import { addonModules } from './addons.generated.js';
     AuthModule,
     UserModule,
     OrgModule,
-    JobsModule,
     NotificationModule,
     StorageModule.forRootAsync({
       inject: [ConfigService],

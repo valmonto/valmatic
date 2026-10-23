@@ -2,5 +2,14 @@
   "mobile.update.required": "Update required",
   "mobile.update.requiredBody": "A newer version of the app is required to continue. Please update to keep going.",
   "mobile.update.updateNow": "Update now",
-  "mobile.nav": "Mobile"
+  "mobile.tabs.home": "Home",
+  "mobile.tabs.profile": "Profile",
+  "mobile.home.greeting": "Hi, {{name}}",
+  "mobile.home.body": "Your app starts here.",
+  "mobile.home.explore": "Explore",
+  "mobile.profile.preferences": "Preferences",
+  "mobile.profile.darkMode": "Dark mode",
+  "mobile.profile.darkModeDescription": "Switch the app theme",
+  "mobile.profile.language": "Language",
+  "mobile.profile.chooseLanguage": "Choose your language"
 }

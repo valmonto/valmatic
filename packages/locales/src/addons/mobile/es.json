@@ -2,5 +2,14 @@
   "mobile.update.required": "Actualización necesaria",
   "mobile.update.requiredBody": "Se necesita una versión más reciente de la aplicación para continuar. Actualízala para seguir.",
   "mobile.update.updateNow": "Actualizar ahora",
-  "mobile.nav": "Móvil"
+  "mobile.tabs.home": "Inicio",
+  "mobile.tabs.profile": "Perfil",
+  "mobile.home.greeting": "Hola, {{name}}",
+  "mobile.home.body": "Tu aplicación empieza aquí.",
+  "mobile.home.explore": "Explorar",
+  "mobile.profile.preferences": "Preferencias",
+  "mobile.profile.darkMode": "Modo oscuro",
+  "mobile.profile.darkModeDescription": "Cambia el tema de la aplicación",
+  "mobile.profile.language": "Idioma",
+  "mobile.profile.chooseLanguage": "Elige tu idioma"
 }

@@ -21,6 +21,7 @@ import { OrgInviteButton } from '@/features/invitations';
 import { NotificationBell } from '@/features/notifications';
 import { LanguageSwitcher } from '@/shared/components/language-switcher';
 import { CommandMenu, openCommandMenu } from '@/shared/components/command-menu';
+import { addons } from '@/addons.generated';
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   const { t } = useTranslation();
@@ -42,14 +43,11 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
   '/users': 'Users',
-  '/jobs': 'Jobs',
   '/notifications': 'Notifications',
-  '/analytics': 'Analytics',
   '/settings': 'Settings',
   '/admin/orgs': 'Organizations',
   '/admin/permissions': 'Permissions',
   '/admin/api-keys': 'API keys',
-  '/components': 'Components',
 };
 
 export default function AppLayout() {
@@ -70,7 +68,10 @@ export default function AppLayout() {
     return <Navigate to="/auth/login" replace />;
   }
 
-  const pageTitle = pageTitles[location.pathname] || 'Page';
+  const addonLink = addons
+    .flatMap((addon) => addon.links ?? [])
+    .find((link) => link.url === location.pathname);
+  const pageTitle = pageTitles[location.pathname] || (addonLink ? t(addonLink.titleKey) : 'Page');
 
   return (
     <SidebarProvider>

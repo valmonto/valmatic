@@ -415,6 +415,8 @@ See LICENSES/boilerplate-MIT.txt for details.
     defaultLanguage: string;
   };
   valmatic.addons.mobile = wantsMobile;
+  // The demo shows what the template can do; no product keeps it.
+  valmatic.addons.demo = false;
   valmatic.languages = languages;
   valmatic.defaultLanguage = defaultLanguage;
   writeFileSync(configPath, JSON.stringify(valmatic, null, 2) + '\n', 'utf-8');

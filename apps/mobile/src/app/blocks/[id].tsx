@@ -1,1 +1,2 @@
-export { default } from '@/features/blocks/screens/block-detail.screen';
+// addon:demo — removed with the demo add-on (docs/addons.md).
+export { default } from '@/addons/demo/blocks/screens/block-detail.screen';

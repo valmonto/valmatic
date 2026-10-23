@@ -16,44 +16,41 @@ import { UserActionsDropdown } from './user-actions-dropdown';
 import { useSystemRole } from '@/shared/hooks/use-permissions';
 import { Link, useLocation } from 'react-router';
 import {
-  BarChart3,
   Building2,
   LayoutDashboard,
   Settings,
   ShieldCheck,
   Users,
   Hexagon,
-  ListTodo,
-  Blocks,
   KeyRound,
 } from 'lucide-react';
 import { addons } from '@/addons.generated';
 
+/** Links from the add-ons this project keeps (docs/addons.md), by sidebar group. */
+function addonLinks(group: 'management' | 'developer') {
+  return addons.flatMap((addon) =>
+    (addon.links ?? []).filter((link) => (link.group ?? 'developer') === group),
+  );
+}
+
 const navGroups = [
   {
     labelKey: k.common.nav.overview,
-    items: [
-      { titleKey: k.common.nav.dashboard, url: '/', icon: LayoutDashboard },
-      { titleKey: k.common.nav.analytics, url: '/analytics', icon: BarChart3 },
-    ],
+    items: [{ titleKey: k.common.nav.dashboard, url: '/', icon: LayoutDashboard }],
   },
   {
     labelKey: k.common.nav.management,
     items: [
       { titleKey: k.users.users, url: '/users', icon: Users },
-      { titleKey: k.jobs.jobs, url: '/jobs', icon: ListTodo },
       { titleKey: k.common.nav.settings, url: '/settings', icon: Settings },
+      ...addonLinks('management'),
     ],
   },
   {
     labelKey: k.common.nav.developer,
-    items: [
-      { titleKey: k.common.nav.components, url: '/components', icon: Blocks },
-      // Links from the add-ons this project keeps (docs/addons.md).
-      ...addons.flatMap((addon) => addon.links ?? []),
-    ],
+    items: addonLinks('developer'),
   },
-];
+].filter((group) => group.items.length > 0);
 
 // Platform pages exist only for platform admins. Hiding the group is
 // rendering; the API enforces @SystemRoles(ADMIN) regardless.

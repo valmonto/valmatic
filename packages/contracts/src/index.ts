@@ -23,5 +23,3 @@ export {
   type AttachmentPolicy,
 } from './constants/attachment.js';
 
-// Optional parts this project keeps (valmatic.json, docs/addons.md).
-export * from './addons.generated.js';

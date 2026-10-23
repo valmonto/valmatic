@@ -1,11 +1,13 @@
 import type { LucideIcon } from 'lucide-react';
 import type { RouteObject } from 'react-router';
 
-/** A link an add-on puts in the sidebar's Developer group and the command menu. */
+/** A link an add-on puts in the sidebar and the command menu. */
 export interface AddonLink {
   titleKey: string;
   url: string;
   icon: LucideIcon;
+  /** The sidebar group it goes in. Default: Developer. */
+  group?: 'management' | 'developer';
 }
 
 /**
