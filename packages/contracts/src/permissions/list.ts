@@ -7,6 +7,8 @@ export const PERMISSIONS = [
   'auth:read-self',
   'auth:change-password',
   'auth:logout',
+  'auth:delete-self', // Delete one's own account
+  'auth:export-self', // Download a copy of one's own data
 
   // Organization permissions
   'org:list',

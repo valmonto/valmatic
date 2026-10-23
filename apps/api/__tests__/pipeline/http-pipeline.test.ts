@@ -527,6 +527,39 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
     expect((await me()).json()).toMatchObject({ emailVerified: true });
   });
 
+  it('hands a person their own data as a download, without the password hash', async () => {
+    const { token: session, email } = await register(app, 'export-me');
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/account/export',
+      headers: bearer(session),
+    });
+    expect(res.statusCode, res.body).toBe(200);
+    expect(res.headers['content-disposition']).toMatch(/^attachment; filename="account-data-/);
+    expect(res.json()).toMatchObject({ account: { email }, organizations: [{ role: 'OWNER' }] });
+    expect(res.body).not.toContain('$2');
+  });
+
+  it('deletes the account on the right password, and the session dies with it', async () => {
+    const { token: session, email } = await register(app, 'delete-me');
+    const remove = (password: string) =>
+      app.inject({
+        method: 'DELETE',
+        url: '/api/account',
+        headers: bearer(session),
+        payload: { password },
+      });
+
+    // 403: a 401 would tell the client its session had died.
+    expect((await remove('WrongPassword123!')).statusCode).toBe(403);
+    const res = await remove(PASSWORD);
+    expect(res.statusCode, res.body).toBe(200);
+
+    const me = await app.inject({ method: 'GET', url: '/api/auth/me', headers: bearer(session) });
+    expect(me.statusCode).toBe(401);
+    expect((await login(app, email)).statusCode).toBe(401);
+  });
+
   it('rejects a bad password with 401 and never leaks which half was wrong', async () => {
     const { email } = await register(app, 'badpw');
     const res = await login(app, email, 'WrongPassword123!');

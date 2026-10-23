@@ -16,6 +16,8 @@ interface AuthState {
   bootstrap: () => Promise<void>;
   signIn: (credentials: LoginRequest) => Promise<void>;
   signOut: () => Promise<void>;
+  /** Delete the account for good; the session goes with it. Throws on refusal. */
+  deleteAccount: (password: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => {
@@ -88,6 +90,13 @@ export const useAuthStore = create<AuthState>((set, get) => {
       } catch {
         // Even if the server call fails, drop local session below.
       }
+      await clearTokens();
+      set({ status: 'unauthenticated', user: null });
+    },
+
+    async deleteAccount(password) {
+      await authApi.deleteAccount({ password });
+      // The server revoked every session; only the local copy is left.
       await clearTokens();
       set({ status: 'unauthenticated', user: null });
     },

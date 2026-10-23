@@ -19,7 +19,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Eye, EyeOff, Loader2, LogOut, Shield, KeyRound, Settings } from 'lucide-react';
+import {
+  Download,
+  Eye,
+  EyeOff,
+  Loader2,
+  LogOut,
+  Shield,
+  KeyRound,
+  Settings,
+  Trash2,
+  UserRound,
+} from 'lucide-react';
 import { PASSWORD_REGEX, type ChangePasswordRequest } from '@pkg/contracts';
 import { PageHeader } from '@/shared/components/page-header';
 
@@ -280,6 +291,139 @@ function LogoutAllDevicesCard() {
   );
 }
 
+function DownloadDataCard() {
+  const { t } = useTranslation();
+  const { execute, isLoading, error } = useActionRequest(() => api.auth.exportAccount());
+
+  const handleDownload = async () => {
+    const { d: data } = await execute({});
+    if (data === null) return;
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `account-data-${data.exportedAt.slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2.5">
+          <div className="flex size-9 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-500/15">
+            <Download className="size-4 text-blue-600 dark:text-blue-400" />
+          </div>
+          {t(k.auth.settings.downloadData)}
+        </CardTitle>
+        <CardDescription>{t(k.auth.settings.downloadDataDescription)}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {error && (
+          <div className="rounded-lg bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive mb-4">
+            {t(error.message)}
+          </div>
+        )}
+        <Button variant="outline" onClick={handleDownload} disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Loader2 className="size-4 animate-spin" /> {t(k.auth.settings.preparingDownload)}
+            </>
+          ) : (
+            t(k.auth.settings.downloadData)
+          )}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+function DeleteAccountCard() {
+  const { t } = useTranslation();
+  const [password, setPassword] = useState('');
+  const [open, setOpen] = useState(false);
+  const { execute, isLoading, error } = useActionRequest((pw: string) =>
+    api.auth.deleteAccount({ password: pw }),
+  );
+
+  const handleDelete = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { d: result } = await execute(password);
+    if (result !== null) {
+      // The session ended with the account.
+      window.location.href = '/auth/login';
+    }
+  };
+
+  return (
+    <Card className="border-destructive/40">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2.5">
+          <div className="flex size-9 items-center justify-center rounded-xl bg-red-100 dark:bg-red-500/15">
+            <Trash2 className="size-4 text-red-600 dark:text-red-400" />
+          </div>
+          {t(k.auth.settings.deleteAccount)}
+        </CardTitle>
+        <CardDescription>{t(k.auth.settings.deleteAccountDescription)}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <AlertDialog
+          open={open}
+          onOpenChange={(next) => {
+            setOpen(next);
+            if (!next) setPassword('');
+          }}
+        >
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive">{t(k.auth.settings.deleteAccount)}</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <form onSubmit={handleDelete} className="space-y-4">
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t(k.auth.settings.deleteAccountConfirm)}</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {t(k.auth.settings.deleteAccountWarning)}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              {error && (
+                <div className="rounded-lg bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
+                  {t(error.message)}
+                </div>
+              )}
+              <div className="space-y-2">
+                <Label htmlFor="deleteAccountPassword">
+                  {t(k.auth.settings.deleteAccountPassword)}
+                </Label>
+                <Input
+                  id="deleteAccountPassword"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <AlertDialogFooter>
+                <AlertDialogCancel type="button">{t(k.common.actions.cancel)}</AlertDialogCancel>
+                <Button type="submit" variant="destructive" disabled={isLoading || !password}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" />{' '}
+                      {t(k.auth.settings.deletingAccount)}
+                    </>
+                  ) : (
+                    t(k.auth.settings.deleteAccount)
+                  )}
+                </Button>
+              </AlertDialogFooter>
+            </form>
+          </AlertDialogContent>
+        </AlertDialog>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function SettingsPage() {
   const { t } = useTranslation();
 
@@ -298,11 +442,20 @@ export default function SettingsPage() {
             <Shield className="size-4" />
             {t(k.auth.settings.security)}
           </TabsTrigger>
+          <TabsTrigger value="account">
+            <UserRound className="size-4" />
+            {t(k.auth.settings.account)}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="security" className="mt-6 space-y-6">
           <ChangePasswordForm />
           <LogoutAllDevicesCard />
+        </TabsContent>
+
+        <TabsContent value="account" className="mt-6 space-y-6">
+          <DownloadDataCard />
+          <DeleteAccountCard />
         </TabsContent>
       </Tabs>
     </div>
