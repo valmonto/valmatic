@@ -98,3 +98,17 @@ export function useDeleteUser() {
   };
   return { ...req, execute };
 }
+
+/** Platform admins: turn an account off, or back on. */
+export function useSetUserDisabled() {
+  const invalidate = useInvalidateUsers();
+  const req = useActionRequest((dto: { id: string; disabled: boolean }) =>
+    dto.disabled ? usersApi.disable({ id: dto.id }) : usersApi.enable({ id: dto.id }),
+  );
+  const execute = async (dto: { id: string; disabled: boolean }) => {
+    const res = await req.execute(dto);
+    if (!res.e) await invalidate();
+    return res;
+  };
+  return { ...req, execute };
+}

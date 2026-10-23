@@ -7,6 +7,7 @@ import {
   organizationUser,
   eq,
   and,
+  isNull,
   User,
   Organization,
   OrganizationUser,
@@ -116,7 +117,11 @@ export class AuthRepository {
         organizationUser,
         and(eq(organizationUser.userId, user.id), eq(organizationUser.orgId, orgId)),
       )
-      .where(eq(user.id, userId))
+      // A disabled account has no access at all. This read is what the auth
+      // guard's refresh re-verifies against (`OrgAccessProvider`) and what
+      // `/auth/me` returns, so excluding it here ends a disabled account's
+      // session at the next refresh even if a revoke was somehow missed.
+      .where(and(eq(user.id, userId), isNull(user.disabledAt)))
       .limit(1);
 
     return result[0] ?? null;

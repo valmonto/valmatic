@@ -1,4 +1,4 @@
-import { pgTable, varchar, timestamp, check } from 'drizzle-orm/pg-core';
+import { pgTable, varchar, timestamp, check, uuid, type AnyPgColumn } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 import { pk } from './helpers.js';
 import { SYSTEM_ROLES, type SystemRole as SystemRoleType } from '@pkg/contracts';
@@ -19,6 +19,20 @@ export const user = pgTable(
       .$type<SystemRoleType>()
       .notNull()
       .default('USER'),
+    /**
+     * Set when a platform admin disables the account; `null` is the normal
+     * state. A disabled account cannot sign in or refresh a session, and its
+     * live sessions are revoked at the moment it is disabled. The row and
+     * everything it owns stay — disabling is the reversible alternative to
+     * deleting.
+     */
+    disabledAt: timestamp('disabled_at', { withTimezone: true }),
+    /** Who disabled it. Survives that admin being deleted: set null, not cascade. */
+    disabledBy: uuid('disabled_by').references((): AnyPgColumn => user.id, {
+      onDelete: 'set null',
+    }),
+    /** Why, in the admin's own words — shown back in the dashboard, never to the user. */
+    disabledReason: varchar('disabled_reason', { length: 500 }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true })
       .notNull()

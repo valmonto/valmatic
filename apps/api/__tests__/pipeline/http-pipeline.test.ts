@@ -1,5 +1,5 @@
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
-import { createDatabaseClient, type DatabaseClient } from '@pkg/database';
+import { createDatabaseClient, eq, user, type DatabaseClient } from '@pkg/database';
 import { describeStack } from '@pkg/testing';
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
 
@@ -384,6 +384,56 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
       expect(res.statusCode, type).toBe(415);
       expect(res.headers['set-cookie'], type).toBeUndefined();
     }
+  });
+
+  it('lets a platform admin disable an account: its session ends and it cannot sign in', async () => {
+    const adminAccount = await register(app, 'platform-admin');
+    await client.db
+      .update(user)
+      .set({ systemRole: 'ADMIN' })
+      .where(eq(user.email, adminAccount.email));
+    const adminToken = (await login(app, adminAccount.email)).json<{
+      tokens: { accessToken: string };
+    }>().tokens.accessToken;
+    const target = await register(app, 'to-disable');
+    const [targetRow] = await client.db
+      .select({ id: user.id })
+      .from(user)
+      .where(eq(user.email, target.email));
+
+    // An organization owner without platform standing is refused.
+    const asOwner = await app.inject({
+      method: 'POST',
+      url: `/api/admin/users/${targetRow!.id}/disable`,
+      headers: bearer(target.token),
+      payload: {},
+    });
+    expect(asOwner.statusCode).toBe(403);
+
+    const disabled = await app.inject({
+      method: 'POST',
+      url: `/api/admin/users/${targetRow!.id}/disable`,
+      headers: bearer(adminToken),
+      payload: { reason: 'Test' },
+    });
+    expect(disabled.statusCode, disabled.body).toBe(200);
+
+    const me = await app.inject({
+      method: 'GET',
+      url: '/api/auth/me',
+      headers: bearer(target.token),
+    });
+    expect(me.statusCode).toBe(401);
+    expect((await login(app, target.email)).statusCode).toBe(403);
+
+    const enabled = await app.inject({
+      method: 'POST',
+      url: `/api/admin/users/${targetRow!.id}/enable`,
+      headers: bearer(adminToken),
+      payload: {},
+    });
+    expect(enabled.statusCode, enabled.body).toBe(200);
+    expect((await login(app, target.email)).statusCode).toBe(201);
   });
 
   it('rejects a bad password with 401 and never leaks which half was wrong', async () => {

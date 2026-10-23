@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useDeleteUser, useUpdateUser } from '../hooks/use-users';
+import { useDeleteUser, useSetUserDisabled, useUpdateUser } from '../hooks/use-users';
+import { useSystemRole } from '@/shared/hooks/use-permissions';
 
 interface Props {
   user: GetUserByIdResponse;
@@ -22,8 +23,16 @@ export function UserDetail({ user, onBack, onUpdated, onDeleted }: Props) {
 
   const { execute: updateUser, error: updateError, isLoading: isUpdating } = useUpdateUser();
   const { execute: deleteUser, error: deleteError, isLoading: isDeleting } = useDeleteUser();
+  const {
+    execute: setDisabled,
+    error: disableError,
+    isLoading: isTogglingDisabled,
+  } = useSetUserDisabled();
+  // Disabling is platform-wide (an account may be in other organizations),
+  // so only a platform admin is offered it.
+  const isPlatformAdmin = useSystemRole() === 'ADMIN';
 
-  const error = updateError?.message ?? deleteError?.message ?? null;
+  const error = updateError?.message ?? deleteError?.message ?? disableError?.message ?? null;
 
   async function handleUpdate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -68,6 +77,11 @@ export function UserDetail({ user, onBack, onUpdated, onDeleted }: Props) {
                 <span className="rounded-lg bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                   {user.role}
                 </span>
+                {user.disabledAt && (
+                  <span className="ml-2 rounded-lg bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive">
+                    {t(k.users.disabled)}
+                  </span>
+                )}
               </dd>
               <dt className="text-muted-foreground">{t(k.common.status.created)}</dt>
               <dd className="font-medium">{new Date(user.createdAt).toLocaleDateString()}</dd>
@@ -76,6 +90,16 @@ export function UserDetail({ user, onBack, onUpdated, onDeleted }: Props) {
               <Button size="sm" variant="outline" onClick={() => setEditing(true)}>
                 {t(k.common.actions.edit)}
               </Button>
+              {isPlatformAdmin && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={isTogglingDisabled}
+                  onClick={() => void setDisabled({ id: user.id, disabled: !user.disabledAt })}
+                >
+                  {user.disabledAt ? t(k.users.enableUser) : t(k.users.disableUser)}
+                </Button>
+              )}
               <Button size="sm" variant="destructive" onClick={handleDelete} disabled={isDeleting}>
                 {isDeleting ? t(k.users.deleting) : t(k.common.actions.delete)}
               </Button>
