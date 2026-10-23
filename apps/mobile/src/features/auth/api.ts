@@ -1,5 +1,6 @@
 import type {
   AuthOptionsResponse,
+  DeleteAccountRequest,
   PasswordResetRequest,
   ChangePasswordRequest,
   ChangePasswordResponse,
@@ -31,6 +32,8 @@ export const authResource = (client: Api) => ({
   options: (): Promise<AuthOptionsResponse> => client.get('/auth/options'),
   requestPasswordReset: (dto: PasswordResetRequest): Promise<Record<string, never>> =>
     client.post('/auth/password-reset/request', dto),
+  deleteAccount: (dto: DeleteAccountRequest): Promise<Record<string, never>> =>
+    client.delete('/account', { data: dto }),
 });
 
 export const authApi = authResource(api);

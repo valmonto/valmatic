@@ -109,3 +109,73 @@ export type AdminDisableUserRequest = z.infer<typeof AdminDisableUserRequestSche
 export type AdminDisableUserResponse = z.infer<typeof AdminDisableUserResponseSchema>;
 export type AdminEnableUserRequest = z.infer<typeof AdminEnableUserRequestSchema>;
 export type AdminEnableUserResponse = z.infer<typeof AdminEnableUserResponseSchema>;
+
+// --- One's own account: delete it, download a copy of it ---
+// The account is always the session's own; nothing in the request names it.
+
+/** The password again: a session left open on a shared computer is not consent. */
+export const DeleteAccountRequestSchema = z.object({ password: z.string().min(1) }).strict();
+export const DeleteAccountResponseSchema = z.object({});
+
+export type DeleteAccountRequest = z.infer<typeof DeleteAccountRequestSchema>;
+export type DeleteAccountResponse = z.infer<typeof DeleteAccountResponseSchema>;
+
+export const ExportAccountRequestSchema = z.object({}).strict();
+
+/**
+ * Everything kept about the person, as one JSON document (GDPR art. 15/20).
+ * Files they uploaded belong to their organizations and are listed, not
+ * included. Secrets (password hash, API key hashes, tokens) never appear.
+ */
+export const AccountExportSchema = z.object({
+  exportedAt: z.string(),
+  account: z.object({
+    id: z.string().uuid(),
+    email: z.string(),
+    name: z.string(),
+    displayName: z.string().nullable(),
+    phone: z.string().nullable(),
+    systemRole: z.string(),
+    emailVerifiedAt: z.string().nullable(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+  }),
+  organizations: z.array(
+    z.object({ id: z.string().uuid(), name: z.string(), role: z.string(), joinedAt: z.string() }),
+  ),
+  notifications: z.array(
+    z.object({
+      id: z.string().uuid(),
+      orgId: z.string().uuid().nullable(),
+      type: z.string(),
+      title: z.string(),
+      message: z.string().nullable(),
+      link: z.string().nullable(),
+      createdAt: z.string(),
+    }),
+  ),
+  attachments: z.array(
+    z.object({
+      id: z.string().uuid(),
+      orgId: z.string().uuid(),
+      fileName: z.string().nullable(),
+      mimeType: z.string(),
+      sizeBytes: z.number(),
+      createdAt: z.string(),
+    }),
+  ),
+  apiKeys: z.array(
+    z.object({
+      id: z.string().uuid(),
+      name: z.string(),
+      prefix: z.string(),
+      scopes: z.array(z.string()),
+      lastUsedAt: z.string().nullable(),
+      revokedAt: z.string().nullable(),
+      createdAt: z.string(),
+    }),
+  ),
+});
+
+export type ExportAccountRequest = z.infer<typeof ExportAccountRequestSchema>;
+export type AccountExport = z.infer<typeof AccountExportSchema>;

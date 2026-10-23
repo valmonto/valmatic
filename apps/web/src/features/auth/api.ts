@@ -1,5 +1,7 @@
 import type {
+  AccountExport,
   AuthOptionsResponse,
+  DeleteAccountRequest,
   ChangeUnverifiedEmailRequest,
   ChangeUnverifiedEmailResponse,
   EmailVerificationConfirmResponse,
@@ -51,6 +53,9 @@ export const authResource = (client: HttpClient) => ({
     dto: ChangeUnverifiedEmailRequest,
   ): Promise<ChangeUnverifiedEmailResponse> =>
     client.post('/api/auth/email-verification/change', dto),
+  exportAccount: (): Promise<AccountExport> => client.get('/api/account/export'),
+  deleteAccount: (dto: DeleteAccountRequest): Promise<Record<string, never>> =>
+    client.delete('/api/account', { data: dto }),
 });
 
 /** Bound instance the feature uses internally. */

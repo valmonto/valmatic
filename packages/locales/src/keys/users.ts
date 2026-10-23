@@ -52,5 +52,6 @@ export const users = {
     cannotRemoveSelf: 'users.errors.cannotRemoveSelf',
     onlyOwnersCanRemoveOwners: 'users.errors.onlyOwnersCanRemoveOwners',
     cannotDisableSelf: 'users.errors.cannotDisableSelf',
+    lastOwnerOfSharedOrg: 'users.errors.lastOwnerOfSharedOrg',
   },
 } as const;
