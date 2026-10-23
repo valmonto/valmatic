@@ -67,9 +67,11 @@ services read the same numbers.
 
 ## Job state belongs to the feature
 
-BullMQ is **transport, not a record**. Completed jobs are dropped from Redis
-(`removeOnComplete: true`); failures are kept for inspection but only in Redis,
-so a flush loses them.
+BullMQ is **transport, not a record**. Only the latest hundred finished jobs of a
+queue are kept in Redis (`removeOnComplete: { count: 100 }`) — enough to tell
+when a queue last finished something. Failures are kept for inspection, up to
+the latest 500 per queue (`removeOnFail: { count: 500 }`), and only in Redis, so
+a flush loses them.
 
 A feature that needs job state to outlive the job — progress to show a user,
 a result to fetch later, an audit trail — gives it a table:
