@@ -173,6 +173,7 @@ export class AuthService {
     return CurrentUserResponseSchema.parse({
       ...rest,
       orgRole: role,
+      providers: await this.authRepository.findProvidersForUser(activeUser.userId),
       permissions: getPermissionsForRole(role),
       // Resolved server-side like permissions, and for the same reason: every
       // client gets the same answer on its next request, and none needs a flag

@@ -1,5 +1,8 @@
 import type {
   AuthOptionsResponse,
+  ProviderNonceResponse,
+  ProviderSignInRequest,
+  ProviderSignInResponse,
   DeleteAccountRequest,
   PasswordResetRequest,
   ChangePasswordRequest,
@@ -32,6 +35,9 @@ export const authResource = (client: Api) => ({
   options: (): Promise<AuthOptionsResponse> => client.get('/auth/options'),
   requestPasswordReset: (dto: PasswordResetRequest): Promise<Record<string, never>> =>
     client.post('/auth/password-reset/request', dto),
+  providerNonce: (): Promise<ProviderNonceResponse> => client.post('/auth/provider/nonce'),
+  providerSignIn: (dto: ProviderSignInRequest): Promise<ProviderSignInResponse> =>
+    client.post('/auth/provider', dto),
   deleteAccount: (dto: DeleteAccountRequest): Promise<Record<string, never>> =>
     client.delete('/account', { data: dto }),
 });

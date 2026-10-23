@@ -11,11 +11,21 @@ import { EmailVerificationRepository } from './email-verification/email-verifica
 import { EmailVerificationService } from './email-verification/email-verification.service.js';
 import { PasswordResetRepository } from './password-reset/password-reset.repository.js';
 import { PasswordResetService } from './password-reset/password-reset.service.js';
+import { AuthProviderController } from './provider/auth-provider.controller.js';
+import { AuthProviderRepository } from './provider/auth-provider.repository.js';
+import { AuthProviderService } from './provider/auth-provider.service.js';
+import { IdentityTokenVerifier } from './provider/identity-token.verifier.js';
+import { ProviderTokens } from './provider/provider-tokens.js';
 
 @Global()
 @Module({
   imports: [IamModule],
-  controllers: [AuthController, PasswordResetController, EmailVerificationController],
+  controllers: [
+    AuthController,
+    PasswordResetController,
+    EmailVerificationController,
+    AuthProviderController,
+  ],
   providers: [
     AuthService,
     LoginAttempts,
@@ -24,6 +34,10 @@ import { PasswordResetService } from './password-reset/password-reset.service.js
     PasswordResetRepository,
     EmailVerificationService,
     EmailVerificationRepository,
+    AuthProviderService,
+    AuthProviderRepository,
+    IdentityTokenVerifier,
+    ProviderTokens,
     IamService,
     OrgAccessProvider,
     {
@@ -31,6 +45,7 @@ import { PasswordResetService } from './password-reset/password-reset.service.js
       useExisting: OrgAccessProvider,
     },
   ],
-  exports: [ORG_ACCESS],
+  // AuthProviderService: deleting an account confirms it with a provider too.
+  exports: [ORG_ACCESS, AuthProviderService],
 })
 export class AuthModule {}

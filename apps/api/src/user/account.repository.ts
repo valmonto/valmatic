@@ -8,6 +8,7 @@ import {
   organization,
   organizationUser,
   user,
+  userIdentity,
   and,
   asc,
   count,
@@ -165,6 +166,19 @@ export class AccountRepository {
       .from(attachment)
       .where(and(eq(attachment.uploadedBy, userId), isNull(attachment.deletedAt)))
       .orderBy(asc(attachment.createdAt));
+  }
+
+  async findSignInProviders(userId: string) {
+    return this.dbClient.db
+      .select({
+        provider: userIdentity.provider,
+        email: userIdentity.email,
+        createdAt: userIdentity.createdAt,
+        lastSeenAt: userIdentity.lastSeenAt,
+      })
+      .from(userIdentity)
+      .where(eq(userIdentity.userId, userId))
+      .orderBy(asc(userIdentity.createdAt));
   }
 
   async findApiKeys(userId: string) {

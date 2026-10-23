@@ -5,6 +5,8 @@ import { InjectLogger, PinoLogger } from '@pkg/server';
 import { AuthService } from './auth.service.js';
 import { MailService } from '../mail/mail.service.js';
 import { EmailVerificationService } from './email-verification/email-verification.service.js';
+import { AuthProviderService } from './provider/auth-provider.service.js';
+import { ConfigService } from '@nestjs/config';
 import {
   PublicRoute,
   ActiveUser,
@@ -54,17 +56,24 @@ export class AuthController {
     private readonly iamService: IamService,
     private readonly mail: MailService,
     private readonly verifications: EmailVerificationService,
+    private readonly providers: AuthProviderService,
+    private readonly configService: ConfigService,
     @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
   /**
    * What this deployment can do, for the sign-in screens: a client offers
-   * "forgot password?" only when an email can actually be sent.
+   * "forgot password?" only when an email can actually be sent, and a
+   * provider button only when that provider can be verified.
    */
   @PublicRoute()
   @Get('options')
   options(): AuthOptionsResponse {
-    return { passwordResetEnabled: this.mail.isConfigured };
+    return {
+      passwordResetEnabled: this.mail.isConfigured,
+      registrationEnabled: this.configService.get<boolean>('AUTH_REGISTRATION_ENABLED') === true,
+      providers: this.providers.available(),
+    };
   }
 
   /**

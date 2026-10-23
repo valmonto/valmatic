@@ -91,6 +91,14 @@ export const envSchema = z
     // Where the mail service is. Only a test stack has a reason to change it.
     RESEND_API_URL: z.string().url().default('https://api.resend.com'),
 
+    // Sign in with Apple and Google (docs/sign-in-setup.md). Client ids, not
+    // secrets; comma-separated, since each platform can have its own. A
+    // provider is ON only when its id is set — the token's audience is checked
+    // against these, and `GET /auth/options` lists only the providers that
+    // are on. Apple: the app's bundle id. Google: the "Web" OAuth client id.
+    AUTH_APPLE_CLIENT_ID: z.string().min(1).optional(),
+    AUTH_GOOGLE_CLIENT_ID: z.string().min(1).optional(),
+
     // Browser origins allowed to call the API, comma-separated
     // (`https://app.example.com,https://admin.example.com`). Unset → local
     // development only (localhost and the LAN). See config/cors.ts.

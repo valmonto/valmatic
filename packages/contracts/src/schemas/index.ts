@@ -10,3 +10,5 @@ export * from './notification.schema.js';
 export * from './api-key.schema.js';
 export * from './attachment.schema.js';
 export * from './invitation.schema.js';
+export * from './provider-proof.schema.js';
+export * from './auth-provider.schema.js';
