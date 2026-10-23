@@ -15,8 +15,10 @@ export {
   ATTACHMENT_MAX_BYTES,
   ATTACHMENT_POLICIES,
   ATTACHMENT_STATUSES,
+  attachmentInlineSafe,
   attachmentKindAllowed,
   attachmentLimitFor,
+  attachmentMimeAllowed,
   type AttachmentKindName,
   type AttachmentPolicy,
 } from './constants/attachment.js';

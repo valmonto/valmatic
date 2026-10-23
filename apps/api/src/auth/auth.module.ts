@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
+import { LoginAttempts } from './login-attempts.js';
 import { IamModule, IamService, ORG_ACCESS } from '@pkg/server';
 import { AuthRepository } from './auth.repository.js';
 import { OrgAccessProvider } from './org-access.provider.js';
@@ -11,6 +12,7 @@ import { OrgAccessProvider } from './org-access.provider.js';
   controllers: [AuthController],
   providers: [
     AuthService,
+    LoginAttempts,
     AuthRepository,
     IamService,
     OrgAccessProvider,

@@ -191,6 +191,31 @@ describe('LocalAuthGuard', () => {
       });
     });
 
+    it('checks the logout cut-off in milliseconds, from iatMs or else iat', async () => {
+      vi.mocked(mockReflector.getAllAndOverride).mockReturnValue(false);
+      vi.mocked(mockAuthProvider.isAccessTokenBlacklisted).mockResolvedValue(false);
+      vi.mocked(mockAuthProvider.isTokenIssuedBeforeLogoutAll).mockResolvedValue(false);
+      const claims = { sub: 'user-123', orgId: 'org-456', orgRole: 'ADMIN', systemRole: 'USER' };
+
+      vi.mocked(mockJwtService.verifyAsync).mockResolvedValue({
+        ...claims,
+        iat: 1792519507,
+        iatMs: 1792519507372,
+      });
+      await guard.canActivate(createMockContext({ authHeader: 'Bearer new-token' }));
+      expect(mockAuthProvider.isTokenIssuedBeforeLogoutAll).toHaveBeenLastCalledWith(
+        'user-123',
+        1792519507372,
+      );
+
+      vi.mocked(mockJwtService.verifyAsync).mockResolvedValue({ ...claims, iat: 1792519507 });
+      await guard.canActivate(createMockContext({ authHeader: 'Bearer old-token' }));
+      expect(mockAuthProvider.isTokenIssuedBeforeLogoutAll).toHaveBeenLastCalledWith(
+        'user-123',
+        1792519507000,
+      );
+    });
+
     it('should throw UnauthorizedException for invalid token', async () => {
       const context = createMockContext({
         authHeader: 'Bearer invalid-token',

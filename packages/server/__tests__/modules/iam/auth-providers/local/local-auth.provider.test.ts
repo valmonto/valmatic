@@ -77,29 +77,36 @@ describe('LocalAuthProvider', () => {
   });
 
   describe('isTokenIssuedBeforeLogoutAll', () => {
-    it('should return true when token was issued before logout', async () => {
-      vi.mocked(mockRedis.get).mockResolvedValue('1000');
+    // 2026-10-20T18:05:07.265Z — the provider sign-in that was ended on its
+    // first request when the cut-off was kept in seconds.
+    const cutoffMs = 1_792_519_507_265;
 
-      const result = await provider.isTokenIssuedBeforeLogoutAll('user-123', 999);
+    it('should return true when token was issued before logout', async () => {
+      vi.mocked(mockRedis.get).mockResolvedValue(String(cutoffMs));
+
+      const result = await provider.isTokenIssuedBeforeLogoutAll('user-123', cutoffMs - 200);
 
       expect(result).toBe(true);
       expect(mockRedis.get).toHaveBeenCalledWith('iam:logout-all:user-123');
     });
 
-    it('should return true when token was issued at same time as logout', async () => {
-      vi.mocked(mockRedis.get).mockResolvedValue('1000');
+    it('should return false when token was issued after logout in the same second', async () => {
+      vi.mocked(mockRedis.get).mockResolvedValue(String(cutoffMs));
 
-      const result = await provider.isTokenIssuedBeforeLogoutAll('user-123', 1000);
-
-      expect(result).toBe(true);
-    });
-
-    it('should return false when token was issued after logout', async () => {
-      vi.mocked(mockRedis.get).mockResolvedValue('1000');
-
-      const result = await provider.isTokenIssuedBeforeLogoutAll('user-123', 1001);
+      const result = await provider.isTokenIssuedBeforeLogoutAll('user-123', cutoffMs + 5);
 
       expect(result).toBe(false);
+    });
+
+    it('should end the whole second for a cut-off stored in seconds', async () => {
+      vi.mocked(mockRedis.get).mockResolvedValue('1792519507');
+
+      await expect(
+        provider.isTokenIssuedBeforeLogoutAll('user-123', 1_792_519_507_999),
+      ).resolves.toBe(true);
+      await expect(
+        provider.isTokenIssuedBeforeLogoutAll('user-123', 1_792_519_508_000),
+      ).resolves.toBe(false);
     });
 
     it('should return false when no logout timestamp exists', async () => {
@@ -392,6 +399,7 @@ describe('refresh rotation grace window', () => {
       get: vi.fn(),
       set: vi.fn(),
       del: vi.fn(),
+      exists: vi.fn().mockResolvedValue(1),
       smembers: vi.fn(),
       multi: vi.fn().mockReturnValue(lastMulti),
     } as unknown as Redis;
@@ -439,9 +447,57 @@ describe('refresh rotation grace window', () => {
     expect(markerCall).toBeDefined();
     expect(JSON.parse(markerCall![1] as string)).toEqual({
       rotatedTo: { accessToken: 'new-access', refreshToken: result.refreshToken },
+      rotatedAt: expect.any(Number),
     });
     // …and never deleted.
     expect(lastMulti.del).not.toHaveBeenCalled();
+  });
+
+  /** S13: "sign out everywhere" deletes the successor; the marker gives nothing then. */
+  it('gives nothing for a just-rotated token once its session was signed out', async () => {
+    const marker = JSON.stringify({
+      rotatedTo: { accessToken: 'a', refreshToken: 'successor' },
+      rotatedAt: Date.now(),
+    });
+    // refresh reads the marker, revokeToken reads it again; the successor is gone.
+    vi.mocked(redis.get)
+      .mockResolvedValueOnce(marker)
+      .mockResolvedValueOnce(marker)
+      .mockResolvedValue(null);
+    vi.mocked(redis.exists).mockResolvedValue(0);
+
+    await expect(provider.refresh({ refreshToken: 'old-token' })).rejects.toThrow(
+      UnauthorizedException,
+    );
+  });
+
+  /** S13: an old token used again after the window means two holders: the session ends. */
+  it('ends the session when a replaced token is used again after the window', async () => {
+    vi.mocked(redis.get)
+      .mockResolvedValueOnce(
+        JSON.stringify({
+          rotatedTo: { accessToken: 'a', refreshToken: 'successor' },
+          rotatedAt: Date.now() - 61_000,
+        }),
+      )
+      // revokeToken: the marker again, then the live successor session.
+      .mockResolvedValueOnce(
+        JSON.stringify({ rotatedTo: { accessToken: 'a', refreshToken: 'successor' } }),
+      )
+      .mockResolvedValueOnce(
+        JSON.stringify({
+          userId: 'user-123',
+          orgId: 'org-456',
+          orgRole: 'ADMIN',
+          systemRole: 'USER',
+          sessionStart: 1,
+        }),
+      );
+
+    await expect(provider.refresh({ refreshToken: 'old-token' })).rejects.toThrow(
+      UnauthorizedException,
+    );
+    expect(lastMulti.del).toHaveBeenCalledWith('iam:refresh:successor');
   });
 
   // Revoking a token that sits in its grace window must kill the LIVE session

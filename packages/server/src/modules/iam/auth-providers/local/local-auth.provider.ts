@@ -25,16 +25,24 @@ interface SessionData extends ActiveUser {
 }
 
 /**
- * What a rotated refresh token's key holds during the grace window: the exact
- * pair its successor was issued. A client presenting the old token within the
- * window gets the SAME tokens back (idempotent refresh) instead of a 401.
+ * What a rotated refresh token's key holds: the exact pair its successor was
+ * issued, and when. A client presenting the old token within the grace
+ * window gets the SAME tokens back (idempotent refresh) instead of a 401 —
+ * while that successor session still exists. After the window, presenting it
+ * again is a reuse: someone else holds a copy, and the session it led to is
+ * ended (S13). The marker lives as long as the session could.
  */
 interface RotatedMarker {
   rotatedTo: { accessToken: string; refreshToken: string };
+  /** Epoch ms. Absent on markers written before reuse was detected: in grace. */
+  rotatedAt?: number;
 }
 
 const isRotatedMarker = (v: unknown): v is RotatedMarker =>
   typeof v === 'object' && v !== null && 'rotatedTo' in v;
+
+/** Any stored cut-off below this is in seconds (1e12 ms is 2001). */
+const SECONDS_BEFORE_MS = 1e12;
 
 @Injectable()
 export class LocalAuthProvider implements IAuthProvider {
@@ -61,10 +69,18 @@ export class LocalAuthProvider implements IAuthProvider {
   async issueTokens(dto: IamIssueTokensRequest): Promise<IamIssueTokensResponse> {
     const refreshToken = randomBytes(32).toString('hex');
     const sessionStart = Date.now();
-    const iat = Math.floor(Date.now() / 1000);
+    const iatMs = Date.now();
+    const iat = Math.floor(iatMs / 1000);
 
     const accessToken = await this.jwtService.signAsync(
-      { sub: dto.userId, orgId: dto.orgId, orgRole: dto.orgRole, systemRole: dto.systemRole, iat },
+      {
+        sub: dto.userId,
+        orgId: dto.orgId,
+        orgRole: dto.orgRole,
+        systemRole: dto.systemRole,
+        iat,
+        iatMs,
+      },
       { expiresIn: this.accessTokenTtl },
     );
 
@@ -87,8 +103,10 @@ export class LocalAuthProvider implements IAuthProvider {
     return { userId: payload.sub };
   }
 
-  async revokeToken(dto: IamRevokeTokenRequest): Promise<IamRevokeTokenResponse> {
+  async revokeToken(dto: IamRevokeTokenRequest, hops = 0): Promise<IamRevokeTokenResponse> {
     const key = this.refreshTokenKey(dto.token);
+    // Each rotation adds a link; a chain longer than this is not a real one.
+    if (hops > 50) throw new UnauthorizedException(k.auth.errors.invalidRefreshToken);
     const data = await this.redis.get(key);
 
     if (!data) {
@@ -101,7 +119,7 @@ export class LocalAuthProvider implements IAuthProvider {
     // SUCCESSOR session — that is where the live session actually is.
     if (isRotatedMarker(parsed)) {
       await this.redis.del(key);
-      return this.revokeToken({ token: parsed.rotatedTo.refreshToken });
+      return this.revokeToken({ token: parsed.rotatedTo.refreshToken }, hops + 1);
     }
 
     const session: SessionData = parsed;
@@ -128,8 +146,25 @@ export class LocalAuthProvider implements IAuthProvider {
     // losers used to get 401s that logged the user out — and (b) a mobile
     // client that lost the rotation response mid-network from being stranded
     // with a dead token.
+    //
+    // Only while the session it led to is still there: "sign out everywhere"
+    // deletes the successor, and the marker must not hand its tokens out for
+    // the rest of the window (S13).
     if (isRotatedMarker(parsed)) {
-      return parsed.rotatedTo;
+      const inGrace =
+        parsed.rotatedAt === undefined ||
+        Date.now() - parsed.rotatedAt < this.refreshGraceTtl * 1000;
+      const successorLive =
+        (await this.redis.exists(this.refreshTokenKey(parsed.rotatedTo.refreshToken))) === 1;
+      if (inGrace && successorLive) return parsed.rotatedTo;
+
+      if (!inGrace && successorLive) {
+        // The token was used again long after it was replaced: two holders.
+        // Whoever is legitimate signs in again; the copy is worth nothing.
+        this.logger.warn('Refresh token reused after rotation — its session is ended');
+      }
+      await this.revokeToken({ token: dto.refreshToken }).catch(() => undefined);
+      throw new UnauthorizedException(k.auth.errors.invalidRefreshToken);
     }
 
     const session: SessionData = parsed;
@@ -161,7 +196,8 @@ export class LocalAuthProvider implements IAuthProvider {
     const newRefreshToken = randomBytes(32).toString('hex');
     const newKey = this.refreshTokenKey(newRefreshToken);
     const remainingTtl = Math.floor((this.maxSessionTtl * 1000 - elapsed) / 1000);
-    const iat = Math.floor(Date.now() / 1000);
+    const iatMs = Date.now();
+    const iat = Math.floor(iatMs / 1000);
 
     const accessToken = await this.jwtService.signAsync(
       {
@@ -170,19 +206,24 @@ export class LocalAuthProvider implements IAuthProvider {
         orgRole: session.orgRole,
         systemRole: session.systemRole,
         iat,
+        iatMs,
       },
       { expiresIn: this.accessTokenTtl },
     );
 
-    // Rotate: the OLD key becomes a short-lived marker pointing at the pair
-    // just issued (not deleted — see the grace check above), the new key
-    // becomes the live session. After the grace window the marker expires and
-    // the old token is dead for good.
+    // Rotate: the OLD key becomes a marker pointing at the pair just issued
+    // (not deleted — see the grace check above), the new key becomes the
+    // live session. Within the grace window the old token is answered with
+    // that pair; after it, the old token is a reuse and ends the session. The
+    // marker lasts as long as the session could.
     const userSessionsKey = this.userSessionsKey(session.userId);
-    const marker: RotatedMarker = { rotatedTo: { accessToken, refreshToken: newRefreshToken } };
+    const marker: RotatedMarker = {
+      rotatedTo: { accessToken, refreshToken: newRefreshToken },
+      rotatedAt: Date.now(),
+    };
     await this.redis
       .multi()
-      .set(key, JSON.stringify(marker), 'EX', this.refreshGraceTtl)
+      .set(key, JSON.stringify(marker), 'EX', remainingTtl)
       .set(newKey, JSON.stringify(session), 'EX', remainingTtl)
       .srem(userSessionsKey, key)
       .sadd(userSessionsKey, newKey)
@@ -193,8 +234,11 @@ export class LocalAuthProvider implements IAuthProvider {
   }
 
   async revokeAllForUser(userId: string): Promise<void> {
-    // Store logout timestamp to invalidate all existing access tokens
-    const logoutTimestamp = Math.floor(Date.now() / 1000);
+    // Store logout timestamp to invalidate all existing access tokens. In
+    // milliseconds: a session made right after it (a provider claiming an
+    // unconfirmed account does exactly that) falls in the same second, and a
+    // seconds cut-off ended it on its first request.
+    const logoutTimestamp = Date.now();
     const logoutKey = this.logoutAllKey(userId);
     const userSessionsKey = this.userSessionsKey(userId);
 
@@ -215,11 +259,11 @@ export class LocalAuthProvider implements IAuthProvider {
     }
   }
 
-  async isTokenIssuedBeforeLogoutAll(userId: string, issuedAt: number): Promise<boolean> {
+  async isTokenIssuedBeforeLogoutAll(userId: string, issuedAtMs: number): Promise<boolean> {
     const key = this.logoutAllKey(userId);
 
     // If issuedAt is missing, treat as invalid (should be invalidated)
-    if (issuedAt === undefined || issuedAt === null) {
+    if (issuedAtMs === undefined || issuedAtMs === null) {
       return true;
     }
 
@@ -229,11 +273,11 @@ export class LocalAuthProvider implements IAuthProvider {
       return false;
     }
 
-    const logoutTime = parseInt(logoutTimestamp, 10);
-    const result = issuedAt <= logoutTime;
-
-    // Use <= to handle same-second edge case
-    return result;
+    // Cut-offs stored before milliseconds (a number of seconds) end at the
+    // close of their second, as they always did.
+    const stored = parseInt(logoutTimestamp, 10);
+    const cutoffMs = stored < SECONDS_BEFORE_MS ? (stored + 1) * 1000 : stored;
+    return issuedAtMs < cutoffMs;
   }
 
   async blacklistAccessToken(token: string): Promise<void> {

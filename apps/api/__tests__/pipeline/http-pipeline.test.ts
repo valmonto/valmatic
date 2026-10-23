@@ -281,6 +281,42 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
     });
   });
 
+  it('keeps a sign-in made in the same second as a logout-all, and ends the ones before it', async () => {
+    const { token: before, email } = await register(app, 'same-second');
+    // A second device, not the one that asks to log out everywhere.
+    const elsewhere = (await login(app, email)).json<{ tokens: { accessToken: string } }>().tokens
+      .accessToken;
+    // The next whole second, frozen: the cut-off at .100, the next sign-in at
+    // .350 — what a provider claiming an unconfirmed account does in one request.
+    const second = (Math.floor(Date.now() / 1000) + 1) * 1000;
+    const now = vi.spyOn(Date, 'now').mockReturnValue(second + 100);
+    try {
+      const out = await app.inject({
+        method: 'POST',
+        url: '/api/auth/logout-all',
+        headers: bearer(before),
+        payload: {},
+      });
+      expect(out.statusCode, out.body).toBe(201);
+
+      now.mockReturnValue(second + 350);
+      const again = await login(app, email);
+      expect(again.statusCode, again.body).toBe(201);
+      const after = again.json<{ tokens: { accessToken: string } }>().tokens.accessToken;
+
+      const me = await app.inject({ method: 'GET', url: '/api/auth/me', headers: bearer(after) });
+      expect(me.statusCode, me.body).toBe(200);
+      const old = await app.inject({
+        method: 'GET',
+        url: '/api/auth/me',
+        headers: bearer(elsewhere),
+      });
+      expect(old.statusCode).toBe(401);
+    } finally {
+      now.mockRestore();
+    }
+  });
+
   it('rejects a bad password with 401 and never leaks which half was wrong', async () => {
     const { email } = await register(app, 'badpw');
     const res = await login(app, email, 'WrongPassword123!');

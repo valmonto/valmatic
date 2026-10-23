@@ -83,6 +83,8 @@ export class LocalAuthGuard {
       orgRole: ActiveUser['orgRole'];
       systemRole: ActiveUser['systemRole'];
       iat: number;
+      /** Tokens made before milliseconds were added carry only `iat`. */
+      iatMs?: number;
     };
     try {
       payload = await this.jwtService.verifyAsync(accessToken);
@@ -102,7 +104,7 @@ export class LocalAuthGuard {
     // Check if user logged out all devices after this token was issued
     const wasLoggedOut = await this.authProvider.isTokenIssuedBeforeLogoutAll(
       payload.sub,
-      payload.iat,
+      payload.iatMs ?? (payload.iat == null ? payload.iat : payload.iat * 1000),
     );
     if (wasLoggedOut) {
       throw new UnauthorizedException(k.auth.errors.sessionInvalidated);

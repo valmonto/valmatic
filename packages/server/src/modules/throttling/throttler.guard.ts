@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable, type ExecutionContext } from '@n
 import { ThrottlerGuard } from '@nestjs/throttler';
 import type { ActiveUser } from '@pkg/contracts';
 import { k } from '@pkg/locales';
+import { clientNetwork } from './client-network.js';
 
 interface TrackableRequest {
   ip: string;
@@ -24,9 +25,12 @@ interface TrackableRequest {
  * header. The cost of that order is that requests rejected by AuthGuard
  * (bad tokens → 401) never reach the throttler — acceptable, because
  * guessing a signed JWT is not a spray anyone wins.
+ *
+ * An IPv6 visitor is counted by its /64 (`clientNetwork`), not its address:
+ * one machine can send from 2^64 of them.
  */
 export function throttlerTracker(req: TrackableRequest): string {
-  return req.user ? `user:${req.user.userId}` : `ip:${req.ip}`;
+  return req.user ? `user:${req.user.userId}` : `ip:${clientNetwork(req.ip)}`;
 }
 
 @Injectable()
