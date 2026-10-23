@@ -9,6 +9,13 @@ import fastifyHelmet from '@fastify/helmet';
 
 import { AppModule } from './app.module.js';
 
+/** What an HTML form can send. No route takes any of them (see below). */
+const FORM_TYPES = new Set([
+  'text/plain',
+  'application/x-www-form-urlencoded',
+  'multipart/form-data',
+]);
+
 /**
  * Builds the api exactly as production runs it — adapter, security headers,
  * signed cookies, CORS, the global prefix — without listening.
@@ -44,6 +51,28 @@ export async function createApp(): Promise<NestFastifyApplication> {
     .getInstance()
     .addHook('onSend', (req, reply, payload, done) => {
       reply.removeHeader('X-Powered-By');
+      done();
+    });
+
+  // A cross-site HTML form can send only these three body types — no
+  // preflight, cookies included — so no route accepts them: a hidden form on
+  // another site could otherwise sign the visitor in to the attacker's
+  // account. Every client here sends JSON, and JSON from another origin needs
+  // a CORS preflight this API does not grant. Refused before a byte of the
+  // body is read.
+  app
+    .getHttpAdapter()
+    .getInstance()
+    .addHook('onRequest', (request, reply, done) => {
+      const type = (request.headers['content-type'] ?? '').split(';')[0]!.trim().toLowerCase();
+      if (FORM_TYPES.has(type)) {
+        void reply.code(415).send({
+          statusCode: 415,
+          message: 'Unsupported Media Type',
+          error: 'Unsupported Media Type',
+        });
+        return;
+      }
       done();
     });
 
