@@ -77,29 +77,36 @@ describe('LocalAuthProvider', () => {
   });
 
   describe('isTokenIssuedBeforeLogoutAll', () => {
-    it('should return true when token was issued before logout', async () => {
-      vi.mocked(mockRedis.get).mockResolvedValue('1000');
+    // 2026-10-20T18:05:07.265Z — the provider sign-in that was ended on its
+    // first request when the cut-off was kept in seconds.
+    const cutoffMs = 1_792_519_507_265;
 
-      const result = await provider.isTokenIssuedBeforeLogoutAll('user-123', 999);
+    it('should return true when token was issued before logout', async () => {
+      vi.mocked(mockRedis.get).mockResolvedValue(String(cutoffMs));
+
+      const result = await provider.isTokenIssuedBeforeLogoutAll('user-123', cutoffMs - 200);
 
       expect(result).toBe(true);
       expect(mockRedis.get).toHaveBeenCalledWith('iam:logout-all:user-123');
     });
 
-    it('should return true when token was issued at same time as logout', async () => {
-      vi.mocked(mockRedis.get).mockResolvedValue('1000');
+    it('should return false when token was issued after logout in the same second', async () => {
+      vi.mocked(mockRedis.get).mockResolvedValue(String(cutoffMs));
 
-      const result = await provider.isTokenIssuedBeforeLogoutAll('user-123', 1000);
-
-      expect(result).toBe(true);
-    });
-
-    it('should return false when token was issued after logout', async () => {
-      vi.mocked(mockRedis.get).mockResolvedValue('1000');
-
-      const result = await provider.isTokenIssuedBeforeLogoutAll('user-123', 1001);
+      const result = await provider.isTokenIssuedBeforeLogoutAll('user-123', cutoffMs + 5);
 
       expect(result).toBe(false);
+    });
+
+    it('should end the whole second for a cut-off stored in seconds', async () => {
+      vi.mocked(mockRedis.get).mockResolvedValue('1792519507');
+
+      await expect(
+        provider.isTokenIssuedBeforeLogoutAll('user-123', 1_792_519_507_999),
+      ).resolves.toBe(true);
+      await expect(
+        provider.isTokenIssuedBeforeLogoutAll('user-123', 1_792_519_508_000),
+      ).resolves.toBe(false);
     });
 
     it('should return false when no logout timestamp exists', async () => {

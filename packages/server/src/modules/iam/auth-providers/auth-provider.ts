@@ -19,5 +19,6 @@ export interface IAuthProvider {
   blacklistAccessToken(token: string): Promise<void>;
   isAccessTokenBlacklisted(token: string): Promise<boolean>;
   revokeAllForUser(userId: string): Promise<void>;
-  isTokenIssuedBeforeLogoutAll(userId: string, issuedAt: number): Promise<boolean>;
+  /** `issuedAtMs` is when the access token was made, in milliseconds. */
+  isTokenIssuedBeforeLogoutAll(userId: string, issuedAtMs: number): Promise<boolean>;
 }
