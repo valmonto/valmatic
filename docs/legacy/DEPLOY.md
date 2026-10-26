@@ -1,7 +1,10 @@
 # Deployment
 
-Every push to `main` auto-deploys to the VM (e.g. a Hetzner server). GitHub Actions SSHes in,
-pulls the code, and rebuilds the Docker stack.
+With the Actions variable `DEPLOY_VIA_ACTIONS=on` set on the repo (Settings → Secrets and
+variables → Actions → Variables), every push to `main` auto-deploys to the VM (e.g. a Hetzner
+server): GitHub Actions SSHes in, pulls the code, and rebuilds the Docker stack. **Without it
+the deploy job is skipped** — the default, because a descendant is usually deployed by a
+platform (Specbook) and must not also deploy itself. The verify job still runs on every push.
 
 - Workflow: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
 - Stack: [`compose.staging.yml`](compose.staging.yml) — Postgres, Redis, a one-shot `migrate`
@@ -41,9 +44,7 @@ DB_PASSWORD=<openssl rand -hex 32>
 REDIS_PASSWORD=<secret>
 REDIS_HOST=redis
 REDIS_PORT=6379
-IAM_REDIS_HOST=redis
-IAM_REDIS_PORT=6379
-IAM_REDIS_PASSWORD=<same as REDIS_PASSWORD>
+# IAM_REDIS_* is optional: sessions use REDIS_* unless you want a dedicated Redis.
 IAM_JWT_SECRET=<secret>
 IAM_COOKIE_SECRET=<secret>
 SEED_INITIAL_EMAIL=admin@example.com

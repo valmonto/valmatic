@@ -35,9 +35,11 @@ export const envSchema = z
     // pair (idempotent refresh) — covers concurrent refreshes and lost responses.
     IAM_REFRESH_GRACE_TTL: z.coerce.number().int().min(5).max(600).default(60),
 
-    // IAM Redis
-    IAM_REDIS_HOST: z.string().default('localhost'),
-    IAM_REDIS_PORT: z.coerce.number().int().min(1).max(65535).default(6379),
+    // IAM Redis (sessions). Optional: unset falls back to REDIS_* (the shared
+    // Redis a platform deploy wires), then localhost:6379 — see iam.redis.ts.
+    // No defaults here on purpose: a default would always win over the fallback.
+    IAM_REDIS_HOST: z.string().optional(),
+    IAM_REDIS_PORT: z.coerce.number().int().min(1).max(65535).optional(),
     IAM_REDIS_PASSWORD: z.string().optional(),
 
     // BullMQ Redis (for job queues)
