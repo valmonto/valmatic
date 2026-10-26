@@ -15,12 +15,13 @@ overrides:
   # lets security patches (5.12.2 fixed four advisories) reach the running
   # server. Keep this equal to the catalog pin below; drop it if platform-fastify
   # ever moves to a range.
-  fastify: 5.12.4
+  fastify: 5.12.6
   # fast-uri (through ajv and fastify) had host-confusion and normalization
-  # advisories fixed in 3.1.7 / 4.1.5. Nothing here validates a URI for a
+  # advisories fixed in 3.1.7 / 4.1.5, and two more (GHSA-w74x-v6f9-j3xg,
+  # GHSA-wjr9-j795-jxcr) in 3.1.9 / 4.2.3. Nothing here validates a URI for a
   # security decision today; the pins keep it that way should one be added.
-  'fast-uri@3': 3.1.8
-  'fast-uri@4': 4.1.5
+  'fast-uri@3': 3.1.9
+  'fast-uri@4': 4.2.3
 
 # @nestjs/throttler 6.5.0 declares peers up to ^11 while its runtime is what
 # upstream ships as v12-compatible (see the catalog comment). Acknowledge the
@@ -60,15 +61,15 @@ catalog:
   oxlint-tsgolint: 7.0.2001
   oxfmt: 0.66.0
   '@types/node': 26.4.1
-  vitest: 5.0.0
-  '@vitest/coverage-v8': 5.0.0
+  vitest: 5.0.3
+  '@vitest/coverage-v8': 5.0.3
   tsdown: 0.23.0 # library bundler for packages/*
 
   # ═══════════════════════════════════════════════════════════════════════
   #  SHARED RUNTIME  (imported by both frontend and backend app code)
   # ═══════════════════════════════════════════════════════════════════════
   axios: 1.20.0
-  zod: 4.5.4
+  zod: 4.6.6
   # ═══════════════════════════════════════════════════════════════════════
   #  BACKEND  (apps/api, apps/worker, packages/server, packages/database)
   # ═══════════════════════════════════════════════════════════════════════
@@ -89,7 +90,7 @@ catalog:
   # is not yet published. peerDependencyRules below acknowledges that; delete
   # the rule and bump here when 6.5.1+ ships with ^12 in its peers.
   '@nestjs/throttler': 6.5.0
-  fastify: 5.12.4
+  fastify: 5.12.6
   reflect-metadata: 0.2.2
   rxjs: 7.8.2
 
@@ -108,7 +109,7 @@ catalog:
   jose: 6.2.10
 
   # MCP — agent access to a deployed instance, env-gated off
-  '@modelcontextprotocol/sdk': 1.30.0
+  '@modelcontextprotocol/sdk': 1.32.0
   # Telemetry (server) — error reporting + product analytics, env-gated no-ops
   '@sentry/node': 10.73.0
   posthog-node: 5.51.6
@@ -172,7 +173,7 @@ catalog:
   # Telemetry (web) — analytics, session replay, frontend errors; env-gated
   posthog-js: 1.427.0
   # Build + test (web)
-  vite: 8.2.2
+  vite: 8.2.4
   '@vitejs/plugin-react-swc': 4.3.3
   jsdom: 30.0.1
   msw: 2.15.0
@@ -335,7 +336,6 @@ allowBuilds:
 minimumReleaseAge: 2880
 minimumReleaseAgeExcludePrune: true
 minimumReleaseAgeExclude:
-  - 'vitest@5.0.0'
   - 'tinyexec@1.3.1'
   - '@aws-sdk/client-s3@3.1126.0'
   - '@aws-sdk/s3-request-presigner@3.1126.0'
@@ -365,8 +365,4 @@ minimumReleaseAgeExclude:
   - '@inquirer/search@4.3.2'
   - '@inquirer/select@5.2.4'
   - '@inquirer/type@4.1.1'
-  - postcss@8.5.27
   - rc9@3.1.0
-  - '@vitest/coverage-v8@5.0.0'
-  - '@vitest/mocker@5.0.0'
-  - '@vitest/spy@5.0.0'
