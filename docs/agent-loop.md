@@ -64,7 +64,7 @@ tenancy code, database migrations, payments, deletions of user data, and
 anything the reviewer escalates. A ticket cannot opt itself out.
 
 Merged ≠ deployed, in every mode: production sits behind its own gates
-(deploy secrets, the opt-in E2E_GATE).
+(deploy secrets, the opt-in DEPLOY_VIA_ACTIONS and E2E_GATE switches).
 
 ## Verification ladder (what "looked at" means per target)
 

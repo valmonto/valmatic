@@ -109,12 +109,17 @@ jobs:
           path: apps/e2e/test-results
 
   deploy:
+    # OPT-IN, like the e2e gate: ships only when the repo sets the Actions
+    # variable DEPLOY_VIA_ACTIONS=on (and has the SSH_* secrets). A fresh
+    # descendant is usually deployed by a platform (Specbook) instead — without
+    # this switch every merge would try to SSH with no secrets (a red ✗ on main)
+    # or, worse, deploy a second time beside the platform.
     # Manual workflow_dispatch runs the gates without shipping. always() +
     # explicit result checks: without E2E_GATE=on the e2e job is SKIPPED, and
     # a skipped need would otherwise skip deploy too — but when the gate IS on
     # and FAILS, it must still block.
     if: >-
-      always() && github.event_name == 'push' &&
+      always() && github.event_name == 'push' && vars.DEPLOY_VIA_ACTIONS == 'on' &&
       needs.verify.result == 'success' &&
       (needs.e2e.result == 'success' || needs.e2e.result == 'skipped')
     needs: [verify, e2e]
