@@ -15,20 +15,12 @@ RUN pnpm install --frozen-lockfile
 ENV VITE_PUBLIC_REGISTRATION_ENABLED=true
 RUN pnpm --filter @pkg/web build
 
-# Production stage - serve with nginx (includes API proxy for E2E)
-FROM nginx:alpine AS runner
+# Production stage - serve with Caddy, like the deployed web image. HTTPS
+# with Caddy's internal CA (secure cookies need it); /api goes to the api
+# container. See apps/e2e/Caddyfile.
+FROM caddy:2-alpine AS runner
 
-# Generate self-signed certificate for HTTPS (E2E testing with secure cookies)
-RUN apk add --no-cache openssl && \
-    mkdir -p /etc/nginx/ssl && \
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-      -keyout /etc/nginx/ssl/key.pem \
-      -out /etc/nginx/ssl/cert.pem \
-      -subj "/CN=localhost"
-
-COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
-COPY apps/e2e/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/apps/web/dist /srv
+COPY apps/e2e/Caddyfile /etc/caddy/Caddyfile
 
 EXPOSE 3000
-
-CMD ["nginx", "-g", "daemon off;"]

@@ -34,7 +34,7 @@ test.describe('Authorization UI - Login Flow', () => {
 
   test.beforeAll(async ({ request }) => {
     // Register test user via API (ignore if already exists)
-    // Use the web URL so it goes through nginx, same as browser
+    // Use the web URL so it goes through the web container (Caddy), same as browser
     const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
     await request.post(`${baseUrl}/api/auth/register`, {
       data: {
