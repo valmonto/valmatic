@@ -25,7 +25,7 @@ on `:5173`.
 pnpm e2e:docker     # everything containerised — postgres, redis, api, web, tests
 ```
 
-The Docker path builds the web app for production (`web.Dockerfile` → nginx)
+The Docker path builds the web app for production (`web.Dockerfile` → Caddy)
 and runs the suite against it, so it exercises the built bundle rather than the
 dev server. That is what CI uses.
 

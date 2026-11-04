@@ -1,0 +1,24 @@
+# E2E only: serves the built web app over HTTPS (secure cookies need it) and
+# sends /api to the api container, like an environment's ingress does.
+{
+	admin off
+	skip_install_trust
+	auto_https disable_redirects
+}
+
+https://localhost:3000, https://web:3000, https://127.0.0.1:3000 {
+	tls internal
+	encode gzip
+
+	handle /api/* {
+		reverse_proxy api:3001
+	}
+
+	handle {
+		@assets path_regexp \.(js|css|png|jpe?g|gif|ico|svg|woff2?)$
+		header @assets Cache-Control "public, max-age=31536000, immutable"
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}
