@@ -61,6 +61,12 @@ FROM caddy:2-alpine AS runner
 COPY apps/web/Caddyfile /etc/caddy/Caddyfile
 COPY --from=builder /app/apps/web/dist /srv
 
+# OS security fixes the base image does not have yet. OS_REFRESH_DATE is
+# today's date (Specbook passes it), so this re-runs once a day and the
+# layers above stay cached. See Specbook's docs/vulnerabilities.md.
+ARG OS_REFRESH_DATE
+RUN apk upgrade --no-cache
+
 EXPOSE 3000
 
 # Not root: Caddy only reads /srv, and 3000 is above the ports only root may
