@@ -85,6 +85,12 @@ ENV GIT_SHA=$GIT_SHA \
 # apps/worker subtree to change into any more.
 COPY --from=builder /prod ./
 
+# OS security fixes the base image does not have yet. OS_REFRESH_DATE is
+# today's date (Specbook passes it), so this re-runs once a day and the
+# layers above stay cached. See Specbook's docs/vulnerabilities.md.
+ARG OS_REFRESH_DATE
+RUN apk upgrade --no-cache
+
 # Not root: the worker only reads its files and talks to Redis, Postgres and
 # object storage over the network. See apps/api/Dockerfile for why the files
 # stay root-owned.

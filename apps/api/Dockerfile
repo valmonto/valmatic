@@ -87,6 +87,12 @@ COPY --from=builder /prod ./
 COPY --from=builder /app/apps/api/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
+# OS security fixes the base image does not have yet. OS_REFRESH_DATE is
+# today's date (Specbook passes it), so this re-runs once a day and the
+# layers above stay cached. See Specbook's docs/vulnerabilities.md.
+ARG OS_REFRESH_DATE
+RUN apk upgrade --no-cache
+
 EXPOSE 3001
 
 # Not root. The API, and the migrate CLI compose runs from this image, only
