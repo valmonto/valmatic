@@ -119,6 +119,19 @@ build machine it is not, and the JavaScript bundle step fails with "`@pkg/locale
 script in `package.json` builds the three packages right after dependencies
 install. Add a package there when the app starts importing another one.
 
+**Over-the-air updates ship on deploy.** The app is wired for `expo-updates`
+(`runtimeVersion` policy `appVersion`, a channel per build profile in
+`eas.json`). Link the environment to an Expo project in Specbook (environment ›
+Phone app updates); its setup pull request adds the project's
+`extra.eas.projectId` and `updates.url` to `app.json`. From then on each deploy
+that changes the app bundles it on Specbook's build server and publishes the
+update to the environment's channel — `eas update` without a laptop. Updates
+are bundled with the EAS environment of the same name as the channel
+(`production`, `preview`), the one the build profiles use too, so put the
+app's `EXPO_PUBLIC_*` values there. A native change (new native package, new
+config plugin) needs a new `version` in `app.json` and a store build; Specbook
+holds the update back until then.
+
 Device setup, deep linking, push notifications and EAS deployment are covered in
 [`docs/legacy/apps/mobile/docs/`](../../docs/legacy/apps/mobile/docs):
 `setup-ios.md`, `setup-android.md`, `development.md`, `deep-linking.md`,
