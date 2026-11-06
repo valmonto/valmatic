@@ -66,6 +66,13 @@ rather than trusting that boot succeeded.
 The pool sets `prepare: false` for PgBouncer compatibility, and the Nest module
 closes it on shutdown.
 
+`postgres.js` 4 lets the **server** decide the type of every parameter. Drizzle
+queries are unaffected (columns give the type), but in a raw `` sql`…` `` where
+nothing does, cast a non-text value yourself — `${date}::timestamptz`,
+`${ids}::uuid[]` — and pass arrays directly (`sql.array()` is gone). Every
+timestamp column here is `timestamptz`; a plain `timestamp` or `date` would now
+be read and written as UTC.
+
 ## A database behind a private CA
 
 A custom certificate authority **cannot be carried in the connection URL**.
@@ -91,11 +98,11 @@ container-network database, or one whose certificate a public CA signed.
 and a CA wired into only some of them is worse than none, because the same
 database then works one way and fails another:
 
-| Entry point | Reads the CA from |
-|---|---|
-| `DatabaseModule.forRootAsync` | whatever the factory passes (above) |
-| `createDatabaseClientFromEnv` | `process.env.DATABASE_CA_CERT` |
-| `runMigrations` / `db:migrate` | `process.env.DATABASE_CA_CERT` |
+| Entry point                    | Reads the CA from                   |
+| ------------------------------ | ----------------------------------- |
+| `DatabaseModule.forRootAsync`  | whatever the factory passes (above) |
+| `createDatabaseClientFromEnv`  | `process.env.DATABASE_CA_CERT`      |
+| `runMigrations` / `db:migrate` | `process.env.DATABASE_CA_CERT`      |
 
 The migration is the one that bites. It runs BEFORE the app, so a stack whose
 CA reached the app but not the migration never starts at all — and the failure

@@ -85,7 +85,7 @@ catalog:
   # Database (Drizzle + Postgres)
   drizzle-orm: 1.0.0-rc.3
   drizzle-kit: 1.0.0-rc.3
-  postgres: 3.4.9
+  postgres: 4.0.0
 
   # Auth
   bcryptjs: 3.0.3
