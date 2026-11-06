@@ -1,5 +1,5 @@
-import { Controller, Delete, Get, Req, Res } from '@nestjs/common';
-import type { FastifyReply, FastifyRequest } from 'fastify';
+import { Controller, Delete, Get, Header, Req, Res } from '@nestjs/common';
+import { HttpAdapterHost } from '@nestjs/core';
 import {
   ActiveUser,
   IamService,
@@ -7,7 +7,9 @@ import {
   Permissions,
   PinoLogger,
   ZodRequest,
-  extractAccessToken,
+  AuthCookies,
+  type HttpRequest,
+  type HttpResponse,
 } from '@pkg/server';
 import { tryCatch } from '@pkg/utils';
 import {
@@ -30,6 +32,8 @@ export class AccountController {
   constructor(
     private readonly accountService: AccountService,
     private readonly iamService: IamService,
+    private readonly cookies: AuthCookies,
+    private readonly adapterHost: HttpAdapterHost,
     @InjectLogger() private readonly logger: PinoLogger,
   ) {}
 
@@ -38,33 +42,37 @@ export class AccountController {
   async remove(
     @ZodRequest(DeleteAccountRequestSchema) dto: DeleteAccountRequest,
     @ActiveUser() activeUser: ActiveUserType,
-    @Req() req: FastifyRequest,
-    @Res({ passthrough: true }) reply: FastifyReply,
+    @Req() req: HttpRequest,
+    @Res({ passthrough: true }) reply: HttpResponse,
   ): Promise<DeleteAccountResponse> {
     await this.accountService.deleteOwnAccount(activeUser.userId, dto);
 
     // Refresh tokens are revoked by the service; the access token that made
     // this call must not outlive the account either.
-    const accessToken = extractAccessToken(req);
+    const accessToken = this.cookies.accessToken(req);
     if (accessToken) {
       const { e } = await tryCatch(this.iamService.auth.blacklistAccessToken(accessToken));
-      if (e) this.logger.warn({ err: e }, 'Failed to blacklist access token after account deletion');
+      if (e)
+        this.logger.warn({ err: e }, 'Failed to blacklist access token after account deletion');
     }
-    reply.clearCookie('accessToken', { path: '/' });
-    reply.clearCookie('refreshToken', { path: '/' });
+    this.cookies.clear(reply);
     return {};
   }
 
   @Get('export')
+  @Header('Cache-Control', 'no-store')
   @Permissions('auth:export-self')
   async export(
     @ZodRequest(ExportAccountRequestSchema) _dto: ExportAccountRequest,
     @ActiveUser() activeUser: ActiveUserType,
-    @Res({ passthrough: true }) reply: FastifyReply,
+    @Res({ passthrough: true }) reply: HttpResponse,
   ): Promise<AccountExport> {
     const date = new Date().toISOString().slice(0, 10);
-    reply.header('Content-Disposition', `attachment; filename="account-data-${date}.json"`);
-    reply.header('Cache-Control', 'no-store');
+    this.adapterHost.httpAdapter.setHeader(
+      reply,
+      'Content-Disposition',
+      `attachment; filename="account-data-${date}.json"`,
+    );
     return this.accountService.exportOwnData(activeUser.userId);
   }
 }

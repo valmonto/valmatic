@@ -26,7 +26,6 @@
   "dependencies": {
     "@aws-sdk/client-s3": "catalog:",
     "@aws-sdk/s3-request-presigner": "catalog:",
-    "@fastify/cookie": "catalog:",
     "@nestjs/bullmq": "catalog:",
     "@nestjs/common": "catalog:",
     "@nestjs/config": "catalog:",
@@ -44,7 +43,6 @@
     "zod": "catalog:"
   },
   "peerDependencies": {
-    "@fastify/cookie": "catalog:",
     "@nestjs/common": "catalog:",
     "@nestjs/config": "catalog:",
     "@nestjs/core": "catalog:",
@@ -68,13 +66,11 @@
     }
   },
   "devDependencies": {
-    "@fastify/cookie": "catalog:",
     "@nestjs/testing": "catalog:",
     "@pkg/testing": "workspace:*",
     "@pkg/tsconfig": "workspace:*",
     "@pkg/vitest-config": "workspace:*",
     "@types/node": "catalog:",
-    "fastify": "catalog:",
     "reflect-metadata": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:",

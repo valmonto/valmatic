@@ -2,8 +2,9 @@ import { Throttle } from '@nestjs/throttler';
 import { Controller, Delete, Get, Post, Req, Res } from '@nestjs/common';
 import {
   ActiveUser,
-  COOKIE_OPTIONS,
-  COOKIE_TTL,
+  AuthCookies,
+  type HttpRequest,
+  type HttpResponse,
   Permissions,
   PublicRoute,
   ZodRequest,
@@ -16,7 +17,6 @@ import {
   AcceptInvitationRequestSchema,
   AcceptInvitationResponse,
   type ActiveUser as ActiveUserType,
-  type AuthTokens,
   type CreateInvitationRequest,
   CreateInvitationRequestSchema,
   CreateInvitationResponse,
@@ -30,8 +30,6 @@ import {
   RevokeInvitationRequestSchema,
   RevokeInvitationResponse,
 } from '@pkg/contracts';
-import type { FastifyReply, FastifyRequest } from 'fastify';
-import '@fastify/cookie';
 import { InvitationService } from './invitation.service.js';
 
 /**
@@ -42,21 +40,13 @@ import { InvitationService } from './invitation.service.js';
  */
 @Controller('invitations')
 export class InvitationController {
-  constructor(private readonly invitations: InvitationService) {}
+  constructor(
+    private readonly invitations: InvitationService,
+    private readonly cookies: AuthCookies,
+  ) {}
 
-  private isMobileClient(req: FastifyRequest): boolean {
+  private isMobileClient(req: HttpRequest): boolean {
     return req.headers['x-client'] === 'mobile';
-  }
-
-  private setAuthCookies(reply: FastifyReply, tokens: AuthTokens): void {
-    reply.setCookie('accessToken', tokens.accessToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.ACCESS_TOKEN,
-    });
-    reply.setCookie('refreshToken', tokens.refreshToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.REFRESH_TOKEN,
-    });
   }
 
   @Post()
@@ -106,15 +96,15 @@ export class InvitationController {
   @Throttle({ default: { limit: 10, ttl: 60_000 } })
   async accept(
     @ZodRequest(AcceptInvitationRequestSchema) dto: AcceptInvitationRequest,
-    @Req() req: FastifyRequest,
-    @Res({ passthrough: true }) reply: FastifyReply,
+    @Req() req: HttpRequest,
+    @Res({ passthrough: true }) reply: HttpResponse,
   ): Promise<AcceptInvitationResponse> {
     const { response, tokens } = await this.invitations.acceptAsNewUser(dto);
     // Mobile gets tokens in the body; web gets httpOnly cookies (as in AuthController).
     if (this.isMobileClient(req)) {
       return { ...response, tokens };
     }
-    this.setAuthCookies(reply, tokens);
+    this.cookies.set(reply, tokens);
     return response;
   }
 

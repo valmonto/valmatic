@@ -1,129 +1,40 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { UnauthorizedException, type ExecutionContext } from '@nestjs/common';
-import type { Reflector } from '@nestjs/core';
+import type { HttpAdapterHost, Reflector } from '@nestjs/core';
+import type { ConfigService } from '@nestjs/config';
 import type { JwtService } from '@nestjs/jwt';
 import { TokenExpiredError } from '@nestjs/jwt';
+import { LocalAuthGuard } from '../../../../../src/modules/iam/auth-providers/local/local-auth.guard.js';
 import {
-  LocalAuthGuard,
-  extractAccessToken,
-  extractRefreshToken,
-} from '../../../../../src/modules/iam/auth-providers/local/local-auth.guard.js';
+  AuthCookies,
+  signCookie,
+} from '../../../../../src/modules/iam/auth-providers/local/auth-cookies.js';
 import type { IAuthProvider } from '../../../../../src/modules/iam/auth-providers/auth-provider.js';
 
-describe('Token Extraction', () => {
-  const createMockRequest = (options: {
-    cookies?: Record<string, string>;
-    unsignResult?: { valid: boolean; value: string | null };
-    authHeader?: string;
-  }) => ({
-    cookies: options.cookies,
-    unsignCookie: vi.fn().mockReturnValue(options.unsignResult ?? { valid: false, value: null }),
-    headers: options.authHeader ? { authorization: options.authHeader } : {},
-  });
-
-  describe('extractAccessToken', () => {
-    it('should extract token from valid signed cookie', () => {
-      const req = createMockRequest({
-        cookies: { accessToken: 'signed-token' },
-        unsignResult: { valid: true, value: 'actual-token' },
-      });
-
-      expect(extractAccessToken(req)).toBe('actual-token');
-    });
-
-    it('should fallback to Bearer header when cookie is invalid', () => {
-      const req = createMockRequest({
-        cookies: { accessToken: 'invalid-signed' },
-        unsignResult: { valid: false, value: null },
-        authHeader: 'Bearer header-token',
-      });
-
-      expect(extractAccessToken(req)).toBe('header-token');
-    });
-
-    it('should extract token from Bearer header when no cookie', () => {
-      const req = createMockRequest({
-        authHeader: 'Bearer my-jwt-token',
-      });
-
-      expect(extractAccessToken(req)).toBe('my-jwt-token');
-    });
-
-    it('should return null when no token sources available', () => {
-      const req = createMockRequest({});
-
-      expect(extractAccessToken(req)).toBeNull();
-    });
-
-    it('should return null for non-Bearer auth header', () => {
-      const req = createMockRequest({
-        authHeader: 'Basic somebase64',
-      });
-
-      expect(extractAccessToken(req)).toBeNull();
-    });
-
-    it('should prefer cookie over header when both valid', () => {
-      const req = createMockRequest({
-        cookies: { accessToken: 'signed-cookie' },
-        unsignResult: { valid: true, value: 'cookie-token' },
-        authHeader: 'Bearer header-token',
-      });
-
-      expect(extractAccessToken(req)).toBe('cookie-token');
-    });
-  });
-
-  describe('extractRefreshToken', () => {
-    it('should extract token from valid signed cookie', () => {
-      const req = createMockRequest({
-        cookies: { refreshToken: 'signed-refresh' },
-        unsignResult: { valid: true, value: 'refresh-token' },
-      });
-
-      expect(extractRefreshToken(req)).toBe('refresh-token');
-    });
-
-    it('should return null when cookie is invalid', () => {
-      const req = createMockRequest({
-        cookies: { refreshToken: 'invalid' },
-        unsignResult: { valid: false, value: null },
-      });
-
-      expect(extractRefreshToken(req)).toBeNull();
-    });
-
-    it('should return null when no refresh cookie', () => {
-      const req = createMockRequest({});
-
-      expect(extractRefreshToken(req)).toBeNull();
-    });
-  });
-});
+const SECRET = 'cookie-secret-at-least-32-characters-long';
 
 describe('LocalAuthGuard', () => {
   let guard: LocalAuthGuard;
   let mockReflector: Reflector;
   let mockJwtService: JwtService;
   let mockAuthProvider: IAuthProvider;
+  let setCookie: ReturnType<typeof vi.fn>;
 
   const createMockContext = (
     options: {
-      cookies?: Record<string, string>;
-      unsignResult?: { valid: boolean; value: string | null };
+      cookie?: string;
       authHeader?: string;
       user?: unknown;
     } = {},
   ): ExecutionContext => {
     const request = {
-      cookies: options.cookies,
-      unsignCookie: vi.fn().mockReturnValue(options.unsignResult ?? { valid: false, value: null }),
-      headers: options.authHeader ? { authorization: options.authHeader } : {},
+      headers: {
+        ...(options.authHeader ? { authorization: options.authHeader } : {}),
+        ...(options.cookie ? { cookie: options.cookie } : {}),
+      },
       user: options.user,
     };
-    const response = {
-      setCookie: vi.fn(),
-    };
+    const response = {};
 
     return {
       getHandler: () => () => {},
@@ -150,7 +61,12 @@ describe('LocalAuthGuard', () => {
       refresh: vi.fn(),
     } as unknown as IAuthProvider;
 
-    guard = new LocalAuthGuard(mockReflector, mockJwtService, mockAuthProvider);
+    setCookie = vi.fn();
+    const cookies = new AuthCookies(
+      { httpAdapter: { setCookie, clearCookie: vi.fn() } } as unknown as HttpAdapterHost,
+      { getOrThrow: () => SECRET } as unknown as ConfigService,
+    );
+    guard = new LocalAuthGuard(mockReflector, mockJwtService, mockAuthProvider, cookies);
   });
 
   describe('canActivate', () => {
@@ -265,8 +181,7 @@ describe('LocalAuthGuard', () => {
     it('should try refresh when token is expired', async () => {
       const context = createMockContext({
         authHeader: 'Bearer expired-token',
-        cookies: { refreshToken: 'signed-refresh' },
-        unsignResult: { valid: true, value: 'refresh-token' },
+        cookie: `refreshToken=${encodeURIComponent(signCookie('refresh-token', SECRET))}`,
       });
       vi.mocked(mockReflector.getAllAndOverride).mockReturnValue(false);
       vi.mocked(mockJwtService.verifyAsync)
@@ -285,6 +200,21 @@ describe('LocalAuthGuard', () => {
 
       expect(result).toBe(true);
       expect(mockAuthProvider.refresh).toHaveBeenCalledWith({ refreshToken: 'refresh-token' });
+      // The new pair goes back as cookies, signed.
+      expect(setCookie.mock.calls.map((c) => [c[1], c[2]])).toEqual([
+        ['accessToken', signCookie('new-access', SECRET)],
+        ['refreshToken', signCookie('new-refresh', SECRET)],
+      ]);
+    });
+
+    it('a refresh cookie with a bad signature is no refresh token', async () => {
+      const context = createMockContext({
+        cookie: `refreshToken=${encodeURIComponent(signCookie('refresh-token', 'another-secret'))}`,
+      });
+      vi.mocked(mockReflector.getAllAndOverride).mockReturnValue(false);
+
+      await expect(guard.canActivate(context)).rejects.toThrow('auth.errors.sessionExpired');
+      expect(mockAuthProvider.refresh).not.toHaveBeenCalled();
     });
 
     it('should throw when no token and no refresh token', async () => {

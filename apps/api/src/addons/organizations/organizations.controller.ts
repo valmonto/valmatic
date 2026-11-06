@@ -1,6 +1,5 @@
 import { Controller, Post, Res } from '@nestjs/common';
-import type { FastifyReply } from 'fastify';
-import { ActiveUser, COOKIE_OPTIONS, COOKIE_TTL, Permissions, ZodRequest } from '@pkg/server';
+import { ActiveUser, AuthCookies, type HttpResponse, Permissions, ZodRequest } from '@pkg/server';
 import {
   type ActiveUser as ActiveUserType,
   type CreateOrgRequest,
@@ -15,7 +14,10 @@ import { OrganizationsService } from './organizations.service.js';
 /** Create an organization, or move the session into another one. */
 @Controller('orgs')
 export class OrganizationsController {
-  constructor(private readonly organizations: OrganizationsService) {}
+  constructor(
+    private readonly organizations: OrganizationsService,
+    private readonly cookies: AuthCookies,
+  ) {}
 
   @Post()
   @Permissions('org:create')
@@ -31,18 +33,11 @@ export class OrganizationsController {
   async switch(
     @ZodRequest(SwitchOrgRequestSchema) dto: SwitchOrgRequest,
     @ActiveUser() activeUser: ActiveUserType,
-    @Res({ passthrough: true }) reply: FastifyReply,
+    @Res({ passthrough: true }) reply: HttpResponse,
   ): Promise<SwitchOrgResponse> {
     const { accessToken, refreshToken } = await this.organizations.switchOrg(activeUser, dto.orgId);
 
-    reply.setCookie('accessToken', accessToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.ACCESS_TOKEN,
-    });
-    reply.setCookie('refreshToken', refreshToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.REFRESH_TOKEN,
-    });
+    this.cookies.set(reply, { accessToken, refreshToken });
     return {};
   }
 }

@@ -1,13 +1,17 @@
 import { SkipThrottle } from '@nestjs/throttler';
 import { Controller, Get, HttpCode, HttpStatus, Res } from '@nestjs/common';
-import type { FastifyReply } from 'fastify';
+import { HttpAdapterHost } from '@nestjs/core';
+import type { HttpResponse } from '../../common/http/index.js';
 import { PublicRoute } from '../iam/index.js';
 import { HealthService, type HealthReport } from './health.service.js';
 
 @SkipThrottle() // orchestration probes must never be limited
 @Controller('health')
 export class HealthController {
-  constructor(private readonly health: HealthService) {}
+  constructor(
+    private readonly health: HealthService,
+    private readonly adapterHost: HttpAdapterHost,
+  ) {}
 
   /**
    * Answers "can this instance serve traffic?" — 200 when its dependencies
@@ -32,11 +36,11 @@ export class HealthController {
   @PublicRoute()
   @Get()
   @HttpCode(HttpStatus.OK)
-  async check(@Res({ passthrough: true }) reply: FastifyReply): Promise<HealthReport> {
+  async check(@Res({ passthrough: true }) res: HttpResponse): Promise<HealthReport> {
     const report = await this.health.check();
 
     if (report.status !== 'ok') {
-      reply.status(HttpStatus.SERVICE_UNAVAILABLE);
+      this.adapterHost.httpAdapter.status(res, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     return report;
