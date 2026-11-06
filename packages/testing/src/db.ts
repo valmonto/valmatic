@@ -22,7 +22,7 @@ export const describeIntegration: typeof describe | typeof describe.skip = proce
 export const hasDatabase = Boolean(process.env.DATABASE_URL);
 
 /**
- * Suites that boot the whole app in-process — Nest, Fastify, guards, filters,
+ * Suites that boot the whole app in-process — Nest, its HTTP adapter, guards, filters,
  * the throttler — and drive it over HTTP. They need everything the app needs:
  * a database AND a Redis (sessions, rate limiting, queues).
  *

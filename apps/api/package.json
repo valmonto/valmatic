@@ -24,7 +24,7 @@
     "@nestjs/config": "catalog:",
     "@nestjs/core": "catalog:",
     "@nestjs/event-emitter": "catalog:",
-    "@nestjs/platform-fastify": "catalog:",
+    "@nestjs/platform-node": "catalog:",
     "@nestjs/throttler": "catalog:",
     "@pkg/contracts": "workspace:*",
     "@pkg/database": "workspace:*",
@@ -50,7 +50,6 @@
     "@pkg/tsconfig": "workspace:*",
     "@pkg/vitest-config": "workspace:*",
     "@types/node": "catalog:",
-    "fastify": "catalog:",
     "pino-pretty": "catalog:",
     "typescript": "catalog:ts6",
     "vitest": "catalog:"

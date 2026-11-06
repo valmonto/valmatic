@@ -1,7 +1,7 @@
-import type { NestFastifyApplication } from '@nestjs/platform-fastify';
+import type { NestNodeApplication, NodeRequest, NodeResponse } from '@nestjs/platform-node';
 
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter } from '@nestjs/platform-fastify';
+import { NodeAdapter } from '@nestjs/platform-node';
 import { ConfigService } from '@nestjs/config';
 import { Logger, withFrameworkLogFilter } from '@pkg/server';
 
@@ -26,14 +26,14 @@ const FORM_TYPES = new Set([
  * and CORS registrations out of `main.ts`; nothing in verify booted it, so
  * only production could reveal the missing plugin — and did.)
  */
-export async function createApp(): Promise<NestFastifyApplication> {
+export async function createApp(): Promise<NestNodeApplication> {
   // trustProxy must exist before the app does, so it reads the raw env (the
   // same variable the schema validates). Behind a reverse proxy the client IP
   // arrives in X-Forwarded-For; without this, rate limiting sees every request
   // as the proxy and throttles all users as one.
-  const app = await NestFactory.create<NestFastifyApplication>(
+  const app = await NestFactory.create<NestNodeApplication>(
     AppModule,
-    new FastifyAdapter({ trustProxy: process.env.TRUST_PROXY === 'true' }),
+    new NodeAdapter({ trustProxy: process.env.TRUST_PROXY === 'true' }),
     {
       bufferLogs: true,
       // Keeps each JSON request's bytes as they arrived (`request.rawBody`).
@@ -65,22 +65,23 @@ export async function createApp(): Promise<NestFastifyApplication> {
   // another site could otherwise sign the visitor in to the attacker's
   // account. Every client here sends JSON, and JSON from another origin needs
   // a CORS preflight this API does not grant. Refused before a byte of the
-  // body is read.
-  app
-    .getHttpAdapter()
-    .getInstance()
-    .addHook('onRequest', (request, reply, done) => {
-      const type = (request.headers['content-type'] ?? '').split(';')[0]!.trim().toLowerCase();
-      if (FORM_TYPES.has(type)) {
-        void reply.code(415).send({
-          statusCode: 415,
-          message: 'Unsupported Media Type',
-          error: 'Unsupported Media Type',
-        });
-        return;
-      }
-      done();
-    });
+  // body is read: Nest adds its body parsers at init(), after this.
+  app.use((req: NodeRequest, res: NodeResponse, next: () => void) => {
+    const type = (req.headers['content-type'] ?? '').split(';')[0]!.trim().toLowerCase();
+    if (FORM_TYPES.has(type)) {
+      res.status(415).json({
+        statusCode: 415,
+        message: 'Unsupported Media Type',
+        error: 'Unsupported Media Type',
+      });
+      return;
+    }
+    next();
+  });
+
+  // JSON bodies up to 1 MiB, as under Fastify; the Node adapter's own default
+  // is 100 KB. Registering it here replaces that default (rawBody included).
+  app.useBodyParser('json', { limit: '1mb' });
 
   const config = app.get(ConfigService);
 

@@ -37,6 +37,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<HttpRequest & { user?: ActiveUser }>();
 
     const { statusCode, message, error, detail } = this.getErrorDetails(exception);
+    // The URL as sent: a mounted router may already have stripped the global
+    // prefix from `request.url`, so ask the adapter.
+    const path = this.adapterHost.httpAdapter.getRequestUrl(request) as string;
 
     const errorResponse: ErrorResponse = {
       statusCode,
@@ -44,14 +47,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       error,
       ...(detail ? { detail } : {}),
       timestamp: new Date().toISOString(),
-      path: request.url,
+      path,
     };
 
     // Log internal server errors, and report them if a reporter is configured.
     // 4xx are the caller's mistakes; only 5xx are ours.
     if (statusCode >= 500) {
       this.logger.error(
-        `${request.method} ${request.url} - ${statusCode}`,
+        `${request.method} ${path} - ${statusCode}`,
         exception instanceof Error ? exception.stack : String(exception),
       );
 
@@ -60,7 +63,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         userId: user?.userId,
         orgId: user?.orgId,
         method: request.method,
-        path: request.url,
+        path,
       });
     }
 

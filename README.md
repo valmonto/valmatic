@@ -1,6 +1,6 @@
 # valmatic
 
-A multi-tenant SaaS boilerplate: NestJS + Fastify API, React web app, BullMQ
+A multi-tenant SaaS boilerplate: NestJS API (on Nest's own Node HTTP adapter), React web app, BullMQ
 worker, Expo mobile app — one pnpm monorepo, one shared contract.
 
 ## What you get

@@ -12,6 +12,7 @@ import {
 import bcrypt from 'bcryptjs';
 import { describeStack } from '@pkg/testing';
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
+import type { NodeRequest, NodeResponse } from '@nestjs/platform-node';
 import { serve, type InjectResponse, type TestServer } from './test-server.js';
 
 /**
@@ -149,7 +150,7 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
 
   beforeAll(async () => {
     await resetDatabase(client);
-    ({ app, restoreEnv } = await boot({ NODE_ENV: 'test' }));
+    ({ app, restoreEnv } = await boot({ NODE_ENV: 'test', MCP_ENABLED: 'true' }));
   });
 
   afterAll(async () => {
@@ -184,12 +185,9 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
       vi.resetModules();
       const { createApp } = await import('@/app.factory.js');
       const raw = await createApp();
-      raw
-        .getHttpAdapter()
-        .getInstance()
-        .post('/raw-body-check', (request, reply) => {
-          void reply.send({ raw: (request as { rawBody?: Buffer }).rawBody?.toString('utf8') });
-        });
+      raw.getHttpAdapter().post('/raw-body-check', (request: NodeRequest, reply: NodeResponse) => {
+        reply.json({ raw: request.rawBody?.toString('utf8') });
+      });
       const server = await serve(raw);
       const body = '{ "b": 1,   "a": [2, 3] }';
       const res = await server.inject({
@@ -231,7 +229,7 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
     expect((await app.inject({ method: 'GET', url: '/api/health' })).statusCode).toBe(404);
   });
 
-  it("answers an unauthenticated request with the exception filter body, not Fastify's", async () => {
+  it("answers an unauthenticated request with the exception filter body, not the adapter's", async () => {
     const res = await app.inject({ method: 'GET', url: '/api/auth/me' });
 
     expect(res.statusCode).toBe(401);
@@ -468,6 +466,59 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
       expect(res.statusCode, type).toBe(415);
       expect(res.headers['set-cookie'], type).toBeUndefined();
     }
+  });
+
+  it('takes JSON bodies up to 1 MiB, and refuses a bigger one with 413', async () => {
+    const send = (bytes: number) =>
+      app.inject({
+        method: 'POST',
+        url: '/api/auth/login',
+        headers: { 'x-client': 'mobile' },
+        payload: { email: 'nobody@pipeline.test', password: 'x'.repeat(bytes) },
+      });
+    // Under the limit the body is read and validated: a password this long
+    // is the schema's 400, not the parser's 413.
+    expect((await send(512 * 1024)).statusCode).not.toBe(413);
+    expect((await send(1024 * 1024 + 1)).statusCode).toBe(413);
+  });
+
+  // The MCP transport writes the raw response itself; this proves Nest hands
+  // it the request and response untouched and stays out of the way.
+  it('answers an MCP initialize over HTTP for a valid API key', async () => {
+    const admin = await register(app, 'mcp-admin');
+    await client.db.update(user).set({ systemRole: 'ADMIN' }).where(eq(user.email, admin.email));
+    const adminToken = (await login(app, admin.email)).json<{
+      tokens: { accessToken: string };
+    }>().tokens.accessToken;
+    const created = await app.inject({
+      method: 'POST',
+      url: '/api/admin/api-keys',
+      headers: bearer(adminToken),
+      payload: { name: 'pipeline', scopes: ['platform:read'] },
+    });
+    expect(created.statusCode, created.body).toBe(201);
+    const { key } = created.json<{ key: string }>();
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/mcp',
+      headers: { ...bearer(key), accept: 'application/json, text/event-stream' },
+      payload: {
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'initialize',
+        params: {
+          protocolVersion: '2025-06-18',
+          capabilities: {},
+          clientInfo: { name: 'pipeline', version: '1' },
+        },
+      },
+    });
+    expect(res.statusCode, res.body).toBe(200);
+    expect(res.body).toContain('"serverInfo"');
+
+    const noKey = await app.inject({ method: 'POST', url: '/api/mcp', payload: {} });
+    expect(noKey.statusCode).toBe(401);
   });
 
   it('lets a platform admin disable an account: its session ends and it cannot sign in', async () => {
