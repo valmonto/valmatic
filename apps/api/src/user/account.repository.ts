@@ -17,7 +17,23 @@ import {
   isNull,
   ne,
 } from '@pkg/database';
-import type { OrganizationUserRole } from '@pkg/contracts';
+import type { AccountExport, OrganizationUserRole } from '@pkg/contracts';
+
+/**
+ * A row of the account export as the database returns it: the export's
+ * shape (AccountExport), with its timestamp fields still `Date`s.
+ */
+type Row<T, K extends keyof T> = Omit<T, K> & { [P in K]: null extends T[P] ? Date | null : Date };
+type Item<K extends keyof AccountExport> = AccountExport[K] extends (infer I)[] ? I : never;
+
+export type AccountRow = Row<
+  AccountExport['account'],
+  'emailVerifiedAt' | 'createdAt' | 'updatedAt'
+>;
+export type NotificationRow = Row<Item<'notifications'>, 'createdAt'>;
+export type UploadRow = Row<Item<'attachments'>, 'createdAt'>;
+export type SignInProviderRow = Row<Item<'signInProviders'>, 'createdAt' | 'lastSeenAt'>;
+export type ApiKeyRow = Row<Item<'apiKeys'>, 'lastUsedAt' | 'revokedAt' | 'createdAt'>;
 
 export interface Membership {
   orgId: string;
@@ -118,7 +134,7 @@ export class AccountRepository {
     });
   }
 
-  async findAccount(userId: string) {
+  async findAccount(userId: string): Promise<AccountRow | null> {
     const [row] = await this.dbClient.db
       .select({
         id: user.id,
@@ -137,7 +153,7 @@ export class AccountRepository {
     return row ?? null;
   }
 
-  async findNotifications(userId: string) {
+  async findNotifications(userId: string): Promise<NotificationRow[]> {
     return this.dbClient.db
       .select({
         id: notification.id,
@@ -153,7 +169,7 @@ export class AccountRepository {
       .orderBy(asc(notification.createdAt));
   }
 
-  async findUploads(userId: string) {
+  async findUploads(userId: string): Promise<UploadRow[]> {
     return this.dbClient.db
       .select({
         id: attachment.id,
@@ -168,7 +184,7 @@ export class AccountRepository {
       .orderBy(asc(attachment.createdAt));
   }
 
-  async findSignInProviders(userId: string) {
+  async findSignInProviders(userId: string): Promise<SignInProviderRow[]> {
     return this.dbClient.db
       .select({
         provider: userIdentity.provider,
@@ -181,7 +197,7 @@ export class AccountRepository {
       .orderBy(asc(userIdentity.createdAt));
   }
 
-  async findApiKeys(userId: string) {
+  async findApiKeys(userId: string): Promise<ApiKeyRow[]> {
     return this.dbClient.db
       .select({
         id: apiKey.id,

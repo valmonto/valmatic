@@ -258,4 +258,3 @@ export type EmailVerificationConfirmResponse = z.infer<
 >;
 export type ChangeUnverifiedEmailRequest = z.infer<typeof ChangeUnverifiedEmailRequestSchema>;
 export type ChangeUnverifiedEmailResponse = z.infer<typeof ChangeUnverifiedEmailResponseSchema>;
-

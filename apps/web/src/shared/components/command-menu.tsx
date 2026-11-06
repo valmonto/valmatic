@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { k } from '@pkg/locales';
-import { Bell, LayoutDashboard, ListTodo, LogOut, Moon, Settings, Sun, Users } from 'lucide-react';
+import { Bell, LayoutDashboard, LogOut, Moon, Settings, Sun, Users } from 'lucide-react';
 import {
   CommandDialog,
   CommandEmpty,

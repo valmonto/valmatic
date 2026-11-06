@@ -71,7 +71,8 @@ export class AccountService {
     // A failure leaves orphaned objects, never a half-deleted account.
     for (const orgId of deleteOrgIds) {
       const { e } = await tryCatch(this.storage.deleteDirectory({ prefix: `org/${orgId}/` }));
-      if (e) this.logger.warn({ err: e, orgId }, 'Could not delete the files of a deleted organization');
+      if (e)
+        this.logger.warn({ err: e, orgId }, 'Could not delete the files of a deleted organization');
     }
 
     this.logger.info(

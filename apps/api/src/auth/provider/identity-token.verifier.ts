@@ -88,7 +88,10 @@ export class IdentityTokenVerifier {
     return this.configFor(provider) !== null;
   }
 
-  private keySetFor(provider: AuthIdentityProvider, config: ProviderConfig) {
+  private keySetFor(
+    provider: AuthIdentityProvider,
+    config: ProviderConfig,
+  ): ReturnType<typeof createRemoteJWKSet> {
     let keySet = this.keySets.get(provider);
     if (!keySet) {
       keySet = createRemoteJWKSet(new URL(config.jwksUri));
