@@ -84,7 +84,7 @@ egress fees). Never the VPS disk — non-negotiable whenever the feature lands.
 | Serious                            | 1k–10k      | 10k–100k    | 1k–10k     | 2–3 api replicas + LB, managed Postgres, dedicated limiter Redis (the env seam exists) | 150–500 |
 | Beyond                             | >10k        | >100k       | >10k       | read replicas, partitioning — a re-architecture conversation                           | 1k+     |
 
-Context for the numbers: a Fastify+Postgres app does hundreds of req/s per
+Context for the numbers: a Node+Postgres API does hundreds of req/s per
 instance on modest hardware, and a B2B user generates a fraction of a req/s.
 At $20/user/mo, the entire $20–50k/yr goal fits in the €15 tier; infra stays
 under ~1% of revenue at every stage.

@@ -9,14 +9,7 @@ packages:
 # found ()"). Pin until NativeWind v5 catches up to newer lightningcss.
 overrides:
   lightningcss: 1.30.1
-  # @nestjs/platform-fastify pins fastify EXACTLY (5.12.8 at v12.4.0), so a
-  # catalog bump alone would leave the adapter's instance unpatched next to a
-  # second copy of ours. Forcing one version here keeps a single Fastify and
-  # lets security patches (5.12.2 fixed four advisories) reach the running
-  # server. Keep this equal to the catalog pin below; drop it if platform-fastify
-  # ever moves to a range.
-  fastify: 5.12.8
-  # fast-uri (through ajv and fastify) had host-confusion and normalization
+  # fast-uri (through ajv) had host-confusion and normalization
   # advisories fixed in 3.1.7 / 4.1.5, and two more (GHSA-w74x-v6f9-j3xg,
   # GHSA-wjr9-j795-jxcr) in 3.1.9 / 4.2.3. Nothing here validates a URI for a
   # security decision today; the pins keep it that way should one be added.
@@ -65,17 +58,16 @@ catalog:
   #  BACKEND  (apps/api, apps/worker, packages/server, packages/database)
   # ═══════════════════════════════════════════════════════════════════════
 
-  # NestJS + Fastify
+  # NestJS (on its own Node adapter)
   '@nestjs/common': 12.4.0
   '@nestjs/core': 12.4.0
   '@nestjs/cli': 12.0.0
   '@nestjs/config': 12.0.0
   '@nestjs/event-emitter': 12.0.0
   '@nestjs/jwt': 12.0.1
-  '@nestjs/platform-fastify': 12.4.0
+  '@nestjs/platform-node': 12.4.0
   '@nestjs/testing': 12.4.0
   '@nestjs/throttler': 6.7.1
-  fastify: 5.12.8
   reflect-metadata: 0.2.2
   rxjs: 7.8.2
 
@@ -323,9 +315,8 @@ minimumReleaseAgeExcludePrune: true
 minimumReleaseAgeExclude:
   - '@nestjs/common@12.4.0'
   - '@nestjs/core@12.4.0'
-  - '@nestjs/platform-fastify@12.4.0'
+  - '@nestjs/platform-node@12.4.0'
   - '@nestjs/testing@12.4.0'
-  - '@fastify/cors@11.4.1'
   - 'tinyexec@1.3.1'
   - '@aws-sdk/client-s3@3.1126.0'
   - '@aws-sdk/s3-request-presigner@3.1126.0'

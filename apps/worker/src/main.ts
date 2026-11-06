@@ -1,14 +1,14 @@
-import type { NestFastifyApplication } from '@nestjs/platform-fastify';
+import type { NestNodeApplication } from '@nestjs/platform-node';
 
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter } from '@nestjs/platform-fastify';
+import { NodeAdapter } from '@nestjs/platform-node';
 import { ConfigService } from '@nestjs/config';
 import { Logger, withFrameworkLogFilter } from '@pkg/server';
 
 import { AppModule } from './app.module.js';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {
+  const app = await NestFactory.create<NestNodeApplication>(AppModule, new NodeAdapter(), {
     bufferLogs: true,
   });
 
