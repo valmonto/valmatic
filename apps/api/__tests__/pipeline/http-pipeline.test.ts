@@ -1,4 +1,3 @@
-import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { createHash } from 'node:crypto';
 import {
   createDatabaseClient,
@@ -13,10 +12,12 @@ import {
 import bcrypt from 'bcryptjs';
 import { describeStack } from '@pkg/testing';
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
+import { serve, type InjectResponse, type TestServer } from './test-server.js';
 
 /**
  * The request pipeline, booted the way production boots it and driven over
- * HTTP in-process — no listener, no browser, no mocks of Nest.
+ * real HTTP in-process — a listener on a random local port, Node's own
+ * `fetch`, no browser, no mocks of Nest (see test-server.ts).
  *
  * Everything else in this workspace tests OUR code with Nest's collaborators
  * replaced: guards get a hand-built ExecutionContext, services get fake
@@ -68,7 +69,7 @@ function withEnv(overrides: Record<string, string | undefined>): () => void {
 
 /** Boot a fresh app; env is read at module compile, so set it first. */
 async function boot(env: Record<string, string | undefined>): Promise<{
-  app: NestFastifyApplication;
+  app: TestServer;
   restoreEnv: () => void;
 }> {
   const restoreEnv = withEnv({
@@ -86,16 +87,11 @@ async function boot(env: Record<string, string | undefined>): Promise<{
   // first one's config. Imported lazily, after the env above is in place.
   vi.resetModules();
   const { createApp } = await import('@/app.factory.js');
-  const app = await createApp();
-  await app.init();
-  await app.getHttpAdapter().getInstance().ready();
+  const app = await serve(await createApp());
   return { app, restoreEnv };
 }
 
-async function register(
-  app: NestFastifyApplication,
-  who: string,
-): Promise<{ token: string; email: string }> {
+async function register(app: TestServer, who: string): Promise<{ token: string; email: string }> {
   const email = `${who}-${RUN}@pipeline.test`;
   const res = await app.inject({
     method: 'POST',
@@ -108,7 +104,7 @@ async function register(
   return { token: body.tokens.accessToken, email };
 }
 
-async function login(app: NestFastifyApplication, email: string, password = PASSWORD) {
+async function login(app: TestServer, email: string, password = PASSWORD) {
   return app.inject({
     method: 'POST',
     url: '/api/auth/login',
@@ -125,7 +121,7 @@ const bearer = (token: string): Record<string, string> => ({ authorization: `Bea
  * sign-up joins the existing one, and tenancy tests need two that are apart.
  */
 async function ownerOfNewOrg(
-  app: NestFastifyApplication,
+  app: TestServer,
   client: DatabaseClient,
   who: string,
 ): Promise<{ token: string; email: string }> {
@@ -148,7 +144,7 @@ async function ownerOfNewOrg(
 
 describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
   const client = createDatabaseClient({ url: process.env.DATABASE_URL! });
-  let app: NestFastifyApplication;
+  let app: TestServer;
   let restoreEnv: () => void;
 
   beforeAll(async () => {
@@ -194,19 +190,32 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
         .post('/raw-body-check', (request, reply) => {
           void reply.send({ raw: (request as { rawBody?: Buffer }).rawBody?.toString('utf8') });
         });
-      await raw.init();
-      await raw.getHttpAdapter().getInstance().ready();
+      const server = await serve(raw);
       const body = '{ "b": 1,   "a": [2, 3] }';
-      const res = await raw.inject({
+      const res = await server.inject({
         method: 'POST',
         url: '/raw-body-check',
         headers: { 'content-type': 'application/json' },
         payload: body,
       });
       expect(res.json()).toEqual({ raw: body });
-      await raw.close();
+      await server.close();
     } finally {
       restore();
+    }
+  });
+
+  it('sends the security headers on every answer, errors included, and no X-Powered-By', async () => {
+    for (const url of ['/health', '/api/auth/me', '/api/definitely-not-a-route']) {
+      const res = await app.inject({ method: 'GET', url });
+      expect(res.headers['x-content-type-options'], url).toBe('nosniff');
+      expect(res.headers['strict-transport-security'], url).toContain('max-age=');
+      expect(res.headers['x-frame-options'], url).toBe('SAMEORIGIN');
+      // The SPA reads these from another origin; CORS is the gate, not CORP.
+      expect(res.headers['cross-origin-resource-policy'], url).toBe('cross-origin');
+      // A JSON API: no page policy to break things.
+      expect(res.headers['content-security-policy'], url).toBeUndefined();
+      expect(res.headers['x-powered-by'], url).toBeUndefined();
     }
   });
 
@@ -655,7 +664,7 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=test)', () => {
 describeStack('HTTP pipeline (in-process, NODE_ENV=development: throttling + startup seed)', () => {
   const client = createDatabaseClient({ url: process.env.DATABASE_URL! });
   const seedEmail = `seeded-owner-${RUN}@pipeline.test`;
-  let app: NestFastifyApplication;
+  let app: TestServer;
   let restoreEnv: () => void;
 
   beforeAll(async () => {
@@ -697,7 +706,7 @@ describeStack('HTTP pipeline (in-process, NODE_ENV=development: throttling + sta
     const { token } = await register(app, 'throttled');
 
     const statuses: number[] = [];
-    let last: ReturnType<NestFastifyApplication['inject']> extends Promise<infer R> ? R : never;
+    let last: InjectResponse;
     for (let i = 0; i < 4; i++) {
       last = await app.inject({ method: 'GET', url: '/api/auth/me', headers: bearer(token) });
       statuses.push(last.statusCode);

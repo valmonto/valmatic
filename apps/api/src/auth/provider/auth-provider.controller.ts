@@ -1,13 +1,18 @@
 import { Controller, Post, Req, Res } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import { COOKIE_OPTIONS, COOKIE_TTL, PublicRoute, ZodRequest } from '@pkg/server';
+import {
+  AuthCookies,
+  type HttpRequest,
+  type HttpResponse,
+  PublicRoute,
+  ZodRequest,
+} from '@pkg/server';
 import {
   ProviderSignInRequestSchema,
   type ProviderNonceResponse,
   type ProviderSignInRequest,
   type ProviderSignInResponse,
 } from '@pkg/contracts';
-import type { FastifyReply, FastifyRequest } from 'fastify';
 import { AUTH_THROTTLE } from '../../config/index.js';
 import { AuthProviderService } from './auth-provider.service.js';
 
@@ -18,7 +23,10 @@ import { AuthProviderService } from './auth-provider.service.js';
  */
 @Controller('auth/provider')
 export class AuthProviderController {
-  constructor(private readonly providers: AuthProviderService) {}
+  constructor(
+    private readonly providers: AuthProviderService,
+    private readonly cookies: AuthCookies,
+  ) {}
 
   /** A one-time value the app gives the provider; it comes back in the token. */
   @PublicRoute()
@@ -33,8 +41,8 @@ export class AuthProviderController {
   @Throttle(AUTH_THROTTLE)
   async signIn(
     @ZodRequest(ProviderSignInRequestSchema) dto: ProviderSignInRequest,
-    @Req() req: FastifyRequest,
-    @Res({ passthrough: true }) reply: FastifyReply,
+    @Req() req: HttpRequest,
+    @Res({ passthrough: true }) reply: HttpResponse,
   ): Promise<ProviderSignInResponse> {
     const { response, accessToken, refreshToken } = await this.providers.signIn(dto);
 
@@ -43,14 +51,7 @@ export class AuthProviderController {
     if (req.headers['x-client'] === 'mobile') {
       return { ...response, tokens: { accessToken, refreshToken } };
     }
-    reply.setCookie('accessToken', accessToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.ACCESS_TOKEN,
-    });
-    reply.setCookie('refreshToken', refreshToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.REFRESH_TOKEN,
-    });
+    this.cookies.set(reply, { accessToken, refreshToken });
     return response;
   }
 }

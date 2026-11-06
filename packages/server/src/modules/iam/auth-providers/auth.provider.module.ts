@@ -9,6 +9,7 @@ import { SystemRolesGuard } from './guards/system-roles.guard.js';
 import { ConfigService } from '@nestjs/config';
 import { LocalAuthProvider } from './local/local-auth.provider.js';
 import { LocalAuthGuard } from './local/local-auth.guard.js';
+import { AuthCookies } from './local/auth-cookies.js';
 import { JwtModule } from '@nestjs/jwt';
 
 @Global()
@@ -28,6 +29,7 @@ import { JwtModule } from '@nestjs/jwt';
       useExisting: LocalAuthProvider,
     },
     LocalAuthGuard,
+    AuthCookies,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
@@ -57,6 +59,6 @@ import { JwtModule } from '@nestjs/jwt';
     },
   ],
   controllers: [],
-  exports: [AUTH_PROVIDER, LocalAuthProvider],
+  exports: [AUTH_PROVIDER, LocalAuthProvider, AuthCookies],
 })
 export class AuthProviderModule {}

@@ -8,7 +8,7 @@ request/error plumbing. `apps/api` and `apps/worker` are thin on top of it.
 ```
 src/
 ├── common/     ZodRequest, GlobalExceptionFilter
-├── config/     SECURITY_CONFIG, cookie options
+├── config/     SECURITY_CONFIG, cookie options (set/read through AuthCookies)
 └── modules/    iam · health · logging · queues · redis · events · storage
 ```
 

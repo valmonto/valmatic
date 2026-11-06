@@ -5,11 +5,12 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import type { FastifyReply, FastifyRequest } from 'fastify';
+import { HttpAdapterHost } from '@nestjs/core';
 import { ZodError } from 'zod';
 import { InjectLogger, PinoLogger } from '../../modules/logging/index.js';
 import { ErrorReporter } from '../../modules/telemetry/index.js';
 import type { ActiveUser } from '@pkg/contracts';
+import type { HttpRequest, HttpResponse } from '../http/index.js';
 
 interface ErrorResponse {
   statusCode: number;
@@ -27,12 +28,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   constructor(
     @InjectLogger() private readonly logger: PinoLogger,
     private readonly errorReporter: ErrorReporter,
+    private readonly adapterHost: HttpAdapterHost,
   ) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
-    const reply = ctx.getResponse<FastifyReply>();
-    const request = ctx.getRequest<FastifyRequest>();
+    const reply = ctx.getResponse<HttpResponse>();
+    const request = ctx.getRequest<HttpRequest & { user?: ActiveUser }>();
 
     const { statusCode, message, error, detail } = this.getErrorDetails(exception);
 
@@ -53,7 +55,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         exception instanceof Error ? exception.stack : String(exception),
       );
 
-      const user = (request as FastifyRequest & { user?: ActiveUser }).user;
+      const user = request.user;
       this.errorReporter.report(exception, {
         userId: user?.userId,
         orgId: user?.orgId,
@@ -62,7 +64,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       });
     }
 
-    void reply.status(statusCode).send(errorResponse);
+    this.adapterHost.httpAdapter.reply(reply, errorResponse, statusCode);
   }
 
   private getErrorDetails(exception: unknown): {

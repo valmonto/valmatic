@@ -4,8 +4,6 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { ConfigService } from '@nestjs/config';
 import { Logger, withFrameworkLogFilter } from '@pkg/server';
-import fastifyCookie from '@fastify/cookie';
-import fastifyHelmet from '@fastify/helmet';
 
 import { AppModule } from './app.module.js';
 import { CORS_ALLOWED_HEADERS, corsOrigins } from './config/cors.js';
@@ -22,7 +20,7 @@ const FORM_TYPES = new Set([
  * signed cookies, CORS, the global prefix — without listening.
  *
  * `main.ts` calls this and listens. The in-process pipeline suite
- * (`__tests__/pipeline`) calls this and uses `app.inject()`, so every guard,
+ * (`__tests__/pipeline`) calls this and listens on a random local port, so every guard,
  * filter and plugin registration below is exercised by `pnpm verify` rather
  * than only by a deployed container. (A careless edit once sliced the cookie
  * and CORS registrations out of `main.ts`; nothing in verify booted it, so
@@ -45,19 +43,22 @@ export async function createApp(): Promise<NestFastifyApplication> {
     },
   );
 
+  // Security headers, Nest's own (Helmet's defaults and option names, no
+  // package). CSP is off — this is a JSON API, and a policy written for pages
+  // it never serves only causes mystery breakage. CORP is cross-origin
+  // because the SPA legitimately consumes these responses from another
+  // origin; actual access control is CORS below, not this header. Also drops
+  // X-Powered-By. Must come first: it throws if called after app.use().
+  app.useSecurityHeaders({
+    contentSecurityPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  });
+
   const logger = app.get(Logger);
   app.useLogger(withFrameworkLogFilter(logger));
 
   // Enable graceful shutdown hooks
   app.enableShutdownHooks();
-
-  app
-    .getHttpAdapter()
-    .getInstance()
-    .addHook('onSend', (req, reply, payload, done) => {
-      reply.removeHeader('X-Powered-By');
-      done();
-    });
 
   // A cross-site HTML form can send only these three body types — no
   // preflight, cookies included — so no route accepts them: a hidden form on
@@ -82,22 +83,6 @@ export async function createApp(): Promise<NestFastifyApplication> {
     });
 
   const config = app.get(ConfigService);
-
-  // Security headers. CSP is off — this is a JSON API, and a policy written
-  // for pages it never serves only causes mystery breakage. CORP is
-  // cross-origin because the SPA legitimately consumes these responses from
-  // another origin; actual access control is CORS below, not this header.
-  await app.register(fastifyHelmet, {
-    contentSecurityPolicy: false,
-    crossOriginResourcePolicy: { policy: 'cross-origin' },
-  });
-
-  // Signed auth cookies — without this registration reply.setCookie does not
-  // exist and every login 500s.
-  await app.register(fastifyCookie, {
-    secret: config.getOrThrow<string>('IAM_COOKIE_SECRET'),
-    parseOptions: {},
-  });
 
   // CORS — browsers send a preflight that must be allowed. Origins and the
   // allowed request headers are set in config/cors.ts.

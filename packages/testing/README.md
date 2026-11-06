@@ -52,8 +52,9 @@ to run after every change. See `apps/e2e` for writing and debugging specs.
 Guard and filter unit tests hand-build their `ExecutionContext`, so they pass
 whether or not the framework still invokes them. `describeStack` suites boot
 the real app in-process (`apps/api/__tests__/pipeline/`) through the same
-factory production uses and drive it with `app.inject()` — no listener, no
-browser. They run when `DATABASE_URL` and `IAM_REDIS_HOST` are both set and
+factory production uses, serve it on a random local port and drive it with
+Node's own `fetch` (`test-server.ts`, an `inject()`-shaped helper that works on
+any Nest adapter) — no browser, no client library. They run when `DATABASE_URL` and `IAM_REDIS_HOST` are both set and
 skip otherwise, like `describeIntegration`. This is the before/after baseline
 for a framework upgrade: run it green on the old version first.
 

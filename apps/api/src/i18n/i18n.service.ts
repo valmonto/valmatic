@@ -1,6 +1,6 @@
 import { Injectable, Scope, Inject } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
-import type { FastifyRequest } from 'fastify';
+import type { HttpRequest } from '@pkg/server';
 import {
   translations,
   defaultLanguage,
@@ -12,7 +12,7 @@ import {
 export class I18nService {
   private readonly lang: SupportedLanguage;
 
-  constructor(@Inject(REQUEST) request: FastifyRequest) {
+  constructor(@Inject(REQUEST) request: HttpRequest) {
     this.lang = detectLanguageFromHeader(request.headers['accept-language']);
   }
 

@@ -4,7 +4,7 @@ import {
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import type { FastifyRequest } from 'fastify';
+import type { HttpRequest } from '../http/index.js';
 import type { z } from 'zod';
 
 /**
@@ -67,7 +67,7 @@ export function mergeRequestInput(req: {
 
 export function ZodRequest<T extends z.ZodType>(schema: T): ParameterDecorator {
   return createParamDecorator((_data: unknown, ctx: ExecutionContext) => {
-    const req = ctx.switchToHttp().getRequest<FastifyRequest>();
+    const req = ctx.switchToHttp().getRequest<HttpRequest>();
     return validateZodRequest(schema, mergeRequestInput(req));
   })();
 }

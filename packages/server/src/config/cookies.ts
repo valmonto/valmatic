@@ -7,10 +7,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 /**
  * Base cookie options for auth tokens.
- * Used for accessToken and refreshToken cookies.
+ * Used for accessToken and refreshToken cookies, which AuthCookies also signs.
  */
 export const COOKIE_OPTIONS = {
-  signed: true,
   httpOnly: true,
   path: '/',
   sameSite: 'lax' as const,

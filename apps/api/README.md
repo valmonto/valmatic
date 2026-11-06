@@ -231,7 +231,7 @@ is the guide):
   without a database proves less than it looks. CI always sets one.
 - **Pipeline tests** (`__tests__/pipeline/`, via `describeStack`) — the whole
   api booted in-process by the same `createApp()` that `main.ts` uses, driven
-  with `app.inject()`: prefix, 401/403/404/400 bodies from the exception
+  over real HTTP on a random local port (`test-server.ts`): prefix, 401/403/404/400 bodies from the exception
   filter, cookies and bearer auth, a cross-tenant read, the permissions guard,
   the throttler's 429, and the startup seeder. Needs `DATABASE_URL` **and**
   `IAM_REDIS_HOST`; CI sets both. This is the only layer in `verify` where Nest

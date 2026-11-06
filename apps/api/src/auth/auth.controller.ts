@@ -22,10 +22,9 @@ import {
   ActiveUser,
   IamService,
   Permissions,
-  COOKIE_OPTIONS,
-  COOKIE_TTL,
-  extractAccessToken,
-  extractRefreshToken,
+  AuthCookies,
+  type HttpRequest,
+  type HttpResponse,
 } from '@pkg/server';
 import { k } from '@pkg/locales';
 import { tryCatch } from '@pkg/utils';
@@ -55,8 +54,6 @@ import {
   RegisterResponse,
   type ActiveUser as ActiveUserType,
 } from '@pkg/contracts';
-import type { FastifyReply, FastifyRequest } from 'fastify';
-import '@fastify/cookie';
 import { ZodRequest } from '@pkg/server';
 
 @Controller('auth')
@@ -68,6 +65,7 @@ export class AuthController {
     private readonly verifications: EmailVerificationService,
     private readonly providers: AuthProviderService,
     private readonly configService: ConfigService,
+    private readonly cookies: AuthCookies,
     @InjectLogger() private readonly logger: PinoLogger,
     @Optional() @Inject(MULTI_ORG) private readonly multiOrg?: boolean,
   ) {}
@@ -93,24 +91,8 @@ export class AuthController {
    * their tokens in the response body instead of as httpOnly cookies, since
    * React Native has no browser cookie jar. Web clients are unaffected.
    */
-  private isMobileClient(req: FastifyRequest): boolean {
+  private isMobileClient(req: HttpRequest): boolean {
     return req.headers['x-client'] === 'mobile';
-  }
-
-  private setAuthCookies(reply: FastifyReply, tokens: AuthTokens): void {
-    reply.setCookie('accessToken', tokens.accessToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.ACCESS_TOKEN,
-    });
-    reply.setCookie('refreshToken', tokens.refreshToken, {
-      ...COOKIE_OPTIONS,
-      maxAge: COOKIE_TTL.REFRESH_TOKEN,
-    });
-  }
-
-  private clearAuthCookies(reply: FastifyReply): void {
-    reply.clearCookie('accessToken', { path: '/' });
-    reply.clearCookie('refreshToken', { path: '/' });
   }
 
   /**
@@ -119,15 +101,15 @@ export class AuthController {
    * returns it so callers can `return this.deliverTokens(...)`.
    */
   private deliverTokens<T extends { tokens?: AuthTokens }>(
-    req: FastifyRequest,
-    reply: FastifyReply,
+    req: HttpRequest,
+    reply: HttpResponse,
     tokens: AuthTokens,
     response: T,
   ): T {
     if (this.isMobileClient(req)) {
       return { ...response, tokens };
     }
-    this.setAuthCookies(reply, tokens);
+    this.cookies.set(reply, tokens);
     return response;
   }
 
@@ -138,10 +120,15 @@ export class AuthController {
   @Throttle(AUTH_THROTTLE)
   async login(
     @ZodRequest(LoginRequestSchema) dto: LoginRequest,
-    @Req() req: FastifyRequest,
-    @Res({ passthrough: true }) reply: FastifyReply,
+    @Req() req: HttpRequest,
+    @Res({ passthrough: true }) reply: HttpResponse,
   ): Promise<LoginResponse> {
-    const { response, accessToken, refreshToken } = await this.authService.login(dto, req.ip);
+    // An address is missing only when the socket already closed; those share
+    // one lockout bucket rather than escaping the limit.
+    const { response, accessToken, refreshToken } = await this.authService.login(
+      dto,
+      req.ip ?? 'unknown',
+    );
     return this.deliverTokens(req, reply, { accessToken, refreshToken }, response);
   }
 
@@ -150,8 +137,8 @@ export class AuthController {
   @Throttle(AUTH_THROTTLE)
   async register(
     @ZodRequest(RegisterRequestSchema) dto: RegisterRequest,
-    @Req() req: FastifyRequest,
-    @Res({ passthrough: true }) reply: FastifyReply,
+    @Req() req: HttpRequest,
+    @Res({ passthrough: true }) reply: HttpResponse,
   ): Promise<RegisterResponse> {
     const { response, accessToken, refreshToken } = await this.authService.register(dto);
     // The address is mailed a link to confirm it. Not awaited: the account
@@ -171,10 +158,10 @@ export class AuthController {
   @Post('refresh')
   async refresh(
     @ZodRequest(RefreshRequestSchema) dto: RefreshRequest,
-    @Req() req: FastifyRequest,
-    @Res({ passthrough: true }) reply: FastifyReply,
+    @Req() req: HttpRequest,
+    @Res({ passthrough: true }) reply: HttpResponse,
   ): Promise<RefreshResponse> {
-    const currentRefreshToken = dto.refreshToken ?? extractRefreshToken(req);
+    const currentRefreshToken = dto.refreshToken ?? this.cookies.refreshToken(req);
     if (!currentRefreshToken) {
       throw new UnauthorizedException(k.auth.errors.invalidRefreshToken);
     }
@@ -187,11 +174,11 @@ export class AuthController {
   @Permissions('auth:logout')
   async logout(
     @ZodRequest(LogoutRequestSchema) dto: LogoutRequest,
-    @Req() req: FastifyRequest,
-    @Res({ passthrough: true }) reply: FastifyReply,
+    @Req() req: HttpRequest,
+    @Res({ passthrough: true }) reply: HttpResponse,
   ): Promise<LogoutResponse> {
     // Blacklist the access token so it can't be reused (cookie or Bearer)
-    const accessToken = extractAccessToken(req);
+    const accessToken = this.cookies.accessToken(req);
     if (accessToken) {
       const { e } = await tryCatch(this.iamService.auth.blacklistAccessToken(accessToken));
       if (e) {
@@ -200,7 +187,7 @@ export class AuthController {
     }
 
     // Revoke the refresh token (cookie for web, request body for mobile)
-    const refreshToken = extractRefreshToken(req) ?? dto.refreshToken;
+    const refreshToken = this.cookies.refreshToken(req) ?? dto.refreshToken;
     if (refreshToken) {
       const { e } = await tryCatch(this.iamService.auth.revokeToken({ token: refreshToken }));
       if (e) {
@@ -208,7 +195,7 @@ export class AuthController {
       }
     }
 
-    this.clearAuthCookies(reply);
+    this.cookies.clear(reply);
     return {};
   }
 
@@ -226,13 +213,13 @@ export class AuthController {
   async logoutAll(
     @ZodRequest(LogoutAllRequestSchema) dto: LogoutAllRequest,
     @ActiveUser() activeUser: ActiveUserType,
-    @Req() req: FastifyRequest,
-    @Res({ passthrough: true }) reply: FastifyReply,
+    @Req() req: HttpRequest,
+    @Res({ passthrough: true }) reply: HttpResponse,
   ): Promise<LogoutAllResponse> {
     await this.authService.logoutAllDevices(activeUser.userId);
 
     // Blacklist current access token and clear cookies
-    const accessToken = extractAccessToken(req);
+    const accessToken = this.cookies.accessToken(req);
     if (accessToken) {
       const { e } = await tryCatch(this.iamService.auth.blacklistAccessToken(accessToken));
       if (e) {
@@ -240,7 +227,7 @@ export class AuthController {
       }
     }
 
-    this.clearAuthCookies(reply);
+    this.cookies.clear(reply);
     return {};
   }
 
@@ -249,13 +236,13 @@ export class AuthController {
   async changePassword(
     @ZodRequest(ChangePasswordRequestSchema) dto: ChangePasswordRequest,
     @ActiveUser() activeUser: ActiveUserType,
-    @Req() req: FastifyRequest,
-    @Res({ passthrough: true }) reply: FastifyReply,
+    @Req() req: HttpRequest,
+    @Res({ passthrough: true }) reply: HttpResponse,
   ): Promise<ChangePasswordResponse> {
     await this.authService.changePassword(activeUser.userId, dto);
 
     // Clear current session (user logged out from all devices)
-    const accessToken = extractAccessToken(req);
+    const accessToken = this.cookies.accessToken(req);
     if (accessToken) {
       const { e } = await tryCatch(this.iamService.auth.blacklistAccessToken(accessToken));
       if (e) {
@@ -263,7 +250,7 @@ export class AuthController {
       }
     }
 
-    this.clearAuthCookies(reply);
+    this.cookies.clear(reply);
     return {};
   }
 }

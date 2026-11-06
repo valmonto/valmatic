@@ -5,51 +5,10 @@ import type { ActiveUser } from '@pkg/contracts';
 import { k } from '@pkg/locales';
 import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator.js';
 import { AUTH_PROVIDER, type IAuthProvider } from '../auth-provider.js';
-import { COOKIE_OPTIONS, COOKIE_TTL } from '../../../../config/index.js';
-import type { FastifyReply, FastifyRequest } from 'fastify';
-import '@fastify/cookie';
+import type { HttpRequest, HttpResponse } from '../../../../common/http/index.js';
+import { AuthCookies } from './auth-cookies.js';
 
-interface CookieRequest {
-  cookies?: Record<string, string | undefined>;
-  unsignCookie: (cookie: string) => { valid: boolean; value: string | null };
-  headers?: { authorization?: string };
-}
-
-/**
- * Extracts access token from signed cookie or Authorization header.
- */
-export function extractAccessToken(req: CookieRequest): string | null {
-  // Try signed cookie first
-  const signedCookie = req.cookies?.accessToken;
-  if (signedCookie) {
-    const unsigned = req.unsignCookie(signedCookie);
-    if (unsigned.valid && unsigned.value) {
-      return unsigned.value;
-    }
-  }
-
-  // Fallback to Authorization header
-  const authHeader = req.headers?.authorization;
-  if (authHeader?.startsWith('Bearer ')) {
-    return authHeader.slice(7);
-  }
-
-  return null;
-}
-
-/**
- * Extracts refresh token from signed cookie.
- */
-export function extractRefreshToken(req: CookieRequest): string | null {
-  const signedCookie = req.cookies?.refreshToken;
-  if (signedCookie) {
-    const unsigned = req.unsignCookie(signedCookie);
-    if (unsigned.valid && unsigned.value) {
-      return unsigned.value;
-    }
-  }
-  return null;
-}
+type GuardedRequest = HttpRequest & { user?: ActiveUser };
 
 @Injectable()
 export class LocalAuthGuard {
@@ -57,6 +16,7 @@ export class LocalAuthGuard {
     private reflector: Reflector,
     private jwtService: JwtService,
     @Inject(AUTH_PROVIDER) private authProvider: IAuthProvider,
+    private cookies: AuthCookies,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -68,9 +28,9 @@ export class LocalAuthGuard {
       return true;
     }
 
-    const req = context.switchToHttp().getRequest<FastifyRequest & { user?: ActiveUser }>();
-    const res = context.switchToHttp().getResponse<FastifyReply>();
-    const accessToken = extractAccessToken(req);
+    const req = context.switchToHttp().getRequest<GuardedRequest>();
+    const res = context.switchToHttp().getResponse<HttpResponse>();
+    const accessToken = this.cookies.accessToken(req);
 
     // No access token - try to refresh using refresh token
     if (!accessToken) {
@@ -119,11 +79,8 @@ export class LocalAuthGuard {
     return true;
   }
 
-  private async tryRefresh(
-    req: FastifyRequest & { user?: ActiveUser },
-    res: FastifyReply,
-  ): Promise<boolean> {
-    const refreshToken = extractRefreshToken(req);
+  private async tryRefresh(req: GuardedRequest, res: HttpResponse): Promise<boolean> {
+    const refreshToken = this.cookies.refreshToken(req);
     if (!refreshToken) {
       throw new UnauthorizedException(k.auth.errors.sessionExpired);
     }
@@ -131,15 +88,7 @@ export class LocalAuthGuard {
     try {
       const tokens = await this.authProvider.refresh({ refreshToken });
 
-      res.setCookie('accessToken', tokens.accessToken, {
-        ...COOKIE_OPTIONS,
-        maxAge: COOKIE_TTL.ACCESS_TOKEN,
-      });
-
-      res.setCookie('refreshToken', tokens.refreshToken, {
-        ...COOKIE_OPTIONS,
-        maxAge: COOKIE_TTL.REFRESH_TOKEN,
-      });
+      this.cookies.set(res, tokens);
 
       // Verify the new token and set user
       const payload = await this.jwtService.verifyAsync(tokens.accessToken);

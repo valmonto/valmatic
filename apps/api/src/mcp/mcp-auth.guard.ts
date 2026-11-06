@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { FastifyRequest } from 'fastify';
+import type { HttpRequest } from '@pkg/server';
 import { k } from '@pkg/locales';
 import type { McpScope } from '@pkg/contracts';
 import { ApiKeyService } from '../api-key/api-key.service.js';
@@ -37,7 +37,7 @@ export class McpAuthGuard implements CanActivate {
       throw new NotFoundException();
     }
 
-    const req = ctx.switchToHttp().getRequest<FastifyRequest & { mcpAuth?: McpAuth }>();
+    const req = ctx.switchToHttp().getRequest<HttpRequest & { mcpAuth?: McpAuth }>();
     const header = req.headers.authorization;
     const token = header?.startsWith('Bearer ') ? header.slice(7).trim() : undefined;
     if (!token) throw new UnauthorizedException(k.mcp.errors.missingKey);
