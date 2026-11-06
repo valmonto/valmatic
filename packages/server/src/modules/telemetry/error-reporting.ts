@@ -42,6 +42,24 @@ export class ErrorReporter {
       environment: this.configService.get<string>('NODE_ENV', 'development'),
       // Errors only — tracing is a separate, costed decision.
       tracesSampleRate: 0,
+      // Sentry 11 collects EVERYTHING when this is unset — cookies (our signed
+      // session tokens), headers (Bearer tokens, API keys), request bodies
+      // (passwords), IPs, query strings and stack-frame variables. Nothing of
+      // that leaves the process: an error carries its stack, and the context
+      // report() attaches (user id, org id, path, method) — nothing else.
+      dataCollection: {
+        userInfo: false,
+        cookies: false,
+        httpHeaders: false,
+        httpBodies: [],
+        urlQueryParams: false,
+        graphQL: { document: false, variables: false },
+        genAI: { inputs: false, outputs: false },
+        mcp: { inputs: false, outputs: false },
+        databaseQueryData: false,
+        queues: false,
+        stackFrameVariables: false,
+      },
     });
     this.sentry = sentry;
     this.logger.info('Sentry error reporting enabled');

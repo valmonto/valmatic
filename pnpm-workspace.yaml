@@ -94,7 +94,7 @@ catalog:
   # MCP — agent access to a deployed instance, env-gated off
   '@modelcontextprotocol/sdk': 1.32.2
   # Telemetry (server) — error reporting + product analytics, env-gated no-ops
-  '@sentry/node': 10.73.0
+  '@sentry/node': 11.10.0
   posthog-node: 5.61.2
   # Logging (Pino)
   nestjs-pino: 5.3.1
