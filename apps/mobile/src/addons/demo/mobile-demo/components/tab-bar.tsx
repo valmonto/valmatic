@@ -67,23 +67,23 @@ function TabButton({
 type TabRoute = { key: string; name: string };
 type TabBarProps = {
   state: { index: number; routes: TabRoute[] };
-  navigation: {
+  emitter: {
     emit: (e: { type: 'tabPress'; target: string; canPreventDefault: true }) => {
       defaultPrevented: boolean;
     };
-    navigate: (name: string) => void;
   };
+  navigateToTab: (routeKey: string) => void;
 };
 
-export function TabBar({ state, navigation }: TabBarProps) {
+export function TabBar({ state, emitter, navigateToTab }: TabBarProps) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const scheme = useColorScheme();
   const unread = useMobileDemoStore((s) => s.notifications.filter((n) => !n.read).length);
 
-  const go = (name: string, key: string, focused: boolean) => {
-    const event = navigation.emit({ type: 'tabPress', target: key, canPreventDefault: true });
-    if (!focused && !event.defaultPrevented) navigation.navigate(name);
+  const go = (key: string, focused: boolean) => {
+    const event = emitter.emit({ type: 'tabPress', target: key, canPreventDefault: true });
+    if (!focused && !event.defaultPrevented) navigateToTab(key);
   };
 
   const left = state.routes.filter((r) => r.name === 'index' || r.name === 'tasks');
@@ -104,7 +104,7 @@ export function TabBar({ state, navigation }: TabBarProps) {
             routeKey={route.key}
             name={route.name}
             active={activeName === route.name}
-            onPress={() => go(route.name, route.key, activeName === route.name)}
+            onPress={() => go(route.key, activeName === route.name)}
           />
         ))}
 
@@ -124,7 +124,7 @@ export function TabBar({ state, navigation }: TabBarProps) {
             name={route.name}
             active={activeName === route.name}
             badge={route.name === 'inbox' ? unread : undefined}
-            onPress={() => go(route.name, route.key, activeName === route.name)}
+            onPress={() => go(route.key, activeName === route.name)}
           />
         ))}
       </View>

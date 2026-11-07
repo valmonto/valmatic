@@ -46,7 +46,7 @@ type SlotListProps = {
 
 /** The scrollable slot list — single highlight, or a connected range block. */
 function SlotList({ mode, selected, range, slots, timeFormat, onPress }: SlotListProps) {
-  const scrollRef = React.useRef<ScrollView>(null);
+  const scrollRef = React.useRef<React.ComponentRef<typeof ScrollView>>(null);
 
   React.useEffect(() => {
     const target = mode === 'range' ? range?.from : selected;

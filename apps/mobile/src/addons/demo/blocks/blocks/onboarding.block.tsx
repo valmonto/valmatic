@@ -5,7 +5,7 @@ import { Text } from '@/components/ui/text';
 import { SafeAreaView } from '@/shared/components/safe-area-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Bell, Rocket, Star, TrendingUp, Users, Zap, type LucideIcon } from 'lucide-react-native';
-import { useRef, useState } from 'react';
+import { type ComponentRef, useRef, useState } from 'react';
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -67,7 +67,7 @@ const AVATARS = [11, 12, 13, 14].map((n) => `https://i.pravatar.cc/64?img=${n}`)
 /** Conversion-focused onboarding — parallax gradient heroes, social proof, animated dots. */
 export function OnboardingBlock() {
   const { width } = useWindowDimensions();
-  const ref = useRef<ScrollView>(null);
+  const ref = useRef<ComponentRef<typeof ScrollView>>(null);
   const scrollX = useSharedValue(0);
   const [index, setIndex] = useState(0);
   const isLast = index === SLIDES.length - 1;
