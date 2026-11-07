@@ -46,7 +46,7 @@ function OTPInput({
   disabled,
   className,
 }: OTPInputProps) {
-  const inputRef = React.useRef<TextInput>(null);
+  const inputRef = React.useRef<React.ComponentRef<typeof TextInput>>(null);
   const [internal, setInternal] = React.useState(defaultValue);
   const [focused, setFocused] = React.useState(false);
   const code = value ?? internal;

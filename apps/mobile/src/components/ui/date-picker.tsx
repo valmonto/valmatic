@@ -26,8 +26,10 @@ type DateFieldProps = React.ComponentProps<typeof Pressable> & {
   dateFormat?: string;
 };
 
+type PressableRef = React.ComponentRef<typeof Pressable>;
+
 /** The Input-style trigger: calendar icon + formatted date (or muted placeholder). */
-const DateField = React.forwardRef<View, DateFieldProps>(function DateField(
+const DateField = React.forwardRef<PressableRef, DateFieldProps>(function DateField(
   { value, placeholder = 'Pick a date', dateFormat = 'PPP', className, ...props },
   ref,
 ) {
@@ -112,7 +114,7 @@ type RangeFieldProps = React.ComponentProps<typeof Pressable> & {
 };
 
 /** Field trigger for a range: "Jun 3 – Jun 9" (or just the start while picking). */
-const RangeField = React.forwardRef<View, RangeFieldProps>(function RangeField(
+const RangeField = React.forwardRef<PressableRef, RangeFieldProps>(function RangeField(
   { range, placeholder = 'Pick a range', dateFormat = 'MMM d', className, ...props },
   ref,
 ) {

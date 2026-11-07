@@ -201,7 +201,7 @@ export default function LoginScreen() {
                     secureTextEntry
                     autoComplete="current-password"
                     editable={!isSubmitting}
-                    onSubmitEditing={onSubmit}
+                    onSubmitEditing={() => void onSubmit()}
                   />
                 )}
               />
@@ -224,7 +224,7 @@ export default function LoginScreen() {
             ) : null}
 
             <Button
-              onPress={onSubmit}
+              onPress={() => void onSubmit()}
               disabled={isSubmitting}
               className="mt-2 h-13 rounded-2xl shadow-lg shadow-primary/25"
             >

@@ -7,7 +7,7 @@ import { SWRConfig } from 'swr';
 function initFocus(callback: () => void) {
   let current = AppState.currentState;
   const sub = AppState.addEventListener('change', (next: AppStateStatus) => {
-    if (current.match(/inactive|background/) && next === 'active') callback();
+    if (current && /inactive|background/.test(current) && next === 'active') callback();
     current = next;
   });
   return () => sub.remove();

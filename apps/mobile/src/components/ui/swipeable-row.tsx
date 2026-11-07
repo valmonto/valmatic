@@ -4,7 +4,7 @@ import { cn } from '@/shared/lib/utils';
 import { type LucideIcon } from 'lucide-react-native';
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
+import Swipeable, { type SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
 
 type SwipeActionTone = 'primary' | 'destructive' | 'success' | 'neutral';
 
@@ -36,7 +36,7 @@ type SwipeableRowProps = {
  * Star…). Token-styled action panels; the row stays opaque while sliding.
  */
 function SwipeableRow({ children, leftActions, rightActions }: SwipeableRowProps) {
-  const ref = React.useRef<Swipeable>(null);
+  const ref = React.useRef<SwipeableMethods>(null);
 
   const renderActions = (actions?: SwipeAction[]) =>
     actions && actions.length

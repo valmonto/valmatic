@@ -15,9 +15,6 @@ config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, 'node_modules'),
   path.resolve(workspaceRoot, 'node_modules'),
 ];
-// pnpm uses symlinks into a virtual store — Metro must follow them.
-config.resolver.unstable_enableSymlinks = true;
-
 // `@pkg/contracts` resolves to its client entry: every type, plus the Zod-free
 // constants and permission helpers. The root entry re-exports the whole schema
 // graph, so importing it here would bundle Zod for the sake of a regex. Screens
