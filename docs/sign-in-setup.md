@@ -45,11 +45,15 @@ is a phone.
    (`com.googleusercontent.apps.000-ios`) as `iosUrlScheme`:
 
    ```json
-   ["@react-native-google-signin/google-signin", { "iosUrlScheme": "com.googleusercontent.apps.000-ios" }]
+   [
+     "@react-native-google-signin/google-signin",
+     { "iosUrlScheme": "com.googleusercontent.apps.000-ios" }
+   ]
    ```
 
    The plugin is not in `app.json` by default because it refuses to run
    without that value.
+
 5. API environment: `AUTH_GOOGLE_CLIENT_ID` = the Web id (add the iOS id after
    a comma).
 6. App build (expo.dev → Environment variables): `EXPO_PUBLIC_GOOGLE_CLIENT_ID`

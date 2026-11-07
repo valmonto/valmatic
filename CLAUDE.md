@@ -44,6 +44,9 @@ pnpm verify            # typecheck + lint + test — must exit 0 (authoritative 
 pnpm verify:affected   # local fast check — only workspaces changed since main + dependents
 ```
 
+Run `pnpm format` before pushing: CI also runs `pnpm format:check`, which
+`verify` does not include.
+
 **`pnpm verify` is the authoritative gate.** CI runs the full verify — every
 package typechecked + linted + tested against Postgres — on every PR, and that
 run is what clears a merge. It must exit 0.

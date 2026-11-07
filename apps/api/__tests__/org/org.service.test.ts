@@ -1,5 +1,4 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import type { IamService } from '@pkg/server';
 import type { ActiveUser } from '@pkg/contracts';
 import { FakeLogger } from '@pkg/testing';
 import type { PinoLogger } from 'nestjs-pino';
@@ -22,12 +21,9 @@ const orgRecord = {
   updatedAt: now,
 };
 
-const TOKENS = { accessToken: 'access', refreshToken: 'refresh' };
-
 describe('OrgService', () => {
   let service: OrgService;
   let repository: Record<string, ReturnType<typeof vi.fn>>;
-  let issueTokens: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     repository = {
@@ -41,7 +37,6 @@ describe('OrgService', () => {
       findAllOrgs: vi.fn().mockResolvedValue({ data: [], total: 0 }),
       findOrgById: vi.fn().mockResolvedValue({ id: ORG_A, name: 'Org A' }),
     };
-    issueTokens = vi.fn().mockResolvedValue(TOKENS);
     service = new OrgService(
       repository as unknown as OrgRepository,
       new FakeLogger().as<PinoLogger>(),

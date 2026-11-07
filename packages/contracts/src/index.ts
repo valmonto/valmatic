@@ -22,4 +22,3 @@ export {
   type AttachmentKindName,
   type AttachmentPolicy,
 } from './constants/attachment.js';
-

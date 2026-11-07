@@ -74,6 +74,12 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # Checks the tree as committed, so once — before the minimal job rewrites it.
+      # Fix locally with `pnpm format`.
+      - name: Formatting
+        if: matrix.template == 'full'
+        run: pnpm format:check
+
       - name: Remove every add-on and language but English
         if: matrix.template == 'minimal'
         run: |

@@ -75,7 +75,6 @@ export const common = {
   somethingWentWrong: 'common.somethingWentWrong',
   unexpectedError: 'common.unexpectedError',
 
-
   // Error test page
   errorTest: {
     title: 'common.errorTest.title',

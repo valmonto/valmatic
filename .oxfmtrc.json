@@ -16,6 +16,8 @@
     "pnpm-lock.yaml",
     "**/test-results/**",
     "**/playwright-report/**",
-    ".debug/"
+    ".debug/",
+    "packages/database/src/migrations/**/snapshot.json",
+    "valmatic.json"
   ]
 }
