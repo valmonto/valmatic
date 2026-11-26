@@ -77,8 +77,8 @@ catalog:
   ioredis: 6.0.0
 
   # Database (Drizzle + Postgres)
-  drizzle-orm: 1.0.0-rc.3
-  drizzle-kit: 1.0.0-rc.3
+  drizzle-orm: 1.0.0-rc.6
+  drizzle-kit: 1.0.0-rc.6
   postgres: 4.0.0
 
   # Auth
