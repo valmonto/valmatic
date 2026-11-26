@@ -87,7 +87,7 @@ catalog:
 
   # Queues / cache
   '@nestjs/bullmq': 12.0.2
-  bullmq: 6.7.9
+  bullmq: 6.7.10
   ioredis: 6.1.0
 
   # Database (Drizzle + Postgres)
