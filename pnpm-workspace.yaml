@@ -194,11 +194,11 @@ catalog:
 catalogs:
   # TypeScript 6 for the workspaces whose tooling still needs the programmatic
   # compiler API that TypeScript 7.0 does not ship: the Nest CLI (`nest build`,
-  # `nest start`) refuses 7.0 outright and expects the API back in 7.1;
-  # mobile's Expo lint stack (typescript-eslint) has the same dependency.
-  # Everything else is on the default catalog's TypeScript 7. Delete this
-  # catalog and move the three consumers back to `catalog:` when @nestjs/cli
-  # and eslint-config-expo accept 7.x.
+  # `nest start`) refuses 7.0 outright and expects the API back in 7.1.
+  # Mobile no longer needs it (Expo's ESLint was replaced by oxlint) and can
+  # move to `catalog:` on its own. Everything else is on the default
+  # catalog's TypeScript 7. Delete this catalog and move the consumers back to
+  # `catalog:` when @nestjs/cli accepts 7.x.
   ts6:
     typescript: 6.0.3
 
@@ -257,11 +257,6 @@ catalogs:
     nativewind: 5.0.0-preview.4
     react-native-css: ^3.0.7 # NW5 peer (formerly react-native-css-interop; at 3.x)
     '@tailwindcss/postcss': 4.3.5 # Tailwind v4 via PostCSS in Metro (web uses @tailwindcss/vite)
-
-    # Lint — mobile keeps Expo's ESLint (the rest of the repo lints with oxlint). ESLint stays on 9:
-    # eslint-config-expo's React and import plugins do not support ESLint 10 yet.
-    eslint: ^9.39.4
-    eslint-config-expo: ~58.0.4
 
     # UI — icons, charts, toasts (RNR components are copied in, not a dep)
     lucide-react-native: 1.79.0

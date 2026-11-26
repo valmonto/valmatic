@@ -86,16 +86,12 @@ belongs in `features/x/`.
 
 ## Lint
 
-`pnpm lint` at the root **skips this app**. The React Compiler rules flag
-`sharedValue.value = …` as a mutation, which is the documented
-react-native-reanimated API — ten false positives that would make a red gate
-meaningless. Run it deliberately:
-
-```bash
-pnpm lint:mobile
-```
-
-Typecheck still covers mobile, and `pnpm verify` runs it.
+oxlint, from the root `.oxlintrc.json` like every other workspace: the
+`apps/mobile/**` override turns on the React rules (rules of hooks, exhaustive
+deps, keys) and the import rules. `pnpm lint` and `pnpm verify` include this
+app. Expo's ESLint (`expo lint`, eslint-config-expo) is gone; its React Compiler
+rules flagged `sharedValue.value = …`, the documented reanimated API, which is
+why mobile used to sit outside the gate.
 
 ## Commands
 

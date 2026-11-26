@@ -7,8 +7,10 @@
     "**/coverage/**",
     "**/node_modules/**",
     ".debug/**",
-    "apps/mobile/**",
-    "docs/legacy/**"
+    "docs/legacy/**",
+    "apps/mobile/.expo/**",
+    "apps/mobile/web-build/**",
+    "apps/mobile/expo-env.d.ts"
   ],
   "rules": {
     "no-unused-vars": [
@@ -147,11 +149,34 @@
             "patterns": [
               {
                 "group": ["@/features/*", "@/features/*/*"],
-                "message": "Shared code may not import a feature \u2014 dependencies point from features \u2192 shared, never the reverse."
+                "message": "Shared code may not import a feature — dependencies point from features → shared, never the reverse."
               }
             ]
           }
         ]
+      }
+    },
+    {
+      "files": ["apps/mobile/**/*.ts", "apps/mobile/**/*.tsx", "apps/mobile/**/*.js"],
+      "plugins": ["typescript", "react", "import"],
+      "env": {
+        "browser": true,
+        "node": true
+      },
+      "globals": {
+        "__DEV__": "readonly"
+      },
+      "rules": {
+        "react/rules-of-hooks": "error",
+        "react/exhaustive-deps": "warn",
+        "react/jsx-key": "error",
+        "react/jsx-no-duplicate-props": "error",
+        "react/jsx-no-undef": "error",
+        "react/no-children-prop": "warn",
+        "react/no-direct-mutation-state": "error",
+        "import/no-duplicates": "warn",
+        "import/first": "warn",
+        "import/no-named-as-default-member": "off"
       }
     }
   ]

@@ -9,7 +9,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
-    "lint": "expo lint",
+    "lint": "oxlint",
     "clean": "rm -rf .expo dist node_modules/.cache",
     "emu:setup": "bash scripts/emu.sh setup",
     "emu:start": "bash scripts/emu.sh start",
@@ -97,8 +97,6 @@
     "@pkg/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "catalog:mobile",
     "@types/react": "catalog:mobile",
-    "eslint": "catalog:mobile",
-    "eslint-config-expo": "catalog:mobile",
     "tailwindcss": "catalog:",
     "typescript": "catalog:ts6"
   }
