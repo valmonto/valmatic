@@ -103,7 +103,7 @@ catalog:
   '@modelcontextprotocol/sdk': 1.32.2
   # Telemetry (server) — error reporting + product analytics, env-gated no-ops
   '@sentry/node': 11.17.0
-  posthog-node: 5.61.2
+  posthog-node: 6.0.6
   # Logging (Pino)
   nestjs-pino: 5.3.2
   pino: 10.4.0
