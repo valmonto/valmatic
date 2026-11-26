@@ -177,10 +177,10 @@ function run(label, args) {
 
 // pnpm silently skips selected packages that lack the script, and exits 0 if
 // none define it — so passing the whole affected set to each gate is safe.
-// lint excludes @pkg/mobile to match the root `lint` script; test serializes
+// test serializes
 // (--workspace-concurrency=1) because api and worker share the one test DB.
 run('typecheck', [...scope, 'run', 'typecheck']);
-run('lint', [...scope, '--filter', '!@pkg/mobile', 'run', 'lint']);
+run('lint', [...scope, 'run', 'lint']);
 run('test', [...scope, '--workspace-concurrency=1', 'run', 'test']);
 
 process.stdout.write('\n✔ verify:affected passed\n');
