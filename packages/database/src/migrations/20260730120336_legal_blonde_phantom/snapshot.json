@@ -1,690 +1,321 @@
 {
-  "version": "8",
+  "type": "diff",
+  "version": "10",
   "dialect": "postgres",
   "id": "5b46c783-2def-43a3-a68b-5ce802558def",
-  "prevIds": ["b3e16e49-557b-485e-b370-f375980d935e"],
-  "ddl": [
+  "prevIds": [
+    "b3e16e49-557b-485e-b370-f375980d935e"
+  ],
+  "footprints": [
     {
-      "isRlsEnabled": false,
-      "name": "user",
-      "entityType": "tables",
-      "schema": "public"
-    },
-    {
-      "isRlsEnabled": false,
-      "name": "organization",
-      "entityType": "tables",
-      "schema": "public"
-    },
-    {
-      "isRlsEnabled": false,
-      "name": "organization_user",
-      "entityType": "tables",
-      "schema": "public"
-    },
-    {
-      "isRlsEnabled": false,
-      "name": "notification",
-      "entityType": "tables",
-      "schema": "public"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "uuidv7()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "user"
-    },
-    {
-      "type": "varchar(255)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "email",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "user"
-    },
-    {
-      "type": "varchar(255)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "name",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "user"
-    },
-    {
-      "type": "varchar(255)",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "display_name",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "user"
-    },
-    {
-      "type": "varchar(255)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "password_hash",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "user"
-    },
-    {
-      "type": "varchar(50)",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "phone",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "user"
-    },
-    {
-      "type": "varchar(32)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "'USER'",
-      "generated": null,
-      "identity": null,
-      "name": "system_role",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "user"
-    },
-    {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "user"
-    },
-    {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "user"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "uuidv7()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "organization"
-    },
-    {
-      "type": "varchar(255)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "name",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "organization"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "owner_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "organization"
-    },
-    {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "organization"
-    },
-    {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "organization"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "org_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "organization_user"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "user_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "organization_user"
-    },
-    {
-      "type": "varchar(32)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "role",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "organization_user"
-    },
-    {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "joined_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "organization_user"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "uuidv7()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "user_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "org_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "type": "varchar(32)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "'info'",
-      "generated": null,
-      "identity": null,
-      "name": "type",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "type": "varchar(32)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "'in_app'",
-      "generated": null,
-      "identity": null,
-      "name": "channel",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "type": "varchar(255)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "title",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "type": "varchar(1000)",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "message",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "type": "varchar(500)",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "link",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "type": "jsonb",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "data",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "type": "boolean",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "false",
-      "generated": null,
-      "identity": null,
-      "name": "read",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "read_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "owner_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "user",
+        "system_role"
       ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "organization_owner_id_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "organization"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "user_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
+      "writes": [
+        "s|colprop|public.user.system_role.type",
+        "s|colprop|public.user.system_role.default"
       ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "organization_user_user_id_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "organization_user"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "user_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
+      "reads": [
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.user.system_role"
       ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "notification_user_id_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "notification"
+      "sqlHash": "12b7a937498efc57"
     },
     {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "org_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "organization_user",
+        "role"
       ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "notification_org_id_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "user_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        },
-        {
-          "value": "read",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
+      "writes": [
+        "s|colprop|public.organization_user.role.type",
+        "s|colprop|public.organization_user.role.default"
       ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "notification_user_read_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "created_at",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
+      "reads": [
+        "n|tbl|public.organization_user",
+        "n|sch|public",
+        "n|col|public.organization_user.role"
       ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "notification_created_at_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "notification"
+      "sqlHash": "eada91737bcd9edc"
     },
     {
-      "nameExplicit": false,
-      "columns": ["owner_id"],
-      "schemaTo": "public",
-      "tableTo": "user",
-      "columnsTo": ["id"],
-      "onUpdate": "NO ACTION",
-      "onDelete": "RESTRICT",
-      "name": "organization_owner_id_user_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "organization"
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "notification",
+        "type"
+      ],
+      "writes": [
+        "s|colprop|public.notification.type.type",
+        "s|colprop|public.notification.type.default"
+      ],
+      "reads": [
+        "n|tbl|public.notification",
+        "n|sch|public",
+        "n|col|public.notification.type"
+      ],
+      "sqlHash": "19ef445c59fa75de"
     },
     {
-      "nameExplicit": false,
-      "columns": ["org_id"],
-      "schemaTo": "public",
-      "tableTo": "organization",
-      "columnsTo": ["id"],
-      "onUpdate": "NO ACTION",
-      "onDelete": "CASCADE",
-      "name": "organization_user_org_id_organization_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "organization_user"
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "notification",
+        "channel"
+      ],
+      "writes": [
+        "s|colprop|public.notification.channel.type",
+        "s|colprop|public.notification.channel.default"
+      ],
+      "reads": [
+        "n|tbl|public.notification",
+        "n|sch|public",
+        "n|col|public.notification.channel"
+      ],
+      "sqlHash": "7e783b1c1de3b247"
     },
     {
-      "nameExplicit": false,
-      "columns": ["user_id"],
-      "schemaTo": "public",
-      "tableTo": "user",
-      "columnsTo": ["id"],
-      "onUpdate": "NO ACTION",
-      "onDelete": "CASCADE",
-      "name": "organization_user_user_id_user_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "organization_user"
+      "statementType": "add_check",
+      "statementTarget": [
+        "table",
+        "public",
+        "user"
+      ],
+      "writes": [
+        "s|ck|public.user.user_system_role_check",
+        "n|ck|public.user.user_system_role_check",
+        "e|ck|public.user.user_system_role_check",
+        "n|con|public.user.user_system_role_check"
+      ],
+      "reads": [
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.user.system_role"
+      ]
     },
     {
-      "nameExplicit": false,
-      "columns": ["user_id"],
-      "schemaTo": "public",
-      "tableTo": "user",
-      "columnsTo": ["id"],
-      "onUpdate": "NO ACTION",
-      "onDelete": "CASCADE",
-      "name": "notification_user_id_user_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "notification"
+      "statementType": "add_check",
+      "statementTarget": [
+        "table",
+        "public",
+        "organization_user"
+      ],
+      "writes": [
+        "s|ck|public.organization_user.organization_user_role_check",
+        "n|ck|public.organization_user.organization_user_role_check",
+        "e|ck|public.organization_user.organization_user_role_check",
+        "n|con|public.organization_user.organization_user_role_check"
+      ],
+      "reads": [
+        "n|tbl|public.organization_user",
+        "n|sch|public",
+        "n|col|public.organization_user.role"
+      ]
     },
     {
-      "nameExplicit": false,
-      "columns": ["org_id"],
-      "schemaTo": "public",
-      "tableTo": "organization",
-      "columnsTo": ["id"],
-      "onUpdate": "NO ACTION",
-      "onDelete": "CASCADE",
-      "name": "notification_org_id_organization_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "notification"
+      "statementType": "add_check",
+      "statementTarget": [
+        "table",
+        "public",
+        "notification"
+      ],
+      "writes": [
+        "s|ck|public.notification.notification_type_check",
+        "n|ck|public.notification.notification_type_check",
+        "e|ck|public.notification.notification_type_check",
+        "n|con|public.notification.notification_type_check"
+      ],
+      "reads": [
+        "n|tbl|public.notification",
+        "n|sch|public",
+        "n|col|public.notification.type"
+      ]
     },
     {
-      "columns": ["org_id", "user_id"],
-      "nameExplicit": false,
-      "name": "organization_user_pkey",
-      "entityType": "pks",
-      "schema": "public",
-      "table": "organization_user"
+      "statementType": "add_check",
+      "statementTarget": [
+        "table",
+        "public",
+        "notification"
+      ],
+      "writes": [
+        "s|ck|public.notification.notification_channel_check",
+        "n|ck|public.notification.notification_channel_check",
+        "e|ck|public.notification.notification_channel_check",
+        "n|con|public.notification.notification_channel_check"
+      ],
+      "reads": [
+        "n|tbl|public.notification",
+        "n|sch|public",
+        "n|col|public.notification.channel"
+      ]
     },
     {
-      "columns": ["id"],
-      "nameExplicit": false,
-      "name": "user_pkey",
-      "schema": "public",
-      "table": "user",
-      "entityType": "pks"
+      "statementType": "drop_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "system_role"
+      ],
+      "writes": [
+        "s|enum|public.system_role",
+        "n|enum|public.system_role",
+        "e|enum|public.system_role",
+        "n|type|public.system_role"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
     },
     {
-      "columns": ["id"],
-      "nameExplicit": false,
-      "name": "organization_pkey",
-      "schema": "public",
-      "table": "organization",
-      "entityType": "pks"
+      "statementType": "drop_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "organization_user_role"
+      ],
+      "writes": [
+        "s|enum|public.organization_user_role",
+        "n|enum|public.organization_user_role",
+        "e|enum|public.organization_user_role",
+        "n|type|public.organization_user_role"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
     },
     {
-      "columns": ["id"],
-      "nameExplicit": false,
-      "name": "notification_pkey",
-      "schema": "public",
-      "table": "notification",
-      "entityType": "pks"
+      "statementType": "drop_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "notification_channel"
+      ],
+      "writes": [
+        "s|enum|public.notification_channel",
+        "n|enum|public.notification_channel",
+        "e|enum|public.notification_channel",
+        "n|type|public.notification_channel"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
     },
     {
-      "nameExplicit": false,
-      "columns": ["email"],
-      "nullsNotDistinct": false,
-      "name": "user_email_key",
-      "schema": "public",
-      "table": "user",
-      "entityType": "uniques"
-    },
-    {
-      "value": "system_role IN ('USER', 'MODERATOR', 'ADMIN')",
-      "name": "user_system_role_check",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "user"
-    },
-    {
-      "value": "role IN ('OWNER', 'ADMIN', 'MEMBER')",
-      "name": "organization_user_role_check",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "organization_user"
-    },
-    {
-      "value": "type IN ('info', 'success', 'warning', 'error')",
-      "name": "notification_type_check",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "notification"
-    },
-    {
-      "value": "channel IN ('in_app', 'email', 'push')",
-      "name": "notification_channel_check",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "notification"
+      "statementType": "drop_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "notification_type"
+      ],
+      "writes": [
+        "s|enum|public.notification_type",
+        "n|enum|public.notification_type",
+        "e|enum|public.notification_type",
+        "n|type|public.notification_type"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
     }
   ],
-  "renames": []
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "user_system_role_check",
+        "value": "system_role IN ('USER', 'MODERATOR', 'ADMIN')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "organization_user",
+        "name": "organization_user_role_check",
+        "value": "role IN ('OWNER', 'ADMIN', 'MEMBER')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "notification",
+        "name": "notification_type_check",
+        "value": "type IN ('info', 'success', 'warning', 'error')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "notification",
+        "name": "notification_channel_check",
+        "value": "channel IN ('in_app', 'email', 'push')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "drop",
+      "key": "enums\u0000[\"public\",\"system_role\"]"
+    },
+    {
+      "op": "drop",
+      "key": "enums\u0000[\"public\",\"organization_user_role\"]"
+    },
+    {
+      "op": "drop",
+      "key": "enums\u0000[\"public\",\"notification_channel\"]"
+    },
+    {
+      "op": "drop",
+      "key": "enums\u0000[\"public\",\"notification_type\"]"
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"user\",\"system_role\"]",
+      "set": {
+        "type": "varchar(32)",
+        "typeSchema": null
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"organization_user\",\"role\"]",
+      "set": {
+        "type": "varchar(32)",
+        "typeSchema": null
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"notification\",\"type\"]",
+      "set": {
+        "type": "varchar(32)",
+        "typeSchema": null
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"notification\",\"channel\"]",
+      "set": {
+        "type": "varchar(32)",
+        "typeSchema": null
+      }
+    }
+  ]
 }
