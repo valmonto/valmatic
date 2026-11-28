@@ -12,7 +12,7 @@ import { z } from 'zod';
 import './styles/index';
 
 // Zod compiles object schemas with `new Function` when it can. The page's
-// Content-Security-Policy (apps/web/Caddyfile) forbids eval, so Zod would try,
+// Content-Security-Policy (caddy/app.caddy) forbids eval, so Zod would try,
 // be refused, log a violation and fall back on every load. Skip the attempt.
 z.config({ jitless: true });
 

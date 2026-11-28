@@ -28,6 +28,7 @@ worker, Expo mobile app — one pnpm monorepo, one shared contract.
 | `apps/worker`        | queue consumers                                         |
 | `apps/mobile`        | Expo / React Native                                     |
 | `apps/e2e`           | Playwright                                              |
+| `caddy/`             | the front door: web build + `/api` load balancing       |
 | `packages/contracts` | schemas, types, permissions — the shared contract       |
 | `packages/server`    | shared Nest layer: iam, guards, queues, logging, health |
 | `packages/database`  | Drizzle schema, migrations, client                      |

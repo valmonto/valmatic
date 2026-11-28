@@ -1,0 +1,15 @@
+# E2E only (compose.e2e.yml): the same app over HTTPS with Caddy's internal
+# CA, because the auth cookies are Secure.
+{
+	admin off
+	persist_config off
+	skip_install_trust
+	auto_https disable_redirects
+}
+
+import /etc/caddy/app.caddy
+
+https://localhost:3000, https://caddy:3000, https://127.0.0.1:3000 {
+	tls internal
+	import app
+}

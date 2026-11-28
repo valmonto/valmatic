@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:18
+    image: postgres:18.7
     container_name: vboilerplatedb
     env_file:
       - .env
@@ -20,7 +20,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:8-alpine
+    image: redis:8.12.0-alpine
     container_name: vboilerplateredis
     env_file:
       - .env
@@ -84,13 +84,13 @@ services:
       DATABASE_URL: postgresql://${DB_USER:-vboilerplate}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-vboilerplate}
       REDIS_HOST: redis
       IAM_REDIS_HOST: redis
-    # Host-port range so up to 5 replicas each bind a distinct loopback port
-    # (3011..3015); point your host proxy's upstreams at this range.
-    # Host ports are .env-configurable (WEB_HOST_PORT / API_HOST_PORT) —
-    # several valmatic-descended apps share one VM, each needs its own
-    # loopback ports, and the host proxy is the only public listener.
-    ports:
-      - '127.0.0.1:${API_HOST_PORT:-3011}-${API_HOST_PORT_MAX:-3015}:3000'
+    # Two copies, reachable only on the compose network: caddy load-balances
+    # them (caddy/app.caddy), so a restart of one is not an outage. More with
+    # `--scale api=N` or API_REPLICAS; no host ports, so copies never clash.
+    deploy:
+      replicas: ${API_REPLICAS:-2}
+    expose:
+      - '3000'
     networks:
       - staging_network
     # Without this, `docker compose up --wait` only waits for the container to
@@ -118,21 +118,26 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  web:
+  # The front door and the only published port: the web build inside Caddy,
+  # /api load-balanced across the api copies. Plain http; put TLS in front
+  # (a host Caddy, Cloudflare). Several apps on one VM: give each its own
+  # GATEWAY_HOST_PORT. See caddy/README.md.
+  caddy:
     build:
       context: .
-      dockerfile: apps/web/Dockerfile
-    container_name: vboilerplateweb
-    env_file:
-      - .env
+      dockerfile: caddy/Dockerfile
+    container_name: vboilerplatecaddy
     environment:
-      NODE_ENV: production
+      # Behind a proxy that sets X-Client-IP (Specbook's server Caddy), its
+      # addresses; unset, only the peer's own address counts.
+      GATEWAY_TRUSTED_PROXIES: ${GATEWAY_TRUSTED_PROXIES:-127.0.0.1/32}
     ports:
-      - '127.0.0.1:${WEB_HOST_PORT:-3010}:3000'
+      - '${GATEWAY_BIND:-127.0.0.1}:${GATEWAY_HOST_PORT:-3010}:3000'
     networks:
       - staging_network
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     restart: unless-stopped
 
   worker:

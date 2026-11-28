@@ -32,7 +32,7 @@ jobs:
     services:
       postgres:
         # Must match compose.staging.yml — uuidv7() defaults need PostgreSQL 18.
-        image: postgres:18-alpine
+        image: postgres:18.7-alpine
         env:
           POSTGRES_USER: valmatic
           POSTGRES_PASSWORD: valmatic
@@ -48,7 +48,7 @@ jobs:
       # sessions, throttling and queues all need Redis. Without it that suite
       # skips and a framework change to guards/filters goes unproven.
       redis:
-        image: redis:8-alpine
+        image: redis:8.12.0-alpine
         ports:
           - 6379:6379
         options: >-
@@ -69,7 +69,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 26.12.1
+          node-version: 26.13.1
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile

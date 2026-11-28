@@ -22,11 +22,12 @@ Playwright only starts the web dev server itself, reusing one already listening
 on `:5173`.
 
 ```bash
-pnpm e2e:docker     # everything containerised — postgres, redis, api, web, tests
+pnpm e2e:docker     # everything containerised — postgres, redis, api, caddy, tests
 ```
 
-The Docker path builds the web app for production (`web.Dockerfile` → Caddy)
-and runs the suite against it, so it exercises the built bundle rather than the
+The Docker path builds the deployed front door (`caddy/Dockerfile`: the web
+build inside Caddy, `/api` load-balanced to the api) and runs the suite
+against it over HTTPS (`caddy/e2e.Caddyfile`), so it exercises the built bundle rather than the
 dev server. That is what CI uses.
 
 ## The specs

@@ -1,0 +1,28 @@
+# Deployed: plain http on :3000. TLS belongs to whatever is in front — a
+# Caddy on the host, Specbook's server Caddy, or Cloudflare. See README.md.
+{
+	admin off
+	auto_https off
+	persist_config off
+	# A deploy replaces this container, and its name answers nothing until
+	# the new one is up: give in-flight requests 3 s, not forever, so that
+	# swap stays short.
+	grace_period 3s
+	servers {
+		# Whose X-Client-IP to believe. Default: nobody's (only loopback),
+		# so a visitor who connects directly cannot claim another address.
+		# Behind a proxy that sets X-Client-IP, set this to its addresses.
+		trusted_proxies static {$GATEWAY_TRUSTED_PROXIES:127.0.0.1/32}
+		client_ip_headers X-Client-IP
+	}
+}
+
+import /etc/caddy/app.caddy
+
+:3000 {
+	log {
+		output stdout
+		format console
+	}
+	import app
+}
