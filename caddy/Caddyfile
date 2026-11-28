@@ -4,6 +4,10 @@
 	admin off
 	auto_https off
 	persist_config off
+	# A deploy replaces this container, and its name answers nothing until
+	# the new one is up: give in-flight requests 3 s, not forever, so that
+	# swap stays short.
+	grace_period 3s
 	servers {
 		# Whose X-Client-IP to believe. Default: nobody's (only loopback),
 		# so a visitor who connects directly cannot claim another address.
