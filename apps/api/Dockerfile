@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-FROM node:26.12.1-alpine AS base
+FROM node:26.13.1-alpine AS base
 RUN npm install -g pnpm@11.25.0
 # Before every `pnpm run`/`exec`, pnpm checks that node_modules still matches
 # the manifests by comparing file times. In this image the install runs on
@@ -70,7 +70,7 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm-store \
       --config.inject-workspace-packages=true
 
 # Production stage
-FROM node:26.12.1-alpine AS runner
+FROM node:26.13.1-alpine AS runner
 WORKDIR /app
 
 # Build identity, served by /health. Passed by the deploy workflow

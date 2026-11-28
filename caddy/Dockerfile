@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1.7
-FROM node:26.12.1-alpine AS base
+# The app's gateway: the web build inside Caddy. See caddy/README.md.
+FROM node:26.13.1-alpine AS base
 RUN npm install -g pnpm@11.25.0
 # Before every `pnpm run`/`exec`, pnpm checks that node_modules still matches
 # the manifests by comparing file times. In this image the install runs on
@@ -52,13 +53,17 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm-store \
 
 COPY packages ./packages
 COPY apps/web ./apps/web
+# Vite inlines VITE_* at BUILD time. Unset unless passed (compose.e2e.yml
+# turns on open signup this way).
+ARG VITE_PUBLIC_REGISTRATION_ENABLED
 RUN pnpm --filter @pkg/web... build
 
-# Production stage: Caddy serves the built files (apps/web/Caddyfile) —
-# real 404s for missing files, long caching for hashed ones, security headers.
-FROM caddy:2-alpine AS runner
+# The front door: Caddy serves the built files and load-balances /api across
+# the api copies (caddy/app.caddy). Exact version; the weekly dependency task
+# bumps it.
+FROM caddy:2.11.9-alpine AS runner
 
-COPY apps/web/Caddyfile /etc/caddy/Caddyfile
+COPY caddy/Caddyfile caddy/e2e.Caddyfile caddy/app.caddy /etc/caddy/
 COPY --from=builder /app/apps/web/dist /srv
 
 # OS security fixes the base image does not have yet. OS_REFRESH_DATE is
@@ -69,7 +74,7 @@ RUN apk upgrade --no-cache
 
 EXPOSE 3000
 
-# Not root: Caddy only reads /srv, and 3000 is above the ports only root may
+# Not root: Caddy only reads /etc/caddy and /srv, and 3000 is above the ports only root may
 # bind. The files stay root-owned, so the server cannot rewrite the site it
 # serves. See apps/api/Dockerfile.
 USER nobody

@@ -13,7 +13,9 @@ Hetzner-class and approximate.
 ## The shape today
 
 One VPS per deployment: Postgres, Redis, api, worker and the static web build
-in one compose file, Caddy in front, Cloudflare proxying the domain
+in one compose file, the app's Caddy (`caddy/`) as the only published port —
+web build inside it, `/api` load-balanced across two api copies — and
+Cloudflare proxying the domain
 (anycast entry, edge TLS, cached assets — see
 [edge-protection.md](./edge-protection.md)).
 
@@ -40,10 +42,11 @@ deploy builds them on the serving box and their speed is deploy time:
 - **pnpm's pre-run deps check is off** (`pnpm_config_verify_deps_before_run=false`)
   inside the builds: the pinned manifest times would otherwise make every
   `pnpm run` attempt a fresh install and fail without a TTY.
-- **The api and worker containers run as `node`, the web container as
-  `nobody`, not root.** The web container is Caddy serving the built files
-  (`apps/web/Caddyfile`): real 404s for missing files, a year of caching for
-  hashed ones, security headers. None of them writes to disk (logs go to stdout, attachments to object storage), so
+- **The api and worker containers run as `node`, the caddy container as
+  `nobody`, not root.** The caddy container serves the built web files and
+  load-balances `/api` (`caddy/app.caddy`, see `caddy/README.md`): real 404s
+  for missing files, a year of caching for hashed ones, security headers.
+  None of them writes to disk (logs go to stdout, attachments to object storage), so
   their files stay root-owned and read-only to the process. The `migrate`
   service runs from the api image and is `node` too. A future feature that
   needs a writable path gets a `node`-owned directory in the Dockerfile, or a
@@ -111,29 +114,14 @@ under ~1% of revenue at every stage.
 
 ## Scaling out (load balancing)
 
-**Phase 1 — replicas on one box (€0).** Prerequisite: **Caddy moves into the
-compose file** and becomes the only service publishing ports; api replicas
-carry `expose` only (no host ports — replicas cannot share one). Then:
-
-```yaml
-services:
-  api:
-    deploy: { replicas: 3 }
-    expose: ['3000'] # internal network only
-```
-
-```caddyfile
-app.example.com {
-  reverse_proxy {
-    dynamic a api 3000        # re-resolves Docker DNS → all replicas
-    lb_policy round_robin
-    health_uri /health
-    health_interval 5s
-  }
-}
-```
-
-Worth doing for **zero-downtime rolling deploys** even before load demands it.
+**Phase 1 — replicas on one box (€0). Done.** `compose.staging.yml` runs
+the api as `API_REPLICAS` copies (default 2) with `expose` only, and the
+app's Caddy is the one service publishing a port. `caddy/app.caddy` finds
+every copy through Docker's DNS (`dynamic a api 3000`, refreshed every 5 s),
+round-robins, health-checks `/health`, and holds a request up to 10 s for a
+healthy copy instead of a 502. So a rolling restart is not an outage
+(measured: 400 of 400 requests through stop/start of each copy). More
+capacity: `docker compose up -d --scale api=N`.
 
 **Phase 2 — multiple boxes (~€6/mo).** api containers on 2–3 VPSes joined by
 a Hetzner private network; a Hetzner Cloud Load Balancer in front (managed

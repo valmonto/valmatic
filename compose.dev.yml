@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:18
+    image: postgres:18.7
     container_name: vboilerplatedb
     environment:
       POSTGRES_USER: vboilerplate
@@ -19,7 +19,7 @@ services:
       retries: 3
 
   redis:
-    image: redis:8-alpine
+    image: redis:8.12.0-alpine
     container_name: vboilerplateredis
     command: >
       redis-server
@@ -45,7 +45,7 @@ services:
   # Deployments on managed object storage (S3/R2/OVH) delete this block and
   # point STORAGE_* at the managed endpoint instead.
   rustfs:
-    image: docker.io/rustfs/rustfs:1.0.0-beta.7
+    image: docker.io/rustfs/rustfs:1.0.7
     container_name: vboilerplaterustfs
     environment:
       RUSTFS_ACCESS_KEY: valmatic
